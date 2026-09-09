@@ -12,7 +12,10 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "export:web": "expo export --platform web",
     "assets": "python3 scripts/prepare_assets.py",
-    "format": "prettier --write App.tsx index.ts src tests scripts/browser-smoke.cjs"
+    "format": "prettier --write App.tsx index.ts src tests scripts/browser-smoke.cjs",
+    "test:content": "python3 scripts/content/extract.py --check && python3 scripts/content/build_course.py --check",
+    "test:browser": "node scripts/run-browser-tests.cjs",
+    "test:all": "npm run test:content && npm run typecheck && npm test && npm run export:web && npm run test:browser"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.4.2",
@@ -31,6 +34,7 @@
   "devDependencies": {
     "@types/node": "^26.5.0",
     "@types/react": "~19.2.4",
+    "playwright": "1.62.1",
     "prettier": "^3.9.6",
     "typescript": "~6.0.3"
   },

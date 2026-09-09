@@ -1,3 +1,4 @@
+import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
 import React, { useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
@@ -74,6 +75,21 @@ export function Exercise({
         </View>
       )}
       {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
+      {[
+        "work",
+        "compose",
+        "activity",
+        "recipe",
+        "relation",
+        "targetGame",
+      ].includes(block.kind) && (
+        <CourseTask
+          block={block}
+          answer={answer}
+          onAnswer={onAnswer}
+          onDrawing={onDrawing}
+        />
+      )}
       {block.kind === "number" && (
         <View style={s.options}>
           {Array.from({ length: 11 }, (_, n) => (

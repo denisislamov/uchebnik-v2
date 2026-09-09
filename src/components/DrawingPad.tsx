@@ -26,7 +26,9 @@ export function DrawingPad({
     [error, setError] = useState(""),
     [chosenColor, setChosenColor] = useState<string | null>(null);
   const active = useRef<Stroke | null>(null);
-  const height = (width * 8) / 12,
+  const columns = trace?.columns ?? 12,
+    rows = trace?.rows ?? 8;
+  const height = (width * rows) / columns,
     color = chosenColor ?? target?.color ?? "#232d2b";
   const coords = (e: any): Point => ({
     x: Math.max(0, Math.min(1, e.nativeEvent.locationX / width)),
@@ -41,7 +43,7 @@ export function DrawingPad({
     active.current = null;
     onDrawing(false);
     if (!stroke) return;
-    if (!target || matchesTrace(stroke, target)) {
+    if (!target || matchesTrace(stroke, target, trace)) {
       onChange([...(progress?.accepted ?? strokes), stroke]);
       setDraft(null);
       setError("");
@@ -169,24 +171,24 @@ export function DrawingPad({
       >
         <View pointerEvents="none">
           <Svg width={width} height={height}>
-            {Array.from({ length: 13 }, (_, i) => (
+            {Array.from({ length: columns + 1 }, (_, i) => (
               <Line
                 key={`v${i}`}
-                x1={(i * width) / 12}
+                x1={(i * width) / columns}
                 y1={0}
-                x2={(i * width) / 12}
+                x2={(i * width) / columns}
                 y2={height}
                 stroke="#8abfbe"
                 strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
               />
             ))}
-            {Array.from({ length: 9 }, (_, i) => (
+            {Array.from({ length: rows + 1 }, (_, i) => (
               <Line
                 key={`h${i}`}
                 x1={0}
-                y1={(i * height) / 8}
+                y1={(i * height) / rows}
                 x2={width}
-                y2={(i * height) / 8}
+                y2={(i * height) / rows}
                 stroke="#8abfbe"
                 strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
               />

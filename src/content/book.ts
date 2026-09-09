@@ -1,3 +1,4 @@
+import { remainingPages } from "./fullBook.ts";
 import { childInteraction } from "./childInteractions.ts";
 import type { Block, BookPage } from "./types.ts";
 type WithoutId<T> = T extends unknown ? Omit<T, "id"> : never;
@@ -635,4 +636,5 @@ export const pages: BookPage[] = [
     ),
   ]),
 ];
+pages.push(...remainingPages);
 export const allBlocks = pages.flatMap((p) => p.blocks);

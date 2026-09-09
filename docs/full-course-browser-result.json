@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "pagesOpened": 134,
+  "mechanics": [
+    "missing-addends",
+    "coins",
+    "equal-groups",
+    "ruler",
+    "recipe",
+    "target-game",
+    "grid-mouse-mobile",
+    "grid-square-diagonal",
+    "draw-quantity-relation"
+  ],
+  "pageErrors": []
+}

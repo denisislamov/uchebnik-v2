@@ -4,8 +4,7 @@ import type {
   TracePlan,
   TraceTarget,
 } from "../content/types.ts";
-const dist = (a: Point, b: Point) =>
-  Math.hypot((a.x - b.x) * 12, (a.y - b.y) * 8);
+const dist = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y);
 const length = (p: Point[]) =>
   p.slice(1).reduce((sum, v, i) => sum + dist(v, p[i]), 0);
 function resample(points: Point[], count = 40): Point[] {
@@ -32,7 +31,17 @@ function resample(points: Point[], count = 40): Point[] {
   }
   return result;
 }
-export function matchesTrace(stroke: Stroke, target: TraceTarget): boolean {
+export function matchesTrace(
+  stroke: Stroke,
+  target: TraceTarget,
+  grid: { columns: number; rows: number } = { columns: 12, rows: 8 },
+): boolean {
+  const toCells = (p: Point): Point => ({
+    x: p.x * grid.columns,
+    y: p.y * grid.rows,
+  });
+  stroke = { ...stroke, points: stroke.points.map(toCells) };
+  target = { ...target, points: target.points.map(toCells) };
   if (
     stroke.color !== target.color ||
     !stroke.points.length ||
@@ -53,16 +62,19 @@ export function matchesTrace(stroke: Stroke, target: TraceTarget): boolean {
   )
     return false;
   if (
-    dist(stroke.points[0], target.points[0]) > 0.65 ||
-    dist(stroke.points.at(-1)!, target.points.at(-1)!) > 0.65
+    dist(stroke.points[0], target.points[0]) > (target.grid ? 0.3 : 0.65) ||
+    dist(stroke.points.at(-1)!, target.points.at(-1)!) >
+      (target.grid ? 0.3 : 0.65)
   )
     return false;
   const actual = resample(stroke.points),
     expected = resample(target.points);
   const errors = actual.map((p, i) => dist(p, expected[i]));
   return (
-    errors.reduce((s, e) => s + e, 0) / errors.length < 0.42 &&
-    errors.filter((e) => e > 0.7).length < errors.length * 0.1
+    errors.reduce((s, e) => s + e, 0) / errors.length <
+      (target.grid ? 0.22 : 0.42) &&
+    errors.filter((e) => e > (target.grid ? 0.4 : 0.7)).length <
+      errors.length * 0.1
   );
 }
 export function traceProgress(plan: TracePlan, strokes: Stroke[] = []) {
@@ -72,7 +84,7 @@ export function traceProgress(plan: TracePlan, strokes: Stroke[] = []) {
   for (const stroke of strokes) {
     if (
       completed < targets.length &&
-      matchesTrace(stroke, targets[completed])
+      matchesTrace(stroke, targets[completed], plan)
     ) {
       accepted.push(stroke);
       completed++;

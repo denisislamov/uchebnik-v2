@@ -4,7 +4,12 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages } = await import("../src/content/book.ts");
-  const browser = await chromium.launch({ channel: "chrome", headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    ...(process.env.BROWSER_CHANNEL
+      ? { channel: process.env.BROWSER_CHANNEL }
+      : {}),
+  });
   try {
     const context = await browser.newContext({
       viewport: { width: 1440, height: 1100 },
@@ -31,13 +36,29 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       ).answers[id];
     };
     const open = async (n, index) => {
-      await button(`Открыть страницу ${n}`).click();
+      if (await button(`Открыть страницу ${n}`).count())
+        await button(`Открыть страницу ${n}`).click();
+      else {
+        await button("← Все страницы").click();
+        await p
+          .getByRole("textbox", {
+            name: "Найти страницу или задание",
+            exact: true,
+          })
+          .fill(String(n));
+        await p
+          .getByRole("button", {
+            name: `Страница ${n}. ${pages[n - 1].title}`,
+            exact: true,
+          })
+          .click();
+      }
       await button(
         `Шаг ${index + 1}: ${pages[n - 1].blocks[index].title}`,
       ).click();
       await images();
     };
-    await p.goto("http://127.0.0.1:8081");
+    await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
     await button("Начать заниматься  →").click();
     assert.equal(
       await p.getByText("Мы рассмотрели", { exact: true }).count(),
@@ -140,7 +161,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p.getByText("Пока не совпало.", { exact: false }).waitFor();
     await button("Флажок").click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
-    for (const page of pages) {
+    for (const page of pages.slice(0, 10)) {
       for (let i = 0; i < page.blocks.length; i++) {
         await open(page.number, i);
         assert.ok(

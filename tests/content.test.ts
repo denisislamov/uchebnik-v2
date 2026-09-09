@@ -12,17 +12,17 @@ import {
 } from "../src/lib/assessment.ts";
 import type { Answer, Block } from "../src/content/types.ts";
 const by = (kind: string) => allBlocks.find((b) => b.kind === kind)!;
-test("first ten PDF pages and all 65 source illustrations are covered", () => {
+test("all 144 PDF pages and 488 source illustrations are covered", () => {
   assert.deepEqual(
     pages.map((p) => p.number),
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    Array.from({ length: 144 }, (_, i) => i + 1),
   );
   assert.equal(new Set(allBlocks.map((b) => b.id)).size, allBlocks.length);
   const used = new Set(allBlocks.flatMap((b) => b.images));
   const source = JSON.parse(
     fs.readFileSync("textbook/data/assets.json", "utf8"),
-  ).filter((a: any) => a.page <= 10);
-  assert.equal(source.length, 65);
+  );
+  assert.equal(source.length, 488);
   for (const asset of source) {
     assert.ok(used.has(asset.id), `Missing source illustration ${asset.id}`);
     assert.ok(fs.existsSync(`assets/book/${asset.id}.jpg`));

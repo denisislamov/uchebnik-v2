@@ -1,3 +1,4 @@
+import { courseCorrect } from "./courseAssessment.ts";
 import { traceProgress } from "./tracing.ts";
 import type { Answer, Block, BookPage, Progress } from "../content/types.ts";
 export const edgeKey = (a: number, b: number) =>
@@ -7,6 +8,17 @@ export function hasInk(answer?: Answer): boolean {
 }
 export function isCorrect(block: Block, answer?: Answer): boolean {
   if (!answer) return false;
+  if (
+    [
+      "work",
+      "compose",
+      "activity",
+      "recipe",
+      "relation",
+      "targetGame",
+    ].includes(block.kind)
+  )
+    return courseCorrect(block, answer);
   if (block.kind === "read") return answer.reviewed === true;
   if (block.kind === "draw")
     return block.trace
@@ -40,7 +52,7 @@ export function isCorrect(block: Block, answer?: Answer): boolean {
     (typeof value === "number" || typeof value === "string") &&
     String(value).trim() !== "" &&
     /^\d+$/.test(String(value)) &&
-    Number(value) === block.expected
+    Number(value) === ("expected" in block ? block.expected : undefined)
   );
 }
 export const isDone = (block: Block, answer?: Answer) =>
@@ -88,15 +100,31 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
         typeof a.value === "number" &&
         Number.isFinite(a.value) &&
         a.value >= 0 &&
-        a.value <= 20
+        a.value <= 1000
       )
         answer.value = a.value;
       if (
         Array.isArray(a.value) &&
-        a.value.length <= 20 &&
+        a.value.length <= 200 &&
         a.value.every((v: unknown) => typeof v === "string")
       )
         answer.value = a.value;
+      if (
+        a.responses &&
+        typeof a.responses === "object" &&
+        !Array.isArray(a.responses)
+      ) {
+        answer.responses = Object.fromEntries(
+          Object.entries(a.responses)
+            .slice(0, 500)
+            .filter(
+              ([key, value]) =>
+                /^[a-zA-Z0-9_-]{1,40}$/.test(key) &&
+                typeof value === "string" &&
+                value.length <= 200,
+            ),
+        ) as Record<string, string>;
+      }
       if (Array.isArray(a.strokes))
         answer.strokes = a.strokes
           .slice(0, 100)
