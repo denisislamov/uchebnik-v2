@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+.DS_Store
+textbook/_work/
+__pycache__/
+*.py[cod]
+*.log
+.env
+.env.*
+!.env.example

@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-09-08T15:05:28.886158+00:00",
+  "pdfPageCount": 144,
+  "pageDocuments": 144,
+  "pageScans": 144,
+  "exerciseNumbers": 892,
+  "missingExerciseNumbers": [],
+  "splitExercises": [
+    {
+      "number": 331,
+      "pages": [
+        74,
+        75
+      ],
+      "documents": [
+        "page_docs/arithmetic_grade1_pchelko_1959_p074.md",
+        "page_docs/arithmetic_grade1_pchelko_1959_p075.md"
+      ],
+      "splitAcrossPages": true
+    },
+    {
+      "number": 489,
+      "pages": [
+        92,
+        93
+      ],
+      "documents": [
+        "page_docs/arithmetic_grade1_pchelko_1959_p092.md",
+        "page_docs/arithmetic_grade1_pchelko_1959_p093.md"
+      ],
+      "splitAcrossPages": true
+    },
+    {
+      "number": 887,
+      "pages": [
+        141,
+        142
+      ],
+      "documents": [
+        "page_docs/arithmetic_grade1_pchelko_1959_p141.md",
+        "page_docs/arithmetic_grade1_pchelko_1959_p142.md"
+      ],
+      "splitAcrossPages": true
+    }
+  ],
+  "assets": 488,
+  "exactSourcePixelMatches": 488,
+  "assetPixelMismatches": [],
+  "unlinkedAssets": [],
+  "localLinksChecked": 1915,
+  "numericEqualitiesChecked": 4370,
+  "numericEqualityCandidates": [],
+  "pdfExternalUriAnnotations": [],
+  "sourcePdfSha256": "83a961cda0998b0bc3a13414ca00de55f9082818fe95f3d1178078095fd4219f",
+  "issues": [],
+  "passed": true
+}

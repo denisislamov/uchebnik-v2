@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "errors": [],
+  "at": "2026-09-09T01:45:22.450Z",
+  "checks": [
+    "read next without confirmation",
+    "direct balls and sloped pencils",
+    "cover and coin digits",
+    "digit among cards",
+    "count and toggle fish",
+    "wrong stroke and tap rejected",
+    "23 traces across worksheets",
+    "trace persistence and undo",
+    "digit 1 tracing",
+    "spatial picture choice",
+    "all 82 blocks render",
+    "mobile real touch region",
+    "mobile touch trace",
+    "square notebook cells",
+    "320px layout"
+  ]
+}

@@ -1,0 +1,3486 @@
+[
+  {
+    "id": "p001",
+    "pdfPage": 1,
+    "printedPage": null,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p001.md",
+    "scan": "pages/page_001.png",
+    "section": "Обложка (вне оглавления)",
+    "topic": "Лицевая сторона переплёта: название книги и семь предметных картинок-иллюстраций чисел 1–7",
+    "pageType": "обложка",
+    "exerciseLabel": "без нумерации (заданий нет)",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p001_cover_acorns_2",
+      "p001_cover_black_currants_7",
+      "p001_cover_chicks_5",
+      "p001_cover_daisies_3",
+      "p001_cover_fish_4",
+      "p001_cover_mushroom_1",
+      "p001_cover_red_currants_6",
+      "p001_cover_title_frame"
+    ]
+  },
+  {
+    "id": "p002",
+    "pdfPage": 2,
+    "printedPage": null,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p002.md",
+    "scan": "pages/page_002.png",
+    "section": "Титульный лист (вне оглавления)",
+    "topic": "Титул: авторы, название, назначение, гриф, издание, издательство, год",
+    "pageType": "титул",
+    "exerciseLabel": "без нумерации (заданий нет)",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p002_title_vignette"
+    ]
+  },
+  {
+    "id": "p003",
+    "pdfPage": 3,
+    "printedPage": 3,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p003.md",
+    "scan": "pages/page_003.png",
+    "section": "Первый десяток (начало раздела) → подготовительные упражнения (сравнение предметов)",
+    "topic": "Начало раздела «Первый десяток»; сравнение предметов: больше — меньше, длиннее — короче; первое упражнение в письме (чёрточки и точки)",
+    "pageType": "введение раздела / подготовительные упражнения / образец письма",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p003_balls_bigger_smaller",
+      "p003_pencils_longer_shorter",
+      "p003_school_children",
+      "p003_writing_strip_dashes_dots"
+    ]
+  },
+  {
+    "id": "p004",
+    "pdfPage": 4,
+    "printedPage": 4,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p004.md",
+    "scan": "pages/page_004.png",
+    "section": "Первый десяток → подготовительные упражнения (счёт предметов на картинке, соотнесение множеств)",
+    "topic": "Счёт предметов на сюжетной картинке (дети, деревья, лодочка); выкладывание палочек и кружков «столько же»; образцы письма (квадраты, ёлочки, чёрточки с точками)",
+    "pageType": "упражнения / образец письма",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p004_boys_river_bathing",
+      "p004_dashes_dots_line",
+      "p004_fir_trees_sample",
+      "p004_squares_row_sample"
+    ]
+  },
+  {
+    "id": "p005",
+    "pdfPage": 5,
+    "printedPage": 5,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p005.md",
+    "scan": "pages/page_005.png",
+    "section": "Первый десяток",
+    "topic": "Соответствие количества: мешки, огурцы, помидоры; графические элементы",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p005_basket_tomatoes",
+      "p005_bowl_cucumbers",
+      "p005_field_harvest_sacks",
+      "p005_writing_strip_dashes_dots_slashes"
+    ]
+  },
+  {
+    "id": "p006",
+    "pdfPage": 6,
+    "printedPage": 6,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p006.md",
+    "scan": "pages/page_006.png",
+    "section": "Первый десяток",
+    "topic": "Пространственные отношения: верх, низ, лево, право",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p006_blackboard_flag_star",
+      "p006_blackboard_house_tree",
+      "p006_children_planting_garden",
+      "p006_writing_strip_circles_hooks_waves"
+    ]
+  },
+  {
+    "id": "p007",
+    "pdfPage": 7,
+    "printedPage": 7,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p007.md",
+    "scan": "pages/page_007.png",
+    "section": "Первый десяток",
+    "topic": "Много — один. Число и цифра 1",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p007_abacus_1",
+      "p007_boy_one_mushroom_forest",
+      "p007_coin_1_kopek",
+      "p007_digit_1_print",
+      "p007_digit_1_sample",
+      "p007_domino_1",
+      "p007_mushroom_draw",
+      "p007_one_green_dot",
+      "p007_one_hedgehog",
+      "p007_one_mushroom",
+      "p007_one_squirrel"
+    ]
+  },
+  {
+    "id": "p008",
+    "pdfPage": 8,
+    "printedPage": 8,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p008.md",
+    "scan": "pages/page_008.png",
+    "section": "Первый десяток",
+    "topic": "Число 2; образование пары",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p008_abacus_2",
+      "p008_bicycle_two_wheels",
+      "p008_coin_2_kopeks",
+      "p008_digit_2_print",
+      "p008_digit_2_sample",
+      "p008_domino_2",
+      "p008_plums_draw",
+      "p008_sticks_angle_v",
+      "p008_two_boys_checkers",
+      "p008_two_green_dots",
+      "p008_two_skates",
+      "p008_two_skis"
+    ]
+  },
+  {
+    "id": "p009",
+    "pdfPage": 9,
+    "printedPage": 9,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p009.md",
+    "scan": "pages/page_009.png",
+    "section": "Первый десяток",
+    "topic": "Задача 1 + 1 и счёт парных частей тела",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p009_chick",
+      "p009_crow_flying",
+      "p009_rabbit",
+      "p009_rooster",
+      "p009_two_bullfinches_branch",
+      "p009_writing_strip_squares_rects"
+    ]
+  },
+  {
+    "id": "p010",
+    "pdfPage": 10,
+    "printedPage": 10,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p010.md",
+    "scan": "pages/page_010.png",
+    "section": "Первый десяток",
+    "topic": "Число 3; три предмета, треугольник, монета",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p010_abacus_3",
+      "p010_boys_fishing",
+      "p010_cherries_draw",
+      "p010_coin_3_kopeks",
+      "p010_digit_3_print",
+      "p010_digit_3_sample",
+      "p010_domino_3",
+      "p010_sticks_triangles",
+      "p010_three_fish",
+      "p010_three_green_dots",
+      "p010_three_strawberries"
+    ]
+  },
+  {
+    "id": "p011",
+    "pdfPage": 11,
+    "printedPage": 11,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p011.md",
+    "scan": "pages/page_011.png",
+    "section": "Первый десяток",
+    "topic": "Состав числа 3: 2 + 1 и 1 + 2",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p011_balls_left_2_and_1",
+      "p011_balls_right_1_and_2",
+      "p011_balls_row_3_groups",
+      "p011_children_tricycles",
+      "p011_three_squares_2_1",
+      "p011_writing_strip_squares_rects"
+    ]
+  },
+  {
+    "id": "p012",
+    "pdfPage": 12,
+    "printedPage": 12,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p012.md",
+    "scan": "pages/page_012.png",
+    "section": "Первый десяток",
+    "topic": "Число 4; квадрат и четыре флажка",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p012_abacus_4",
+      "p012_children_woodwork_table",
+      "p012_digit_4_print",
+      "p012_digit_4_sample",
+      "p012_domino_4",
+      "p012_flags_draw_sample",
+      "p012_four_green_dots",
+      "p012_sticks_square"
+    ]
+  },
+  {
+    "id": "p013",
+    "pdfPage": 13,
+    "printedPage": 13,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p013.md",
+    "scan": "pages/page_013.png",
+    "section": "Первый десяток → Число 4 (продолжение, вторая страница темы)",
+    "topic": "Число 4: вычитание 1 из 4 (задача про птичек), нахождение числа 4 в окружающих предметах (ноги, колёса, крылья), состав числа 4 (квадратики, сливы), запись цифры 4.",
+    "pageType": "введение числа / упражнения / задачи",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p013_birds_four_on_branch",
+      "p013_birds_one_flies_away",
+      "p013_butterfly",
+      "p013_goat",
+      "p013_plums_frame_1",
+      "p013_plums_frame_2",
+      "p013_plums_frame_3",
+      "p013_squares_2_2",
+      "p013_truck"
+    ]
+  },
+  {
+    "id": "p014",
+    "pdfPage": 14,
+    "printedPage": 14,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p014.md",
+    "scan": "pages/page_014.png",
+    "section": "Первый десяток → Число 5",
+    "topic": "Введение числа 5: сюжетная картинка (5 мальчиков), предметные картинки числа 5 (звёзды, цветок), счётные схемы (абак, домино, кружки), цифра 5 (крупная и образец в клетках), монета 5 копеек, задания с палочками, рисование 5 яблок.",
+    "pageType": "введение числа / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p014_abacus_5",
+      "p014_apple_blossom",
+      "p014_apples_draw",
+      "p014_boys_queue",
+      "p014_circles_5",
+      "p014_coin_5_kopeks",
+      "p014_digit_5_large",
+      "p014_digit_5_sample",
+      "p014_domino_5",
+      "p014_five_stars",
+      "p014_star_outline"
+    ]
+  },
+  {
+    "id": "p015",
+    "pdfPage": 15,
+    "printedPage": 15,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p015.md",
+    "scan": "pages/page_015.png",
+    "section": "Первый десяток → Число 5 (продолжение, вторая страница темы)",
+    "topic": "Число 5: сюжет «девочка рвёт ромашки» (5 − 1), состав числа 5 (квадратики 4 и 1, рамки с орехами 3+2, 2+3, 4+1, 1+4), набор 5 копеек из монет, запись цифр по вопросам, счёт орехов в столбиках 1–5.",
+    "pageType": "введение числа / упражнения / задачи",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p015_girl_daisies_1",
+      "p015_girl_daisies_2",
+      "p015_nuts_columns_1_5",
+      "p015_nuts_frame_1",
+      "p015_nuts_frame_2",
+      "p015_nuts_frame_3",
+      "p015_nuts_frame_4",
+      "p015_squares_4_1"
+    ]
+  },
+  {
+    "id": "p016",
+    "pdfPage": 16,
+    "printedPage": 16,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p016.md",
+    "scan": "pages/page_016.png",
+    "section": "Первый десяток → Число 5 (продолжение) → знакомство со знаками «+» и «=», примеры на прибавление 1",
+    "topic": "Введение записи сложения: четыре картинки (2 куклы, 3 щенка, 4 козы, 5 котят) с записями 1 + 1 = 2, 2 + 1 = 3, 3 + 1 = 4, 4 + 1 = 5 на карточках; примеры с пустым ответом.",
+    "pageType": "введение понятия (знаки «+», «=») / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p016_cards_1_plus_1_blank",
+      "p016_cards_1_plus_1_eq_2",
+      "p016_cards_2_plus_1_blank",
+      "p016_cards_2_plus_1_eq_3",
+      "p016_cards_3_plus_1_blank",
+      "p016_cards_3_plus_1_eq_4",
+      "p016_cards_4_plus_1_blank",
+      "p016_cards_4_plus_1_eq_5",
+      "p016_five_kittens",
+      "p016_four_goats",
+      "p016_three_puppies",
+      "p016_two_dolls"
+    ]
+  },
+  {
+    "id": "p017",
+    "pdfPage": 17,
+    "printedPage": 17,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p017.md",
+    "scan": "pages/page_017.png",
+    "section": "Первый десяток → Число 5 (продолжение) → сложение с 1 в пределах 5",
+    "topic": "Задачи по картинкам на сложение (кролики 3 + 1, морковки 4 + 1), схемы с кружками для 1 + 1, 2 + 1, 3 + 1, 4 + 1, образец рукописной записи примеров в тетради, столбики примеров на прибавление 1.",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p017_carrots",
+      "p017_circles_1_plus_1",
+      "p017_circles_2_plus_1",
+      "p017_circles_3_plus_1",
+      "p017_circles_4_plus_1",
+      "p017_handwritten_sums_plus_1",
+      "p017_rabbits"
+    ]
+  },
+  {
+    "id": "p018",
+    "pdfPage": 18,
+    "printedPage": 18,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p018.md",
+    "scan": "pages/page_018.png",
+    "section": "Первый десяток → Число 6",
+    "topic": "Введение числа 6: сюжетная картинка (девочка кормит 6 кур), предметные картинки (жук с 6 ногами, 6 вишен), счётные схемы (абак 5+1, домино 3+3, 6 кружков), цифра 6 (печатная и образец в клетках), фигуры из 6 палочек, образование 6 из 5 и 1, рисование 6 вишен.",
+    "pageType": "введение числа / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p018_abacus_6",
+      "p018_beetle",
+      "p018_cherries_branch",
+      "p018_circles_6",
+      "p018_digit_6_large",
+      "p018_digit_6_sample",
+      "p018_domino_6",
+      "p018_girl_feeding_chickens",
+      "p018_sticks_house",
+      "p018_sticks_two_triangles"
+    ]
+  },
+  {
+    "id": "p019",
+    "pdfPage": 19,
+    "printedPage": 19,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p019.md",
+    "scan": "pages/page_019.png",
+    "section": "Первый десяток",
+    "topic": "Состав числа 6; недостающие цифры",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p019_boy_aquarium",
+      "p019_domino_3_3",
+      "p019_domino_4_2",
+      "p019_domino_5_1",
+      "p019_girl_flowerpots",
+      "p019_number_cards_1_6",
+      "p019_squares_4_2"
+    ]
+  },
+  {
+    "id": "p020",
+    "pdfPage": 20,
+    "printedPage": 20,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p020.md",
+    "scan": "pages/page_020.png",
+    "section": "Первый десяток",
+    "topic": "Вычитание 1 в трёх сюжетах",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p020_boys_giving_object",
+      "p020_cards_2_minus_1",
+      "p020_cards_3_minus_1",
+      "p020_cards_4_minus_1",
+      "p020_girl_balloon_flies",
+      "p020_girl_picking_tomato",
+      "p020_girl_two_balloons"
+    ]
+  },
+  {
+    "id": "p021",
+    "pdfPage": 21,
+    "printedPage": 21,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p021.md",
+    "scan": "pages/page_021.png",
+    "section": "Первый десяток",
+    "topic": "Таблица вычитания 1",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p021_cards_5_minus_1",
+      "p021_circles_2_minus_1",
+      "p021_circles_3_minus_1",
+      "p021_circles_4_minus_1",
+      "p021_circles_5_minus_1",
+      "p021_circles_6_minus_1",
+      "p021_five_cones",
+      "p021_squirrel_takes_cone",
+      "p021_writing_subtract_one"
+    ]
+  },
+  {
+    "id": "p022",
+    "pdfPage": 22,
+    "printedPage": 22,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p022.md",
+    "scan": "pages/page_022.png",
+    "section": "Первый десяток",
+    "topic": "Число 7",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p022_abacus_7",
+      "p022_children_planting_seven_trees",
+      "p022_digit_7_print",
+      "p022_digit_7_sample",
+      "p022_domino_7",
+      "p022_seven_apples",
+      "p022_seven_green_dots",
+      "p022_seven_walnuts",
+      "p022_sticks_square_triangle"
+    ]
+  },
+  {
+    "id": "p023",
+    "pdfPage": 23,
+    "printedPage": 23,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p023.md",
+    "scan": "pages/page_023.png",
+    "section": "Первый десяток",
+    "topic": "Состав числа 7 и обратные действия",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p023_boy_picking_pear",
+      "p023_domino_4_3",
+      "p023_domino_5_2",
+      "p023_domino_6_1",
+      "p023_seven_leaves",
+      "p023_squares_4_3"
+    ]
+  },
+  {
+    "id": "p024",
+    "pdfPage": 24,
+    "printedPage": 24,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p024.md",
+    "scan": "pages/page_024.png",
+    "section": "Первый десяток",
+    "topic": "Число 8",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p024_abacus_8",
+      "p024_digit_8_print",
+      "p024_digit_8_sample",
+      "p024_domino_8",
+      "p024_eight_currants",
+      "p024_eight_green_dots",
+      "p024_eight_peas",
+      "p024_eight_pigeons",
+      "p024_sticks_two_squares"
+    ]
+  },
+  {
+    "id": "p025",
+    "pdfPage": 25,
+    "printedPage": 25,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p025.md",
+    "scan": "pages/page_025.png",
+    "section": "Первый десяток → Число 8 (вторая страница темы, продолжение стр. 24)",
+    "topic": "Число 8: прибавить и отнять 1 (7 + 1 = 8, 8 − 1 = 7), состав числа 8 (7 и 1, 6 и 2, 5 и 3, 4 и 4), счёт до 8 и обратно",
+    "pageType": "введение числа / задачи / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p025_domino_8_4_4",
+      "p025_domino_8_5_3",
+      "p025_domino_8_6_2",
+      "p025_domino_8_7_1",
+      "p025_girl_reads_book",
+      "p025_girl_takes_book"
+    ]
+  },
+  {
+    "id": "p026",
+    "pdfPage": 26,
+    "printedPage": 26,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p026.md",
+    "scan": "pages/page_026.png",
+    "section": "Первый десяток → Число 9",
+    "topic": "Введение числа 9: образование 9 из 8 и 1, счёт до 9, цифра 9, состав числа 9 (5 и 4), числовой ряд до 9",
+    "pageType": "введение числа / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p026_abacus_9",
+      "p026_digit_9_large",
+      "p026_digit_9_sample",
+      "p026_dots_frame_9",
+      "p026_flags_9",
+      "p026_green_circles_9",
+      "p026_number_row_missing",
+      "p026_pioneers_marching",
+      "p026_roses_vase",
+      "p026_sticks_triangles"
+    ]
+  },
+  {
+    "id": "p027",
+    "pdfPage": 27,
+    "printedPage": 27,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p027.md",
+    "scan": "pages/page_027.png",
+    "section": "Первый десяток → Число 9 (вторая страница темы, продолжение стр. 26)",
+    "topic": "Число 9: прибавить и отнять 1 (8 + 1 = 9, 9 − 1 = 8), состав числа 9 (8 и 1, 7 и 2, 6 и 3, 5 и 4), счёт до 9 и обратно",
+    "pageType": "введение числа / задачи / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p027_domino_9_5_4",
+      "p027_domino_9_6_3",
+      "p027_domino_9_7_2",
+      "p027_domino_9_8_1",
+      "p027_ducks_pond",
+      "p027_pigs_grazing"
+    ]
+  },
+  {
+    "id": "p028",
+    "pdfPage": 28,
+    "printedPage": 28,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p028.md",
+    "scan": "pages/page_028.png",
+    "section": "Первый десяток → Число 10",
+    "topic": "Введение числа 10: образование 10 из 9 и 1, счёт до 10, запись числа 10, монета 10 копеек, числовой ряд до 10",
+    "pageType": "введение числа / задачи / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p028_abacus_10",
+      "p028_coin_10_kopeks",
+      "p028_digit_10_large",
+      "p028_digit_10_sample",
+      "p028_dots_frame_10",
+      "p028_green_circles_10",
+      "p028_kids_gymnastics",
+      "p028_number_row_missing",
+      "p028_sticks_star"
+    ]
+  },
+  {
+    "id": "p029",
+    "pdfPage": 29,
+    "printedPage": 29,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p029.md",
+    "scan": "pages/page_029.png",
+    "section": "Первый десяток → Число 10 (вторая страница темы, продолжение стр. 28)",
+    "topic": "Число 10: образование 9 + 1 = 10, состав числа 10 (9 и 1, 8 и 2, 7 и 3, 6 и 4, 5 и 5), счёт до 10 и обратно",
+    "pageType": "введение числа / упражнения",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [],
+    "assetIds": [
+      "p029_bar_10_5_5",
+      "p029_bar_10_6_4",
+      "p029_bar_10_7_3",
+      "p029_bar_10_8_2",
+      "p029_bar_10_9_1",
+      "p029_bars_10_all",
+      "p029_boy_toy_train",
+      "p029_squares_green_red"
+    ]
+  },
+  {
+    "id": "p030",
+    "pdfPage": 30,
+    "printedPage": 30,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p030.md",
+    "scan": "pages/page_030.png",
+    "section": "Первый десяток",
+    "topic": "Сложение и вычитание; прибавить и отнять 1",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "assetIds": [
+      "p030_fir_trees_10"
+    ]
+  },
+  {
+    "id": "p031",
+    "pdfPage": 31,
+    "printedPage": 31,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p031.md",
+    "scan": "pages/page_031.png",
+    "section": "Первый десяток",
+    "topic": "Прибавление и вычитание 1; переход к +2",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "assetIds": [
+      "p031_apples_pair_1",
+      "p031_apples_pair_2",
+      "p031_apples_pair_3",
+      "p031_apples_pair_4",
+      "p031_apples_pair_5",
+      "p031_birds_branch_6_1",
+      "p031_domino_2_2",
+      "p031_domino_4_2",
+      "p031_domino_6_2",
+      "p031_domino_8_2",
+      "p031_swallows_wire_7"
+    ]
+  },
+  {
+    "id": "p032",
+    "pdfPage": 32,
+    "printedPage": 32,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p032.md",
+    "scan": "pages/page_032.png",
+    "section": "Первый десяток",
+    "topic": "Вычитание 2 по единице; задачи 14–22",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    ],
+    "assetIds": [
+      "p032_circles_10_minus_2",
+      "p032_circles_4_minus_2",
+      "p032_circles_6_minus_2",
+      "p032_circles_8_minus_2"
+    ]
+  },
+  {
+    "id": "p033",
+    "pdfPage": 33,
+    "printedPage": 33,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p033.md",
+    "scan": "pages/page_033.png",
+    "section": "Первый десяток",
+    "topic": "Прибавление 2 к нечётным числам",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "assetIds": [
+      "p033_cherries_group_1",
+      "p033_cherries_group_2",
+      "p033_cherries_group_3",
+      "p033_cherries_group_4",
+      "p033_cherries_group_5",
+      "p033_domino_1_plus_2",
+      "p033_domino_3_plus_2",
+      "p033_domino_5_plus_2",
+      "p033_domino_7_plus_2",
+      "p033_pine_cone",
+      "p033_spruce_cone"
+    ]
+  },
+  {
+    "id": "p034",
+    "pdfPage": 34,
+    "printedPage": 34,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p034.md",
+    "scan": "pages/page_034.png",
+    "section": "Первый десяток",
+    "topic": "Вычитание 2; составление примеров",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "assetIds": [
+      "p034_circles_3_minus_2",
+      "p034_circles_5_minus_2",
+      "p034_circles_7_minus_2",
+      "p034_circles_9_minus_2",
+      "p034_five_buttons"
+    ]
+  },
+  {
+    "id": "p035",
+    "pdfPage": 35,
+    "printedPage": 35,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p035.md",
+    "scan": "pages/page_035.png",
+    "section": "Первый десяток",
+    "topic": "Завершение ±2; прибавить и отнять 3",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41
+    ],
+    "assetIds": [
+      "p035_domino_1_plus_3",
+      "p035_domino_2_plus_3",
+      "p035_domino_3_plus_3",
+      "p035_domino_4_plus_3"
+    ]
+  },
+  {
+    "id": "p036",
+    "pdfPage": 36,
+    "printedPage": 36,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p036.md",
+    "scan": "pages/page_036.png",
+    "section": "Первый десяток",
+    "topic": "Прибавление 3; листья, деревья, монеты",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "без нумерации",
+    "exerciseNumbers": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "assetIds": [
+      "p036_coin_2_kopeks",
+      "p036_coin_3_kopeks",
+      "p036_domino_5_plus_3",
+      "p036_domino_6_plus_3",
+      "p036_domino_7_plus_3",
+      "p036_three_birch_leaves",
+      "p036_two_maple_leaves"
+    ]
+  },
+  {
+    "id": "p037",
+    "pdfPage": 37,
+    "printedPage": 37,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p037.md",
+    "scan": "pages/page_037.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 3 (продолжение; сложение с 3 и повторение ±1, ±2)",
+    "topic": "Прибавление 3 в задачах и примерах; понятие «столько же»; повторение прибавления и вычитания 1 и 2; вычитание по частям (−2−1, −1−2)",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "48–57",
+    "exerciseNumbers": [
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p038",
+    "pdfPage": 38,
+    "printedPage": 38,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p038.md",
+    "scan": "pages/page_038.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 3 (вычитание 3)",
+    "topic": "Вычитание 3 из чисел 4–10 по частям (−1−1−1 и −2−1) с опорой на схемы с зачёркнутыми кружками; связь сложения и вычитания (1+3 / 4−3)",
+    "pageType": "введение приёма вычитания / упражнения / задача",
+    "exerciseLabel": "58–62 (плюс 7 схем без нумерации)",
+    "exerciseNumbers": [
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "assetIds": [
+      "p038_circles_10_minus_3",
+      "p038_circles_4_minus_3",
+      "p038_circles_5_minus_3",
+      "p038_circles_6_minus_3",
+      "p038_circles_7_minus_3",
+      "p038_circles_8_minus_3",
+      "p038_circles_9_minus_3"
+    ]
+  },
+  {
+    "id": "p039",
+    "pdfPage": 39,
+    "printedPage": 39,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p039.md",
+    "scan": "pages/page_039.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 3 (закрепление)",
+    "topic": "Закрепление вычитания 3: текстовые задачи на остаток, столбики примеров, работа с разрезной таблицей, задача с продолжением (…), повторение ±1, ±2",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "63–71",
+    "exerciseNumbers": [
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p040",
+    "pdfPage": 40,
+    "printedPage": 40,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p040.md",
+    "scan": "pages/page_040.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 4",
+    "topic": "Начало темы «Прибавить и отнять 4»: состав числа 4, прибавление 4 по частям (+2+2) с опорой на домино, задачи на сложение с 4",
+    "pageType": "введение приёма сложения / упражнения / задачи",
+    "exerciseLabel": "72–78 (плюс 6 схем-домино без нумерации)",
+    "exerciseNumbers": [
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78
+    ],
+    "assetIds": [
+      "p040_domino_1_plus_4",
+      "p040_domino_2_plus_4",
+      "p040_domino_3_plus_4",
+      "p040_domino_4_plus_4",
+      "p040_domino_5_plus_4",
+      "p040_domino_6_plus_4"
+    ]
+  },
+  {
+    "id": "p041",
+    "pdfPage": 41,
+    "printedPage": 41,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p041.md",
+    "scan": "pages/page_041.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 4",
+    "topic": "Закрепление прибавления 4 (карточки, столбики, задачи со «столько же»), повторение −1, −2, −3, вычитание по частям (−2−2, −1−3) и начало вычитания 4 со схемами кружков",
+    "pageType": "упражнения / задачи / введение приёма вычитания",
+    "exerciseLabel": "79–86 (плюс 3 схемы без нумерации)",
+    "exerciseNumbers": [
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86
+    ],
+    "assetIds": [
+      "p041_circles_10_minus_4",
+      "p041_circles_6_minus_4",
+      "p041_circles_8_minus_4"
+    ]
+  },
+  {
+    "id": "p042",
+    "pdfPage": 42,
+    "printedPage": 42,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p042.md",
+    "scan": "pages/page_042.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 4",
+    "topic": "Вычитание 4 (продолжение): пары «сложение / вычитание», схемы 5−4, 7−4, 9−4, задачи на остаток, таблицы «+4» и «−4»",
+    "pageType": "упражнения / задачи / таблица",
+    "exerciseLabel": "87–95 (плюс 3 схемы без нумерации)",
+    "exerciseNumbers": [
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95
+    ],
+    "assetIds": [
+      "p042_circles_5_minus_4",
+      "p042_circles_7_minus_4",
+      "p042_circles_9_minus_4",
+      "p042_table_minus_4",
+      "p042_table_plus_4"
+    ]
+  },
+  {
+    "id": "p043",
+    "pdfPage": 43,
+    "printedPage": 43,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p043.md",
+    "scan": "pages/page_043.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 4 (завершение) / Прибавить и отнять 5 (начало)",
+    "topic": "Завершение темы ±4 (двухчастная задача, столбики) и начало темы «Прибавить и отнять 5»: состав числа 5, перестановка слагаемых на домино (5+1 и 1+5 … 5+5)",
+    "pageType": "упражнения / задачи / введение приёма сложения",
+    "exerciseLabel": "96–100 (плюс 9 домино без нумерации)",
+    "exerciseNumbers": [
+      96,
+      97,
+      98,
+      99,
+      100
+    ],
+    "assetIds": [
+      "p043_domino_1_plus_5",
+      "p043_domino_2_plus_5",
+      "p043_domino_3_plus_5",
+      "p043_domino_4_plus_5",
+      "p043_domino_5_plus_1",
+      "p043_domino_5_plus_2",
+      "p043_domino_5_plus_3",
+      "p043_domino_5_plus_4",
+      "p043_domino_5_plus_5"
+    ]
+  },
+  {
+    "id": "p044",
+    "pdfPage": 44,
+    "printedPage": 44,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p044.md",
+    "scan": "pages/page_044.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 5",
+    "topic": "Прибавление 5 по частям (+2+3, +3+2), задачи на сложение с 5, столбики, начало вычитания 5 по частям (−3−2, −2−3)",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "101–108 (плюс схемы-записи без нумерации вверху и внизу)",
+    "exerciseNumbers": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p045",
+    "pdfPage": 45,
+    "printedPage": 45,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p045.md",
+    "scan": "pages/page_045.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 5",
+    "topic": "Закрепление вычитания 5: задачи на остаток, постановка вопроса, столбики «±5», серия задач про флажки, разрезная таблица",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "109–118",
+    "exerciseNumbers": [
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p046",
+    "pdfPage": 46,
+    "printedPage": 46,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p046.md",
+    "scan": "pages/page_046.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 5 (повторение) / Прибавить и отнять 6 (начало)",
+    "topic": "Повторение ±3, ±4, ±5; начало темы «Прибавить и отнять 6»: состав числа 6, перестановка слагаемых на домино (6+1/1+6 … 6+4/4+6), прибавление 6 по частям, задачи на сложение с 6",
+    "pageType": "повторение / введение приёма сложения / задачи",
+    "exerciseLabel": "119–124 (плюс 8 домино и 4 записи без нумерации)",
+    "exerciseNumbers": [
+      119,
+      120,
+      121,
+      122,
+      123,
+      124
+    ],
+    "assetIds": [
+      "p046_domino_1_plus_6",
+      "p046_domino_2_plus_6",
+      "p046_domino_3_plus_6",
+      "p046_domino_4_plus_6",
+      "p046_domino_6_plus_1",
+      "p046_domino_6_plus_2",
+      "p046_domino_6_plus_3",
+      "p046_domino_6_plus_4"
+    ]
+  },
+  {
+    "id": "p047",
+    "pdfPage": 47,
+    "printedPage": 47,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p047.md",
+    "scan": "pages/page_047.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 6",
+    "topic": "Закрепление сложения с 6; вычитание 6 (пары «сложение/вычитание», вычитание по частям −4−2, −3−3, −2−4); задачи на остаток",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "125–133 (плюс 4 записи без нумерации)",
+    "exerciseNumbers": [
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p048",
+    "pdfPage": 48,
+    "printedPage": 48,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p048.md",
+    "scan": "pages/page_048.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 6 (закрепление) / Прибавить и отнять 7 (начало)",
+    "topic": "Закрепление ±6 («семейства» примеров, задачи, разрезная таблица, смешанные столбики); начало темы «Прибавить и отнять 7»: состав числа 7, 7+1 и 1+7 с палочками",
+    "pageType": "упражнения / задачи / введение",
+    "exerciseLabel": "134–142",
+    "exerciseNumbers": [
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p049",
+    "pdfPage": 49,
+    "printedPage": 49,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p049.md",
+    "scan": "pages/page_049.png",
+    "section": "Первый десяток → Сложение и вычитание (прибавление и перестановка слагаемых: 7 + 1, 1 + 7; 7 + 2, 2 + 7; 7 + 3, 3 + 7)",
+    "topic": "Прибавление числа 7 (1 + 7, 2 + 7, 3 + 7) на основе перестановки слагаемых; разложение второго слагаемого по частям; задачи на сложение и вычитание с числом 7",
+    "pageType": "введение приёма вычисления / упражнения / задачи",
+    "exerciseLabel": "143–147 (плюс вводные схемы и примеры без нумерации)",
+    "exerciseNumbers": [
+      143,
+      144,
+      145,
+      146,
+      147
+    ],
+    "assetIds": [
+      "p049_domino_1_plus_7",
+      "p049_domino_2_plus_7",
+      "p049_domino_3_plus_7",
+      "p049_domino_7_plus_1",
+      "p049_domino_7_plus_2",
+      "p049_domino_7_plus_3"
+    ]
+  },
+  {
+    "id": "p050",
+    "pdfPage": 50,
+    "printedPage": 50,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p050.md",
+    "scan": "pages/page_050.png",
+    "section": "Первый десяток → Сложение и вычитание (прибавить и отнять 7)",
+    "topic": "Вычитание числа 7 (8 − 7, 9 − 7, 10 − 7) как действие, обратное сложению; вычитание 7 по частям; задачи на покупку и сдачу (блюдце 3 руб., чашка 7 руб.)",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "148–154",
+    "exerciseNumbers": [
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154
+    ],
+    "assetIds": [
+      "p050_saucer_cup_prices"
+    ]
+  },
+  {
+    "id": "p051",
+    "pdfPage": 51,
+    "printedPage": 51,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p051.md",
+    "scan": "pages/page_051.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 8",
+    "topic": "Прибавление и вычитание числа 8: 8 + 1, 1 + 8, 9 − 1, 9 − 8, 8 + 2, 2 + 8, 10 − 2, 10 − 8; состав числа 8; задачи про звёздочки",
+    "pageType": "введение приёма вычисления / упражнения / задачи",
+    "exerciseLabel": "155–162",
+    "exerciseNumbers": [
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162
+    ],
+    "assetIds": [
+      "p051_domino_1_plus_8",
+      "p051_domino_2_plus_8",
+      "p051_domino_8_plus_1",
+      "p051_domino_8_plus_2"
+    ]
+  },
+  {
+    "id": "p052",
+    "pdfPage": 52,
+    "printedPage": 52,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p052.md",
+    "scan": "pages/page_052.png",
+    "section": "Первый десяток → Сложение и вычитание → Прибавить и отнять 9",
+    "topic": "Прибавление и вычитание числа 9 (9 + 1, 1 + 9, 10 − 1, 10 − 9); задачи про хоровод и лоскутки; смешанные столбики на повторение всего сложения и вычитания в пределах 10",
+    "pageType": "введение приёма вычисления / упражнения / задачи",
+    "exerciseLabel": "163–167",
+    "exerciseNumbers": [
+      163,
+      164,
+      165,
+      166,
+      167
+    ],
+    "assetIds": [
+      "p052_domino_1_plus_9",
+      "p052_domino_9_plus_1"
+    ]
+  },
+  {
+    "id": "p053",
+    "pdfPage": 53,
+    "printedPage": 53,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p053.md",
+    "scan": "pages/page_053.png",
+    "section": "Первый десяток → Сложение и вычитание (итог: таблица сложения; случай вычитания с остатком 0)",
+    "topic": "Сводная таблица сложения в пределах 10; вычитание, когда в остатке получается 0 (a − a = 0); примеры с двумя действиями",
+    "pageType": "справочная таблица / введение нового случая / упражнения",
+    "exerciseLabel": "168–170 (плюс таблица и образец без нумерации)",
+    "exerciseNumbers": [
+      168,
+      169,
+      170
+    ],
+    "assetIds": [
+      "p053_addition_table"
+    ]
+  },
+  {
+    "id": "p054",
+    "pdfPage": 54,
+    "printedPage": 54,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p054.md",
+    "scan": "pages/page_054.png",
+    "section": "Первый десяток → Метр",
+    "topic": "Знакомство с мерой длины — метром: что измеряют метром, практические измерения (класс, тесьма, шнур, комната), изготовление метра, задачи с метрами; сокращённая запись «м»",
+    "pageType": "введение понятия (мера длины) / практические задания / задачи",
+    "exerciseLabel": "171–175 (плюс вопрос и правило без нумерации)",
+    "exerciseNumbers": [
+      171,
+      172,
+      173,
+      174,
+      175
+    ],
+    "assetIds": [
+      "p054_fabric_shop_meter",
+      "p054_rule_meter_abbrev"
+    ]
+  },
+  {
+    "id": "p055",
+    "pdfPage": 55,
+    "printedPage": 55,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p055.md",
+    "scan": "pages/page_055.png",
+    "section": "Первый десяток → Метр (окончание) → Повторение (начало)",
+    "topic": "Задачи с метрами (портниха, столяр); начало раздела «Повторение»: примеры в три действия, пара обратных задач про ёлочки",
+    "pageType": "задачи / повторение / упражнения",
+    "exerciseLabel": "176–179",
+    "exerciseNumbers": [
+      176,
+      177,
+      178,
+      179
+    ],
+    "assetIds": [
+      "p055_sewing_workshop_meter"
+    ]
+  },
+  {
+    "id": "p056",
+    "pdfPage": 56,
+    "printedPage": 56,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p056.md",
+    "scan": "pages/page_056.png",
+    "section": "Первый десяток",
+    "topic": "Повторение первого десятка: задачи и цепочки действий",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "180, 181, 182, 183, 184, 185, 186, 187, 188",
+    "exerciseNumbers": [
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188
+    ],
+    "assetIds": [
+      "p056_columns_plus4_minus4_plus5_minus5"
+    ]
+  },
+  {
+    "id": "p057",
+    "pdfPage": 57,
+    "printedPage": 57,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p057.md",
+    "scan": "pages/page_057.png",
+    "section": "Первый десяток",
+    "topic": "Повторение: круговые схемы и дополнение условий",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "189, 190, 191, 192, 193, 194, 195",
+    "exerciseNumbers": [
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195
+    ],
+    "assetIds": [
+      "p057_circle_minus6",
+      "p057_circle_minus7",
+      "p057_circle_plus6",
+      "p057_circle_plus7"
+    ]
+  },
+  {
+    "id": "p058",
+    "pdfPage": 58,
+    "printedPage": 58,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p058.md",
+    "scan": "pages/page_058.png",
+    "section": "Первый десяток",
+    "topic": "Неизвестное слагаемое; игра с карточками",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "196, 197, 198, 199",
+    "exerciseNumbers": [
+      196,
+      197,
+      198,
+      199
+    ],
+    "assetIds": [
+      "p058_boy_number_cards",
+      "p058_girl_setting_table"
+    ]
+  },
+  {
+    "id": "p059",
+    "pdfPage": 59,
+    "printedPage": 59,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p059.md",
+    "scan": "pages/page_059.png",
+    "section": "Второй десяток",
+    "topic": "Второй десяток. Счёт и запись чисел 11–20",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "200, 201, 202",
+    "exerciseNumbers": [
+      200,
+      201,
+      202
+    ],
+    "assetIds": [
+      "p059_blocks_11",
+      "p059_blocks_12",
+      "p059_blocks_13",
+      "p059_blocks_14",
+      "p059_blocks_15",
+      "p059_blocks_16",
+      "p059_blocks_17",
+      "p059_blocks_18",
+      "p059_blocks_19",
+      "p059_blocks_20",
+      "p059_bundle_ten_six_sticks"
+    ]
+  },
+  {
+    "id": "p060",
+    "pdfPage": 60,
+    "printedPage": 60,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p060.md",
+    "scan": "pages/page_060.png",
+    "section": "Второй десяток",
+    "topic": "Десятки и единицы чисел 11–20",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "203, 204, 205, 206",
+    "exerciseNumbers": [
+      203,
+      204,
+      205,
+      206
+    ],
+    "assetIds": [
+      "p060_columns_11",
+      "p060_columns_12",
+      "p060_columns_13",
+      "p060_columns_14",
+      "p060_columns_15",
+      "p060_columns_16",
+      "p060_columns_17",
+      "p060_columns_18",
+      "p060_columns_19",
+      "p060_columns_20",
+      "p060_table_tens_units"
+    ]
+  },
+  {
+    "id": "p061",
+    "pdfPage": 61,
+    "printedPage": 61,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p061.md",
+    "scan": "pages/page_061.png",
+    "section": "Второй десяток → Счёт и запись чисел (стр. 59–63)",
+    "topic": "Образование и запись чисел 11–20 из десятка и единиц; чтение и письмо чисел до 20; порядок чисел; повторение сложения и вычитания в пределах 10 (±1, ±2, ±3, ±4)",
+    "pageType": "упражнения / задачи / повторение",
+    "exerciseLabel": "207–215",
+    "exerciseNumbers": [
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214,
+      215
+    ],
+    "assetIds": [
+      "p061_strip_11_20_gaps"
+    ]
+  },
+  {
+    "id": "p062",
+    "pdfPage": 62,
+    "printedPage": 62,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p062.md",
+    "scan": "pages/page_062.png",
+    "section": "Второй десяток → Счёт и запись чисел (стр. 59–63)",
+    "topic": "Повторение сложения и вычитания в пределах 10 (±5, ±6, ±7, ±8, ±9); начало части «II.» — прибавление единиц к десятку (10 + а, а + 10) на примере монет 10 коп. и 2 коп.",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "216–224",
+    "exerciseNumbers": [
+      216,
+      217,
+      218,
+      219,
+      220,
+      221,
+      222,
+      223,
+      224
+    ],
+    "assetIds": [
+      "p062_coin_10_kopeks",
+      "p062_coin_2_kopeks"
+    ]
+  },
+  {
+    "id": "p063",
+    "pdfPage": 63,
+    "printedPage": 63,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p063.md",
+    "scan": "pages/page_063.png",
+    "section": "Второй десяток → Счёт и запись чисел (стр. 59–63), часть II",
+    "topic": "Вычитание из чисел второго десятка всех единиц (1а − а = 10) и десятка (1а − 10 = а); связь сложения 10 + а с вычитанием; пучок-десяток и отдельные палочки",
+    "pageType": "упражнения / задачи / введение приёма",
+    "exerciseLabel": "225–231",
+    "exerciseNumbers": [
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231
+    ],
+    "assetIds": [
+      "p063_bundle_plus_1_stick",
+      "p063_bundle_plus_3_sticks",
+      "p063_buttons_frame_10_5"
+    ]
+  },
+  {
+    "id": "p064",
+    "pdfPage": 64,
+    "printedPage": 64,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p064.md",
+    "scan": "pages/page_064.png",
+    "section": "Второй десяток → Счёт и запись чисел (конец, № 232–234) → Сложение без перехода через десяток (начало, стр. 64)",
+    "topic": "Завершение темы 1а − 10 / 1а − а; начало темы «Сложение без перехода через десяток»: приём 12 + 2 = (10 + 2) + 2 → 2 + 2 = 4, 10 + 4 = 14; примеры вида 1а + b",
+    "pageType": "задачи / упражнения / введение приёма",
+    "exerciseLabel": "232–239",
+    "exerciseNumbers": [
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239
+    ],
+    "assetIds": [
+      "p064_solution_12_plus_2",
+      "p064_sticks_bundle_2_plus_2"
+    ]
+  },
+  {
+    "id": "p065",
+    "pdfPage": 65,
+    "printedPage": 65,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p065.md",
+    "scan": "pages/page_065.png",
+    "section": "Второй десяток → Сложение без перехода через десяток (стр. 64–66)",
+    "topic": "Сложение вида 1а + b без перехода через десяток; случаи с результатом 20 (15 + 5, 12 + 8); задачи с постановкой вопроса и дополнением условия",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "240–247",
+    "exerciseNumbers": [
+      240,
+      241,
+      242,
+      243,
+      244,
+      245,
+      246,
+      247
+    ],
+    "assetIds": [
+      "p065_circles_frame_15_5",
+      "p065_solution_15_plus_5"
+    ]
+  },
+  {
+    "id": "p066",
+    "pdfPage": 66,
+    "printedPage": 66,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p066.md",
+    "scan": "pages/page_066.png",
+    "section": "Второй десяток → Сложение без перехода через десяток (стр. 64–66)",
+    "topic": "Сложение без перехода через десяток; переместительное свойство (11 + 3 = 3 + 11); прибавление двузначного к однозначному (а + 1b); счёт двойками и пятёрками до 20",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "248–258",
+    "exerciseNumbers": [
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256,
+      257,
+      258
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p067",
+    "pdfPage": 67,
+    "printedPage": 67,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p067.md",
+    "scan": "pages/page_067.png",
+    "section": "Второй десяток → Сложение без перехода через десяток (конец, № 259–262) → Увеличение на несколько единиц (начало, стр. 67)",
+    "topic": "Закрепление сложения без перехода через десяток; введение понятия «на несколько единиц больше» на классных счётах («столько же и ещё 1», «на 1 косточку больше»)",
+    "pageType": "упражнения / задачи / введение понятия",
+    "exerciseLabel": "259–265",
+    "exerciseNumbers": [
+      259,
+      260,
+      261,
+      262,
+      263,
+      264,
+      265
+    ],
+    "assetIds": [
+      "p067_abacus_5_and_6"
+    ]
+  },
+  {
+    "id": "p068",
+    "pdfPage": 68,
+    "printedPage": 68,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p068.md",
+    "scan": "pages/page_068.png",
+    "section": "Второй десяток → Увеличение на несколько единиц (стр. 67–70)",
+    "topic": "Задачи на увеличение числа на несколько единиц («на 2 больше»); термин «увеличить на»; игра; задачи со словом «дороже»",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "266–276",
+    "exerciseNumbers": [
+      266,
+      267,
+      268,
+      269,
+      270,
+      271,
+      272,
+      273,
+      274,
+      275,
+      276
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p069",
+    "pdfPage": 69,
+    "printedPage": 69,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p069.md",
+    "scan": "pages/page_069.png",
+    "section": "Второй десяток → Увеличение на несколько единиц (стр. 67–70)",
+    "topic": "Задачи на увеличение на несколько единиц («дороже», «старше», «больше»); составление похожих задач с другими числами; «Увеличить: … на …»",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "277–287",
+    "exerciseNumbers": [
+      277,
+      278,
+      279,
+      280,
+      281,
+      282,
+      283,
+      284,
+      285,
+      286,
+      287
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p070",
+    "pdfPage": 70,
+    "printedPage": 70,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p070.md",
+    "scan": "pages/page_070.png",
+    "section": "Второй десяток → Увеличение на несколько единиц (стр. 67–70)",
+    "topic": "Пары задач (увеличение на несколько единиц → нахождение суммы); увеличение с метрами («длиннее», «шире», «выше»); задания на рисование с условием «на n больше»",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "288–298",
+    "exerciseNumbers": [
+      288,
+      289,
+      290,
+      291,
+      292,
+      293,
+      294,
+      295,
+      296,
+      297,
+      298
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p071",
+    "pdfPage": 71,
+    "printedPage": 71,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p071.md",
+    "scan": "pages/page_071.png",
+    "section": "Второй десяток → Увеличение на несколько единиц (конец, № 299) → Вычитание однозначных чисел без перехода через десяток (начало, стр. 71)",
+    "topic": "Введение вычитания вида 1а − b (b ≤ а): приём 16 − 2 → 6 − 2 = 4, 10 + 4 = 14; наглядность с палочками; задачи на остаток",
+    "pageType": "упражнения / задачи / введение приёма",
+    "exerciseLabel": "299–305",
+    "exerciseNumbers": [
+      299,
+      300,
+      301,
+      302,
+      303,
+      304,
+      305
+    ],
+    "assetIds": [
+      "p071_solution_16_minus_2",
+      "p071_sticks_bundle_4_plus_2"
+    ]
+  },
+  {
+    "id": "p072",
+    "pdfPage": 72,
+    "printedPage": 72,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p072.md",
+    "scan": "pages/page_072.png",
+    "section": "Второй десяток → Вычитание однозначных чисел без перехода через десяток (стр. 71–73)",
+    "topic": "Вычитание 1а − b; таблицы «вычесть 3 / вычесть 4»; связь сложения и вычитания (14 + 3, 14 − 3); вычитание из 20: приём 20 − 5 → 10 − 5 = 5, 10 + 5 = 15",
+    "pageType": "упражнения / задачи / введение приёма",
+    "exerciseLabel": "306–313",
+    "exerciseNumbers": [
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313
+    ],
+    "assetIds": [
+      "p072_circles_frame_20_minus_5",
+      "p072_solution_20_minus_5",
+      "p072_table_minus_3",
+      "p072_table_minus_4"
+    ]
+  },
+  {
+    "id": "p073",
+    "pdfPage": 73,
+    "printedPage": 73,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p073.md",
+    "scan": "pages/page_073.png",
+    "section": "Второй десяток → Вычитание однозначных чисел без перехода через десяток (стр. 71–73)",
+    "topic": "Вычитание из 10 и 20, вычитание из чисел второго десятка без перехода через десяток; задачи на увеличение/уменьшение в одно действие; примеры в два действия",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "314–320",
+    "exerciseNumbers": [
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      320
+    ],
+    "assetIds": [
+      "p073_frame_minus_5"
+    ]
+  },
+  {
+    "id": "p074",
+    "pdfPage": 74,
+    "printedPage": 74,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p074.md",
+    "scan": "pages/page_074.png",
+    "section": "Второй десяток → Уменьшение на несколько единиц (стр. 74–76)",
+    "topic": "Введение понятия «на несколько единиц меньше»; практические упражнения со счётами, карандашами, кружками, квадратиками; простые задачи на уменьшение; примеры на вычитание; начало игры с карточками",
+    "pageType": "введение темы / упражнения / задачи",
+    "exerciseLabel": "321–331 (331 продолжается на стр. 75)",
+    "exerciseNumbers": [
+      321,
+      322,
+      323,
+      324,
+      325,
+      326,
+      327,
+      328,
+      329,
+      330,
+      331
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p075",
+    "pdfPage": 75,
+    "printedPage": 75,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p075.md",
+    "scan": "pages/page_075.png",
+    "section": "Второй десяток → Уменьшение на несколько единиц (стр. 74–76)",
+    "topic": "Задачи на уменьшение на несколько единиц (дешевле, моложе); составление похожих задач; примеры на сложение и вычитание в пределах 20; «уменьшить / увеличить на»",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "331 (окончание), 332–342",
+    "exerciseNumbers": [
+      331,
+      332,
+      333,
+      334,
+      335,
+      336,
+      337,
+      338,
+      339,
+      340,
+      341,
+      342
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p076",
+    "pdfPage": 76,
+    "printedPage": 76,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p076.md",
+    "scan": "pages/page_076.png",
+    "section": "Второй десяток → Уменьшение на несколько единиц (стр. 74–76)",
+    "topic": "Задачи на «меньше / больше на несколько единиц» с продолжением («сколько всего»); примеры в два действия; уменьшение на 5; задачи с метрами («короче», «ниже»); задание на рисование",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "343–352",
+    "exerciseNumbers": [
+      343,
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350,
+      351,
+      352
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p077",
+    "pdfPage": 77,
+    "printedPage": 77,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p077.md",
+    "scan": "pages/page_077.png",
+    "section": "Второй десяток → конец «Уменьшение на несколько единиц» (353–354) и начало «Задачи в 2 действия» (стр. 77–78)",
+    "topic": "Задание с клетками «на 3 меньше»; примеры в два действия; введение задач в два действия (сделал — ещё — отдал — сколько осталось) с иллюстрацией",
+    "pageType": "упражнения / введение темы / задачи",
+    "exerciseLabel": "353–358",
+    "exerciseNumbers": [
+      353,
+      354,
+      355,
+      356,
+      357,
+      358
+    ],
+    "assetIds": [
+      "p077_boy_gives_boat_sister",
+      "p077_boy_making_boats"
+    ]
+  },
+  {
+    "id": "p078",
+    "pdfPage": 78,
+    "printedPage": 78,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p078.md",
+    "scan": "pages/page_078.png",
+    "section": "Второй десяток → Задачи в 2 действия (стр. 77–78)",
+    "topic": "Задачи в 2 действия на покупку и сдачу (с иллюстрацией товаров с ценами); задачи «было — отдал — купил ещё»; «было — взяли — добавили»; примеры на вычитание и сложение в пределах 20",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "359–366",
+    "exerciseNumbers": [
+      359,
+      360,
+      361,
+      362,
+      363,
+      364,
+      365,
+      366
+    ],
+    "assetIds": [
+      "p078_bandage_1_rub",
+      "p078_soap_2_rub",
+      "p078_toothbrush_3_rub"
+    ]
+  },
+  {
+    "id": "p079",
+    "pdfPage": 79,
+    "printedPage": 79,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p079.md",
+    "scan": "pages/page_079.png",
+    "section": "Второй десяток → конец «Задачи в 2 действия» (367–369) и начало «Сложение с переходом через десяток» (стр. 79–83)",
+    "topic": "Задачи в 2 действия («пришли — ушли»); введение сложения с переходом через десяток: прибавление к 9 (дополнение до 10, затем прибавление остатка)",
+    "pageType": "задачи / введение темы / упражнения",
+    "exerciseLabel": "367–374",
+    "exerciseNumbers": [
+      367,
+      368,
+      369,
+      370,
+      371,
+      372,
+      373,
+      374
+    ],
+    "assetIds": [
+      "p079_domino_9_plus_3",
+      "p079_sample_9_plus_3"
+    ]
+  },
+  {
+    "id": "p080",
+    "pdfPage": 80,
+    "printedPage": 80,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p080.md",
+    "scan": "pages/page_080.png",
+    "section": "Второй десяток → Сложение с переходом через десяток (стр. 79–83)",
+    "topic": "Задачи на прибавление к 9; примеры 9 + n; введение прибавления к 8 (дополнение 8 до 10) со схемой и образцом записи; задачи на 8 + n",
+    "pageType": "упражнения / введение приёма / задачи",
+    "exerciseLabel": "375–382",
+    "exerciseNumbers": [
+      375,
+      376,
+      377,
+      378,
+      379,
+      380,
+      381,
+      382
+    ],
+    "assetIds": [
+      "p080_domino_8_plus_3",
+      "p080_sample_8_plus_3"
+    ]
+  },
+  {
+    "id": "p081",
+    "pdfPage": 81,
+    "printedPage": 81,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p081.md",
+    "scan": "pages/page_081.png",
+    "section": "Второй десяток",
+    "topic": "Прибавление 5 к 7 через десяток; задачи в два действия",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "383, 384, 385, 386, 387, 388, 389",
+    "exerciseNumbers": [
+      383,
+      384,
+      385,
+      386,
+      387,
+      388,
+      389
+    ],
+    "assetIds": [
+      "p081_deep_plate_7_rub",
+      "p081_domino_7_plus_5",
+      "p081_sample_7_plus_5",
+      "p081_shallow_plate_rub"
+    ]
+  },
+  {
+    "id": "p082",
+    "pdfPage": 82,
+    "printedPage": 82,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p082.md",
+    "scan": "pages/page_082.png",
+    "section": "Второй десяток",
+    "topic": "Сложение 6 и 5 с переходом через десяток",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "390, 391, 392, 393, 394, 395, 396, 397, 398",
+    "exerciseNumbers": [
+      390,
+      391,
+      392,
+      393,
+      394,
+      395,
+      396,
+      397,
+      398
+    ],
+    "assetIds": [
+      "p082_frame_8_plus",
+      "p082_sample_5_plus_7",
+      "p082_sample_6_plus_5"
+    ]
+  },
+  {
+    "id": "p083",
+    "pdfPage": 83,
+    "printedPage": 83,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p083.md",
+    "scan": "pages/page_083.png",
+    "section": "Второй десяток",
+    "topic": "Прибавление к 4 и 3; задачи на увеличение и сумму",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "399, 400, 401, 402, 403, 404, 405, 406, 407, 408",
+    "exerciseNumbers": [
+      399,
+      400,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408
+    ],
+    "assetIds": [
+      "p083_frame_3_plus",
+      "p083_sample_3_plus_8",
+      "p083_sample_4_plus_7"
+    ]
+  },
+  {
+    "id": "p084",
+    "pdfPage": 84,
+    "printedPage": 84,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p084.md",
+    "scan": "pages/page_084.png",
+    "section": "Второй десяток",
+    "topic": "Начало вычитания с переходом через десяток: 11−2",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "409, 410, 411, 412, 413, 414, 415, 416, 417",
+    "exerciseNumbers": [
+      409,
+      410,
+      411,
+      412,
+      413,
+      414,
+      415,
+      416,
+      417
+    ],
+    "assetIds": [
+      "p084_sample_11_minus_2",
+      "p084_sticks_11_minus_2"
+    ]
+  },
+  {
+    "id": "p085",
+    "pdfPage": 85,
+    "printedPage": 85,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p085.md",
+    "scan": "pages/page_085.png",
+    "section": "Второй десяток → Вычитание с переходом через десяток (стр. 84–88)",
+    "topic": "Вычитание из 11 (закрепление) и введение вычитания из 12 с переходом через десяток (приём «сначала до 10, потом остальное»)",
+    "pageType": "упражнения / задачи / введение приёма вычисления",
+    "exerciseLabel": "418–425",
+    "exerciseNumbers": [
+      418,
+      419,
+      420,
+      421,
+      422,
+      423,
+      424,
+      425
+    ],
+    "assetIds": [
+      "p085_frame_minus_2",
+      "p085_pencils_box_12_minus_4"
+    ]
+  },
+  {
+    "id": "p086",
+    "pdfPage": 86,
+    "printedPage": 86,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p086.md",
+    "scan": "pages/page_086.png",
+    "section": "Второй десяток → Вычитание с переходом через десяток (стр. 84–88)",
+    "topic": "Закрепление вычитания из 12; введение вычитания из 13 с переходом через десяток",
+    "pageType": "упражнения / задачи / введение приёма вычисления",
+    "exerciseLabel": "426–433 (плюс ненумерованная схема-образец «13 − 4»)",
+    "exerciseNumbers": [
+      426,
+      427,
+      428,
+      429,
+      430,
+      431,
+      432,
+      433
+    ],
+    "assetIds": [
+      "p086_frame_minus_3",
+      "p086_pencils_box_13_minus_4"
+    ]
+  },
+  {
+    "id": "p087",
+    "pdfPage": 87,
+    "printedPage": 87,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p087.md",
+    "scan": "pages/page_087.png",
+    "section": "Второй десяток → Вычитание с переходом через десяток (стр. 84–88)",
+    "topic": "Закрепление вычитания из 13; вычитание из 14 и 15 с переходом через десяток",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "434–443",
+    "exerciseNumbers": [
+      434,
+      435,
+      436,
+      437,
+      438,
+      439,
+      440,
+      441,
+      442,
+      443
+    ],
+    "assetIds": [
+      "p087_frame_minus_4"
+    ]
+  },
+  {
+    "id": "p088",
+    "pdfPage": 88,
+    "printedPage": 88,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p088.md",
+    "scan": "pages/page_088.png",
+    "section": "Второй десяток → Вычитание с переходом через десяток (стр. 84–88)",
+    "topic": "Вычитание из 16, 17, 18 с переходом через десяток; смешанные примеры и задачи; переход к задачам на «больше/меньше на несколько единиц» в два действия",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "444–452",
+    "exerciseNumbers": [
+      444,
+      445,
+      446,
+      447,
+      448,
+      449,
+      450,
+      451,
+      452
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p089",
+    "pdfPage": 89,
+    "printedPage": 89,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p089.md",
+    "scan": "pages/page_089.png",
+    "section": "Второй десяток → Вычитание с переходом через десяток (окончание, № 453–456); Килограмм (стр. 89, начало нового подраздела)",
+    "topic": "Задачи в два действия на «больше/меньше на несколько единиц» с нахождением суммы; введение единицы веса — килограмм",
+    "pageType": "задачи / упражнения / введение новой величины (килограмм)",
+    "exerciseLabel": "453–459",
+    "exerciseNumbers": [
+      453,
+      454,
+      455,
+      456,
+      457,
+      458,
+      459
+    ],
+    "assetIds": [
+      "p089_rule_kg_frame",
+      "p089_scales_bread_2kg_1kg",
+      "p089_scales_flour_5kg_1kg"
+    ]
+  },
+  {
+    "id": "p090",
+    "pdfPage": 90,
+    "printedPage": 90,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p090.md",
+    "scan": "pages/page_090.png",
+    "section": "Второй десяток → Килограмм (окончание, № 460–466); Вычитание двузначных чисел (стр. 90, начало)",
+    "topic": "Задачи с килограммами (сложение и вычитание в пределах 20); введение вычитания двузначного числа из двузначного приёмом «сначала вычесть 10, потом единицы»",
+    "pageType": "задачи / упражнения / введение приёма вычисления",
+    "exerciseLabel": "460–470",
+    "exerciseNumbers": [
+      460,
+      461,
+      462,
+      463,
+      464,
+      465,
+      466,
+      467,
+      468,
+      469,
+      470
+    ],
+    "assetIds": [
+      "p090_sticks_bundle_10_plus_5"
+    ]
+  },
+  {
+    "id": "p091",
+    "pdfPage": 91,
+    "printedPage": 91,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p091.md",
+    "scan": "pages/page_091.png",
+    "section": "Второй десяток → Вычитание двузначных чисел (стр. 90–92)",
+    "topic": "Вычитание двузначного числа из двузначного (без перехода через десяток, в пределах 20); вычитание из 20 (образец 20 − 12)",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "471–479",
+    "exerciseNumbers": [
+      471,
+      472,
+      473,
+      474,
+      475,
+      476,
+      477,
+      478,
+      479
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p092",
+    "pdfPage": 92,
+    "printedPage": 92,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p092.md",
+    "scan": "pages/page_092.png",
+    "section": "Второй десяток",
+    "topic": "Вычитание двузначных чисел; составление вопроса",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "480, 481, 482, 483, 484, 485, 486, 487, 488, 489",
+    "exerciseNumbers": [
+      480,
+      481,
+      482,
+      483,
+      484,
+      485,
+      486,
+      487,
+      488,
+      489
+    ],
+    "assetIds": [
+      "p092_frame_minus_14"
+    ]
+  },
+  {
+    "id": "p093",
+    "pdfPage": 93,
+    "printedPage": 93,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p093.md",
+    "scan": "pages/page_093.png",
+    "section": "Второй десяток",
+    "topic": "Литр; завершение задачи 489",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "489, 490, 491, 492, 493, 494",
+    "exerciseNumbers": [
+      489,
+      490,
+      491,
+      492,
+      493,
+      494
+    ],
+    "assetIds": [
+      "p093_bottle",
+      "p093_glass",
+      "p093_one_liter_mug",
+      "p093_rule_liter_abbreviation"
+    ]
+  },
+  {
+    "id": "p094",
+    "pdfPage": 94,
+    "printedPage": 94,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p094.md",
+    "scan": "pages/page_094.png",
+    "section": "Второй десяток",
+    "topic": "Литры; начало повторения сложения и вычитания",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "495, 496, 497, 498, 499, 500, 501, 502",
+    "exerciseNumbers": [
+      495,
+      496,
+      497,
+      498,
+      499,
+      500,
+      501,
+      502
+    ],
+    "assetIds": [
+      "p094_milk_can_12_l",
+      "p094_milk_can_unknown"
+    ]
+  },
+  {
+    "id": "p095",
+    "pdfPage": 95,
+    "printedPage": 95,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p095.md",
+    "scan": "pages/page_095.png",
+    "section": "Второй десяток",
+    "topic": "Неизвестные слагаемые; составление примеров и счёт группами",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "503, 504, 505, 506, 507, 508, 509, 510, 511, 512",
+    "exerciseNumbers": [
+      503,
+      504,
+      505,
+      506,
+      507,
+      508,
+      509,
+      510,
+      511,
+      512
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p096",
+    "pdfPage": 96,
+    "printedPage": 96,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p096.md",
+    "scan": "pages/page_096.png",
+    "section": "Второй десяток",
+    "topic": "Повторение: увеличение и уменьшение, выбор вопроса",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "513, 514, 515, 516, 517, 518, 519",
+    "exerciseNumbers": [
+      513,
+      514,
+      515,
+      516,
+      517,
+      518,
+      519
+    ],
+    "assetIds": [
+      "p096_plough",
+      "p096_tractor"
+    ]
+  },
+  {
+    "id": "p097",
+    "pdfPage": 97,
+    "printedPage": 97,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p097.md",
+    "scan": "pages/page_097.png",
+    "section": "Второй десяток → Умножение (стр. 97) → Умножение 2",
+    "topic": "Введение умножения. Умножение числа 2: замена суммы одинаковых слагаемых умножением (2×2 … 2×7)",
+    "pageType": "введение нового понятия (умножение) / упражнения / задачи",
+    "exerciseLabel": "520–523 (плюс схемы без нумерации для 2×6 и 2×7)",
+    "exerciseNumbers": [
+      520,
+      521,
+      522,
+      523
+    ],
+    "assetIds": [
+      "p097_acorns_2x6",
+      "p097_acorns_2x7",
+      "p097_strawberries_2x2",
+      "p097_strawberries_2x3",
+      "p097_strawberries_2x4",
+      "p097_strawberries_2x5"
+    ]
+  },
+  {
+    "id": "p098",
+    "pdfPage": 98,
+    "printedPage": 98,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p098.md",
+    "scan": "pages/page_098.png",
+    "section": "Второй десяток → Умножение → Умножение 2",
+    "topic": "Завершение таблицы умножения 2 (2×8, 2×9, 2×10), сводная таблица «2×2 … 2×10», задачи и примеры вида «2×n ± m»",
+    "pageType": "введение (продолжение схем) / упражнения / задачи",
+    "exerciseLabel": "524–528 (плюс схемы и таблица без нумерации)",
+    "exerciseNumbers": [
+      524,
+      525,
+      526,
+      527,
+      528
+    ],
+    "assetIds": [
+      "p098_acorns_2x10",
+      "p098_acorns_2x8",
+      "p098_acorns_2x9",
+      "p098_table_mult_2"
+    ]
+  },
+  {
+    "id": "p099",
+    "pdfPage": 99,
+    "printedPage": 99,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p099.md",
+    "scan": "pages/page_099.png",
+    "section": "Второй десяток → Умножение → Умножение 2 (окончание), Умножение 3 (начало)",
+    "topic": "Задачи на стоимость (по 2 рубля), примеры «2×n ± m»; начало темы «Умножение 3»: счёт по 3, схемы 3×2 и 3×3",
+    "pageType": "задачи / упражнения / введение (умножение 3)",
+    "exerciseLabel": "529–535",
+    "exerciseNumbers": [
+      529,
+      530,
+      531,
+      532,
+      533,
+      534,
+      535
+    ],
+    "assetIds": [
+      "p099_balls_5_two_rubles",
+      "p099_circles_3x2",
+      "p099_circles_3x3"
+    ]
+  },
+  {
+    "id": "p100",
+    "pdfPage": 100,
+    "printedPage": 100,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p100.md",
+    "scan": "pages/page_100.png",
+    "section": "Второй десяток → Умножение → Умножение 3",
+    "topic": "Схемы 3×4, 3×5, 3×6; таблица умножения 3; задачи на умножение 3 и на умножение 1; сводные примеры 1×n, 2×n, 3×n",
+    "pageType": "введение (продолжение схем) / упражнения / задачи",
+    "exerciseLabel": "536–540 (плюс схемы и таблица без нумерации)",
+    "exerciseNumbers": [
+      536,
+      537,
+      538,
+      539,
+      540
+    ],
+    "assetIds": [
+      "p100_circles_3x4",
+      "p100_circles_3x5",
+      "p100_circles_3x6",
+      "p100_table_mult_3"
+    ]
+  },
+  {
+    "id": "p101",
+    "pdfPage": 101,
+    "printedPage": 101,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p101.md",
+    "scan": "pages/page_101.png",
+    "section": "Второй десяток → Умножение → Умножение 3",
+    "topic": "Составление задач по картинке (девочка накрывает на стол), задачи и примеры на умножение 2 и 3, счёт клеток в прямоугольнике (3 в ряду × 6 рядов)",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "541–546",
+    "exerciseNumbers": [
+      541,
+      542,
+      543,
+      544,
+      545,
+      546
+    ],
+    "assetIds": [
+      "p101_girl_table_cups_plates",
+      "p101_grid_3x6_cells"
+    ]
+  },
+  {
+    "id": "p102",
+    "pdfPage": 102,
+    "printedPage": 102,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p102.md",
+    "scan": "pages/page_102.png",
+    "section": "Второй десяток → Умножение → Умножение 3 (окончание), Умножение 4 (начало)",
+    "topic": "Монеты по 3 копейки, задачи на стоимость по 3 (в т. ч. со сдачей), сетка клеток 6 рядов по 3, примеры; начало темы «Умножение 4»: счёт по 4, схемы 4×2 и 4×3",
+    "pageType": "задачи / упражнения / введение (умножение 4)",
+    "exerciseLabel": "547–553",
+    "exerciseNumbers": [
+      547,
+      548,
+      549,
+      550,
+      551,
+      552,
+      553
+    ],
+    "assetIds": [
+      "p102_circles_4x2",
+      "p102_circles_4x3",
+      "p102_coins_3_kopeks_4"
+    ]
+  },
+  {
+    "id": "p103",
+    "pdfPage": 103,
+    "printedPage": 103,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p103.md",
+    "scan": "pages/page_103.png",
+    "section": "Второй десяток → Умножение → Умножение 4",
+    "topic": "Схемы 4×4, 4×5; таблица умножения 4; квадрат из палочек; задачи на умножение 4; сводные примеры 1×n … 4×n; задача «Я задумал число»",
+    "pageType": "введение (продолжение схем) / упражнения / задачи",
+    "exerciseLabel": "554–559 (плюс схемы и таблица без нумерации)",
+    "exerciseNumbers": [
+      554,
+      555,
+      556,
+      557,
+      558,
+      559
+    ],
+    "assetIds": [
+      "p103_circles_4x4",
+      "p103_circles_4x5",
+      "p103_sticks_square",
+      "p103_table_mult_4"
+    ]
+  },
+  {
+    "id": "p104",
+    "pdfPage": 104,
+    "printedPage": 104,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p104.md",
+    "scan": "pages/page_104.png",
+    "section": "Второй десяток → Умножение → Умножение 4",
+    "topic": "Задачи на умножение 4 (в т. ч. составные в 2 действия), составление задач, столбики примеров на умножение 1–4",
+    "pageType": "задачи / упражнения",
+    "exerciseLabel": "560–569",
+    "exerciseNumbers": [
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567,
+      568,
+      569
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p105",
+    "pdfPage": 105,
+    "printedPage": 105,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p105.md",
+    "scan": "pages/page_105.png",
+    "section": "Второй десяток",
+    "topic": "Умножение 5; пучки моркови и пятикопеечные монеты",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "570, 571, 572, 573",
+    "exerciseNumbers": [
+      570,
+      571,
+      572,
+      573
+    ],
+    "assetIds": [
+      "p105_carrots_5x2",
+      "p105_carrots_5x3",
+      "p105_carrots_5x4",
+      "p105_coins_5_kopeks_3",
+      "p105_table_mult_5"
+    ]
+  },
+  {
+    "id": "p106",
+    "pdfPage": 106,
+    "printedPage": 106,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p106.md",
+    "scan": "pages/page_106.png",
+    "section": "Второй десяток",
+    "topic": "Умножение 5; поиск выражения и весы",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "574, 575, 576, 577, 578, 579, 580",
+    "exerciseNumbers": [
+      574,
+      575,
+      576,
+      577,
+      578,
+      579,
+      580
+    ],
+    "assetIds": [
+      "p106_scales_flour_weights"
+    ]
+  },
+  {
+    "id": "p107",
+    "pdfPage": 107,
+    "printedPage": 107,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p107.md",
+    "scan": "pages/page_107.png",
+    "section": "Второй десяток",
+    "topic": "Умножение 6; равные ряды клеток",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "581, 582, 583, 584, 585, 586",
+    "exerciseNumbers": [
+      581,
+      582,
+      583,
+      584,
+      585,
+      586
+    ],
+    "assetIds": [
+      "p107_cells_6x2",
+      "p107_cells_6x3",
+      "p107_table_mult_6"
+    ]
+  },
+  {
+    "id": "p108",
+    "pdfPage": 108,
+    "printedPage": 108,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p108.md",
+    "scan": "pages/page_108.png",
+    "section": "Второй десяток",
+    "topic": "Умножение 6 в бытовых задачах; стоимость покупки",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "587, 588, 589, 590, 591, 592, 593, 594",
+    "exerciseNumbers": [
+      587,
+      588,
+      589,
+      590,
+      591,
+      592,
+      593,
+      594
+    ],
+    "assetIds": [
+      "p108_birds_birdhouse",
+      "p108_fork_4_rubles",
+      "p108_knife_3_rubles",
+      "p108_spoon_6_rubles"
+    ]
+  },
+  {
+    "id": "p109",
+    "pdfPage": 109,
+    "printedPage": 109,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p109.md",
+    "scan": "pages/page_109.png",
+    "section": "Второй десяток → Умножение → Умножение 7, 8, 9 и 10",
+    "topic": "Умножение чисел 7, 8, 9 и 10 на 2 (завершение таблицы умножения в пределах 20); задачи в два действия «умножение + сложение»",
+    "pageType": "введение темы / упражнения / задачи",
+    "exerciseLabel": "595–601",
+    "exerciseNumbers": [
+      595,
+      596,
+      597,
+      598,
+      599,
+      600,
+      601
+    ],
+    "assetIds": [
+      "p109_frame_mult_7_10"
+    ]
+  },
+  {
+    "id": "p110",
+    "pdfPage": 110,
+    "printedPage": 110,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p110.md",
+    "scan": "pages/page_110.png",
+    "section": "Второй десяток → Умножение → Таблица умножения до 20; Повторение (стр. 110)",
+    "topic": "Сводная таблица умножения в пределах 20; начало раздела «Повторение» (переместительное свойство умножения на кружках и клетках, размен монет, составление задачи)",
+    "pageType": "таблица-справочник / повторение / упражнения / задачи",
+    "exerciseLabel": "602–605",
+    "exerciseNumbers": [
+      602,
+      603,
+      604,
+      605
+    ],
+    "assetIds": [
+      "p110_circles_3x2",
+      "p110_grid_4x3",
+      "p110_mult_table_to_20"
+    ]
+  },
+  {
+    "id": "p111",
+    "pdfPage": 111,
+    "printedPage": 111,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p111.md",
+    "scan": "pages/page_111.png",
+    "section": "Второй десяток → Умножение → Повторение (стр. 110–112)",
+    "topic": "Повторение умножения: составление задач, постановка вопроса к задаче, примеры вида «a×b±c», подбор примеров по ответу",
+    "pageType": "повторение / задачи / упражнения",
+    "exerciseLabel": "606–611",
+    "exerciseNumbers": [
+      606,
+      607,
+      608,
+      609,
+      610,
+      611
+    ],
+    "assetIds": [
+      "p111_dog_sled"
+    ]
+  },
+  {
+    "id": "p112",
+    "pdfPage": 112,
+    "printedPage": 112,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p112.md",
+    "scan": "pages/page_112.png",
+    "section": "Второй десяток → Умножение → Повторение (стр. 110–112)",
+    "topic": "Повторение: задачи на «больше на …» в два действия, задачи с весами (умножение + сложение), задачи с изменением условия («хотели … но каждый сделал на … больше»), примеры «a×b±c»",
+    "pageType": "повторение / задачи / упражнения",
+    "exerciseLabel": "612–619",
+    "exerciseNumbers": [
+      612,
+      613,
+      614,
+      615,
+      616,
+      617,
+      618,
+      619
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p113",
+    "pdfPage": 113,
+    "printedPage": 113,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p113.md",
+    "scan": "pages/page_113.png",
+    "section": "Второй десяток → Деление (стр. 113) → Деление на 2 равные части",
+    "topic": "Введение деления: деление на 2 равные части (числа 2–20), связь с умножением на 2 и со сложением/вычитанием одинаковых слагаемых",
+    "pageType": "введение темы / упражнения / задачи",
+    "exerciseLabel": "620–626",
+    "exerciseNumbers": [
+      620,
+      621,
+      622,
+      623,
+      624,
+      625,
+      626
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p114",
+    "pdfPage": 114,
+    "printedPage": 114,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p114.md",
+    "scan": "pages/page_114.png",
+    "section": "Второй десяток → Деление → Деление на 2 равные части",
+    "topic": "Закрепление деления на 2: таблица деления на 2 (в рамке), задачи на деление, примеры «a:2+b», задачи в два действия «вычесть, затем разделить на 2»",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "627–634",
+    "exerciseNumbers": [
+      627,
+      628,
+      629,
+      630,
+      631,
+      632,
+      633,
+      634
+    ],
+    "assetIds": [
+      "p114_frame_div_by_2"
+    ]
+  },
+  {
+    "id": "p115",
+    "pdfPage": 115,
+    "printedPage": 115,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p115.md",
+    "scan": "pages/page_115.png",
+    "section": "Второй десяток → Деление → Деление на 2 равные части (окончание); Деление на 3 равные части",
+    "topic": "Примеры на умножение с делением на 2 («a×b:2»); введение деления на 3 равные части (3–18)",
+    "pageType": "упражнения / введение темы / задачи",
+    "exerciseLabel": "635–640",
+    "exerciseNumbers": [
+      635,
+      636,
+      637,
+      638,
+      639,
+      640
+    ],
+    "assetIds": [
+      "p115_frame_div_by_3"
+    ]
+  },
+  {
+    "id": "p116",
+    "pdfPage": 116,
+    "printedPage": 116,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p116.md",
+    "scan": "pages/page_116.png",
+    "section": "Второй десяток → Деление → Деление на 3 равные части",
+    "topic": "Закрепление деления на 3: связь с умножением на 3, схема «числа в рамке : 3», задачи в два действия (вычитание → деление на 3), примеры «a:3+b», задача-угадывание числа",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "641–647",
+    "exerciseNumbers": [
+      641,
+      642,
+      643,
+      644,
+      645,
+      646,
+      647
+    ],
+    "assetIds": [
+      "p116_box_divide_by_3",
+      "p116_pencil_boxes"
+    ]
+  },
+  {
+    "id": "p117",
+    "pdfPage": 117,
+    "printedPage": 117,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p117.md",
+    "scan": "pages/page_117.png",
+    "section": "Второй десяток",
+    "topic": "Деление на 4 равные части; цена единицы",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "648, 649, 650, 651, 652, 653, 654, 655, 656, 657",
+    "exerciseNumbers": [
+      648,
+      649,
+      650,
+      651,
+      652,
+      653,
+      654,
+      655,
+      656,
+      657
+    ],
+    "assetIds": [
+      "p117_frame_div_by_4"
+    ]
+  },
+  {
+    "id": "p118",
+    "pdfPage": 118,
+    "printedPage": 118,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p118.md",
+    "scan": "pages/page_118.png",
+    "section": "Второй десяток",
+    "topic": "Деление на 4; поиск результата и составная цена",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "658, 659, 660, 661, 662, 663, 664, 665",
+    "exerciseNumbers": [
+      658,
+      659,
+      660,
+      661,
+      662,
+      663,
+      664,
+      665
+    ],
+    "assetIds": [
+      "p118_fish_hooks"
+    ]
+  },
+  {
+    "id": "p119",
+    "pdfPage": 119,
+    "printedPage": 119,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p119.md",
+    "scan": "pages/page_119.png",
+    "section": "Второй десяток",
+    "topic": "Деление на 5 равных частей; длина частей",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "666, 667, 668, 669, 670, 671, 672, 673",
+    "exerciseNumbers": [
+      666,
+      667,
+      668,
+      669,
+      670,
+      671,
+      672,
+      673
+    ],
+    "assetIds": [
+      "p119_frame_div_by_5",
+      "p119_strip_15_cells"
+    ]
+  },
+  {
+    "id": "p120",
+    "pdfPage": 120,
+    "printedPage": 120,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p120.md",
+    "scan": "pages/page_120.png",
+    "section": "Второй десяток",
+    "topic": "Деление на 5 и задачи на стоимость единицы",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "674, 675, 676, 677, 678, 679, 680, 681, 682",
+    "exerciseNumbers": [
+      674,
+      675,
+      676,
+      677,
+      678,
+      679,
+      680,
+      681,
+      682
+    ],
+    "assetIds": [
+      "p120_box_divide_by_5"
+    ]
+  },
+  {
+    "id": "p121",
+    "pdfPage": 121,
+    "printedPage": 121,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p121.md",
+    "scan": "pages/page_121.png",
+    "section": "Второй десяток → Деление → Деление на 6 равных частей",
+    "topic": "Деление на 6 равных частей (6 : 6, 12 : 6, 18 : 6); связь умножения на 6 и деления на 6; смешанные примеры в два действия; задачи на деление на равные части",
+    "pageType": "введение темы / упражнения / задачи",
+    "exerciseLabel": "683–692",
+    "exerciseNumbers": [
+      683,
+      684,
+      685,
+      686,
+      687,
+      688,
+      689,
+      690,
+      691,
+      692
+    ],
+    "assetIds": [
+      "p121_frame_division_by_6"
+    ]
+  },
+  {
+    "id": "p122",
+    "pdfPage": 122,
+    "printedPage": 122,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p122.md",
+    "scan": "pages/page_122.png",
+    "section": "Второй десяток → Деление → Деление на 7, 8, 9, 10 равных частей",
+    "topic": "Деление на 7, 8, 9, 10 равных частей (7 : 7, 14 : 7, 8 : 8, 16 : 8, 9 : 9, 18 : 9, 10 : 10, 20 : 10); связь с умножением; задачи на деление; составление задач и примеров",
+    "pageType": "введение темы / упражнения / задачи",
+    "exerciseLabel": "693–700",
+    "exerciseNumbers": [
+      693,
+      694,
+      695,
+      696,
+      697,
+      698,
+      699,
+      700
+    ],
+    "assetIds": [
+      "p122_frame_division_7_8_9_10"
+    ]
+  },
+  {
+    "id": "p123",
+    "pdfPage": 123,
+    "printedPage": 123,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p123.md",
+    "scan": "pages/page_123.png",
+    "section": "Второй десяток → Деление (окончание, 701–703) → Повторение (704–708)",
+    "topic": "Задачи в два действия с делением; начало раздела «Повторение» второго десятка: смешанные примеры на все четыре действия, задачи на увеличение/уменьшение на несколько единиц и нахождение суммы",
+    "pageType": "задачи / упражнения / повторение",
+    "exerciseLabel": "701–708",
+    "exerciseNumbers": [
+      701,
+      702,
+      703,
+      704,
+      705,
+      706,
+      707,
+      708
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p124",
+    "pdfPage": 124,
+    "printedPage": 124,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p124.md",
+    "scan": "pages/page_124.png",
+    "section": "Второй десяток → Повторение (стр. 123–125)",
+    "topic": "Повторение умножения и деления: примеры в два действия, составление примеров с заданным ответом, составление задач по картинкам (деление и умножение), задача в два действия",
+    "pageType": "повторение / упражнения / задачи",
+    "exerciseLabel": "709–716",
+    "exerciseNumbers": [
+      709,
+      710,
+      711,
+      712,
+      713,
+      714,
+      715,
+      716
+    ],
+    "assetIds": [
+      "p124_three_books_6_rub_each",
+      "p124_three_books_brace_6_rub"
+    ]
+  },
+  {
+    "id": "p125",
+    "pdfPage": 125,
+    "printedPage": 125,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p125.md",
+    "scan": "pages/page_125.png",
+    "section": "Второй десяток → Повторение (стр. 123–125, окончание раздела «Второй десяток»)",
+    "topic": "Окончание повторения второго десятка: составление примеров на деление с ответом 3, задачи в два действия (умножение и сложение; сложение и деление), составление задачи, смешанные примеры в два действия",
+    "pageType": "повторение / задачи / упражнения",
+    "exerciseLabel": "717–721",
+    "exerciseNumbers": [
+      717,
+      718,
+      719,
+      720,
+      721
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p126",
+    "pdfPage": 126,
+    "printedPage": 126,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p126.md",
+    "scan": "pages/page_126.png",
+    "section": "Первая сотня → Счёт и запись чисел",
+    "topic": "Начало раздела «Первая сотня»: счёт десятками (пучки по 10 палочек), круглые десятки до 100, числа из десятков и единиц (55, 88, 33)",
+    "pageType": "заголовок раздела / введение темы / упражнения (практические, с палочками)",
+    "exerciseLabel": "722–726",
+    "exerciseNumbers": [
+      722,
+      723,
+      724,
+      725,
+      726
+    ],
+    "assetIds": [
+      "p126_ten_bundles_of_sticks",
+      "p126_three_bundles_three_sticks"
+    ]
+  },
+  {
+    "id": "p127",
+    "pdfPage": 127,
+    "printedPage": 127,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p127.md",
+    "scan": "pages/page_127.png",
+    "section": "Первая сотня",
+    "topic": "Первая сотня: десятки и единицы, монеты, запись чисел",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "727, 728, 729, 730, 731, 732, 733, 734, 735",
+    "exerciseNumbers": [
+      727,
+      728,
+      729,
+      730,
+      731,
+      732,
+      733,
+      734,
+      735
+    ],
+    "assetIds": [
+      "p127_coins_three_10_kop_one_1_kop",
+      "p127_rule_units_tens_frame",
+      "p127_table_tens_units_2_4",
+      "p127_two_bundles_four_sticks"
+    ]
+  },
+  {
+    "id": "p128",
+    "pdfPage": 128,
+    "printedPage": 128,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p128.md",
+    "scan": "pages/page_128.png",
+    "section": "Первая сотня",
+    "topic": "Таблица чисел 1–100, пропуски, номера страниц и домов",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "736, 737, 738, 739, 740, 741, 742, 743, 744",
+    "exerciseNumbers": [
+      736,
+      737,
+      738,
+      739,
+      740,
+      741,
+      742,
+      743,
+      744
+    ],
+    "assetIds": [
+      "p128_row_40_50_gaps",
+      "p128_table_numbers_1_100"
+    ]
+  },
+  {
+    "id": "p129",
+    "pdfPage": 129,
+    "printedPage": 129,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p129.md",
+    "scan": "pages/page_129.png",
+    "section": "Первая сотня",
+    "topic": "Сантиметр; измерение и связь сантиметра с метром",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "745, 746, 747, 748, 749, 750, 751, 752, 753, 754, 755, 756, 757",
+    "exerciseNumbers": [
+      745,
+      746,
+      747,
+      748,
+      749,
+      750,
+      751,
+      752,
+      753,
+      754,
+      755,
+      756,
+      757
+    ],
+    "assetIds": [
+      "p129_line_to_measure",
+      "p129_rule_cm_abbreviation_frame",
+      "p129_rule_meter_100_cm_frame",
+      "p129_ruler_10_cm"
+    ]
+  },
+  {
+    "id": "p130",
+    "pdfPage": 130,
+    "printedPage": 130,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p130.md",
+    "scan": "pages/page_130.png",
+    "section": "Первая сотня",
+    "topic": "Сложение круглых десятков",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "758, 759, 760, 761, 762, 763, 764, 765, 766, 767",
+    "exerciseNumbers": [
+      758,
+      759,
+      760,
+      761,
+      762,
+      763,
+      764,
+      765,
+      766,
+      767
+    ],
+    "assetIds": [
+      "p130_three_bundles_20_plus_10"
+    ]
+  },
+  {
+    "id": "p131",
+    "pdfPage": 131,
+    "printedPage": 131,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p131.md",
+    "scan": "pages/page_131.png",
+    "section": "Первая сотня",
+    "topic": "Переход от сложения к вычитанию круглых десятков",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "768, 769, 770, 771, 772, 773, 774, 775, 776, 777",
+    "exerciseNumbers": [
+      768,
+      769,
+      770,
+      771,
+      772,
+      773,
+      774,
+      775,
+      776,
+      777
+    ],
+    "assetIds": [
+      "p131_buttons_30_minus_10"
+    ]
+  },
+  {
+    "id": "p132",
+    "pdfPage": 132,
+    "printedPage": 132,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p132.md",
+    "scan": "pages/page_132.png",
+    "section": "Первая сотня",
+    "topic": "Вычитание круглых десятков и составные задачи",
+    "pageType": "учебная; объяснение / упражнения / практические задания (состав блоков ниже).",
+    "exerciseLabel": "778, 779, 780, 781, 782, 783, 784, 785, 786, 787, 788",
+    "exerciseNumbers": [
+      778,
+      779,
+      780,
+      781,
+      782,
+      783,
+      784,
+      785,
+      786,
+      787,
+      788
+    ],
+    "assetIds": [
+      "p132_scheme_100_minus",
+      "p132_scheme_30_plus",
+      "p132_scheme_70_minus"
+    ]
+  },
+  {
+    "id": "p133",
+    "pdfPage": 133,
+    "printedPage": 133,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p133.md",
+    "scan": "pages/page_133.png",
+    "section": "Первая сотня → Вычитание круглых десятков (окончание, №№ 789–798) → Умножение круглых десятков (начало, № 799)",
+    "topic": "закрепление сложения и вычитания круглых десятков (примеры в 2 действия, «увеличить/уменьшить», нахождение неизвестного слагаемого, задачи в 2 действия); переход к теме «Умножение круглых десятков» — сумма одинаковых круглых десятков.",
+    "pageType": "упражнения / задачи / введение новой темы",
+    "exerciseLabel": "789–799",
+    "exerciseNumbers": [
+      789,
+      790,
+      791,
+      792,
+      793,
+      794,
+      795,
+      796,
+      797,
+      798,
+      799
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p134",
+    "pdfPage": 134,
+    "printedPage": 134,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p134.md",
+    "scan": "pages/page_134.png",
+    "section": "Первая сотня → Умножение круглых десятков",
+    "topic": "умножение круглых десятков на однозначное число (10 × 4, 20 × 3, 30 × 2 …) как умножение десятков: «2 дес. × 3 = 6 дес.»; задачи на умножение круглых десятков; монета 20 копеек.",
+    "pageType": "введение темы / упражнения / задачи",
+    "exerciseLabel": "800–811",
+    "exerciseNumbers": [
+      800,
+      801,
+      802,
+      803,
+      804,
+      805,
+      806,
+      807,
+      808,
+      809,
+      810,
+      811
+    ],
+    "assetIds": [
+      "p134_coin_20_kopeks",
+      "p134_stick_bundles_3x2"
+    ]
+  },
+  {
+    "id": "p135",
+    "pdfPage": 135,
+    "printedPage": 135,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p135.md",
+    "scan": "pages/page_135.png",
+    "section": "Первая сотня → Умножение круглых десятков (окончание, №№ 812–818) → Деление круглых десятков (начало, № 819)",
+    "topic": "закрепление умножения круглых десятков в примерах в 2 действия и задачах; введение деления круглых десятков на схеме «40 чернильниц : 2».",
+    "pageType": "упражнения / задачи / введение новой темы",
+    "exerciseLabel": "812–819",
+    "exerciseNumbers": [
+      812,
+      813,
+      814,
+      815,
+      816,
+      817,
+      818,
+      819
+    ],
+    "assetIds": [
+      "p135_circles_40_split_2"
+    ]
+  },
+  {
+    "id": "p136",
+    "pdfPage": 136,
+    "printedPage": 136,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p136.md",
+    "scan": "pages/page_136.png",
+    "section": "Первая сотня → Деление круглых десятков",
+    "topic": "деление круглых десятков на однозначное число (20 : 2, 100 : 5, 90 : 9 …), взаимосвязь умножения и деления круглых десятков, задачи на деление на равные части, в том числе в 2 действия.",
+    "pageType": "упражнения / задачи",
+    "exerciseLabel": "820–830",
+    "exerciseNumbers": [
+      820,
+      821,
+      822,
+      823,
+      824,
+      825,
+      826,
+      827,
+      828,
+      829,
+      830
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p137",
+    "pdfPage": 137,
+    "printedPage": 137,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p137.md",
+    "scan": "pages/page_137.png",
+    "section": "Первая сотня → Повторение (начало раздела, стр. 137)",
+    "topic": "итоговое повторение за год: сложение и вычитание в пределах 10 и 20 (в 1–3 действия), задачи на увеличение/уменьшение на несколько единиц с постановкой вопроса, черчение отрезков в сантиметрах, составление примеров с заданным ответом.",
+    "pageType": "повторение / упражнения / задачи",
+    "exerciseLabel": "831–842",
+    "exerciseNumbers": [
+      831,
+      832,
+      833,
+      834,
+      835,
+      836,
+      837,
+      838,
+      839,
+      840,
+      841,
+      842
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p138",
+    "pdfPage": 138,
+    "printedPage": 138,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p138.md",
+    "scan": "pages/page_138.png",
+    "section": "Первая сотня → Повторение",
+    "topic": "повторение второго десятка: задачи на «больше/меньше на несколько единиц», задачи на нахождение остатка, примеры в 2 действия в пределах 20, табличное умножение, задачи на умножение с добавлением/остатком.",
+    "pageType": "повторение / задачи / упражнения",
+    "exerciseLabel": "843–852",
+    "exerciseNumbers": [
+      843,
+      844,
+      845,
+      846,
+      847,
+      848,
+      849,
+      850,
+      851,
+      852
+    ],
+    "assetIds": [
+      "p138_mower_machine",
+      "p138_seeder_machine"
+    ]
+  },
+  {
+    "id": "p139",
+    "pdfPage": 139,
+    "printedPage": 139,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p139.md",
+    "scan": "pages/page_139.png",
+    "section": "Первая сотня → Повторение",
+    "topic": "повторение умножения и деления в пределах 20 (в том числе в 2 действия), деление на равные части, задачи в 2 действия «остаток поделить поровну», четыре действия с круглыми десятками, составление задач на 4 действия с числами 10 и 2.",
+    "pageType": "повторение / упражнения / задачи",
+    "exerciseLabel": "853–863",
+    "exerciseNumbers": [
+      853,
+      854,
+      855,
+      856,
+      857,
+      858,
+      859,
+      860,
+      861,
+      862,
+      863
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p140",
+    "pdfPage": 140,
+    "printedPage": 140,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p140.md",
+    "scan": "pages/page_140.png",
+    "section": "Первая сотня → Повторение",
+    "topic": "повторение: смешанные примеры в пределах 20 и 100 (2–3 действия), составление примеров с заданным ответом, задачи на круглые десятки (метры, ряды, деление поровну), измерение верёвкой.",
+    "pageType": "повторение / упражнения / задачи",
+    "exerciseLabel": "864–875",
+    "exerciseNumbers": [
+      864,
+      865,
+      866,
+      867,
+      868,
+      869,
+      870,
+      871,
+      872,
+      873,
+      874,
+      875
+    ],
+    "assetIds": []
+  },
+  {
+    "id": "p141",
+    "pdfPage": 141,
+    "printedPage": 141,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p141.md",
+    "scan": "pages/page_141.png",
+    "section": "Первая сотня → Повторение",
+    "topic": "повторение: задачи в 2 действия с круглыми десятками (умножение/деление, «остаток поровну», половина), примеры на умножение и деление в 2 действия в пределах 20 и 100, составление примеров на умножение с ответом 20.",
+    "pageType": "повторение / задачи / упражнения",
+    "exerciseLabel": "876–887 (887 продолжается на стр. 142)",
+    "exerciseNumbers": [
+      876,
+      877,
+      878,
+      879,
+      880,
+      881,
+      882,
+      883,
+      884,
+      885,
+      886,
+      887
+    ],
+    "assetIds": [
+      "p141_flowerbeds_round_triangles"
+    ]
+  },
+  {
+    "id": "p142",
+    "pdfPage": 142,
+    "printedPage": 142,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p142.md",
+    "scan": "pages/page_142.png",
+    "section": "Первая сотня → Повторение (последняя страница учебного материала)",
+    "topic": "завершение повторения: составление примеров на деление с ответом 5, задачи в 2 действия (вёсла, лодки), задача с дополнением данных, задача о возрасте, игра с бросанием мешочков в круги (счёт очков круглыми десятками).",
+    "pageType": "повторение / задачи / игра",
+    "exerciseLabel": "887 (часть 2), 888–892",
+    "exerciseNumbers": [
+      887,
+      888,
+      889,
+      890,
+      891,
+      892
+    ],
+    "assetIds": [
+      "p142_rowing_boat",
+      "p142_target_circles_10_20_30"
+    ]
+  },
+  {
+    "id": "p143",
+    "pdfPage": 143,
+    "printedPage": 143,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p143.md",
+    "scan": "pages/page_143.png",
+    "section": "Оглавление",
+    "topic": "оглавление учебника (три части: Первый десяток, Второй десяток, Первая сотня) с номерами страниц.",
+    "pageType": "оглавление",
+    "exerciseLabel": "без нумерации (заданий нет)",
+    "exerciseNumbers": [],
+    "assetIds": []
+  },
+  {
+    "id": "p144",
+    "pdfPage": 144,
+    "printedPage": null,
+    "document": "page_docs/arithmetic_grade1_pchelko_1959_p144.md",
+    "scan": "pages/page_144.png",
+    "section": "Выходные данные (служебная страница)",
+    "topic": "выходные сведения издания: авторы, название, редакторы, художники, типографские данные, издательство, типография, цена.",
+    "pageType": "выходные данные",
+    "exerciseLabel": "без нумерации (заданий нет)",
+    "exerciseNumbers": [],
+    "assetIds": []
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Арифметика · Первые шаги",
+    "slug": "arithmetic-first-steps",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "dev.uchebnik.firststeps" },
+    "android": { "package": "dev.uchebnik.firststeps" },
+    "web": { "bundler": "metro", "name": "Арифметика · Первые шаги" }
+  }
+}
