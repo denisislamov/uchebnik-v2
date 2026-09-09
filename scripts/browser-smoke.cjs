@@ -1,3 +1,4 @@
+const { baseURL, newTestContext } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -11,7 +12,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       : {}),
   });
   try {
-    const context = await browser.newContext({
+    const context = await newTestContext(browser, {
       viewport: { width: 1440, height: 1100 },
     });
     const p = await context.newPage(),
@@ -58,7 +59,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       ).click();
       await images();
     };
-    await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
+    await p.goto(baseURL);
     await button("Начать заниматься  →").click();
     assert.equal(
       await p.getByText("Мы рассмотрели", { exact: true }).count(),
@@ -169,14 +170,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         );
       }
     }
-    const mobile = await browser.newContext({
+    const mobile = await newTestContext(browser, {
       viewport: { width: 390, height: 844 },
       isMobile: true,
       hasTouch: true,
     });
     const m = await mobile.newPage();
     m.on("pageerror", (e) => errors.push(e.message));
-    await m.goto("http://127.0.0.1:8081");
+    await m.goto(baseURL);
     await m
       .getByRole("button", { name: "Начать заниматься  →", exact: true })
       .click();

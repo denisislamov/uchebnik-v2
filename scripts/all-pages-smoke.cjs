@@ -1,3 +1,4 @@
+const { baseURL, newTestContext } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -16,11 +17,13 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     viewport: { width: 1280, height: 1000 },
   };
   try {
-    const context = await browser.newContext({ viewport: report.viewport }),
+    const context = await newTestContext(browser, {
+        viewport: report.viewport,
+      }),
       p = await context.newPage();
     p.setDefaultTimeout(12000);
     p.on("pageerror", (e) => report.errors.push(e.message));
-    await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
+    await p.goto(baseURL);
     for (const page of pages) {
       await p.getByRole("button", { name: "На главную", exact: true }).click();
       await p

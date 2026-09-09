@@ -1,3 +1,4 @@
+const { baseURL, newTestContext } = require("./browser-context.cjs");
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -12,7 +13,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
   });
   const report = { passed: false, scenarios: [], errors: [] };
   try {
-    const context = await browser.newContext({
+    const context = await newTestContext(browser, {
         viewport: { width: 390, height: 844 },
         hasTouch: true,
       }),
@@ -20,14 +21,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     p.setDefaultTimeout(12000);
     p.on("pageerror", (e) => report.errors.push(e.message));
     const btn = (name) => p.getByRole("button", { name, exact: true });
-    await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
+    await p.goto(baseURL);
     const open = async (b) => {
       const page = pages.find((p) => p.blocks.includes(b)),
         index = page.blocks.indexOf(b);
       // Seed with no React save effect running, then load the application.
-      await p.goto(
-        `${process.env.BASE_URL || "http://127.0.0.1:8081"}/metadata.json`,
-      );
+      await p.goto(`${baseURL}/metadata.json`);
       await p.evaluate(
         ({ KEY, n, index }) =>
           localStorage.setItem(
@@ -36,7 +35,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           ),
         { KEY, n: page.number, index },
       );
-      await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
+      await p.goto(baseURL);
       await btn("Продолжить занятие  →").click();
       await p.getByText(b.title, { exact: true }).last().waitFor();
     };

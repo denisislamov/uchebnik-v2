@@ -1,3 +1,4 @@
+const { baseURL, newTestContext } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -11,22 +12,20 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       : {}),
   });
   try {
-    const context = await browser.newContext({
+    const context = await newTestContext(browser, {
         viewport: { width: 1440, height: 1100 },
       }),
       p = await context.newPage(),
       errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
     p.setDefaultTimeout(10000);
-    await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
+    await p.goto(baseURL);
     const btn = (name) => p.getByRole("button", { name, exact: true });
     const open = async (b) => {
       const page = pages.find((p) => p.blocks.some((v) => v.id === b.id));
       const index = page.blocks.findIndex((v) => v.id === b.id);
       // Seed with no React save effect running, then load the application.
-      await p.goto(
-        `${process.env.BASE_URL || "http://127.0.0.1:8081"}/metadata.json`,
-      );
+      await p.goto(`${baseURL}/metadata.json`);
       await p.evaluate(
         ({ KEY, n, index }) =>
           localStorage.setItem(
@@ -35,7 +34,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           ),
         { KEY, n: page.number, index },
       );
-      await p.goto(process.env.BASE_URL || "http://127.0.0.1:8081");
+      await p.goto(baseURL);
       await btn("Продолжить занятие  →").click();
       await p.getByText(b.title, { exact: true }).last().waitFor();
     };
