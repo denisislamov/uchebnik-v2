@@ -3,6 +3,7 @@ import { View, Text, Pressable, Platform } from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
 import type { Stroke, Point, TracePlan } from "../content/types";
 import { traceProgress, matchesTrace } from "../lib/tracing";
+import { traceDirections } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
 import { Button, ProgressBar } from "./Controls";
 export function DrawingPad({
@@ -30,6 +31,10 @@ export function DrawingPad({
     rows = trace?.rows ?? 8;
   const height = (width * rows) / columns,
     color = chosenColor ?? target?.color ?? "#232d2b";
+  const arrows = target ? traceDirections(target, { columns, rows }) : [];
+  const cellSize = width / columns;
+  const arrowSize = Math.max(5, Math.min(11, cellSize * 0.28));
+  const directionColor = "#2563a6";
   const coords = (e: any): Point => ({
     x: Math.max(0, Math.min(1, e.nativeEvent.locationX / width)),
     y: Math.max(0, Math.min(1, e.nativeEvent.locationY / height)),
@@ -54,7 +59,7 @@ export function DrawingPad({
           ? "Выбери цвет, как у пунктира."
           : target.dot
             ? "Поставь маленькую точку в кружке."
-            : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру до конца.",
+            : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синих стрелок.",
       );
     }
   }
@@ -123,6 +128,25 @@ export function DrawingPad({
           Отменить штрих
         </Button>
       </View>
+      {target && (
+        <View
+          testID="drawing-direction-hint"
+          style={{ padding: 12, borderRadius: 10, backgroundColor: "#edf4fc" }}
+        >
+          <Text
+            style={{
+              fontFamily: f.bold,
+              color: directionColor,
+              fontSize: 15,
+              lineHeight: 22,
+            }}
+          >
+            {target.dot
+              ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
+              : "Синие стрелки показывают, куда вести палец. Начни с яркой точки и двигайся по пунктиру в сторону стрелок. Сами стрелки обводить не нужно."}
+          </Text>
+        </View>
+      )}
       <View
         accessibilityLabel="Поле для рисования"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
@@ -247,6 +271,36 @@ export function DrawingPad({
                 strokeLinejoin="round"
               />
             ))}
+            {arrows.map(({ point, direction }, i) => {
+              const x = point.x * cellSize,
+                y = point.y * cellSize;
+              const backX = x - direction.x * arrowSize;
+              const backY = y - direction.y * arrowSize;
+              const wingX = -direction.y * arrowSize * 0.65;
+              const wingY = direction.x * arrowSize * 0.65;
+              const path = `M ${backX + wingX} ${backY + wingY} L ${x} ${y} L ${backX - wingX} ${backY - wingY}`;
+              return (
+                <React.Fragment key={`direction-${i}`}>
+                  <Path
+                    d={path}
+                    stroke="#fffef9"
+                    strokeWidth={4}
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <Path
+                    testID="drawing-direction-arrow"
+                    d={path}
+                    stroke={directionColor}
+                    strokeWidth={2}
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </React.Fragment>
+              );
+            })}
           </Svg>
         </View>
       </View>

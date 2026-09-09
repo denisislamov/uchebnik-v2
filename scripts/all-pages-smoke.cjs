@@ -63,6 +63,15 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
             1,
             b.id,
           );
+        if (b.kind === "draw" && b.trace) {
+          assert.equal(
+            await p.getByTestId("drawing-direction-hint").count(),
+            1,
+            b.id,
+          );
+          const arrows = await p.getByTestId("drawing-direction-arrow").count();
+          assert.equal(arrows > 0, !b.trace.stages[0][0].dot, b.id);
+        }
         assert.equal(
           await p.getByText("Мы рассмотрели", { exact: true }).count(),
           0,
