@@ -35,7 +35,7 @@ export function relationPlan(
           ]);
       targets.push({
         label: `${group === 0 ? "Первая" : "Вторая"} группа: ${cells ? "обведи клетку" : "нарисуй предмет"} ${i + 1}`,
-        color: "#232d2b",
+        color: "#111111",
         grid: cells,
         points: points.map(([x, y]) => ({ x: x / columns, y: y / rows })),
       });

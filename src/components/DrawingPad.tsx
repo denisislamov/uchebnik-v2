@@ -2,7 +2,13 @@ import React, { useRef, useState } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
 import type { Stroke, Point, TracePlan } from "../content/types";
-import { traceProgress, matchesTrace } from "../lib/tracing";
+import {
+  traceProgress,
+  matchesTrace,
+  isClosedTrace,
+  drawingColor,
+  DRAWING_COLORS,
+} from "../lib/tracing";
 import { traceDirections } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
 import { Button, ProgressBar } from "./Controls";
@@ -30,11 +36,12 @@ export function DrawingPad({
   const columns = trace?.columns ?? 12,
     rows = trace?.rows ?? 8;
   const height = (width * rows) / columns,
-    color = chosenColor ?? target?.color ?? "#232d2b";
+    color = chosenColor ?? target?.color ?? "#111111";
+  const closed = target ? isClosedTrace(target, { columns, rows }) : false;
   const arrows = target ? traceDirections(target, { columns, rows }) : [];
   const cellSize = width / columns;
   const arrowSize = Math.max(5, Math.min(11, cellSize * 0.28));
-  const directionColor = "#2563a6";
+  const directionColor = "#1565c0";
   const coords = (e: any): Point => ({
     x: Math.max(0, Math.min(1, e.nativeEvent.locationX / width)),
     y: Math.max(0, Math.min(1, e.nativeEvent.locationY / height)),
@@ -55,7 +62,7 @@ export function DrawingPad({
       setChosenColor(null);
     } else {
       setError(
-        stroke.color !== target.color
+        drawingColor(stroke.color) !== drawingColor(target.color)
           ? "Выбери цвет, как у пунктира."
           : target.dot
             ? "Поставь маленькую точку в кружке."
@@ -84,7 +91,7 @@ export function DrawingPad({
           <ProgressBar value={progress.completed / progress.total} />
           <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
             Лист {progress.stage + 1} из {trace!.stages.length} · начинай с
-            яркой точки
+            яркой точки (замкнутую фигуру — с любого места)
           </Text>
         </View>
       )}
@@ -96,11 +103,11 @@ export function DrawingPad({
           flexWrap: "wrap",
         }}
       >
-        {["#23594e", "#ce6548", "#232d2b"].map((v, i) => (
+        {DRAWING_COLORS.map((v, i) => (
           <Pressable
             key={v}
             accessibilityRole="button"
-            accessibilityLabel={`Цвет: ${["зелёный", "красный", "чёрный"][i]}`}
+            accessibilityLabel={`Цвет: ${["чёрный", "красный", "синий"][i]}`}
             accessibilityState={{ selected: color === v }}
             onPress={() => setChosenColor(v)}
             style={{
@@ -143,7 +150,9 @@ export function DrawingPad({
           >
             {target.dot
               ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
-              : "Синие стрелки показывают, куда вести палец. Начни с яркой точки и двигайся по пунктиру в сторону стрелок. Сами стрелки обводить не нужно."}
+              : closed
+                ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
+                : "Синие стрелки показывают, куда вести палец. Начни с яркой точки и двигайся по пунктиру в сторону стрелок. Сами стрелки обводить не нужно."}
           </Text>
         </View>
       )}
@@ -243,7 +252,7 @@ export function DrawingPad({
                   />
                 ),
               )}
-            {target && !target.dot && (
+            {target && !target.dot && !closed && (
               <>
                 <Circle
                   cx={target.points.at(-1)!.x * width}
@@ -264,14 +273,18 @@ export function DrawingPad({
               <Path
                 key={i}
                 d={d(s.points)}
-                stroke={error && i === visible.length ? c.orange : s.color}
+                stroke={
+                  error && i === visible.length
+                    ? c.orange
+                    : drawingColor(s.color)
+                }
                 strokeWidth={3}
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             ))}
-            {arrows.map(({ point, direction }, i) => {
+            {(!closed ? arrows : []).map(({ point, direction }, i) => {
               const x = point.x * cellSize,
                 y = point.y * cellSize;
               const backX = x - direction.x * arrowSize;

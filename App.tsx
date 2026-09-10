@@ -19,7 +19,7 @@ import { Nunito_400Regular } from "@expo-google-fonts/nunito/400Regular";
 import { Nunito_700Bold } from "@expo-google-fonts/nunito/700Bold";
 import { Nunito_800ExtraBold } from "@expo-google-fonts/nunito/800ExtraBold";
 import * as Speech from "expo-speech";
-import { pages, allBlocks } from "./src/content/book";
+import { pages, allBlocks, lessonPages, extraPages } from "./src/content/book";
 import type { Answer, Progress } from "./src/content/types";
 import {
   emptyProgress,
@@ -139,7 +139,10 @@ function Main() {
     readProgress()
       .then((raw) => {
         if (mounted) {
-          setProgress(parseProgress(raw, pages));
+          const restored = parseProgress(raw, pages);
+          setProgress(
+            restored.page === 2 ? { ...restored, page: 3, block: 0 } : restored,
+          );
           setReady(true);
         }
       })
@@ -178,12 +181,12 @@ function Main() {
   const page = pages[progress.page - 1],
     block = page.blocks[progress.block],
     answer = progress.answers[block.id] ?? {};
-  const finished = pages.filter((p) =>
+  const finished = lessonPages.filter((p) =>
     pageCompleted(p, progress.answers),
   ).length;
-  const stepsDone = allBlocks.filter((b) =>
-    isDone(b, progress.answers[b.id]),
-  ).length;
+  const stepsDone = lessonPages
+    .flatMap((p) => p.blocks)
+    .filter((b) => isDone(b, progress.answers[b.id])).length;
   const pageDone = page.blocks.filter((b) =>
     isDone(b, progress.answers[b.id]),
   ).length;
@@ -208,12 +211,12 @@ function Main() {
           : p.answers;
       return p.block < pages[p.page - 1].blocks.length - 1
         ? { ...p, answers, block: p.block + 1 }
-        : p.page < pages.length
+        : p.page >= 3 && p.page < 142
           ? { ...p, answers, page: p.page + 1, block: 0 }
-          : { ...p, answers };
+          : { ...p, answers, page: 3, block: 0 };
     });
     if (
-      progress.page === pages.length &&
+      !(progress.page >= 3 && progress.page < 142) &&
       progress.block === page.blocks.length - 1
     )
       setHome(true);
@@ -222,7 +225,7 @@ function Main() {
     setProgress((p) =>
       p.block > 0
         ? { ...p, block: p.block - 1 }
-        : p.page > 1
+        : p.page > 3 && p.page <= 142
           ? {
               ...p,
               page: p.page - 1,
@@ -417,16 +420,38 @@ function Main() {
                   <Text style={s.artCaption}>Два рыбака. И ещё один друг.</Text>
                 </View>
               </View>
+              <View style={{ gap: 12, marginTop: 20 }}>
+                <Text style={s.eyebrow}>ВНЕ ЗАНЯТИЙ · МАТЕРИАЛЫ КНИГИ</Text>
+                <View
+                  style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
+                >
+                  {extraPages.map((p) => (
+                    <Button
+                      key={p.id}
+                      small
+                      secondary
+                      label={`Страница ${p.number}. ${p.title}`}
+                      onPress={() => selectPage(p.number)}
+                    >
+                      {p.number === 1
+                        ? "Здравствуй, арифметика! · Обложка"
+                        : p.number === 143
+                          ? "Оглавление книги"
+                          : "Выходные данные"}
+                    </Button>
+                  ))}
+                </View>
+              </View>
               <View style={s.pathHeading}>
                 <View>
                   <Text style={s.eyebrow}>НАША МАЛЕНЬКАЯ ПРОГРАММА</Text>
                   <Text style={s.sectionTitle}>Весь учебник</Text>
                 </View>
                 <Text style={s.progressText}>
-                  {finished} из {pages.length} пройдено
+                  {finished} из {lessonPages.length} пройдено
                 </Text>
               </View>
-              <ProgressBar value={finished / pages.length} />
+              <ProgressBar value={finished / lessonPages.length} />
               <View style={{ gap: 12, marginVertical: 20 }}>
                 <View
                   style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
@@ -437,7 +462,6 @@ function Main() {
                     "Второй десяток",
                     "Умножение и деление",
                     "Первая сотня",
-                    "Оглавление",
                   ].map((title, i) => (
                     <Button
                       key={title}
@@ -469,7 +493,7 @@ function Main() {
                 />
               </View>
               <View style={s.pageGrid}>
-                {pages
+                {lessonPages
                   .filter((p) => {
                     if (search.trim()) {
                       const n = Number(search.replace(/[^0-9]/g, ""));
@@ -561,7 +585,7 @@ function Main() {
                     <Text style={s.back}>← Все страницы</Text>
                   </Pressable>
                   <Text style={s.eyebrow}>СОСЕДНИЕ СТРАНИЦЫ</Text>
-                  {pages
+                  {lessonPages
                     .filter((p) => Math.abs(p.number - page.number) <= 4)
                     .map((p) => (
                       <Pressable
@@ -711,13 +735,16 @@ function Main() {
                 <View style={s.navigation}>
                   <Button
                     secondary
-                    disabled={progress.page === 1 && progress.block === 0}
+                    disabled={
+                      progress.block === 0 &&
+                      (progress.page <= 3 || progress.page > 142)
+                    }
                     onPress={previous}
                   >
                     ← Назад
                   </Button>
                   <Button onPress={next}>
-                    {progress.page === pages.length &&
+                    {!(progress.page >= 3 && progress.page < 142) &&
                     progress.block === page.blocks.length - 1
                       ? "К страницам →"
                       : "Дальше →"}

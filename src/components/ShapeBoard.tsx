@@ -1,94 +1,235 @@
-import React, { useState } from "react";
-import { View, Pressable, Text } from "react-native";
+import React, { useState, useRef } from "react";
+import { View, Text, Platform } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import type { Block } from "../content/types";
 import { edgeKey } from "../lib/assessment";
 import { colors as c, fonts as f } from "../theme";
+import { Button } from "./Controls";
 export function ShapeBoard({
   block,
   value,
   onChange,
+  onDrawing,
 }: {
   block: Extract<Block, { kind: "shape" }>;
   value: string[];
   onChange: (v: string[]) => void;
+  onDrawing: (v: boolean) => void;
 }) {
-  const [first, setFirst] = useState<number | null>(null),
-    [width, setWidth] = useState(400);
+  const [width, setWidth] = useState(400),
+    [drag, setDrag] = useState<{ index: number; x: number; y: number } | null>(
+      null,
+    ),
+    [message, setMessage] = useState("");
+  const active = useRef<{
+    index: number;
+    pageX: number;
+    pageY: number;
+    x: number;
+    y: number;
+  } | null>(null);
+  const [rotation, setRotation] = useState<Record<number, number>>({});
+  const edges = block.edges.map(([a, b], index) => {
+    const p = block.vertices[a],
+      q = block.vertices[b];
+    return {
+      index,
+      key: edgeKey(a, b),
+      x: ((p.x + q.x) * width) / 2,
+      y: 24 + ((p.y + q.y) * 220) / 2,
+      angle:
+        (Math.atan2((q.y - p.y) * 220, (q.x - p.x) * width) * 180) / Math.PI,
+      length: Math.hypot((q.x - p.x) * width, (q.y - p.y) * 220),
+    };
+  });
+  const available = edges.filter((t) => !value.includes(t.key)).slice(0, 1);
+  const tray = (_index: number) => ({ x: width / 2, y: 330 });
+  function finish(e: any) {
+    const current = active.current;
+    active.current = null;
+    onDrawing(false);
+    if (!current) return;
+    const x = current.x + e.nativeEvent.pageX - current.pageX,
+      y = current.y + e.nativeEvent.pageY - current.pageY;
+    const source = edges[current.index],
+      angle = source.angle + (rotation[current.index] ?? 0);
+    const match = edges.find(
+      (t) =>
+        !value.includes(t.key) &&
+        Math.hypot(t.x - x, t.y - y) < 36 &&
+        Math.abs(t.length - source.length) <
+          Math.max(12, source.length * 0.15) &&
+        Math.abs(((((angle - t.angle) % 180) + 270) % 180) - 90) < 22,
+    );
+    if (match) {
+      onChange([...value, match.key]);
+      setMessage("Палочка на месте!");
+    } else
+      setMessage(
+        "Поднеси середину палочки к пунктиру. Если нужно, поверни палочку.",
+      );
+    setDrag(null);
+  }
   return (
     <View style={{ gap: 12 }}>
       <Text style={{ fontFamily: f.regular, color: c.muted }}>
-        Нажми две точки, чтобы положить палочку. Повтори пару, чтобы убрать.
+        Перетаскивай палочки по одной из лотка снизу на пунктир, чтобы собрать
+        фигуру. При необходимости поверни палочку кнопкой ↻.
       </Text>
       <View
+        testID="stick-board"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-        style={{ height: 220, backgroundColor: c.mint, borderRadius: 16 }}
+        style={{
+          height: Math.max(
+            440,
+            365 + Math.max(...edges.map((t) => t.length)) / 2,
+          ),
+          backgroundColor: c.mint,
+          borderRadius: 16,
+          overflow: "hidden",
+        }}
       >
-        <Svg width={width} height={220} style={{ position: "absolute" }}>
-          {value.map((edge) => {
-            const [a, b] = edge.split("-").map(Number);
-            const v = block.vertices;
-            return v[a] && v[b] ? (
-              <Line
-                key={edge}
-                x1={v[a].x * width}
-                y1={v[a].y * 220}
-                x2={v[b].x * width}
-                y2={v[b].y * 220}
-                stroke="#bb8052"
-                strokeWidth={9}
-                strokeLinecap="round"
-              />
-            ) : null;
-          })}
-        </Svg>
-        {block.vertices.map((v, i) => (
-          <Pressable
-            key={i}
-            accessibilityRole="button"
-            accessibilityLabel={`Точка ${i + 1}`}
-            accessibilityState={{ selected: first === i }}
-            onPress={() => {
-              if (first === null) setFirst(i);
-              else if (first === i) setFirst(null);
-              else {
-                const e = edgeKey(first, i);
-                onChange(
-                  value.includes(e)
-                    ? value.filter((x) => x !== e)
-                    : [...value, e],
-                );
-                setFirst(null);
-              }
-            }}
-            style={{
-              position: "absolute",
-              left: v.x * width - 24,
-              top: v.y * 220 - 24,
-              width: 48,
-              height: 48,
-              borderRadius: 24,
-              backgroundColor: first === i ? c.orange : c.card,
-              borderWidth: 2,
-              borderColor: c.green,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text
+        <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
+          <Svg width={width} height={270}>
+            {edges.map((t) => {
+              const a = block.vertices[block.edges[t.index][0]],
+                b = block.vertices[block.edges[t.index][1]];
+              return (
+                <Line
+                  key={t.key}
+                  x1={a.x * width}
+                  y1={24 + a.y * 220}
+                  x2={b.x * width}
+                  y2={24 + b.y * 220}
+                  stroke={value.includes(t.key) ? "#bb8052" : "#71938d"}
+                  strokeWidth={value.includes(t.key) ? 9 : 3}
+                  strokeDasharray={value.includes(t.key) ? undefined : "6 5"}
+                  strokeLinecap="round"
+                />
+              );
+            })}
+          </Svg>
+          {edges.map((t) => (
+            <View
+              key={t.key}
+              testID={`stick-target-${t.index}`}
               style={{
-                fontFamily: f.bold,
-                color: first === i ? c.white : c.green,
+                position: "absolute",
+                left: t.x - 5,
+                top: t.y - 5,
+                width: 10,
+                height: 10,
               }}
-            >
-              {i + 1}
-            </Text>
-          </Pressable>
+            />
+          ))}
+        </View>
+        {available.map((t) => {
+          const position = drag?.index === t.index ? drag : tray(t.index);
+          return (
+            <React.Fragment key={t.key}>
+              <View
+                accessibilityLabel={`Палочка ${t.index + 1}`}
+                testID={`stick-${t.index}`}
+                accessibilityHint="Перетащи на подходящий пунктир"
+                onStartShouldSetResponder={() => true}
+                onMoveShouldSetResponder={() => true}
+                onResponderGrant={(e) => {
+                  active.current = {
+                    index: t.index,
+                    pageX: e.nativeEvent.pageX,
+                    pageY: e.nativeEvent.pageY,
+                    ...tray(t.index),
+                  };
+                  setDrag({ index: t.index, ...tray(t.index) });
+                  onDrawing(true);
+                  setMessage("");
+                }}
+                onResponderMove={(e) => {
+                  const a = active.current;
+                  if (a)
+                    setDrag({
+                      index: a.index,
+                      x: a.x + e.nativeEvent.pageX - a.pageX,
+                      y: a.y + e.nativeEvent.pageY - a.pageY,
+                    });
+                }}
+                onResponderRelease={finish}
+                onResponderTerminate={() => {
+                  active.current = null;
+                  setDrag(null);
+                  onDrawing(false);
+                }}
+                onResponderTerminationRequest={() => false}
+                style={[
+                  {
+                    position: "absolute",
+                    left: position.x - t.length / 2,
+                    top: position.y - 22,
+                    width: t.length,
+                    height: 44,
+                    justifyContent: "center",
+                    transform: [
+                      { rotate: `${t.angle + (rotation[t.index] ?? 0)}deg` },
+                    ],
+                    zIndex: drag?.index === t.index ? 10 : 1,
+                  },
+                  Platform.OS === "web"
+                    ? ({ touchAction: "none", cursor: "grab" } as any)
+                    : undefined,
+                ]}
+              >
+                <View
+                  pointerEvents="none"
+                  style={{
+                    height: 9,
+                    backgroundColor: "#bb8052",
+                    borderRadius: 5,
+                    borderWidth: 1,
+                    borderColor: "#93613a",
+                  }}
+                />
+              </View>
+            </React.Fragment>
+          );
+        })}
+      </View>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+        {available.map((t) => (
+          <Button
+            key={t.key}
+            small
+            secondary
+            label={`Повернуть палочку ${t.index + 1}`}
+            onPress={() =>
+              setRotation((r) => ({ ...r, [t.index]: (r[t.index] ?? 0) + 45 }))
+            }
+          >
+            ↻ {t.index + 1}
+          </Button>
         ))}
       </View>
+      {!!message && (
+        <Text
+          accessibilityLiveRegion="polite"
+          style={{ fontFamily: f.bold, color: c.green }}
+        >
+          {message}
+        </Text>
+      )}
       <Text style={{ fontFamily: f.bold, color: c.green }}>
-        Палочек: {value.length}
+        Палочек: {value.length} из {edges.length}
       </Text>
+      <Button
+        small
+        secondary
+        disabled={!value.length}
+        onPress={() => {
+          onChange(value.slice(0, -1));
+          setMessage("");
+        }}
+      >
+        Убрать последнюю палочку
+      </Button>
     </View>
   );
 }

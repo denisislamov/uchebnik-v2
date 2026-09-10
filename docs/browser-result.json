@@ -1,7 +1,7 @@
 {
   "passed": true,
   "errors": [],
-  "at": "2026-09-10T00:34:04.290Z",
+  "at": "2026-09-10T14:11:06.385Z",
   "checks": [
     "read next without confirmation",
     "direct balls and sloped pencils",
@@ -13,7 +13,7 @@
     "trace persistence and undo",
     "digit 1 tracing",
     "spatial picture choice",
-    "all 82 blocks render",
+    "all 81 visible initial blocks render; title page excluded",
     "mobile real touch region",
     "mobile touch trace",
     "square notebook cells",

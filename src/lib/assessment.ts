@@ -1,5 +1,5 @@
 import { courseCorrect } from "./courseAssessment.ts";
-import { traceProgress } from "./tracing.ts";
+import { traceProgress, drawingColor, DRAWING_COLORS } from "./tracing.ts";
 import type { Answer, Block, BookPage, Progress } from "../content/types.ts";
 export const edgeKey = (a: number, b: number) =>
   [a, b].sort((x, y) => x - y).join("-");
@@ -131,7 +131,7 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
           .filter(
             (s: any) =>
               s &&
-              ["#23594e", "#ce6548", "#232d2b"].includes(s.color) &&
+              DRAWING_COLORS.includes(drawingColor(s.color)) &&
               Array.isArray(s.points),
           )
           .map((s: any) => ({

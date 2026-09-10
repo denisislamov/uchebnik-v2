@@ -8,7 +8,7 @@ test("page 6 has twelve black waves without added dots", () => {
   assert.ok(b.kind === "draw" && b.trace);
   const targets = b.trace.stages.flat();
   assert.equal(targets.length, 12);
-  assert.ok(targets.every((t) => !t.dot && t.color === "#232d2b"));
+  assert.ok(targets.every((t) => !t.dot && t.color === "#111111"));
 });
 test("four flags are two cells wide with inward notches; last flag is mirrored", () => {
   const flags = allBlocks

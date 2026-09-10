@@ -51,12 +51,15 @@ async function run(file) {
     }
     if (serverError) throw serverError;
     if (!ready) throw Error("Test server did not start");
-    for (const file of [
-      "scripts/browser-smoke.cjs",
-      "scripts/full-course-smoke.cjs",
-      "scripts/activity-smoke.cjs",
-      "scripts/all-pages-smoke.cjs",
-    ])
+    for (const file of process.argv.length > 2
+      ? process.argv.slice(2)
+      : [
+          "scripts/browser-smoke.cjs",
+          "scripts/full-course-smoke.cjs",
+          "scripts/activity-smoke.cjs",
+          "scripts/child-revisions-smoke.cjs",
+          "scripts/all-pages-smoke.cjs",
+        ])
       await run(file);
   } finally {
     server.kill();

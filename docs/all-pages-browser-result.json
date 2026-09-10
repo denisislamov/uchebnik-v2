@@ -47,16 +47,6 @@
       ]
     },
     {
-      "page": 2,
-      "blocks": [
-        {
-          "id": "p002-block01",
-          "kind": "read",
-          "passed": true
-        }
-      ]
-    },
-    {
       "page": 3,
       "blocks": [
         {
@@ -281,7 +271,7 @@
       "blocks": [
         {
           "id": "p008-block01",
-          "kind": "read",
+          "kind": "picture",
           "passed": true
         },
         {
@@ -7445,6 +7435,12 @@
           "passed": true
         }
       ]
+    }
+  ],
+  "excluded": [
+    {
+      "page": 2,
+      "reason": "Title page removed from activities"
     }
   ],
   "errors": [],

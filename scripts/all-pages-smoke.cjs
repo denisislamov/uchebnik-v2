@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 (async () => {
   const { pages } = await import("../src/content/book.ts");
+  const { isClosedTrace } = await import("../src/lib/tracing.ts");
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL
@@ -13,6 +14,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
   const report = {
     passed: false,
     pages: [],
+    excluded: [{page:2,reason:"Title page removed from activities"}],
     errors: [],
     viewport: { width: 1280, height: 1000 },
   };
@@ -24,7 +26,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     p.setDefaultTimeout(12000);
     p.on("pageerror", (e) => report.errors.push(e.message));
     await p.goto(baseURL);
-    for (const page of pages) {
+    for (const page of pages.filter((p) => p.number !== 2)) {
       await p.getByRole("button", { name: "На главную", exact: true }).click();
       await p
         .getByRole("textbox", {
@@ -75,7 +77,12 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
             b.id,
           );
           const arrows = await p.getByTestId("drawing-direction-arrow").count();
-          assert.equal(arrows > 0, !b.trace.stages[0][0].dot, b.id);
+          assert.equal(
+            arrows > 0,
+            !b.trace.stages[0][0].dot &&
+              !isClosedTrace(b.trace.stages[0][0], b.trace),
+            b.id,
+          );
         }
         assert.equal(
           await p.getByText("Мы рассмотрели", { exact: true }).count(),

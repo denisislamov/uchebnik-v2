@@ -162,7 +162,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p.getByText("Пока не совпало.", { exact: false }).waitFor();
     await button("Флажок").click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
-    for (const page of pages.slice(0, 10)) {
+    for (const page of pages.slice(0, 10).filter((p) => p.number !== 2)) {
       for (let i = 0; i < page.blocks.length; i++) {
         await open(page.number, i);
         assert.ok(
@@ -252,7 +252,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             "trace persistence and undo",
             "digit 1 tracing",
             "spatial picture choice",
-            "all 82 blocks render",
+            "all 81 visible initial blocks render; title page excluded",
             "mobile real touch region",
             "mobile touch trace",
             "square notebook cells",

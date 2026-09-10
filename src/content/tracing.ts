@@ -1,8 +1,8 @@
 import { numberTrace } from "./fullBook.ts";
 import type { Point, TracePlan, TraceTarget } from "./types.ts";
-export const INK = "#232d2b",
-  RED = "#ce6548",
-  GREEN = "#23594e";
+export const INK = "#111111",
+  RED = "#d62828",
+  BLUE = "#1565c0";
 // Coordinates are in notebook cells: 12 columns by 8 rows on every device.
 const point = (x: number, y: number): Point => ({ x: x / 12, y: y / 8 });
 const line = (

@@ -198,6 +198,7 @@ export function Exercise({
       )}
       {block.kind === "shape" && (
         <ShapeBoard
+          onDrawing={onDrawing}
           block={block}
           value={Array.isArray(answer.value) ? answer.value : []}
           onChange={(value) => update({ value })}

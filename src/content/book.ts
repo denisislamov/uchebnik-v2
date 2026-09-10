@@ -122,7 +122,7 @@ const shape = (
           [0, 1],
           [1, 2],
         ],
-  hint: "Выбери две точки: между ними появится палочка. Нажми те же точки, чтобы убрать её.",
+  hint: "Перетащи палочки на пунктир, чтобы собрать фигуру.",
 });
 function page(
   n: number,
@@ -404,8 +404,8 @@ export const pages: BookPage[] = [
         number(t, "Сколько предметов на рисунке?", 1, [img(7, im)]),
       ),
       counters(
-        "Одна бусина",
-        "Положи один кружок — столько же, сколько бусин.",
+        "Один жетон",
+        "Положи один кружок — столько же, сколько жетонов на карточке.",
         1,
         "circle",
         [img(7, "abacus_1")],
@@ -479,7 +479,7 @@ export const pages: BookPage[] = [
       ),
       read(
         "Это число 2",
-        "Две бусины, две точки, два зелёных кружка и цифра 2.",
+        "Два жетона, две точки, два зелёных кружка и цифра 2.",
         [
           img(8, "abacus_2"),
           img(8, "domino_2"),
@@ -583,7 +583,7 @@ export const pages: BookPage[] = [
     ]),
     counters(
       "Две и ещё одна",
-      "Положи столько кружков, сколько бусин на проволоке.",
+      "Положи столько кружков, сколько жетонов на карточке.",
       3,
       "circle",
       [img(10, "abacus_3")],
@@ -637,4 +637,22 @@ export const pages: BookPage[] = [
   ]),
 ];
 pages.push(...remainingPages);
+for (const p of pages)
+  for (const b of p.blocks) {
+    if (!b.images.some((id) => id.includes("abacus_"))) continue;
+    const modern = (text: string) =>
+      text
+        .replace(/на (счётах|счетах|проволоке)/gi, "на карточке")
+        .replace(/бусин/g, "жетон")
+        .replace(/счёты|счеты|абак/gi, "карточка с жетонами");
+    b.prompt = modern(b.prompt);
+    b.title = modern(b.title);
+    if (b.kind === "read") b.body = modern(b.body);
+  }
 export const allBlocks = pages.flatMap((p) => p.blocks);
+
+// Source pages stay addressable by PDF number; only these pages count as lessons.
+export const lessonPages = pages.filter(
+  (p) => p.number >= 3 && p.number <= 142,
+);
+export const extraPages = pages.filter((p) => [1, 143, 144].includes(p.number));
