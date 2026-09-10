@@ -44,6 +44,72 @@ export function ShapeBoard({
   });
   const available = edges.filter((t) => !value.includes(t.key)).slice(0, 1);
   const tray = (_index: number) => ({ x: width / 2, y: 330 });
+  const webPointer = useRef<number | null>(null);
+  function begin(index: number, e: any) {
+    active.current = {
+      index,
+      pageX: e.nativeEvent.pageX,
+      pageY: e.nativeEvent.pageY,
+      ...tray(index),
+    };
+    setDrag({ index, ...tray(index) });
+    onDrawing(true);
+    setMessage("");
+  }
+  function move(e: any) {
+    const a = active.current;
+    if (a)
+      setDrag({
+        index: a.index,
+        x: a.x + e.nativeEvent.pageX - a.pageX,
+        y: a.y + e.nativeEvent.pageY - a.pageY,
+      });
+  }
+  function cancel() {
+    active.current = null;
+    webPointer.current = null;
+    setDrag(null);
+    onDrawing(false);
+  }
+  function handlers(index: number): any {
+    if (Platform.OS !== "web")
+      return {
+        onStartShouldSetResponder: () => true,
+        onMoveShouldSetResponder: () => true,
+        onResponderGrant: (e: any) => begin(index, e),
+        onResponderMove: move,
+        onResponderRelease: finish,
+        onResponderTerminate: cancel,
+        onResponderTerminationRequest: () => false,
+      };
+    // Capture the browser pointer; a moving/rotating stick must keep receiving pointerup.
+    return {
+      onPointerDown: (e: any) => {
+        if (webPointer.current !== null || e.button !== 0) return;
+        e.preventDefault();
+        e.stopPropagation();
+        webPointer.current = e.pointerId;
+        e.currentTarget.setPointerCapture(e.pointerId);
+        begin(index, e);
+      },
+      onPointerMove: (e: any) => {
+        if (e.pointerId === webPointer.current) move(e);
+      },
+      onPointerUp: (e: any) => {
+        if (e.pointerId !== webPointer.current) return;
+        webPointer.current = null;
+        finish(e);
+        if (e.currentTarget.hasPointerCapture(e.pointerId))
+          e.currentTarget.releasePointerCapture(e.pointerId);
+      },
+      onPointerCancel: (e: any) => {
+        if (e.pointerId === webPointer.current) cancel();
+      },
+      onLostPointerCapture: (e: any) => {
+        if (e.pointerId === webPointer.current) cancel();
+      },
+    };
+  }
   function finish(e: any) {
     const current = active.current;
     active.current = null;
@@ -131,35 +197,7 @@ export function ShapeBoard({
                 accessibilityLabel={`Палочка ${t.index + 1}`}
                 testID={`stick-${t.index}`}
                 accessibilityHint="Перетащи на подходящий пунктир"
-                onStartShouldSetResponder={() => true}
-                onMoveShouldSetResponder={() => true}
-                onResponderGrant={(e) => {
-                  active.current = {
-                    index: t.index,
-                    pageX: e.nativeEvent.pageX,
-                    pageY: e.nativeEvent.pageY,
-                    ...tray(t.index),
-                  };
-                  setDrag({ index: t.index, ...tray(t.index) });
-                  onDrawing(true);
-                  setMessage("");
-                }}
-                onResponderMove={(e) => {
-                  const a = active.current;
-                  if (a)
-                    setDrag({
-                      index: a.index,
-                      x: a.x + e.nativeEvent.pageX - a.pageX,
-                      y: a.y + e.nativeEvent.pageY - a.pageY,
-                    });
-                }}
-                onResponderRelease={finish}
-                onResponderTerminate={() => {
-                  active.current = null;
-                  setDrag(null);
-                  onDrawing(false);
-                }}
-                onResponderTerminationRequest={() => false}
+                {...handlers(t.index)}
                 style={[
                   {
                     position: "absolute",
