@@ -15,7 +15,10 @@
     "format": "prettier --write App.tsx index.ts src tests scripts/browser-smoke.cjs",
     "test:content": "python3 scripts/content/extract.py --check && python3 scripts/content/build_course.py --check",
     "test:browser": "node scripts/run-browser-tests.cjs",
-    "test:all": "npm run test:content && npm run typecheck && npm test && npm run export:web && npm run test:browser"
+    "test:all": "npm run test:content && npm run typecheck && npm test && npm run test:release-guard && npm run export:web && npm run test:browser",
+    "web:debug": "node scripts/start-source-debug.cjs",
+    "test:debug": "node scripts/debug-source-smoke.cjs",
+    "test:release-guard": "node scripts/check-release-debug-guard.cjs"
   },
   "dependencies": {
     "@expo-google-fonts/nunito": "^0.4.2",

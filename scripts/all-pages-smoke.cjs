@@ -48,6 +48,11 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
           })
           .click();
         await p.getByText(b.title, { exact: true }).last().waitFor();
+        assert.equal(
+          await p.getByTestId("debug-source-panel").count(),
+          0,
+          "release must not show source comparison",
+        );
         await p.waitForFunction(() =>
           [...document.images].every((i) => i.complete && i.naturalWidth > 0),
         );

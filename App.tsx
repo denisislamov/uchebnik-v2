@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Image,
   Modal,
   Platform,
   Pressable,
@@ -30,7 +31,81 @@ import { readProgress, saveProgress } from "./src/lib/storage";
 import { colors as c, fonts as f } from "./src/theme";
 import { Button, ProgressBar } from "./src/components/Controls";
 import { BookImage } from "./src/components/BookImage";
+import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
+// Both guards are build-time constants: production removes this entire component.
+const DebugSourcePanel =
+  __DEV__ && process.env.EXPO_PUBLIC_SOURCE_DEBUG === "1"
+    ? function SourceComparison({
+        pageNumber,
+        title,
+      }: {
+        pageNumber: number;
+        title: string;
+      }) {
+        const [panelWidth, setPanelWidth] = useState(500);
+        const [enlarged, setEnlarged] = useState(false);
+        const imageWidth = Math.max(280, panelWidth - 32) * (enlarged ? 2 : 1);
+        const scan = assets[`page_${String(pageNumber).padStart(3, "0")}`];
+        return (
+          <View
+            testID="debug-source-panel"
+            style={{
+              flex: 1,
+              minHeight: 0,
+              backgroundColor: "#edf4fc",
+              borderLeftWidth: 1,
+              borderColor: "#b5c9df",
+            }}
+            onLayout={(e) => setPanelWidth(e.nativeEvent.layout.width)}
+          >
+            <View style={{ padding: 16, gap: 8 }}>
+              <Text
+                style={{ fontFamily: f.bold, color: "#2563a6", fontSize: 16 }}
+              >
+                РЕЖИМ СВЕРКИ · ТОЛЬКО ДЛЯ РАЗРАБОТКИ
+              </Text>
+              <Text
+                testID="debug-source-page"
+                style={{ fontFamily: f.bold, fontSize: 19, color: c.green }}
+              >
+                PDF · страница {pageNumber}
+              </Text>
+              <Text style={{ fontFamily: f.regular, color: c.muted }}>
+                {title}
+              </Text>
+              <Text
+                style={{ fontFamily: f.regular, color: c.muted, fontSize: 12 }}
+              >
+                Полный скан страницы исходного PDF. Нумерация — по листам PDF.
+              </Text>
+              <Button small secondary onPress={() => setEnlarged((v) => !v)}>
+                {enlarged
+                  ? "Сверка: уместить страницу"
+                  : "Сверка: увеличить ×2"}
+              </Button>
+            </View>
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ padding: 16 }}
+            >
+              <ScrollView horizontal style={{ flexGrow: 0 }}>
+                <Image
+                  accessibilityLabel={scan.alt}
+                  source={scan.source}
+                  resizeMode="contain"
+                  style={{
+                    width: imageWidth,
+                    height: (imageWidth * scan.height) / scan.width,
+                  }}
+                />
+              </ScrollView>
+            </ScrollView>
+          </View>
+        );
+      }
+    : null;
+
 function Main() {
   const [loaded, fontError] = useFonts({
     Nunito_400Regular,
@@ -53,7 +128,10 @@ function Main() {
   const scroll = useRef<ScrollView>(null),
     saveRevision = useRef(0);
   const [readAttempt, setReadAttempt] = useState(0);
-  const { width } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
+  const comparison = !!DebugSourcePanel && !home;
+  const sideBySide = windowWidth >= 900;
+  const width = comparison && sideBySide ? windowWidth * 0.52 : windowWidth;
   const wide = width >= 1000,
     compact = width < 600;
   useEffect(() => {
@@ -236,402 +314,432 @@ function Main() {
           </Button>
         </View>
       )}
-      <ScrollView
-        ref={scroll}
-        scrollEnabled={!drawing}
-        contentContainerStyle={s.scroll}
+      <View
+        style={{
+          flex: 1,
+          minHeight: 0,
+          flexDirection: comparison && sideBySide ? "row" : "column",
+        }}
       >
-        {home ? (
-          <View
-            style={[
-              s.home,
-              compact && { paddingHorizontal: 18, paddingTop: 28 },
-            ]}
-          >
+        <ScrollView
+          testID="lesson-scroll-pane"
+          style={{ flex: comparison ? 0.52 : 1, minWidth: 0 }}
+          ref={scroll}
+          scrollEnabled={!drawing}
+          contentContainerStyle={s.scroll}
+        >
+          {home ? (
             <View
-              style={[s.hero, !wide && { flexDirection: "column", gap: 28 }]}
+              style={[
+                s.home,
+                compact && { paddingHorizontal: 18, paddingTop: 28 },
+              ]}
             >
-              <View style={[s.heroText, wide && { paddingRight: 48 }]}>
-                <View style={s.badge}>
-                  <View style={s.badgeDot} />
-                  <Text style={s.badgeText}>
-                    ПЕРВЫЙ КЛАСС · ОТ ОДНОГО ДО СТА
+              <View
+                style={[s.hero, !wide && { flexDirection: "column", gap: 28 }]}
+              >
+                <View style={[s.heroText, wide && { paddingRight: 48 }]}>
+                  <View style={s.badge}>
+                    <View style={s.badgeDot} />
+                    <Text style={s.badgeText}>
+                      ПЕРВЫЙ КЛАСС · ОТ ОДНОГО ДО СТА
+                    </Text>
+                  </View>
+                  <Text
+                    style={[
+                      s.heroTitle,
+                      compact && { fontSize: 44, lineHeight: 49 },
+                    ]}
+                  >
+                    Большое путешествие{"\n"}начинается{"\n"}с{" "}
+                    <Text style={{ color: c.orange }}>одного.</Text>
                   </Text>
+                  <Text style={s.heroDescription}>
+                    Считаем рыбок, сравниваем мячи и рисуем первые цифры.
+                    Знакомый учебник — теперь с маленькими открытиями на каждом
+                    шаге.
+                  </Text>
+                  <View style={{ alignSelf: "flex-start", marginTop: 28 }}>
+                    <Button
+                      onPress={() =>
+                        stepsDone || progress.page > 1
+                          ? setHome(false)
+                          : selectPage(3)
+                      }
+                    >
+                      {stepsDone || progress.page > 1
+                        ? "Продолжить занятие  →"
+                        : "Начать заниматься  →"}
+                    </Button>
+                  </View>
+                  <Text style={s.heroFoot}>
+                    Слушай, пробуй и открывай. В своём темпе.
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    s.heroArt,
+                    !wide && {
+                      width: "100%",
+                      maxWidth: 550,
+                      alignSelf: "center",
+                    },
+                  ]}
+                >
+                  <View style={s.artTag}>
+                    <Text style={s.artTagText}>ИЗ УЧЕБНИКА 1959 ГОДА</Text>
+                  </View>
+                  <BookImage id="p010_boys_fishing" maxHeight={350} />
+                  <View style={s.numberTiles}>
+                    {[1, 2, 3].map((n) => (
+                      <View
+                        key={n}
+                        style={[
+                          s.numberTile,
+                          n === 2 && {
+                            backgroundColor: c.orange,
+                            transform: [{ rotate: "6deg" }],
+                          },
+                          n === 3 && {
+                            backgroundColor: c.sand,
+                            transform: [{ rotate: "-5deg" }],
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={[s.tileDigit, n === 3 && { color: c.green }]}
+                        >
+                          {n}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                  <Text style={s.artCaption}>Два рыбака. И ещё один друг.</Text>
+                </View>
+              </View>
+              <View style={s.pathHeading}>
+                <View>
+                  <Text style={s.eyebrow}>НАША МАЛЕНЬКАЯ ПРОГРАММА</Text>
+                  <Text style={s.sectionTitle}>Весь учебник</Text>
+                </View>
+                <Text style={s.progressText}>
+                  {finished} из {pages.length} пройдено
+                </Text>
+              </View>
+              <ProgressBar value={finished / pages.length} />
+              <View style={{ gap: 12, marginVertical: 20 }}>
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
+                >
+                  {[
+                    "Знакомство с числами",
+                    "Первый десяток",
+                    "Второй десяток",
+                    "Умножение и деление",
+                    "Первая сотня",
+                    "Оглавление",
+                  ].map((title, i) => (
+                    <Button
+                      key={title}
+                      small
+                      secondary={catalogSection !== i}
+                      onPress={() => {
+                        setCatalogSection(i);
+                        setSearch("");
+                      }}
+                    >
+                      {title}
+                    </Button>
+                  ))}
+                </View>
+                <TextInput
+                  accessibilityLabel="Найти страницу или задание"
+                  placeholder="Страница 80 или № 500"
+                  value={search}
+                  onChangeText={setSearch}
+                  style={{
+                    padding: 14,
+                    borderWidth: 1,
+                    borderColor: c.line,
+                    borderRadius: 12,
+                    fontFamily: f.regular,
+                    fontSize: 18,
+                    color: c.green,
+                  }}
+                />
+              </View>
+              <View style={s.pageGrid}>
+                {pages
+                  .filter((p) => {
+                    if (search.trim()) {
+                      const n = Number(search.replace(/[^0-9]/g, ""));
+                      return search.includes("№")
+                        ? p.blocks.some((b) => b.exerciseNumber === n)
+                        : p.number === n ||
+                            p.title
+                              .toLowerCase()
+                              .includes(search.toLowerCase());
+                    }
+                    const bounds = [
+                      [1, 29],
+                      [30, 58],
+                      [59, 96],
+                      [97, 125],
+                      [126, 142],
+                      [143, 144],
+                    ][catalogSection];
+                    return p.number >= bounds[0] && p.number <= bounds[1];
+                  })
+                  .map((p) => {
+                    const done = pageCompleted(p, progress.answers),
+                      count = p.blocks.filter((b) =>
+                        isDone(b, progress.answers[b.id]),
+                      ).length;
+                    return (
+                      <Pressable
+                        key={p.id}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Страница ${p.number}. ${p.title}`}
+                        onPress={() => selectPage(p.number)}
+                        style={({ pressed }) => [
+                          s.pageCard,
+                          {
+                            width: wide ? "18.6%" : compact ? "100%" : "48.5%",
+                          },
+                          pressed && { opacity: 0.8 },
+                        ]}
+                      >
+                        <View style={s.cardTop}>
+                          <Text style={s.pageNumber}>
+                            {String(p.number).padStart(2, "0")}
+                          </Text>
+                          <Text
+                            style={[s.pageStatus, done && { color: c.green }]}
+                          >
+                            {done
+                              ? "✓"
+                              : p.number < 3
+                                ? "ЗНАКОМСТВО"
+                                : `${p.blocks.length} шагов`}
+                          </Text>
+                        </View>
+                        <View style={s.cardArt}>
+                          <BookImage id={p.hero} maxHeight={108} />
+                        </View>
+                        <Text style={s.cardTitle}>{p.title}</Text>
+                        <Text style={s.cardSubtitle}>{p.subtitle}</Text>
+                        <View style={{ marginTop: "auto", paddingTop: 18 }}>
+                          <ProgressBar value={count / p.blocks.length} />
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+              </View>
+              <View style={s.homeFooter}>
+                <Text style={s.footerText}>
+                  А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого класса
+                </Text>
+                <Text style={s.footerText}>
+                  Тестовая версия{"\n"}Страницы PDF 1–144
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View
+              style={[
+                s.lessonLayout,
+                compact && { paddingHorizontal: 14, paddingTop: 20 },
+              ]}
+            >
+              {wide && (
+                <View style={s.sidebar}>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => setHome(true)}
+                    style={{ paddingBottom: 28 }}
+                  >
+                    <Text style={s.back}>← Все страницы</Text>
+                  </Pressable>
+                  <Text style={s.eyebrow}>СОСЕДНИЕ СТРАНИЦЫ</Text>
+                  {pages
+                    .filter((p) => Math.abs(p.number - page.number) <= 4)
+                    .map((p) => (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={`Открыть страницу ${p.number}`}
+                        accessibilityState={{
+                          selected: page.number === p.number,
+                        }}
+                        key={p.id}
+                        onPress={() => selectPage(p.number)}
+                        style={[
+                          s.sideItem,
+                          page.number === p.number && {
+                            backgroundColor: c.mint,
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            s.sideNumber,
+                            page.number === p.number && { color: c.green },
+                          ]}
+                        >
+                          {pageCompleted(p, progress.answers)
+                            ? "✓"
+                            : String(p.number).padStart(2, "0")}
+                        </Text>
+                        <Text style={s.sideTitle}>{p.title}</Text>
+                      </Pressable>
+                    ))}
+                  <View style={s.sideNote}>
+                    <Text style={s.sideNoteTitle}>Понемногу каждый день</Text>
+                    <Text style={s.sideNoteText}>
+                      Можно остановиться на любом шаге. Мы запомним, где ты
+                      закончил.
+                    </Text>
+                  </View>
+                </View>
+              )}
+              <View style={s.lessonMain}>
+                <View style={s.lessonTop}>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => setHome(true)}
+                  >
+                    <Text style={s.back}>
+                      {wide ? "УЧЕБНИК / АРИФМЕТИКА" : "← Все страницы"}
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    onPress={() => {
+                      setOriginal(true);
+                      setZoom(false);
+                    }}
+                  >
+                    <Text style={s.sourceLink}>Оригинал ↗</Text>
+                  </Pressable>
                 </View>
                 <Text
                   style={[
-                    s.heroTitle,
-                    compact && { fontSize: 44, lineHeight: 49 },
+                    s.lessonTitle,
+                    compact && { fontSize: 33, lineHeight: 39 },
                   ]}
                 >
-                  Большое путешествие{"\n"}начинается{"\n"}с{" "}
-                  <Text style={{ color: c.orange }}>одного.</Text>
+                  {page.title}
                 </Text>
-                <Text style={s.heroDescription}>
-                  Считаем рыбок, сравниваем мячи и рисуем первые цифры. Знакомый
-                  учебник — теперь с маленькими открытиями на каждом шаге.
+                <Text style={s.lessonSubtitle}>
+                  Страница {page.number} · {page.subtitle}
                 </Text>
-                <View style={{ alignSelf: "flex-start", marginTop: 28 }}>
-                  <Button
-                    onPress={() =>
-                      stepsDone || progress.page > 1
-                        ? setHome(false)
-                        : selectPage(3)
-                    }
-                  >
-                    {stepsDone || progress.page > 1
-                      ? "Продолжить занятие  →"
-                      : "Начать заниматься  →"}
-                  </Button>
+                <View style={s.stepHeading}>
+                  <Text style={s.stepText}>
+                    ШАГ {progress.block + 1} ИЗ {page.blocks.length}
+                  </Text>
+                  <Text style={s.stepText}>{pageDone} выполнено</Text>
                 </View>
-                <Text style={s.heroFoot}>
-                  Слушай, пробуй и открывай. В своём темпе.
-                </Text>
-              </View>
-              <View
-                style={[
-                  s.heroArt,
-                  !wide && {
-                    width: "100%",
-                    maxWidth: 550,
-                    alignSelf: "center",
-                  },
-                ]}
-              >
-                <View style={s.artTag}>
-                  <Text style={s.artTagText}>ИЗ УЧЕБНИКА 1959 ГОДА</Text>
-                </View>
-                <BookImage id="p010_boys_fishing" maxHeight={350} />
-                <View style={s.numberTiles}>
-                  {[1, 2, 3].map((n) => (
-                    <View
-                      key={n}
-                      style={[
-                        s.numberTile,
-                        n === 2 && {
-                          backgroundColor: c.orange,
-                          transform: [{ rotate: "6deg" }],
-                        },
-                        n === 3 && {
-                          backgroundColor: c.sand,
-                          transform: [{ rotate: "-5deg" }],
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={[s.tileDigit, n === 3 && { color: c.green }]}
-                      >
-                        {n}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-                <Text style={s.artCaption}>Два рыбака. И ещё один друг.</Text>
-              </View>
-            </View>
-            <View style={s.pathHeading}>
-              <View>
-                <Text style={s.eyebrow}>НАША МАЛЕНЬКАЯ ПРОГРАММА</Text>
-                <Text style={s.sectionTitle}>Весь учебник</Text>
-              </View>
-              <Text style={s.progressText}>
-                {finished} из {pages.length} пройдено
-              </Text>
-            </View>
-            <ProgressBar value={finished / pages.length} />
-            <View style={{ gap: 12, marginVertical: 20 }}>
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                {[
-                  "Знакомство с числами",
-                  "Первый десяток",
-                  "Второй десяток",
-                  "Умножение и деление",
-                  "Первая сотня",
-                  "Оглавление",
-                ].map((title, i) => (
-                  <Button
-                    key={title}
-                    small
-                    secondary={catalogSection !== i}
-                    onPress={() => {
-                      setCatalogSection(i);
-                      setSearch("");
-                    }}
-                  >
-                    {title}
-                  </Button>
-                ))}
-              </View>
-              <TextInput
-                accessibilityLabel="Найти страницу или задание"
-                placeholder="Страница 80 или № 500"
-                value={search}
-                onChangeText={setSearch}
-                style={{
-                  padding: 14,
-                  borderWidth: 1,
-                  borderColor: c.line,
-                  borderRadius: 12,
-                  fontFamily: f.regular,
-                  fontSize: 18,
-                  color: c.ink,
-                }}
-              />
-            </View>
-            <View style={s.pageGrid}>
-              {pages
-                .filter((p) => {
-                  if (search.trim()) {
-                    const n = Number(search.replace(/[^0-9]/g, ""));
-                    return search.includes("№")
-                      ? p.blocks.some((b) => b.exerciseNumber === n)
-                      : p.number === n ||
-                          p.title.toLowerCase().includes(search.toLowerCase());
-                  }
-                  const bounds = [
-                    [1, 29],
-                    [30, 58],
-                    [59, 96],
-                    [97, 125],
-                    [126, 142],
-                    [143, 144],
-                  ][catalogSection];
-                  return p.number >= bounds[0] && p.number <= bounds[1];
-                })
-                .map((p) => {
-                  const done = pageCompleted(p, progress.answers),
-                    count = p.blocks.filter((b) =>
-                      isDone(b, progress.answers[b.id]),
-                    ).length;
-                  return (
-                    <Pressable
-                      key={p.id}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Страница ${p.number}. ${p.title}`}
-                      onPress={() => selectPage(p.number)}
-                      style={({ pressed }) => [
-                        s.pageCard,
-                        { width: wide ? "18.6%" : compact ? "100%" : "48.5%" },
-                        pressed && { opacity: 0.8 },
-                      ]}
-                    >
-                      <View style={s.cardTop}>
-                        <Text style={s.pageNumber}>
-                          {String(p.number).padStart(2, "0")}
-                        </Text>
-                        <Text
-                          style={[s.pageStatus, done && { color: c.green }]}
-                        >
-                          {done
-                            ? "✓"
-                            : p.number < 3
-                              ? "ЗНАКОМСТВО"
-                              : `${p.blocks.length} шагов`}
-                        </Text>
-                      </View>
-                      <View style={s.cardArt}>
-                        <BookImage id={p.hero} maxHeight={108} />
-                      </View>
-                      <Text style={s.cardTitle}>{p.title}</Text>
-                      <Text style={s.cardSubtitle}>{p.subtitle}</Text>
-                      <View style={{ marginTop: "auto", paddingTop: 18 }}>
-                        <ProgressBar value={count / p.blocks.length} />
-                      </View>
-                    </Pressable>
-                  );
-                })}
-            </View>
-            <View style={s.homeFooter}>
-              <Text style={s.footerText}>
-                А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого класса
-              </Text>
-              <Text style={s.footerText}>
-                Тестовая версия{"\n"}Страницы PDF 1–144
-              </Text>
-            </View>
-          </View>
-        ) : (
-          <View
-            style={[
-              s.lessonLayout,
-              compact && { paddingHorizontal: 14, paddingTop: 20 },
-            ]}
-          >
-            {wide && (
-              <View style={s.sidebar}>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => setHome(true)}
-                  style={{ paddingBottom: 28 }}
+                <ProgressBar value={pageDone / page.blocks.length} />
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={s.stepDots}
                 >
-                  <Text style={s.back}>← Все страницы</Text>
-                </Pressable>
-                <Text style={s.eyebrow}>СОСЕДНИЕ СТРАНИЦЫ</Text>
-                {pages
-                  .filter((p) => Math.abs(p.number - page.number) <= 4)
-                  .map((p) => (
+                  {page.blocks.map((b, i) => (
                     <Pressable
+                      key={b.id}
                       accessibilityRole="button"
-                      accessibilityLabel={`Открыть страницу ${p.number}`}
-                      accessibilityState={{
-                        selected: page.number === p.number,
-                      }}
-                      key={p.id}
-                      onPress={() => selectPage(p.number)}
+                      accessibilityLabel={`Шаг ${i + 1}: ${b.title}`}
+                      accessibilityState={{ selected: i === progress.block }}
+                      onPress={() => setProgress((p) => ({ ...p, block: i }))}
                       style={[
-                        s.sideItem,
-                        page.number === p.number && { backgroundColor: c.mint },
+                        s.stepDot,
+                        i === progress.block && s.stepActive,
+                        isDone(b, progress.answers[b.id]) && {
+                          borderColor: c.green,
+                        },
                       ]}
                     >
                       <Text
                         style={[
-                          s.sideNumber,
-                          page.number === p.number && { color: c.green },
+                          s.stepDotText,
+                          i === progress.block && { color: c.white },
                         ]}
                       >
-                        {pageCompleted(p, progress.answers)
-                          ? "✓"
-                          : String(p.number).padStart(2, "0")}
+                        {isDone(b, progress.answers[b.id]) ? "✓" : i + 1}
                       </Text>
-                      <Text style={s.sideTitle}>{p.title}</Text>
                     </Pressable>
                   ))}
-                <View style={s.sideNote}>
-                  <Text style={s.sideNoteTitle}>Понемногу каждый день</Text>
-                  <Text style={s.sideNoteText}>
-                    Можно остановиться на любом шаге. Мы запомним, где ты
-                    закончил.
-                  </Text>
-                </View>
-              </View>
-            )}
-            <View style={s.lessonMain}>
-              <View style={s.lessonTop}>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => setHome(true)}
-                >
-                  <Text style={s.back}>
-                    {wide ? "УЧЕБНИК / АРИФМЕТИКА" : "← Все страницы"}
-                  </Text>
-                </Pressable>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => {
-                    setOriginal(true);
-                    setZoom(false);
-                  }}
-                >
-                  <Text style={s.sourceLink}>Оригинал ↗</Text>
-                </Pressable>
-              </View>
-              <Text
-                style={[
-                  s.lessonTitle,
-                  compact && { fontSize: 33, lineHeight: 39 },
-                ]}
-              >
-                {page.title}
-              </Text>
-              <Text style={s.lessonSubtitle}>
-                Страница {page.number} · {page.subtitle}
-              </Text>
-              <View style={s.stepHeading}>
-                <Text style={s.stepText}>
-                  ШАГ {progress.block + 1} ИЗ {page.blocks.length}
-                </Text>
-                <Text style={s.stepText}>{pageDone} выполнено</Text>
-              </View>
-              <ProgressBar value={pageDone / page.blocks.length} />
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={s.stepDots}
-              >
-                {page.blocks.map((b, i) => (
-                  <Pressable
-                    key={b.id}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Шаг ${i + 1}: ${b.title}`}
-                    accessibilityState={{ selected: i === progress.block }}
-                    onPress={() => setProgress((p) => ({ ...p, block: i }))}
-                    style={[
-                      s.stepDot,
-                      i === progress.block && s.stepActive,
-                      isDone(b, progress.answers[b.id]) && {
-                        borderColor: c.green,
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        s.stepDotText,
-                        i === progress.block && { color: c.white },
-                      ]}
+                </ScrollView>
+                <View style={[s.exerciseCard, compact && { padding: 20 }]}>
+                  <View style={s.exerciseTop}>
+                    <Text style={s.exerciseCategory}>
+                      {block.kind === "read"
+                        ? "РАССМАТРИВАЕМ"
+                        : block.kind === "draw"
+                          ? "ТВОРЧЕСКАЯ МАСТЕРСКАЯ"
+                          : block.kind === "shape"
+                            ? "СОБИРАЕМ ФИГУРУ"
+                            : "ПОПРОБУЙ САМ"}
+                    </Text>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        speaking
+                          ? "Остановить озвучивание"
+                          : "Послушать задание"
+                      }
+                      onPress={speak}
+                      style={s.speechButton}
                     >
-                      {isDone(b, progress.answers[b.id]) ? "✓" : i + 1}
-                    </Text>
-                  </Pressable>
-                ))}
-              </ScrollView>
-              <View style={[s.exerciseCard, compact && { padding: 20 }]}>
-                <View style={s.exerciseTop}>
-                  <Text style={s.exerciseCategory}>
-                    {block.kind === "read"
-                      ? "РАССМАТРИВАЕМ"
-                      : block.kind === "draw"
-                        ? "ТВОРЧЕСКАЯ МАСТЕРСКАЯ"
-                        : block.kind === "shape"
-                          ? "СОБИРАЕМ ФИГУРУ"
-                          : "ПОПРОБУЙ САМ"}
-                  </Text>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      speaking ? "Остановить озвучивание" : "Послушать задание"
-                    }
-                    onPress={speak}
-                    style={s.speechButton}
-                  >
-                    <Text style={s.speechText}>
-                      {speaking ? "■ Стоп" : "♫ Слушать"}
-                    </Text>
-                  </Pressable>
+                      <Text style={s.speechText}>
+                        {speaking ? "■ Стоп" : "♫ Слушать"}
+                      </Text>
+                    </Pressable>
+                  </View>
+                  <Text style={s.blockTitle}>{block.title}</Text>
+                  {speechError !== "" && (
+                    <Text style={s.lessonSubtitle}>{speechError}</Text>
+                  )}
+                  <Exercise
+                    key={block.id}
+                    block={block}
+                    answer={answer}
+                    onAnswer={updateAnswer}
+                    onDrawing={setDrawing}
+                  />
                 </View>
-                <Text style={s.blockTitle}>{block.title}</Text>
-                {speechError !== "" && (
-                  <Text style={s.lessonSubtitle}>{speechError}</Text>
-                )}
-                <Exercise
-                  key={block.id}
-                  block={block}
-                  answer={answer}
-                  onAnswer={updateAnswer}
-                  onDrawing={setDrawing}
-                />
+                <View style={s.navigation}>
+                  <Button
+                    secondary
+                    disabled={progress.page === 1 && progress.block === 0}
+                    onPress={previous}
+                  >
+                    ← Назад
+                  </Button>
+                  <Button onPress={next}>
+                    {progress.page === pages.length &&
+                    progress.block === page.blocks.length - 1
+                      ? "К страницам →"
+                      : "Дальше →"}
+                  </Button>
+                </View>
+                <Text style={s.saveNote}>
+                  Ответы и рисунки сохраняются на этом устройстве.
+                </Text>
               </View>
-              <View style={s.navigation}>
-                <Button
-                  secondary
-                  disabled={progress.page === 1 && progress.block === 0}
-                  onPress={previous}
-                >
-                  ← Назад
-                </Button>
-                <Button onPress={next}>
-                  {progress.page === pages.length &&
-                  progress.block === page.blocks.length - 1
-                    ? "К страницам →"
-                    : "Дальше →"}
-                </Button>
-              </View>
-              <Text style={s.saveNote}>
-                Ответы и рисунки сохраняются на этом устройстве.
-              </Text>
             </View>
+          )}
+        </ScrollView>
+        {comparison && DebugSourcePanel && (
+          <View style={{ flex: 0.48, minWidth: 0, minHeight: 0 }}>
+            <DebugSourcePanel
+              key={page.number}
+              pageNumber={page.number}
+              title={block.title}
+            />
           </View>
         )}
-      </ScrollView>
+      </View>
       <Modal
         visible={original}
         animationType="slide"
@@ -841,7 +949,7 @@ const s = StyleSheet.create({
     fontFamily: f.serif,
     fontSize: 59,
     lineHeight: 65,
-    color: c.ink,
+    color: c.green,
     letterSpacing: -1.5,
   },
   heroDescription: {
@@ -923,7 +1031,7 @@ const s = StyleSheet.create({
     color: c.muted,
     marginBottom: 9,
   },
-  sectionTitle: { fontFamily: f.serif, color: c.ink, fontSize: 34 },
+  sectionTitle: { fontFamily: f.serif, color: c.green, fontSize: 34 },
   progressText: {
     fontFamily: f.bold,
     color: c.green,
@@ -957,7 +1065,7 @@ const s = StyleSheet.create({
     fontFamily: f.heavy,
     fontSize: 17,
     lineHeight: 23,
-    color: c.ink,
+    color: c.green,
   },
   cardSubtitle: {
     fontFamily: f.regular,
@@ -1000,7 +1108,7 @@ const s = StyleSheet.create({
     marginTop: 4,
   },
   sideNumber: { fontFamily: f.bold, color: c.muted, fontSize: 12, width: 22 },
-  sideTitle: { fontFamily: f.bold, color: c.ink, fontSize: 13, flex: 1 },
+  sideTitle: { fontFamily: f.bold, color: c.green, fontSize: 13, flex: 1 },
   sideNote: {
     marginTop: 32,
     padding: 18,
@@ -1035,7 +1143,7 @@ const s = StyleSheet.create({
   },
   lessonTitle: {
     fontFamily: f.serif,
-    color: c.ink,
+    color: c.green,
     fontSize: 42,
     lineHeight: 49,
   },
@@ -1100,7 +1208,7 @@ const s = StyleSheet.create({
   speechText: { fontFamily: f.bold, color: c.green, fontSize: 12 },
   blockTitle: {
     fontFamily: f.serif,
-    color: c.ink,
+    color: c.green,
     fontSize: 29,
     marginBottom: 20,
   },
@@ -1124,7 +1232,12 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     gap: 12,
   },
-  modalTitle: { fontFamily: f.bold, fontSize: 22, color: c.ink, flexShrink: 1 },
+  modalTitle: {
+    fontFamily: f.bold,
+    fontSize: 22,
+    color: c.green,
+    flexShrink: 1,
+  },
   modalShade: {
     flex: 1,
     backgroundColor: "#162b26aa",
@@ -1142,7 +1255,7 @@ const s = StyleSheet.create({
   },
   parentBody: {
     fontFamily: f.regular,
-    color: c.ink,
+    color: c.green,
     fontSize: 16,
     lineHeight: 25,
   },
