@@ -10,12 +10,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       ? { channel: process.env.BROWSER_CHANNEL }
       : {}),
   });
+  let debugPage;
   try {
     const context = await newTestContext(browser, {
         viewport: { width: 1440, height: 1100 },
         hasTouch: true,
       }),
       p = await context.newPage();
+    debugPage = p;
     const errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
     p.setDefaultTimeout(15000);
@@ -112,6 +114,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     async function drag(index, wrong = false, touch = false) {
       const board = p.getByTestId("stick-board");
       await board.scrollIntoViewIfNeeded();
+      // Wait for the previous drop to return to the tray and for layout to settle.
+      await p.getByTestId(`stick-${index}`).hover();
       const a = await p.getByTestId(`stick-${index}`).boundingBox(),
         b = await p.getByTestId(`stick-target-${index}`).boundingBox(),
         frame = await board.boundingBox();
@@ -145,9 +149,13 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       }
     }
     for (const [j, b] of shapes.entries()) {
+      console.log(`Drag task ${b.id}`);
       await open(b);
       if (j === 0) {
         await drag(0, true);
+        await p
+          .getByText("Поднеси середину палочки к пунктиру.", { exact: false })
+          .waitFor();
         await p
           .getByText(`Палочек: 0 из ${b.edges.length}`, { exact: true })
           .waitFor();
@@ -188,6 +196,23 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     console.log(
       `PASS: optional front matter, room pairs, modern counters, drawing palette, all ${shapes.length} stick tasks, wrong drops, undo, save, touch`,
     );
+  } catch (error) {
+    if (debugPage) {
+      await debugPage
+        .screenshot({
+          path: "docs/child-revisions-failure.png",
+          fullPage: true,
+        })
+        .catch(() => {});
+      console.error(
+        "Failed UI:",
+        await debugPage
+          .locator("body")
+          .innerText()
+          .catch(() => "unavailable"),
+      );
+    }
+    throw error;
   } finally {
     await browser.close();
   }
