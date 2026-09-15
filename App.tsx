@@ -326,7 +326,13 @@ function Main() {
       >
         <ScrollView
           testID="lesson-scroll-pane"
-          style={{ flex: comparison ? 0.52 : 1, minWidth: 0 }}
+          style={[
+            { flex: comparison ? 0.52 : 1, minWidth: 0 },
+            // Keep notebook width fixed when drawing temporarily hides scrolling.
+            Platform.OS === "web"
+              ? ({ scrollbarGutter: "stable" } as any)
+              : undefined,
+          ]}
           ref={scroll}
           scrollEnabled={!drawing}
           contentContainerStyle={s.scroll}
@@ -730,6 +736,26 @@ function Main() {
                     answer={answer}
                     onAnswer={updateAnswer}
                     onDrawing={setDrawing}
+                    revealCoachTarget={(target) =>
+                      new Promise<void>((resolve) => {
+                        const container = scroll.current?.getInnerViewNode();
+                        if (!container) {
+                          resolve();
+                          return;
+                        }
+                        target.measureLayout(
+                          container,
+                          (_x, y) => {
+                            scroll.current?.scrollTo({
+                              y: Math.max(0, y - 100),
+                              animated: false,
+                            });
+                            setTimeout(resolve, 160);
+                          },
+                          resolve,
+                        );
+                      })
+                    }
                   />
                 </View>
                 <View style={s.navigation}>

@@ -50,14 +50,6 @@ const pencils = [
     "Красный карандаш",
   ),
 ];
-const upperBoard = [
-  area("flag", 0.19, 0.15, 0.12, 0.18, "Флажок"),
-  area("star", 0.64, 0.16, 0.14, 0.15, "Звёздочка"),
-];
-const lowerBoard = [
-  area("house", 0.13, 0.37, 0.15, 0.16, "Домик"),
-  area("tree", 0.57, 0.33, 0.12, 0.23, "Ёлочка"),
-];
 const maps: Record<
   string,
   { targets: Hotspot[]; expected: string[]; prompt: string }
@@ -81,26 +73,6 @@ const maps: Record<
     targets: pencils,
     expected: ["red"],
     prompt: "Нажми на короткий карандаш.",
-  },
-  "p006-block02": {
-    targets: upperBoard,
-    expected: ["flag"],
-    prompt: "Нажми на рисунок вверху слева на доске.",
-  },
-  "p006-block03": {
-    targets: upperBoard,
-    expected: ["star"],
-    prompt: "Нажми на рисунок вверху справа на доске.",
-  },
-  "p006-block04": {
-    targets: lowerBoard,
-    expected: ["house"],
-    prompt: "Нажми на рисунок внизу слева на доске.",
-  },
-  "p006-block05": {
-    targets: lowerBoard,
-    expected: ["tree"],
-    prompt: "Нажми на рисунок внизу справа на доске.",
   },
   "p007-block02": {
     targets: [
@@ -333,7 +305,7 @@ export function childInteraction(block: Block): Block {
       trace: tracePlans[block.id],
       prompt: block.guide
         ? `Обведи цифру ${block.guide} по пунктиру.`
-        : `Повтори рисунок по пунктиру. Замкнутую фигуру можно начинать с любого места.`,
+        : block.prompt,
       hint: "Для открытой линии яркая точка показывает начало. Замкнутую фигуру начинай где удобно. Проведи по пунктиру до конца. Если не получилось, попробуй ещё раз.",
     };
   const map = maps[block.id];

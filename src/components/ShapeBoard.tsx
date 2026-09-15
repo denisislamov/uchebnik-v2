@@ -1,3 +1,4 @@
+import { CoachButton, useGestureCoach } from "./GestureCoach";
 import React, { useState, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import Svg, { Line } from "react-native-svg";
@@ -16,6 +17,18 @@ export function ShapeBoard({
   onChange: (v: string[]) => void;
   onDrawing: (v: boolean) => void;
 }) {
+  const sourceRef = useRef<View>(null),
+    fieldRef = useRef<View>(null);
+  const showCoach = useGestureCoach("sticks", [
+    {
+      ref: sourceRef,
+      text: "Возьми палочку внизу: прижми её пальцем и держи.",
+    },
+    {
+      ref: fieldRef,
+      text: "Не отпуская палец, положи палочку на подходящую линию. Если нужно, нажми «Повернуть».",
+    },
+  ]);
   const [width, setWidth] = useState(400),
     [drag, setDrag] = useState<{ index: number; x: number; y: number } | null>(
       null,
@@ -29,17 +42,21 @@ export function ShapeBoard({
     y: number;
   } | null>(null);
   const [rotation, setRotation] = useState<Record<number, number>>({});
+  const scale = Math.min(width - 32, 240);
+  const vertices = block.vertices.map((p) => ({
+    x: (width - scale) / 2 + p.x * scale,
+    y: 24 + p.y * scale,
+  }));
   const edges = block.edges.map(([a, b], index) => {
-    const p = block.vertices[a],
-      q = block.vertices[b];
+    const p = vertices[a],
+      q = vertices[b];
     return {
       index,
       key: edgeKey(a, b),
-      x: ((p.x + q.x) * width) / 2,
-      y: 24 + ((p.y + q.y) * 220) / 2,
-      angle:
-        (Math.atan2((q.y - p.y) * 220, (q.x - p.x) * width) * 180) / Math.PI,
-      length: Math.hypot((q.x - p.x) * width, (q.y - p.y) * 220),
+      x: (p.x + q.x) / 2,
+      y: (p.y + q.y) / 2,
+      angle: (Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI,
+      length: Math.hypot(q.x - p.x, q.y - p.y),
     };
   });
   const available = edges.filter((t) => !value.includes(t.key)).slice(0, 1);
@@ -54,7 +71,6 @@ export function ShapeBoard({
     };
     setDrag({ index, ...tray(index) });
     onDrawing(true);
-    setMessage("");
   }
   function move(e: any) {
     const a = active.current;
@@ -138,9 +154,10 @@ export function ShapeBoard({
   }
   return (
     <View style={{ gap: 12 }}>
+      <CoachButton onPress={showCoach} />
       <Text style={{ fontFamily: f.regular, color: c.muted }}>
-        Перетаскивай палочки по одной из лотка снизу на пунктир, чтобы собрать
-        фигуру. При необходимости поверни палочку кнопкой ↻.
+        Возьми палочку внизу и положи на пунктир. Чтобы повернуть палочку, нажми
+        «Повернуть».
       </Text>
       <View
         testID="stick-board"
@@ -155,18 +172,28 @@ export function ShapeBoard({
           overflow: "hidden",
         }}
       >
-        <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
+        <View
+          ref={fieldRef}
+          pointerEvents="none"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 270,
+          }}
+        >
           <Svg width={width} height={270}>
             {edges.map((t) => {
-              const a = block.vertices[block.edges[t.index][0]],
-                b = block.vertices[block.edges[t.index][1]];
+              const a = vertices[block.edges[t.index][0]],
+                b = vertices[block.edges[t.index][1]];
               return (
                 <Line
                   key={t.key}
-                  x1={a.x * width}
-                  y1={24 + a.y * 220}
-                  x2={b.x * width}
-                  y2={24 + b.y * 220}
+                  x1={a.x}
+                  y1={a.y}
+                  x2={b.x}
+                  y2={b.y}
                   stroke={value.includes(t.key) ? "#bb8052" : "#71938d"}
                   strokeWidth={value.includes(t.key) ? 9 : 3}
                   strokeDasharray={value.includes(t.key) ? undefined : "6 5"}
@@ -194,6 +221,7 @@ export function ShapeBoard({
           return (
             <React.Fragment key={t.key}>
               <View
+                ref={sourceRef}
                 accessibilityLabel={`Палочка ${t.index + 1}`}
                 testID={`stick-${t.index}`}
                 accessibilityHint="Перетащи на подходящий пунктир"
@@ -242,7 +270,7 @@ export function ShapeBoard({
               setRotation((r) => ({ ...r, [t.index]: (r[t.index] ?? 0) + 45 }))
             }
           >
-            ↻ {t.index + 1}
+            ↻ Повернуть
           </Button>
         ))}
       </View>

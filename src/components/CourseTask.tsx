@@ -1,3 +1,5 @@
+import { CounterBoard } from "./CounterBoard";
+import { composeStory, storySubjects } from "../lib/composeStory";
 import { DrawingPad } from "./DrawingPad";
 import { relationPlan } from "../lib/relationDrawing";
 import { BookImage } from "./BookImage";
@@ -156,18 +158,34 @@ export function CourseTask({
       )}
       {block.kind === "recipe" && (
         <View style={s.card}>
-          <Text style={s.label}>О чём будет задача?</Text>
+          <Text style={s.label}>
+            {block.context
+              ? "Составь похожую задачу со своими числами"
+              : "О чём будет задача?"}
+          </Text>
+          {block.context && (
+            <Text style={s.text}>
+              {block.context.replace(/\{([abc])\}/g, (_, key) => r[key] || "□")}
+            </Text>
+          )}
+          {block.excludedInputs && (
+            <Text style={s.note}>
+              Измени хотя бы одно число из исходной задачи. Сохрани её смысл.
+            </Text>
+          )}
           {chips(
             "story",
-            [
-              "яблоки",
-              "книги",
-              "карандаши",
-              "метры",
-              "рубли",
-              "литры",
-              "килограммы",
-            ],
+            block.unit
+              ? [block.unit]
+              : [
+                  "яблоки",
+                  "книги",
+                  "карандаши",
+                  "метры",
+                  "рубли",
+                  "литры",
+                  "килограммы",
+                ],
             "Сюжет",
           )}
           <Text style={s.note}>
@@ -176,15 +194,19 @@ export function CourseTask({
               .replace(/[abc]/g, (k) => r[k] || "□")
               .replace(/\*/g, "×")
               .replace(/\//g, ":")}
-            . Результат должен быть целым числом от 0 до {block.max}.
+            . Результат должен быть целым числом от {block.minResult ?? 0} до{" "}
+            {block.max}.
           </Text>
           {[...new Set(block.formula.match(/[abc]/g) ?? [])].map((k) => (
             <View key={k} style={s.row}>
               <Text style={s.text}>
-                {{ a: "Первое число", b: "Второе число", c: "Третье число" }[k]}{" "}
+                {block.inputLabels?.[k] ??
+                  { a: "Первое число", b: "Второе число", c: "Третье число" }[
+                    k
+                  ]}{" "}
                 =
               </Text>
-              {input(k, `Число ${k}`)}
+              {input(k, block.inputLabels?.[k] ?? `Число ${k}`)}
             </View>
           ))}
           <Text style={s.label}>Результат всей задачи</Text>
@@ -271,20 +293,7 @@ export function CourseTask({
             <Text style={s.label}>
               {block.story ? "Придумай задачу" : "Составь пример"} {i + 1}
             </Text>
-            {block.story &&
-              chips(
-                `${i}story`,
-                [
-                  "яблоки",
-                  "книги",
-                  "карандаши",
-                  "метры",
-                  "рубли",
-                  "литры",
-                  "килограммы",
-                ],
-                "О чём задача",
-              )}
+            {block.story && chips(`${i}story`, storySubjects, "О чём задача")}
             <Text style={s.note}>
               {rule.left !== undefined ? `Первое число: ${rule.left}. ` : ""}
               {rule.right !== undefined ? `Второе число: ${rule.right}. ` : ""}
@@ -301,15 +310,24 @@ export function CourseTask({
               {input(`${i}c`, "Результат")}
             </View>
             {block.story && r[`${i}story`] && (
-              <Text style={s.note}>
-                {rule.operator === "+"
-                  ? `Было ${r[`${i}a`] || "…"}. Добавили ${r[`${i}b`] || "…"}. Сколько стало?`
-                  : rule.operator === "−"
-                    ? `Было ${r[`${i}a`] || "…"}. Убрали ${r[`${i}b`] || "…"}. Сколько осталось?`
-                    : rule.operator === "×"
-                      ? `В каждой группе ${r[`${i}a`] || "…"}. Таких групп ${r[`${i}b`] || "…"}. Сколько всего?`
-                      : `${r[`${i}a`] || "…"} разделили на ${r[`${i}b`] || "…"} равных частей. Сколько в каждой?`}
-              </Text>
+              <View style={{ gap: 12 }}>
+                <Text style={s.text}>
+                  {
+                    composeStory(
+                      rule.operator,
+                      r[`${i}story`],
+                      r[`${i}a`],
+                      r[`${i}b`],
+                    ).condition
+                  }
+                </Text>
+                <Text style={s.label}>Выбери вопрос к своей задаче</Text>
+                {chips(
+                  `${i}question`,
+                  composeStory(rule.operator, r[`${i}story`]).options,
+                  `Вопрос к задаче ${i + 1}`,
+                )}
+              </View>
             )}
             {answer.checked && (
               <Text style={s.feedback}>
@@ -378,15 +396,42 @@ export function CourseTask({
                 {a.labels?.[i] ??
                   (a.measure
                     ? "Измерь предмет на рисунке"
-                    : a.mode === "groups"
-                      ? `Разложи ${target} предметов поровну между ${a.groups} группами`
-                      : a.mode === "place"
-                        ? `Число ${target}: десятки и единицы`
-                        : a.mode === "composition"
-                          ? `Разложи ${target} на две части`
-                          : `Набери ${target} ${a.unit ?? ""}`)}
+                    : a.mode === "count"
+                      ? (a.groupLabels?.[i] ??
+                        "Положи столько предметов, сколько на рисунке")
+                      : a.mode === "groups"
+                        ? `Разложи ${target} предметов поровну между ${a.groups} группами`
+                        : a.mode === "place"
+                          ? `Число ${target}: десятки и единицы`
+                          : a.mode === "composition"
+                            ? `Разложи ${target} на две части`
+                            : `Набери ${target} ${a.unit ?? ""}`)}
               </Text>
-              {a.mode === "count" && (
+              {a.mode === "count" && a.token && (
+                <CounterBoard
+                  value={value}
+                  token={a.token}
+                  slots={a.slots}
+                  occupied={(r[`${i}slots`] || "")
+                    .split(",")
+                    .filter(Boolean)
+                    .map(Number)}
+                  onPlaced={(indices) =>
+                    onAnswer({
+                      ...answer,
+                      checked: false,
+                      responses: {
+                        ...r,
+                        [key]: String(indices.length),
+                        [`${i}slots`]: indices.join(","),
+                      },
+                    })
+                  }
+                  onChange={(v) => set(key, String(v))}
+                  onDrawing={onDrawing}
+                />
+              )}
+              {a.mode === "count" && !a.token && (
                 <>
                   <View style={s.row}>
                     {Array.from({ length: value }, (_, j) => (
@@ -399,22 +444,45 @@ export function CourseTask({
               {a.mode === "coins" && (
                 <>
                   <View style={s.row}>
-                    {(a.denominations ?? [1, 2, 3, 5, 10, 15, 20]).map((n) => (
-                      <Pressable
-                        key={n}
-                        style={[s.chip, { borderRadius: 40 }]}
-                        accessibilityRole="button"
-                        accessibilityLabel={`Монета ${n} копеек`}
-                        onPress={() => {
-                          if (value + n <= 200) set(key, String(value + n));
-                        }}
-                      >
-                        <Text style={s.text}>{n} к.</Text>
-                      </Pressable>
-                    ))}
+                    {(a.denominations ?? [1, 2, 3, 5, 10, 15, 20])
+                      .filter((n) => !a.exchange || n < target)
+                      .map((n) => (
+                        <Pressable
+                          key={n}
+                          style={[s.chip, { borderRadius: 40 }]}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Монета ${n} копеек`}
+                          onPress={() => {
+                            if (value + n <= 200)
+                              onAnswer({
+                                ...answer,
+                                checked: false,
+                                responses: {
+                                  ...r,
+                                  [key]: String(value + n),
+                                  [`${i}coins`]: [r[`${i}coins`], String(n)]
+                                    .filter(Boolean)
+                                    .join(","),
+                                },
+                              });
+                          }}
+                        >
+                          <Text style={s.text}>{n} к.</Text>
+                        </Pressable>
+                      ))}
                   </View>
                   <Text style={s.text}>В кошельке: {value} копеек</Text>
-                  <Button small secondary onPress={() => set(key, "0")}>
+                  <Button
+                    small
+                    secondary
+                    onPress={() =>
+                      onAnswer({
+                        ...answer,
+                        checked: false,
+                        responses: { ...r, [key]: "0", [`${i}coins`]: "" },
+                      })
+                    }
+                  >
                     Вернуть монеты
                   </Button>
                 </>
@@ -511,24 +579,38 @@ export function CourseTask({
               )}
               {a.mode === "composition" && (
                 <>
-                  {["left", "right"].map((side) => (
+                  {["left", "right"].map((side, group) => (
                     <View key={side}>
                       <Text style={s.note}>
-                        {side === "left" ? "Первая" : "Вторая"} часть
+                        {a.groupLabels?.[group] ??
+                          `${side === "left" ? "Первая" : "Вторая"} часть`}
                       </Text>
-                      {stepper(
-                        `${i}${side}`,
-                        side === "left" ? "Первая часть" : "Вторая часть",
-                        target - 1,
+                      {a.token ? (
+                        <CounterBoard
+                          token={a.token}
+                          objectLabel={a.objectLabel}
+                          value={Number(r[`${i}${side}`]) || 0}
+                          max={target - 1}
+                          onChange={(v) => set(`${i}${side}`, String(v))}
+                          onDrawing={onDrawing}
+                        />
+                      ) : (
+                        stepper(
+                          `${i}${side}`,
+                          side === "left" ? "Первая часть" : "Вторая часть",
+                          target - 1,
+                        )
                       )}
-                      <View style={s.row}>
-                        {Array.from(
-                          { length: Number(r[`${i}${side}`]) || 0 },
-                          (_, j) => (
-                            <View key={j} style={tokenStyle} />
-                          ),
-                        )}
-                      </View>
+                      {!a.token && (
+                        <View style={s.row}>
+                          {Array.from(
+                            { length: Number(r[`${i}${side}`]) || 0 },
+                            (_, j) => (
+                              <View key={j} style={tokenStyle} />
+                            ),
+                          )}
+                        </View>
+                      )}
                     </View>
                   ))}
                 </>

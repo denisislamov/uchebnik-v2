@@ -158,9 +158,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await stroke(digit.points);
     await p.getByText("Все элементы получились!", { exact: true }).waitFor();
     await open(6, 1);
-    await button("Звёздочка").click();
+    await button("Вверху").click();
+    await button("Справа").click();
     await p.getByText("Пока не совпало.", { exact: false }).waitFor();
-    await button("Флажок").click();
+    await button("Слева").click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     for (const page of pages.slice(0, 10).filter((p) => p.number !== 2)) {
       for (let i = 0; i < page.blocks.length; i++) {

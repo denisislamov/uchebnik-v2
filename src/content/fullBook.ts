@@ -17,6 +17,7 @@ const path = (
   label,
   color: "#111111",
   grid,
+  bidirectional: /ствол/.test(label),
 });
 const oval = (x: number, y: number, rx: number, ry: number) =>
   path(
@@ -200,8 +201,35 @@ function drawing(spec: string): TracePlan {
         ),
       ]);
   }
-  stages.push(...numberTrace(n).stages);
-  return { columns: 12, rows: 8, stages };
+  const columns = Math.min(5, n) * 3 + 1,
+    rows = Math.ceil(n / 5) * 4 + 5;
+  const together = stages.flatMap((targets, i) =>
+    targets.map((t) => ({
+      ...t,
+      points: t.points.map((p) => ({
+        x:
+          (p.x * 12 -
+            4 +
+            1 +
+            (i % 5) * 3 +
+            (kind === "flag" && i === n - 1 ? 2 : 0)) /
+          columns,
+        y: (p.y * 8 - 2 + 2 + Math.floor(i / 5) * 4) / rows,
+      })),
+    })),
+  );
+  together.push(
+    ...numberTrace(n)
+      .stages.flat()
+      .map((t) => ({
+        ...t,
+        points: t.points.map((p) => ({
+          x: (p.x * 12 - 4 + columns / 2 - 0.5) / columns,
+          y: (p.y * 8 - 2 + rows - 3) / rows,
+        })),
+      })),
+  );
+  return { columns, rows, stages: [together] };
 }
 function construction(
   shapes: string[],
@@ -221,15 +249,15 @@ function construction(
       });
     else if (shape === "triangle")
       points = [
-        [x, y + 0.4],
+        [x, y + (w * Math.sqrt(3)) / 2],
         [x + w / 2, y],
-        [x + w, y + 0.4],
+        [x + w, y + (w * Math.sqrt(3)) / 2],
       ];
     else if (shape === "house")
       points = [
         [0.3, 0.8],
         [0.3, 0.4],
-        [0.5, 0.15],
+        [0.5, 0.4 - (0.4 * Math.sqrt(3)) / 2],
         [0.7, 0.4],
         [0.7, 0.8],
       ];
@@ -237,8 +265,8 @@ function construction(
       points = [
         [x, y],
         [x + w, y],
-        [x + w, y + 0.4],
-        [x, y + 0.4],
+        [x + w, y + w],
+        [x, y + w],
       ];
     const offset = vertices.length;
     vertices.push(...points.map(([x, y]) => ({ x, y })));

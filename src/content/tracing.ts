@@ -13,6 +13,7 @@ const line = (
   label,
   color,
   points: coords.map(([x, y]) => point(x, y)),
+  bidirectional: /ствол/.test(label),
   grid: coords.every(([x, y]) => Number.isInteger(x) && Number.isInteger(y)),
 });
 const dot = (x: number, y: number, color = RED): TraceTarget => ({
@@ -141,51 +142,60 @@ const marks: TracePlan = {
     ),
   ],
 };
-const fruit = (n: number, mushroom = false): TracePlan => ({
-  columns: 12,
-  rows: 8,
-  stages: [
-    ...Array.from({ length: n }, () =>
-      mushroom
+const fruit = (n: number, mushroom = false): TracePlan => {
+  const targets: TraceTarget[] = [];
+  for (let i = 0; i < n; i++) {
+    const x = 6 + (i - (n - 1) / 2) * 3,
+      y = 2.5;
+    targets.push(
+      ...(mushroom
         ? [
             curve(
               (t) => [
-                6 - 3 * Math.cos(t * Math.PI),
-                4 - 2.4 * Math.sin(t * Math.PI),
+                x - 1.2 * Math.cos(t * Math.PI),
+                y - Math.sin(t * Math.PI),
               ],
               "Нарисуй шляпку",
             ),
             line(
               [
-                [9, 4],
-                [3, 4],
+                [x + 1.2, y],
+                [x - 1.2, y],
               ],
               "Закрой шляпку",
             ),
             line(
               [
-                [5, 4],
-                [5, 6],
-                [7, 6],
-                [7, 4],
+                [x - 0.4, y],
+                [x - 0.4, y + 1],
+                [x + 0.4, y + 1],
+                [x + 0.4, y],
               ],
               "Нарисуй ножку",
             ),
           ]
         : [
-            oval(6, 4, 1.7, n === 2 ? 2 : 1.5),
+            oval(x, y, 0.85, n === 2 ? 1 : 0.75),
             line(
               [
-                [6, 2.5],
-                [7, 1],
+                [x, y - (n === 2 ? 1 : 0.75)],
+                [x + 0.5, y - 1.6],
               ],
               "Нарисуй черенок",
             ),
-          ],
-    ),
-    numberTrace(n).stages[0],
-  ],
-});
+          ]),
+    );
+  }
+  targets.push(
+    ...numberTrace(n)
+      .stages.flat()
+      .map((t) => ({
+        ...t,
+        points: t.points.map((p) => ({ ...p, y: p.y + 3.3 / 8 })),
+      })),
+  );
+  return { columns: 12, rows: 8, stages: [targets] };
+};
 export const tracePlans: Record<string, TracePlan> = {
   "p003-block06": repeated(12, (x, y, i) => [
     line(

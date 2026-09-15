@@ -58,6 +58,10 @@ async function run(file) {
           "scripts/full-course-smoke.cjs",
           "scripts/activity-smoke.cjs",
           "scripts/child-revisions-smoke.cjs",
+          "scripts/manual-feedback-smoke.cjs",
+          "scripts/source-fidelity-smoke.cjs",
+          "scripts/gesture-coach-smoke.cjs",
+          "scripts/drawing-guidance-smoke.cjs",
           "scripts/all-pages-smoke.cjs",
         ])
       await run(file);

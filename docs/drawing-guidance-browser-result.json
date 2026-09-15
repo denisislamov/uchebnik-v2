@@ -1,0 +1,198 @@
+{
+  "status": "passed",
+  "startedAt": "2026-09-15T16:06:57.027Z",
+  "mouse": [
+    {
+      "width": 390,
+      "arrowBounds": [
+        {
+          "x": 130.8000030517578,
+          "y": 77.66666412353516,
+          "width": 12,
+          "height": 22
+        },
+        {
+          "x": 161.1999969482422,
+          "y": 77.66666412353516,
+          "width": 12,
+          "height": 22
+        }
+      ],
+      "before": {
+        "x": 35,
+        "y": 411,
+        "width": 304,
+        "height": 202.65625,
+        "scrollTop": 764,
+        "scrollClient": 374,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": 35,
+        "y": 411,
+        "width": 304,
+        "height": 202.65625,
+        "scrollTop": 764,
+        "scrollClient": 374,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "after": {
+        "x": 35,
+        "y": 411,
+        "width": 304,
+        "height": 202.65625,
+        "scrollTop": 764,
+        "scrollClient": 374,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryBefore": {
+        "x": 35,
+        "y": 355,
+        "width": 304,
+        "height": 202.65625,
+        "scrollTop": 820,
+        "scrollClient": 374,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryDuring": {
+        "x": 35,
+        "y": 355,
+        "width": 304,
+        "height": 202.65625,
+        "scrollTop": 820,
+        "scrollClient": 374,
+        "overflow": "hidden",
+        "gutter": "stable"
+      }
+    },
+    {
+      "width": 760,
+      "arrowBounds": [
+        {
+          "x": 263.4200134277344,
+          "y": 158.5833282470703,
+          "width": 14.959991455078125,
+          "height": 34
+        },
+        {
+          "x": 323.6199951171875,
+          "y": 158.5833282470703,
+          "width": 14.959991455078125,
+          "height": 34
+        }
+      ],
+      "before": {
+        "x": 71,
+        "y": 290,
+        "width": 602,
+        "height": 401.328125,
+        "scrollTop": 796,
+        "scrollClient": 744,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": 71,
+        "y": 290,
+        "width": 602,
+        "height": 401.328125,
+        "scrollTop": 796,
+        "scrollClient": 744,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "after": {
+        "x": 71,
+        "y": 290,
+        "width": 602,
+        "height": 401.328125,
+        "scrollTop": 796,
+        "scrollClient": 744,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryBefore": {
+        "x": 71,
+        "y": 185,
+        "width": 602,
+        "height": 401.328125,
+        "scrollTop": 901,
+        "scrollClient": 744,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryDuring": {
+        "x": 71,
+        "y": 185,
+        "width": 602,
+        "height": 401.328125,
+        "scrollTop": 901,
+        "scrollClient": 744,
+        "overflow": "hidden",
+        "gutter": "stable"
+      }
+    }
+  ],
+  "touch": [
+    {
+      "width": 390,
+      "direction": "down",
+      "before": {
+        "x": 35,
+        "y": 289,
+        "width": 320,
+        "height": 213.328125,
+        "scrollTop": 886,
+        "scrollClient": 390,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": 35,
+        "y": 289,
+        "width": 320,
+        "height": 213.328125,
+        "scrollTop": 886,
+        "scrollClient": 390,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "acceptedStrokes": 1
+    },
+    {
+      "width": 390,
+      "direction": "up",
+      "before": {
+        "x": 35,
+        "y": 289,
+        "width": 320,
+        "height": 213.328125,
+        "scrollTop": 886,
+        "scrollClient": 390,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": 35,
+        "y": 289,
+        "width": 320,
+        "height": 213.328125,
+        "scrollTop": 886,
+        "scrollClient": 390,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "acceptedStrokes": 1
+    }
+  ],
+  "screenshots": [
+    "docs/drawing-guidance-390.png",
+    "docs/drawing-guidance-760.png"
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-15T16:06:59.961Z"
+}

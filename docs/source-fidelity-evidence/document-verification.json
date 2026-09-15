@@ -1,0 +1,16 @@
+{
+  "pageCards": 144,
+  "findingGroups": 90,
+  "runtimeBlocksInOrder": 1332,
+  "linksChecked": 870,
+  "linkErrors": [],
+  "preExistingFilesChanged": [],
+  "statusAdded": [
+    "?? docs/MANUAL_SOURCE_REVIEW.md",
+    "?? docs/MANUAL_SOURCE_REVIEW_PAGES.md",
+    "?? docs/source-fidelity-evidence/"
+  ],
+  "pdfScansIdentical": 144,
+  "appRegression": "NOT RUN",
+  "phone": "NOT RUN"
+}

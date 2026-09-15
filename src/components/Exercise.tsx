@@ -1,3 +1,6 @@
+import { GestureCoachProvider } from "./GestureCoach";
+import { LocationTask } from "./LocationTask";
+import { CounterBoard } from "./CounterBoard";
 import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
 import React, { useState } from "react";
@@ -9,17 +12,27 @@ import { BookImage } from "./BookImage";
 import { Button } from "./Controls";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
-export function Exercise({
-  block,
-  answer,
-  onAnswer,
-  onDrawing,
-}: {
+import { PracticalTask } from "./PracticalTask";
+import { StoryTask } from "./StoryTask";
+import { NumberGameTask } from "./NumberGameTask";
+type ExerciseProps = {
   block: Block;
   answer: Answer;
   onAnswer: (a: Answer) => void;
   onDrawing: (v: boolean) => void;
-}) {
+  revealCoachTarget?: (target: View) => Promise<void>;
+};
+export function Exercise(props: ExerciseProps) {
+  return (
+    <GestureCoachProvider
+      key={props.block.id}
+      revealTarget={props.revealCoachTarget}
+    >
+      <ExerciseBody {...props} />
+    </GestureCoachProvider>
+  );
+}
+function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   const [hint, setHint] = useState(false);
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
@@ -33,7 +46,7 @@ export function Exercise({
       : answer.value !== undefined && answer.value !== "";
   return (
     <View style={{ gap: 22 }}>
-      {block.kind !== "read" && (
+      {block.kind !== "read" && block.kind !== "location" && (
         <View>
           <Text style={s.prompt}>{block.prompt}</Text>
         </View>
@@ -57,24 +70,43 @@ export function Exercise({
             },
           ]}
         >
-          {block.images.map((id) => (
-            <View
-              key={id}
-              style={
-                block.images.length > 1
-                  ? { flexGrow: 1, flexBasis: 110, maxWidth: "100%" }
-                  : { width: "100%" }
-              }
-            >
-              <BookImage
-                id={id}
-                maxHeight={block.kind === "read" ? 340 : 270}
-              />
-            </View>
-          ))}
+          {block.images
+            .filter((id) => id !== "p011_balls_row_3_groups")
+            .map((id) => (
+              <View
+                key={id}
+                style={
+                  block.images.length > 1
+                    ? { flexGrow: 1, flexBasis: 110, maxWidth: "100%" }
+                    : { width: "100%" }
+                }
+              >
+                <BookImage
+                  id={id}
+                  maxHeight={block.kind === "read" ? 340 : 270}
+                />
+              </View>
+            ))}
         </View>
       )}
+      {block.kind === "location" && (
+        <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
+      )}
       {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
+      {block.kind === "story" && (
+        <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
+      )}
+      {block.kind === "numberGame" && (
+        <NumberGameTask block={block} answer={answer} onAnswer={onAnswer} />
+      )}
+      {block.kind === "practical" && (
+        <PracticalTask
+          block={block}
+          answer={answer}
+          onAnswer={onAnswer}
+          onDrawing={onDrawing}
+        />
+      )}
       {[
         "work",
         "compose",
@@ -150,43 +182,12 @@ export function Exercise({
         </View>
       )}
       {block.kind === "counters" && (
-        <View style={{ gap: 14 }}>
-          <View style={s.tray}>
-            {numeric === 0 ? (
-              <Text style={s.trayHint}>
-                Положи сюда {block.token === "stick" ? "палочки" : "кружки"}
-              </Text>
-            ) : (
-              Array.from({ length: numeric }, (_, i) => (
-                <View
-                  key={i}
-                  style={block.token === "stick" ? s.stick : s.counter}
-                />
-              ))
-            )}
-          </View>
-          <View style={s.counterTools}>
-            <Button
-              secondary
-              small
-              disabled={numeric === 0}
-              onPress={() => update({ value: numeric - 1 })}
-              label="Убрать один предмет"
-            >
-              − Убрать
-            </Button>
-            <Text style={s.count}>{numeric}</Text>
-            <Button
-              secondary
-              small
-              disabled={numeric >= 12}
-              onPress={() => update({ value: numeric + 1 })}
-              label="Добавить один предмет"
-            >
-              + Добавить
-            </Button>
-          </View>
-        </View>
+        <CounterBoard
+          value={numeric}
+          token={block.token}
+          onChange={(value) => update({ value })}
+          onDrawing={onDrawing}
+        />
       )}
       {block.kind === "draw" && (
         <DrawingPad

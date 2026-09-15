@@ -1,4 +1,5 @@
-import { containsPoint } from "../lib/hitTesting";
+import { CoachButton, useGestureCoach } from "./GestureCoach";
+import { pickTarget } from "../lib/hitTesting";
 import React, { useState, useRef } from "react";
 import { View, Image, Pressable, Text } from "react-native";
 import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
@@ -18,10 +19,16 @@ function Picture({
 }) {
   const a = assets[id];
   const frame = useRef<View>(null);
+  const showCoach = useGestureCoach("picture", [
+    {
+      ref: frame,
+      text: "Найди на рисунке то, о чём спрашивают. Коснись этого предмета пальцем. Чтобы убрать отметку, нажми ещё раз.",
+    },
+  ]);
   const [width, setWidth] = useState(280);
   const height = (width * a.height) / a.width;
   const pick = (x: number, y: number) => {
-    const target = targets.find((t) => containsPoint(t, { x, y }));
+    const target = pickTarget(targets, { x, y }, width, height);
     onPick(target?.id ?? "miss");
   };
   function press(e: any, fallback?: string) {
@@ -36,86 +43,89 @@ function Picture({
     );
   }
   return (
-    <View
-      ref={frame}
-      style={{
-        width: "100%",
-        maxWidth: Math.min(650, (420 * a.width) / a.height),
-        alignSelf: "center",
-      }}
-      onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-    >
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Рисунок задания"
-        onPress={(e) => press(e)}
-        style={{ width: "100%", height }}
+    <View style={{ gap: 12, width: "100%" }}>
+      <CoachButton onPress={showCoach} />
+      <View
+        ref={frame}
+        style={{
+          width: "100%",
+          maxWidth: Math.min(650, (420 * a.width) / a.height),
+          alignSelf: "center",
+        }}
+        onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
       >
-        <Image
-          accessible={false}
-          source={a.source}
-          resizeMode="stretch"
-          style={{ width: "100%", height: "100%", borderRadius: 10 }}
-        />
-        <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
-          <Svg width={width} height={height}>
-            {targets
-              .filter((t) => selected.includes(t.id))
-              .map((t) =>
-                t.polygon ? (
-                  <Polygon
-                    key={t.id}
-                    points={t.polygon
-                      .map((p) => `${p.x * width},${p.y * height}`)
-                      .join(" ")}
-                    fill="#23594e25"
-                    stroke={c.green}
-                    strokeWidth={3}
-                  />
-                ) : t.ellipse ? (
-                  <Ellipse
-                    key={t.id}
-                    cx={(t.x + t.w / 2) * width}
-                    cy={(t.y + t.h / 2) * height}
-                    rx={(t.w * width) / 2}
-                    ry={(t.h * height) / 2}
-                    fill="#23594e25"
-                    stroke={c.green}
-                    strokeWidth={3}
-                  />
-                ) : (
-                  <Rect
-                    key={t.id}
-                    x={t.x * width}
-                    y={t.y * height}
-                    width={t.w * width}
-                    height={t.h * height}
-                    rx={6}
-                    fill="#23594e25"
-                    stroke={c.green}
-                    strokeWidth={3}
-                  />
-                ),
-              )}
-          </Svg>
-        </View>
-        {targets.map((t) => (
-          <Pressable
-            key={t.id}
-            accessibilityRole="button"
-            accessibilityLabel={t.label}
-            accessibilityState={{ selected: selected.includes(t.id) }}
-            onPress={(e) => press(e, t.id)}
-            style={{
-              position: "absolute",
-              left: t.x * width,
-              top: t.y * height,
-              width: t.w * width,
-              height: t.h * height,
-            }}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Рисунок задания"
+          onPress={(e) => press(e)}
+          style={{ width: "100%", height }}
+        >
+          <Image
+            accessible={false}
+            source={a.source}
+            resizeMode="stretch"
+            style={{ width: "100%", height: "100%", borderRadius: 10 }}
           />
-        ))}
-      </Pressable>
+          <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
+            <Svg width={width} height={height}>
+              {targets
+                .filter((t) => selected.includes(t.id))
+                .map((t) =>
+                  t.polygon ? (
+                    <Polygon
+                      key={t.id}
+                      points={t.polygon
+                        .map((p) => `${p.x * width},${p.y * height}`)
+                        .join(" ")}
+                      fill="#23594e25"
+                      stroke={c.green}
+                      strokeWidth={3}
+                    />
+                  ) : t.ellipse ? (
+                    <Ellipse
+                      key={t.id}
+                      cx={(t.x + t.w / 2) * width}
+                      cy={(t.y + t.h / 2) * height}
+                      rx={(t.w * width) / 2}
+                      ry={(t.h * height) / 2}
+                      fill="#23594e25"
+                      stroke={c.green}
+                      strokeWidth={3}
+                    />
+                  ) : (
+                    <Rect
+                      key={t.id}
+                      x={t.x * width}
+                      y={t.y * height}
+                      width={t.w * width}
+                      height={t.h * height}
+                      rx={6}
+                      fill="#23594e25"
+                      stroke={c.green}
+                      strokeWidth={3}
+                    />
+                  ),
+                )}
+            </Svg>
+          </View>
+          {targets.map((t) => (
+            <Pressable
+              key={t.id}
+              accessibilityRole="button"
+              accessibilityLabel={t.label}
+              accessibilityState={{ selected: selected.includes(t.id) }}
+              onPress={(e) => press(e, t.id)}
+              style={{
+                position: "absolute",
+                left: t.x * width,
+                top: t.y * height,
+                width: t.w * width,
+                height: t.h * height,
+              }}
+            />
+          ))}
+        </Pressable>
+      </View>
     </View>
   );
 }

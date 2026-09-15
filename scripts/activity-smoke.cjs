@@ -31,13 +31,33 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         ({ KEY, n, index }) =>
           localStorage.setItem(
             KEY,
-            JSON.stringify({ version: 1, page: n, block: index, answers: {} }),
+            JSON.stringify({
+              version: 1,
+              contentRevision: 3,
+              page: n,
+              block: index,
+              answers: {},
+            }),
           ),
         { KEY, n: page.number, index },
       );
       await p.goto(baseURL);
       await btn("Продолжить занятие  →").click();
       await p.getByText(b.title, { exact: true }).last().waitFor();
+    };
+    const placeToken = async (board, slot) => {
+      const from = board.getByTestId("token-source"),
+        to = board.getByTestId(
+          slot === undefined ? "token-dropzone" : `token-slot-${slot}`,
+        );
+      await from.scrollIntoViewIfNeeded();
+      await from.hover();
+      const a = await from.boundingBox(),
+        b = await to.boundingBox();
+      await p.mouse.move(a.x + a.width / 2, a.y + a.height / 2);
+      await p.mouse.down();
+      await p.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 18 });
+      await p.mouse.up();
     };
     const finish = async (name) => {
       await btn("Проверить").click();
@@ -47,38 +67,80 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     };
     let b = allBlocks.find((b) => b.exerciseNumber === 49);
     await open(b);
-    await btn("О чём задача: рубли").click();
+    await btn("Сюжет: Копилка").click();
+    await btn("рубли").click();
+    await btn("+").click();
     await p
-      .getByRole("textbox", { name: "Первое число", exact: true })
-      .fill("1");
-    await p
-      .getByRole("textbox", { name: "Второе число", exact: true })
-      .fill("3");
-    await p.getByRole("textbox", { name: "Результат", exact: true }).fill("5");
-    await btn("Проверить").click();
+      .getByRole("textbox", {
+        name: "Ответ: Сколько рублей стало в копилке?",
+        exact: true,
+      })
+      .fill("5");
+    await btn("Проверить задачу").click();
     assert.equal(await btn("✓ Получилось!").count(), 0);
-    await p.getByRole("textbox", { name: "Результат", exact: true }).fill("4");
-    await finish("story-builder: wrong then correct");
+    await p
+      .getByRole("textbox", {
+        name: "Ответ: Сколько рублей стало в копилке?",
+        exact: true,
+      })
+      .fill("4");
+    await btn("Проверить задачу").click();
+    await btn("✓ Верно").waitFor();
+    report.scenarios.push("story-builder: source rubles, wrong then correct");
     b = allBlocks.find(
       (b) => b.kind === "activity" && b.activity.mode === "composition",
     );
     await open(b);
-    await btn("Первая часть: добавить").click();
-    for (let n = 0; n < b.activity.targets[0] - 1; n++)
-      await btn("Вторая часть: добавить").click();
+    await placeToken(p.getByTestId("counter-board").nth(0));
+    await p
+      .getByTestId("counter-board")
+      .nth(0)
+      .getByText("На поле: 1", { exact: true })
+      .waitFor();
+    for (let n = 0; n < b.activity.targets[0] - 1; n++) {
+      const group = p.getByTestId("counter-board").nth(1);
+      await placeToken(group);
+      await group.getByText(`На поле: ${n + 1}`, { exact: true }).waitFor();
+    }
     await finish("two-part number composition");
     b = allBlocks.find(
       (b) => b.kind === "activity" && b.activity.mode === "count",
     );
     await open(b);
-    for (let n = 0; n < b.activity.targets[0]; n++)
-      await btn("Предметы: добавить").click();
+    for (let n = 0; n < b.activity.targets[0]; n++) {
+      const board = p.getByTestId("counter-board");
+      await placeToken(board, b.activity.slots ? n : undefined);
+      await board.getByText(`На поле: ${n + 1}`, { exact: true }).waitFor();
+    }
     await finish("counting");
     b = allBlocks.find((b) => b.exerciseNumber === 202);
     await open(b);
-    await btn("Десятки: добавить").click();
-    for (let n = 0; n < 4; n++) await btn("Единицы: добавить").click();
-    await finish("tens and ones");
+    for (const counts of [[4], [1, 4]]) {
+      for (const [i, count] of counts.entries())
+        for (let n = 1; n <= count; n++) {
+          const board = p.getByTestId("counter-board").nth(i);
+          await placeToken(board);
+          await board.getByText(`На поле: ${n}`, { exact: true }).waitFor();
+        }
+      await btn("Проверить действие").click();
+    }
+    await p
+      .getByRole("textbox", {
+        name: "Сколько десятков в четырнадцати?",
+        exact: true,
+      })
+      .fill("1");
+    await p
+      .getByRole("textbox", {
+        name: "Сколько единиц в четырнадцати?",
+        exact: true,
+      })
+      .fill("4");
+    await btn("Проверить ответ").click();
+    await btn("✓ Верно").waitFor();
+    report.scenarios.push(
+      "tens and ones: four sticks, then a ten and four units",
+    );
     b = allBlocks.find((b) => b.exerciseNumber === 457);
     await open(b);
     for (let i = 0; i < 2; i++)

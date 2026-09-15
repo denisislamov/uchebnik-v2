@@ -30,7 +30,13 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         ({ KEY, n, index }) =>
           localStorage.setItem(
             KEY,
-            JSON.stringify({ version: 1, page: n, block: index, answers: {} }),
+            JSON.stringify({
+              version: 1,
+              contentRevision: 3,
+              page: n,
+              block: index,
+              answers: {},
+            }),
           ),
         { KEY, n: page.number, index },
       );
@@ -96,10 +102,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     assert.equal((await load()).answers[ruler.id].responses["0"], "15");
     const recipe = allBlocks.find((b) => b.exerciseNumber === 581);
     await open(recipe);
-    await btn("Сюжет: книги").click();
+    await btn("Сюжет: килограммы").click();
     for (const [key, v] of Object.entries({ a: "2", b: "3", c: "4" }))
       await p
-        .getByRole("textbox", { name: `Число ${key}`, exact: true })
+        .getByRole("textbox", { name: recipe.inputLabels[key], exact: true })
         .fill(v);
     await p
       .getByRole("textbox", { name: "Результат всей задачи", exact: true })

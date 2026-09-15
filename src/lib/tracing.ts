@@ -58,6 +58,17 @@ export function matchesTrace(
   target: TraceTarget,
   grid: { columns: number; rows: number } = { columns: 12, rows: 8 },
 ): boolean {
+  if (target.bidirectional) {
+    const oneWay = { ...target, bidirectional: false };
+    return (
+      matchesTrace(stroke, oneWay, grid) ||
+      matchesTrace(
+        stroke,
+        { ...oneWay, points: [...oneWay.points].reverse() },
+        grid,
+      )
+    );
+  }
   const closed = isClosedTrace(target, grid);
   const toCells = (p: Point): Point => ({
     x: p.x * grid.columns,

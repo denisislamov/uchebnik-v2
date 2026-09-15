@@ -1,3 +1,4 @@
+import { CoachButton, useGestureCoach } from "./GestureCoach";
 import React, { useRef, useState } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
@@ -9,7 +10,7 @@ import {
   drawingColor,
   DRAWING_COLORS,
 } from "../lib/tracing";
-import { traceDirections } from "../lib/traceDirections";
+import { traceDirections, traceArrowGeometry } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
 import { Button, ProgressBar } from "./Controls";
 export function DrawingPad({
@@ -38,9 +39,23 @@ export function DrawingPad({
   const height = (width * rows) / columns,
     color = chosenColor ?? target?.color ?? "#111111";
   const closed = target ? isClosedTrace(target, { columns, rows }) : false;
+  const fieldRef = useRef<View>(null);
+  const showCoach = useGestureCoach(target?.dot ? "dot" : "trace", [
+    {
+      ref: fieldRef,
+      text: target?.dot
+        ? "Поставь палец в маленький кружок и сразу подними. Получится точка."
+        : closed
+          ? "Обведи фигуру пальцем по пунктиру. Начни в любом месте и вернись к началу."
+          : target?.bidirectional
+            ? "Веди палец по пунктиру. Две синие стрелки показывают: можно начать с любого конца."
+            : target
+              ? "Начни с яркой точки. Не отрывая палец, веди по пунктиру в сторону синей стрелки. Стрелка показывает направление движения."
+              : "Рисуй пальцем на этом листе. Чтобы закончить линию, подними палец.",
+    },
+  ]);
   const arrows = target ? traceDirections(target, { columns, rows }) : [];
   const cellSize = width / columns;
-  const arrowSize = Math.max(5, Math.min(11, cellSize * 0.28));
   const directionColor = "#1565c0";
   const coords = (e: any): Point => ({
     x: Math.max(0, Math.min(1, e.nativeEvent.locationX / width)),
@@ -66,7 +81,11 @@ export function DrawingPad({
           ? "Выбери цвет, как у пунктира."
           : target.dot
             ? "Поставь маленькую точку в кружке."
-            : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синих стрелок.",
+            : closed
+              ? "Обведи весь контур и вернись к месту начала."
+              : target.bidirectional
+                ? "Проведи всю линию по пунктиру. Можно начать с любого конца."
+                : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синих стрелок.",
       );
     }
   }
@@ -78,6 +97,16 @@ export function DrawingPad({
     : strokes;
   return (
     <View style={{ gap: 12 }}>
+      <CoachButton onPress={showCoach} />
+      {progress && strokes.length > progress.accepted.length && (
+        <Text
+          accessibilityRole="alert"
+          style={{ fontFamily: f.regular, color: c.orange }}
+        >
+          Образец обновлён. Этот рисунок нужно выполнить заново; остальные
+          ответы сохранены.
+        </Text>
+      )}
       {progress && (
         <View style={{ gap: 8 }}>
           <Text
@@ -90,8 +119,14 @@ export function DrawingPad({
           </Text>
           <ProgressBar value={progress.completed / progress.total} />
           <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
-            Лист {progress.stage + 1} из {trace!.stages.length} · начинай с
-            яркой точки (замкнутую фигуру — с любого места)
+            Лист {progress.stage + 1} из {trace!.stages.length} ·{" "}
+            {closed
+              ? "начинай с любого места контура"
+              : target?.bidirectional
+                ? /ствол/i.test(target.label)
+                  ? "ствол можно вести вверх или вниз"
+                  : "можно начинать с любого конца линии"
+                : "начинай с яркой точки"}
           </Text>
         </View>
       )}
@@ -152,11 +187,16 @@ export function DrawingPad({
               ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
               : closed
                 ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
-                : "Синие стрелки показывают, куда вести палец. Начни с яркой точки и двигайся по пунктиру в сторону стрелок. Сами стрелки обводить не нужно."}
+                : target.bidirectional
+                  ? /ствол/i.test(target.label)
+                    ? "Веди ствол по пунктиру вверх или вниз."
+                    : "Начни с любого конца. Веди по пунктиру."
+                  : "Начни с яркой точки. Веди по пунктиру в сторону синих стрелок."}
           </Text>
         </View>
       )}
       <View
+        ref={fieldRef}
         accessibilityLabel="Поле для рисования"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
         style={[
@@ -178,7 +218,8 @@ export function DrawingPad({
         }
         onResponderGrant={(e) => {
           onDrawing(true);
-          setError("");
+          // Keep feedback in place while drawing: removing it can clamp the
+          // parent scroll position and move the notebook under the finger.
           const p = coords(e);
           active.current = {
             color,
@@ -258,7 +299,7 @@ export function DrawingPad({
                   cx={target.points.at(-1)!.x * width}
                   cy={target.points.at(-1)!.y * height}
                   r={4}
-                  fill={c.paper}
+                  fill={target.bidirectional ? target.color : c.paper}
                   stroke={target.color}
                 />
                 <Circle
@@ -274,7 +315,7 @@ export function DrawingPad({
                 key={i}
                 d={d(s.points)}
                 stroke={
-                  error && i === visible.length
+                  error && !active.current && i === visible.length
                     ? c.orange
                     : drawingColor(s.color)
                 }
@@ -284,20 +325,18 @@ export function DrawingPad({
                 strokeLinejoin="round"
               />
             ))}
-            {(!closed ? arrows : []).map(({ point, direction }, i) => {
-              const x = point.x * cellSize,
-                y = point.y * cellSize;
-              const backX = x - direction.x * arrowSize;
-              const backY = y - direction.y * arrowSize;
-              const wingX = -direction.y * arrowSize * 0.65;
-              const wingY = direction.x * arrowSize * 0.65;
-              const path = `M ${backX + wingX} ${backY + wingY} L ${x} ${y} L ${backX - wingX} ${backY - wingY}`;
+            {(!closed ? arrows : []).map((arrow, i) => {
+              const { tip, tail, left, right } = traceArrowGeometry(
+                arrow,
+                cellSize,
+              );
+              const path = `M ${tail.x} ${tail.y} L ${tip.x} ${tip.y} M ${left.x} ${left.y} L ${tip.x} ${tip.y} L ${right.x} ${right.y}`;
               return (
                 <React.Fragment key={`direction-${i}`}>
                   <Path
                     d={path}
                     stroke="#fffef9"
-                    strokeWidth={4}
+                    strokeWidth={6}
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -306,7 +345,7 @@ export function DrawingPad({
                     testID="drawing-direction-arrow"
                     d={path}
                     stroke={directionColor}
-                    strokeWidth={2}
+                    strokeWidth={3}
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"

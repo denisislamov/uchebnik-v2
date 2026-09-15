@@ -28,7 +28,7 @@ export function BookImage({
       >
         <Text style={{ color: "#2563a6" }}>Посчитай жетоны</Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-          {Array.from({ length: Math.ceil(n / 5) * 5 }, (_, i) => (
+          {Array.from({ length: n }, (_, i) => (
             <View
               key={i}
               style={{
@@ -39,9 +39,10 @@ export function BookImage({
                 borderColor: "#aac5e1",
                 alignItems: "center",
                 justifyContent: "center",
+                marginLeft: i === n - 1 && n > 1 ? 18 : 0,
               }}
             >
-              {i < n && (
+              {
                 <View
                   style={{
                     width: 24,
@@ -50,7 +51,7 @@ export function BookImage({
                     backgroundColor: "#1565c0",
                   }}
                 />
-              )}
+              }
             </View>
           ))}
         </View>

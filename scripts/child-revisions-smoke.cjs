@@ -37,7 +37,13 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         ({ KEY, n, index }) =>
           localStorage.setItem(
             KEY,
-            JSON.stringify({ version: 1, page: n, block: index, answers: {} }),
+            JSON.stringify({
+              version: 1,
+              contentRevision: 3,
+              page: n,
+              block: index,
+              answers: {},
+            }),
           ),
         { KEY, n: page.number, index },
       );

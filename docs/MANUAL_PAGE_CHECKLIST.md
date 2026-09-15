@@ -15,24 +15,24 @@
 | [9](../textbook/pages/page_009.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p009.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
 | [10](../textbook/pages/page_010.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p010.md) | 12 | Без номеров | ☐ | ☐ | ☐ | — |
 | [11](../textbook/pages/page_011.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p011.md) | 8 | Без номеров | ☐ | ☐ | ☐ | — |
-| [12](../textbook/pages/page_012.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p012.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
+| [12](../textbook/pages/page_012.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p012.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
 | [13](../textbook/pages/page_013.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p013.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
-| [14](../textbook/pages/page_014.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p014.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
+| [14](../textbook/pages/page_014.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p014.md) | 5 | Без номеров | ☐ | ☐ | ☐ | — |
 | [15](../textbook/pages/page_015.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p015.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
-| [16](../textbook/pages/page_016.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p016.md) | 5 | Без номеров | ☐ | ☐ | ☐ | — |
-| [17](../textbook/pages/page_017.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p017.md) | 5 | Без номеров | ☐ | ☐ | ☐ | — |
-| [18](../textbook/pages/page_018.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p018.md) | 8 | Без номеров | ☐ | ☐ | ☐ | — |
-| [19](../textbook/pages/page_019.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p019.md) | 12 | Без номеров | ☐ | ☐ | ☐ | — |
-| [20](../textbook/pages/page_020.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p020.md) | 2 | Без номеров | ☐ | ☐ | ☐ | — |
-| [21](../textbook/pages/page_021.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p021.md) | 4 | Без номеров | ☐ | ☐ | ☐ | — |
-| [22](../textbook/pages/page_022.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p022.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
+| [16](../textbook/pages/page_016.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p016.md) | 4 | Без номеров | ☐ | ☐ | ☐ | — |
+| [17](../textbook/pages/page_017.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p017.md) | 4 | Без номеров | ☐ | ☐ | ☐ | — |
+| [18](../textbook/pages/page_018.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p018.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
+| [19](../textbook/pages/page_019.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p019.md) | 11 | Без номеров | ☐ | ☐ | ☐ | — |
+| [20](../textbook/pages/page_020.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p020.md) | 1 | Без номеров | ☐ | ☐ | ☐ | — |
+| [21](../textbook/pages/page_021.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p021.md) | 3 | Без номеров | ☐ | ☐ | ☐ | — |
+| [22](../textbook/pages/page_022.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p022.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
 | [23](../textbook/pages/page_023.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p023.md) | 10 | Без номеров | ☐ | ☐ | ☐ | — |
-| [24](../textbook/pages/page_024.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p024.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
+| [24](../textbook/pages/page_024.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p024.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
 | [25](../textbook/pages/page_025.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p025.md) | 11 | Без номеров | ☐ | ☐ | ☐ | — |
-| [26](../textbook/pages/page_026.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p026.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
+| [26](../textbook/pages/page_026.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p026.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
 | [27](../textbook/pages/page_027.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p027.md) | 11 | Без номеров | ☐ | ☐ | ☐ | — |
-| [28](../textbook/pages/page_028.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p028.md) | 7 | Без номеров | ☐ | ☐ | ☐ | — |
-| [29](../textbook/pages/page_029.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p029.md) | 10 | Без номеров | ☐ | ☐ | ☐ | — |
+| [28](../textbook/pages/page_028.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p028.md) | 6 | Без номеров | ☐ | ☐ | ☐ | — |
+| [29](../textbook/pages/page_029.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p029.md) | 9 | Без номеров | ☐ | ☐ | ☐ | — |
 | [30](../textbook/pages/page_030.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p030.md) | 11 | 1, 2, 3, 4, 5, 6, 7, 8 | ☐ | ☐ | ☐ | — |
 | [31](../textbook/pages/page_031.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p031.md) | 9 | 9, 10, 11, 12, 13 | ☐ | ☐ | ☐ | — |
 | [32](../textbook/pages/page_032.png) | [Описание](../textbook/page_docs/arithmetic_grade1_pchelko_1959_p032.md) | 10 | 14, 15, 16, 17, 18, 19, 20, 21, 22 | ☐ | ☐ | ☐ | — |

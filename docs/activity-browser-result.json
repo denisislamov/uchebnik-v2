@@ -1,10 +1,10 @@
 {
   "passed": true,
   "scenarios": [
-    "story-builder: wrong then correct",
+    "story-builder: source rubles, wrong then correct",
     "two-part number composition",
     "counting",
-    "tens and ones",
+    "tens and ones: four sticks, then a ten and four units",
     "balance",
     "five 200ml measures",
     "hundred table",

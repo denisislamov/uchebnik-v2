@@ -16,12 +16,13 @@ test("four flags are two cells wide with inward notches; last flag is mirrored",
     .find((b) => b.title.includes("Нарисуй"))!;
   assert.ok(flags.kind === "draw" && flags.trace);
   for (let i = 0; i < 4; i++) {
-    const points: { x: number; y: number }[] = flags.trace.stages[
-      i
-    ][1].points.map((p) => ({
-      x: p.x * 12,
-      y: p.y * 8,
-    }));
+    const points: { x: number; y: number }[] = flags.trace.stages
+      .flat()
+      .filter((t) => t.label.startsWith("Обведи флажок"))
+      [i].points.map((p) => ({
+        x: p.x * flags.trace!.columns,
+        y: p.y * flags.trace!.rows,
+      }));
     assert.equal(points.length, 5);
     const direction = i === 3 ? -1 : 1;
     assert.equal(points[1].x - points[0].x, 2 * direction);
