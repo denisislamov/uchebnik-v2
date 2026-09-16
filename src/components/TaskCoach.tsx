@@ -38,6 +38,23 @@ export function useTaskCoach(
         : {}),
     };
   });
+  if (block.kind === "picture" && block.quantityMeaning) {
+    targets = [
+      {
+        ref: refs.instruction,
+        text: "Рисунки разные. Посмотрим, что у них общего. Коснись каждого рисунка, как показывает палец.",
+      },
+      ...block.targets.map((t) => ({
+        anchor: `meaning:${block.id}:${t.id}`,
+        surface: block.images[t.image].includes("abacus_")
+          ? undefined
+          : { kind: "image" as const, imageId: block.images[t.image] },
+        text: `${t.label}. ${t.label.startsWith("Цифра") ? "Так записывают это число." : `Это тоже ${block.quantityMeaning!.number}.`}`,
+        motion: { kind: "tap" as const, points: [{ x: 0.5, y: 0.45 }] },
+      })),
+      { ref: refs.instruction, text: block.quantityMeaning.conclusion },
+    ];
+  }
   const scene = countingTutorials[block.id];
   if (scene) {
     const noun = /дет|дети|ребён/.test(block.prompt.toLowerCase())

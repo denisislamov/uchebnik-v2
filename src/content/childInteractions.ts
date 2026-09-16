@@ -118,17 +118,61 @@ for (const [id, n, rect] of [
     prompt: `Найди цифру ${n} на монете. Нажми на неё.`,
   };
 }
-for (const [id, index, n] of [
-  ["p007-block07", 1, 1],
-  ["p008-block08", 2, 2],
-  ["p010-block06", 1, 3],
-] as const) {
-  maps[id] = {
-    targets: [],
-    expected: [`card-${index}`],
-    prompt: `Найди цифру ${n}. Нажми на карточку с цифрой.`,
-  };
-}
+// These source rows introduce one quantity in different representations.
+// They are not a quiz in which only the printed numeral is correct.
+const numberMeanings: Record<
+  string,
+  {
+    number: number;
+    page: string;
+    cards: [string, string][];
+    conclusion: string;
+  }
+> = {
+  "p007-block07": {
+    number: 1,
+    page: "p007",
+    cards: [
+      ["one_mushroom", "Один гриб"],
+      ["one_squirrel", "Одна белка"],
+      ["one_hedgehog", "Один ёж"],
+      ["domino_1", "Одна точка"],
+      ["one_green_dot", "Один кружок"],
+      ["digit_1_print", "Цифра 1"],
+    ],
+    conclusion:
+      "Гриб, белка, ёж, точка и кружок — разные. Но на каждом рисунке их по одному. Это число один. Его записывают цифрой 1.",
+  },
+  "p008-block08": {
+    number: 2,
+    page: "p008",
+    cards: [
+      ["two_skates", "Два конька"],
+      ["two_skis", "Две лыжи"],
+      ["bicycle_two_wheels", "Два колеса"],
+      ["domino_2", "Две точки"],
+      ["two_green_dots", "Два кружка"],
+      ["abacus_2", "Два жетона"],
+      ["digit_2_print", "Цифра 2"],
+    ],
+    conclusion:
+      "Два конька, две лыжи, два колеса. Точек и кружков тоже по два. Предметы разные, а количество одинаковое. Это число два. Его записывают цифрой 2.",
+  },
+  "p010-block06": {
+    number: 3,
+    page: "p010",
+    cards: [
+      ["boys_fishing", "Три мальчика"],
+      ["three_fish", "Три рыбы"],
+      ["three_strawberries", "Три красные ягоды"],
+      ["domino_3", "Три точки"],
+      ["three_green_dots", "Три кружка"],
+      ["digit_3_print", "Цифра 3"],
+    ],
+    conclusion:
+      "Три мальчика, три рыбы, три красные ягоды. Точек и кружков тоже по три. Предметы разные, а количество одинаковое. Это число три. Его записывают цифрой 3.",
+  },
+};
 const counts: Record<string, { label: string; rects: number[][] }> = {
   "p007-block03": { label: "гриб", rects: [[0.21, 0.17, 0.53, 0.65]] },
   "p007-block04": { label: "белку", rects: [[0.21, 0.08, 0.53, 0.74]] },
@@ -299,6 +343,29 @@ maps["p008-block01"] = {
   prompt: "Найди и нажми оба стула, оба окна и обе рамки на стене.",
 };
 export function childInteraction(block: Block): Block {
+  const meaning = numberMeanings[block.id];
+  if (meaning) {
+    const targets = meaning.cards.map(([, label], i) =>
+      area(`representation-${i}`, 0, 0, 1, 1, label, i),
+    );
+    return {
+      id: block.id,
+      title: block.title,
+      kind: "picture",
+      images: meaning.cards.map(([image]) => `${meaning.page}_${image}`),
+      sourceText: block.kind === "read" ? block.body : block.sourceText,
+      prompt:
+        "Рассмотри рисунки. Что у них общего? Нажимай на каждый рисунок и сравнивай количество.",
+      targets,
+      expected: targets.map((t) => t.id),
+      quantityMeaning: {
+        number: meaning.number,
+        conclusion: meaning.conclusion,
+      },
+      adaptation: true,
+      hint: meaning.conclusion,
+    };
+  }
   if (block.kind === "draw")
     return {
       ...block,

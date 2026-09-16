@@ -142,7 +142,12 @@ export type Block = Base &
         review?: string;
       }
     | { kind: "draw"; guide?: string; rubric: string; trace?: TracePlan }
-    | { kind: "picture"; targets: Hotspot[]; expected: string[] }
+    | {
+        kind: "picture";
+        targets: Hotspot[];
+        expected: string[];
+        quantityMeaning?: { number: number; conclusion: string };
+      }
     | { kind: "shape"; vertices: Point[]; edges: [number, number][] }
   );
 export type BookPage = {

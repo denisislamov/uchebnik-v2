@@ -88,9 +88,20 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await button("Цифра 3 на монете").click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     await open(7, 6);
-    await button("Карточка 1").click();
-    await p.getByText("Пока не совпало.", { exact: false }).waitFor();
-    await button("Карточка 2").click();
+    for (const label of [
+      "Один гриб",
+      "Одна белка",
+      "Один ёж",
+      "Одна точка",
+      "Один кружок",
+      "Цифра 1",
+    ]) {
+      await button(label).click();
+      assert.equal(
+        await p.getByText("Пока не совпало.", { exact: false }).count(),
+        0,
+      );
+    }
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     await open(10, 2);
     await button("рыбу 1").click();

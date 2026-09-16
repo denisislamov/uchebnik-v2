@@ -6,6 +6,7 @@ import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
 import type { Block, Hotspot, Point } from "../content/types";
 import { assets } from "../content/assets";
 import { colors as c, fonts as f } from "../theme";
+import { NumberMeaning } from "./NumberMeaning";
 function Picture({
   id,
   targets,
@@ -169,6 +170,8 @@ export function PictureTask({
   onChange: (v: string[]) => void;
 }) {
   const [miss, setMiss] = useState(false);
+  if (block.quantityMeaning)
+    return <NumberMeaning block={block} value={value} onChange={onChange} />;
   function pick(id: string) {
     setMiss(id === "miss");
     if (id === "miss") return;

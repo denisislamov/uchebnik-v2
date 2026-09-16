@@ -63,6 +63,7 @@ async function run(file) {
           "scripts/gesture-coach-smoke.cjs",
           "scripts/coach-layout-smoke.cjs",
           "scripts/onboarding-gesture-regressions.cjs",
+          "scripts/number-meaning-smoke.cjs",
           "scripts/onboarding-all-views.cjs",
           "scripts/drawing-guidance-smoke.cjs",
           "scripts/all-pages-smoke.cjs",

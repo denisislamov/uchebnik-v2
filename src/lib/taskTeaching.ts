@@ -379,6 +379,20 @@ export function taskTeaching(block: Block): TaskTeaching {
       );
     case "picture": {
       const p = block.prompt;
+      if (block.quantityMeaning)
+        return lesson(
+          `picture.number-meaning.${block.quantityMeaning.number}`,
+          "Разные предметы — одно количество",
+          step(
+            "Рассмотри каждый рисунок. Сосчитай предметы, точки и кружки. Что у них общего?",
+            "images",
+          ),
+          step(block.quantityMeaning.conclusion, "images"),
+          step(
+            "Коснись каждого рисунка. Здесь нет лишнего: все они помогают познакомиться с одним числом.",
+            "images",
+          ),
+        );
       if (/цифр/.test(p))
         return lesson(
           "picture.find-digit",
