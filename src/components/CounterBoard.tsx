@@ -5,6 +5,7 @@ import type { Point } from "../content/types";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
 import { counterBoardLayout, counterSupplyCenter } from "../lib/counterLayout";
+import { nextCounterSlot } from "../lib/coachTargets";
 export function CounterBoard({
   value,
   onChange,
@@ -30,8 +31,10 @@ export function CounterBoard({
   tokenValue?: number;
   layout?: "row" | "groups";
 }) {
+  const boardRef = useRef<View>(null);
   const sourceRef = useRef<View>(null),
     fieldRef = useRef<View>(null);
+  const nextSlot = nextCounterSlot(slots, storedOccupied);
   const object =
     objectLabel ??
     (token === "stick"
@@ -39,16 +42,39 @@ export function CounterBoard({
       : token === "square"
         ? "квадратик"
         : "кружок");
-  const showCoach = useGestureCoach("place", [
-    {
-      ref: sourceRef,
-      text: `Здесь можно взять ${object}. Прижми пальцем и держи.`,
-    },
-    {
-      ref: fieldRef,
-      text: "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
-    },
-  ]);
+  const full = slots ? !nextSlot : value >= max;
+  const showCoach = useGestureCoach(
+    "place",
+    full
+      ? [
+          {
+            ref: boardRef,
+            text: "На поле больше нет места. Пересчитай предметы. Если есть лишние, перенеси их обратно в коробку.",
+          },
+        ]
+      : [
+          {
+            ref: sourceRef,
+            surface: { kind: "token", token: token },
+            text: `Здесь можно взять ${object}. Прижми пальцем и держи.`,
+            motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
+          },
+          {
+            ref: boardRef,
+            surface: { kind: "place", token, slots },
+            motion: {
+              kind: "drag",
+              points: [],
+              from: { ref: sourceRef },
+              to: { ref: fieldRef },
+              toPoint: nextSlot ?? { x: 0.5, y: 0.5 },
+              surfaceToPoint: nextSlot,
+              token,
+            },
+            text: "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+          },
+        ],
+  );
   const [width, setWidth] = useState(300),
     [drag, setDrag] = useState<{ index: number; x: number; y: number } | null>(
       null,
@@ -287,6 +313,8 @@ export function CounterBoard({
   };
   const board = (
     <View
+      ref={boardRef}
+      collapsable={false}
       style={{
         width: boardWidth,
         height: supplyTop + 110,

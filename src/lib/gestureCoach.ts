@@ -1,4 +1,4 @@
-export const COACH_STORAGE_KEY = "uchebnik:gesture-coach:v1";
+export const COACH_STORAGE_KEY = "uchebnik:gesture-coach:v2";
 export const COACH_FAMILIES = [
   "place",
   "trace",
@@ -7,13 +7,22 @@ export const COACH_FAMILIES = [
   "cards",
   "picture",
 ] as const;
-export type CoachFamily = (typeof COACH_FAMILIES)[number];
+export type CoachFamily = string;
 export type CoachRect = { x: number; y: number; width: number; height: number };
 export function readSeenCoaches(raw: string | null): CoachFamily[] {
   try {
     const data: unknown = JSON.parse(raw ?? "[]");
     return Array.isArray(data)
-      ? COACH_FAMILIES.filter((v) => data.includes(v))
+      ? [
+          ...new Set(
+            data.filter(
+              (v): v is string =>
+                typeof v === "string" &&
+                ((COACH_FAMILIES as readonly string[]).includes(v) ||
+                  /^task:[a-zA-Z0-9:+_.-]{1,240}$/.test(v)),
+            ),
+          ),
+        ]
       : [];
   } catch {
     return [];

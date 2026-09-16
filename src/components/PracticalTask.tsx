@@ -264,6 +264,7 @@ export function PracticalTask({
           )}
           {step.mode === "cards" && (
             <DigitCards
+              expected={step.counts}
               value={state.counts ?? [-1, -1]}
               onDrawing={onDrawing}
               onChange={(counts) => update({ ...state, counts })}

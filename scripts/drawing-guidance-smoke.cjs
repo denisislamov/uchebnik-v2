@@ -9,6 +9,7 @@ const report = {
   status: "running",
   startedAt: new Date().toISOString(),
   mouse: [],
+  outlines: [],
   touch: [],
   screenshots: [],
   errors: [],
@@ -50,6 +51,11 @@ async function drawingStarted(page) {
       ).overflowY === "hidden",
   );
   await settle(page);
+  assert.equal(
+    await page.getByTestId("drawing-direction-arrow").count(),
+    0,
+    "guidance disappears while the child draws",
+  );
 }
 
 async function settle(page) {
@@ -73,7 +79,8 @@ async function settle(page) {
       ? { channel: process.env.BROWSER_CHANNEL }
       : {}),
   });
-  async function open(options) {
+  async function open(options, selected = block) {
+    const selectedPage = pages.find((page) => page.blocks.includes(selected));
     const context = await newTestContext(browser, options);
     const page = await context.newPage();
     page.setDefaultTimeout(15000);
@@ -91,7 +98,11 @@ async function settle(page) {
             answers: {},
           }),
         ),
-      { KEY, number: source.number, index: source.blocks.indexOf(block) },
+      {
+        KEY,
+        number: selectedPage.number,
+        index: selectedPage.blocks.indexOf(selected),
+      },
     );
     await page.goto(baseURL);
     await page
@@ -136,8 +147,10 @@ async function settle(page) {
           "trunk has one arrow in each direction",
         );
         assert.ok(
-          arrowBounds.every((box) => box.height >= 22 && box.width >= 12),
-          "arrows have visible shafts and broad heads at phone width",
+          arrowBounds.every(
+            (box) => box.height >= 8 && box.height <= 14 && box.width <= 7,
+          ),
+          "compact arrows leave the notebook drawing visible",
         );
         assert.ok(
           arrowBounds[0].x + arrowBounds[0].width < arrowBounds[1].x ||
@@ -264,6 +277,52 @@ async function settle(page) {
         await context.close();
       }
     }
+    for (const id of ["p003-block06", "p007-block09", "p008-block14"]) {
+      const selected = pages
+        .flatMap((page) => page.blocks)
+        .find((item) => item.id === id);
+      for (const width of [390, 1280]) {
+        const { context, page, pad } = await open(
+          { viewport: { width, height: 900 } },
+          selected,
+        );
+        try {
+          const arrows = page.getByTestId("drawing-direction-arrow");
+          assert.equal(
+            await arrows.count(),
+            1,
+            `${id} shows a single direction cue`,
+          );
+          const screenshot = `docs/drawing-guidance-${id}-${width}.png`;
+          await pad.screenshot({ path: screenshot });
+          report.screenshots.push(screenshot);
+          const box = await pad.boundingBox();
+          const points = selected.trace.stages[0][0].points;
+          await page.mouse.move(
+            box.x + points[0].x * box.width,
+            box.y + points[0].y * box.height,
+          );
+          await page.mouse.down();
+          await drawingStarted(page);
+          for (const point of points.slice(1))
+            await page.mouse.move(
+              box.x + point.x * box.width,
+              box.y + point.y * box.height,
+              { steps: 8 },
+            );
+          await page.mouse.up();
+          await page.waitForFunction(
+            ({ KEY, id }) =>
+              JSON.parse(localStorage.getItem(KEY)).answers[id]?.strokes
+                ?.length === 1,
+            { KEY, id },
+          );
+          report.outlines.push({ id, width, acceptedStrokes: 1 });
+        } finally {
+          await context.close();
+        }
+      }
+    }
     assert.deepEqual(report.errors, [], "no browser runtime errors");
     report.status = "passed";
   } catch (error) {
@@ -276,7 +335,7 @@ async function settle(page) {
     await browser.close();
   }
   console.log(
-    `Drawing guidance: ${report.mouse.length} viewport checks, ${report.touch.length} touch directions passed; ${reportPath}`,
+    `Drawing guidance: ${report.mouse.length} viewport checks, ${report.touch.length} touch directions, ${report.outlines.length} dash/digit checks passed; ${reportPath}`,
   );
 })().catch((error) => {
   console.error(error);

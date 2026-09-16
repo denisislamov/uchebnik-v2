@@ -1,6 +1,6 @@
 {
-  "date": "2026-09-15T16:06:41.841Z",
-  "baseURL": "http://127.0.0.1:8096",
+  "date": "2026-09-16T12:35:01.149Z",
+  "baseURL": "http://127.0.0.1:8099",
   "checks": [
     "p009 original story visible",
     "p025 original digits and pigeons stories",

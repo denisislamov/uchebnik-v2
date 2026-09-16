@@ -119,6 +119,7 @@ function Main() {
     [parent, setParent] = useState(false),
     [confirmReset, setConfirmReset] = useState(false),
     [drawing, setDrawing] = useState(false),
+    [coaching, setCoaching] = useState(false),
     [storageError, setStorageError] = useState(""),
     [speaking, setSpeaking] = useState(false),
     [speechError, setSpeechError] = useState(""),
@@ -128,7 +129,7 @@ function Main() {
   const scroll = useRef<ScrollView>(null),
     saveRevision = useRef(0);
   const [readAttempt, setReadAttempt] = useState(0);
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const comparison = !!DebugSourcePanel && !home;
   const sideBySide = windowWidth >= 900;
   const width = comparison && sideBySide ? windowWidth * 0.52 : windowWidth;
@@ -335,7 +336,10 @@ function Main() {
           ]}
           ref={scroll}
           scrollEnabled={!drawing}
-          contentContainerStyle={s.scroll}
+          contentContainerStyle={[
+            s.scroll,
+            coaching && { paddingBottom: windowHeight },
+          ]}
         >
           {home ? (
             <View
@@ -736,6 +740,7 @@ function Main() {
                     answer={answer}
                     onAnswer={updateAnswer}
                     onDrawing={setDrawing}
+                    onCoachActiveChange={setCoaching}
                     revealCoachTarget={(target) =>
                       new Promise<void>((resolve) => {
                         const container = scroll.current?.getInnerViewNode();

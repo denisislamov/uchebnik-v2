@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "1280x800: whole picture and both balls visible, no answers changed",
+    "390x844: whole picture and both balls visible, no answers changed",
+    "800x375: whole picture and both balls visible, no answers changed",
+    "320x568: whole picture and both balls visible, no answers changed"
+  ],
+  "errors": []
+}

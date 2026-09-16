@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useCoachAnchor } from "./GestureCoach";
 import { Image, View, Text } from "react-native";
 import { assets } from "../content/assets";
 export function BookImage({
@@ -8,11 +9,14 @@ export function BookImage({
   id: string;
   maxHeight?: number;
 }) {
+  const frame = useRef<View>(null);
+  useCoachAnchor(`image:${id}`, frame);
   const count = /abacus_(\d+)$/.exec(id);
   if (count) {
     const n = Number(count[1]);
     return (
       <View
+        ref={frame}
         accessibilityRole="image"
         accessibilityLabel="Карточка с жетонами для счёта"
         testID="modern-counting-card"
@@ -61,7 +65,15 @@ export function BookImage({
   const a = assets[id];
   if (!a) return null;
   return (
-    <View style={{ alignItems: "center", width: "100%" }}>
+    <View
+      ref={frame}
+      testID={`book-image-${id}`}
+      style={{
+        alignSelf: "center",
+        width: "100%",
+        maxWidth: (maxHeight * a.width) / a.height,
+      }}
+    >
       <Image
         accessibilityLabel={a.alt}
         source={a.source}

@@ -1,5 +1,5 @@
-import { CoachButton, useGestureCoach } from "./GestureCoach";
-import { pickTarget } from "../lib/hitTesting";
+import { CoachButton, useGestureCoach, useCoachAnchor } from "./GestureCoach";
+import { hotspotTouchPoint, pickTarget } from "../lib/hitTesting";
 import React, { useState, useRef } from "react";
 import { View, Image, Pressable, Text } from "react-native";
 import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
@@ -11,18 +11,48 @@ function Picture({
   targets,
   selected,
   onPick,
+  expected,
 }: {
   id: string;
   targets: Hotspot[];
+  expected: string[];
   selected: string[];
   onPick: (id: string) => void;
 }) {
   const a = assets[id];
   const frame = useRef<View>(null);
+  useCoachAnchor(`image:${id}`, frame);
+  const relevant = targets.filter((t) => expected.includes(t.id));
+  const region = (t: Hotspot) => ({ x: t.x, y: t.y, width: t.w, height: t.h });
   const showCoach = useGestureCoach("picture", [
     {
       ref: frame,
-      text: "Найди на рисунке то, о чём спрашивают. Коснись этого предмета пальцем. Чтобы убрать отметку, нажми ещё раз.",
+      surface: { kind: "image", imageId: id },
+      text: "Сначала внимательно рассмотри предметы. Подумай, что нужно найти по заданию.",
+      motion: targets.length
+        ? {
+            kind: "inspect",
+            points: targets.map(hotspotTouchPoint),
+            regions: targets.map(region),
+            labels: targets.map((t) => t.label),
+          }
+        : undefined,
+    },
+    {
+      ref: frame,
+      surface: { kind: "image", imageId: id },
+      text:
+        relevant.length > 1
+          ? "Отмечай нужные предметы по одному. Посмотри, как палец касается каждого из них."
+          : "Коснись нужного предмета и подними палец. Чтобы убрать отметку, нажми ещё раз.",
+      motion: relevant.length
+        ? {
+            kind: relevant.length > 1 ? "count" : "tap",
+            points: relevant.map(hotspotTouchPoint),
+            regions: relevant.map(region),
+            labels: relevant.map((t) => t.label),
+          }
+        : undefined,
     },
   ]);
   const [width, setWidth] = useState(280);
@@ -158,6 +188,7 @@ export function PictureTask({
         <Picture
           key={id}
           id={id}
+          expected={block.expected}
           targets={block.targets.filter((t) => t.image === i)}
           selected={value}
           onPick={pick}

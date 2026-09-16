@@ -43,6 +43,21 @@ export function DrawingPad({
   const showCoach = useGestureCoach(target?.dot ? "dot" : "trace", [
     {
       ref: fieldRef,
+      surface: trace
+        ? {
+            kind: "trace",
+            columns,
+            rows,
+            targets: trace.stages[progress?.stage ?? 0],
+          }
+        : undefined,
+      motion: target
+        ? {
+            kind: target.dot ? "tap" : "trace",
+            points: target.points,
+            color: target.color,
+          }
+        : undefined,
       text: target?.dot
         ? "Поставь палец в маленький кружок и сразу подними. Получится точка."
         : closed
@@ -51,10 +66,14 @@ export function DrawingPad({
             ? "Веди палец по пунктиру. Две синие стрелки показывают: можно начать с любого конца."
             : target
               ? "Начни с яркой точки. Не отрывая палец, веди по пунктиру в сторону синей стрелки. Стрелка показывает направление движения."
-              : "Рисуй пальцем на этом листе. Чтобы закончить линию, подними палец.",
+              : progress?.done
+                ? "Все линии уже обведены. Можно перейти дальше или отменить штрих и попробовать ещё раз."
+                : "Рисуй пальцем на этом листе. Чтобы закончить линию, подними палец.",
     },
   ]);
-  const arrows = target ? traceDirections(target, { columns, rows }) : [];
+  const arrows = target
+    ? traceDirections(target, { columns, rows }, trace!.stages[progress!.stage])
+    : [];
   const cellSize = width / columns;
   const directionColor = "#1565c0";
   const coords = (e: any): Point => ({
@@ -85,7 +104,7 @@ export function DrawingPad({
               ? "Обведи весь контур и вернись к месту начала."
               : target.bidirectional
                 ? "Проведи всю линию по пунктиру. Можно начать с любого конца."
-                : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синих стрелок.",
+                : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синей стрелки.",
       );
     }
   }
@@ -191,7 +210,7 @@ export function DrawingPad({
                   ? /ствол/i.test(target.label)
                     ? "Веди ствол по пунктиру вверх или вниз."
                     : "Начни с любого конца. Веди по пунктиру."
-                  : "Начни с яркой точки. Веди по пунктиру в сторону синих стрелок."}
+                  : "Начни с яркой точки. Веди по пунктиру в сторону синей стрелки."}
           </Text>
         </View>
       )}
@@ -325,32 +344,23 @@ export function DrawingPad({
                 strokeLinejoin="round"
               />
             ))}
-            {(!closed ? arrows : []).map((arrow, i) => {
+            {(!closed && !active.current ? arrows : []).map((arrow, i) => {
               const { tip, tail, left, right } = traceArrowGeometry(
                 arrow,
                 cellSize,
               );
               const path = `M ${tail.x} ${tail.y} L ${tip.x} ${tip.y} M ${left.x} ${left.y} L ${tip.x} ${tip.y} L ${right.x} ${right.y}`;
               return (
-                <React.Fragment key={`direction-${i}`}>
-                  <Path
-                    d={path}
-                    stroke="#fffef9"
-                    strokeWidth={6}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    testID="drawing-direction-arrow"
-                    d={path}
-                    stroke={directionColor}
-                    strokeWidth={3}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </React.Fragment>
+                <Path
+                  key={`direction-${i}`}
+                  testID="drawing-direction-arrow"
+                  d={path}
+                  stroke={directionColor}
+                  strokeWidth={1.5}
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               );
             })}
           </Svg>

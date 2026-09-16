@@ -1,9 +1,14 @@
-import { GestureCoachProvider } from "./GestureCoach";
+import { useTaskCoach } from "./TaskCoach";
+import {
+  GestureCoachProvider,
+  CoachButton,
+  useCoachAnchor,
+} from "./GestureCoach";
 import { LocationTask } from "./LocationTask";
 import { CounterBoard } from "./CounterBoard";
 import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { colors as c, fonts as f } from "../theme";
@@ -20,6 +25,7 @@ type ExerciseProps = {
   answer: Answer;
   onAnswer: (a: Answer) => void;
   onDrawing: (v: boolean) => void;
+  onCoachActiveChange?: (active: boolean) => void;
   revealCoachTarget?: (target: View) => Promise<void>;
 };
 export function Exercise(props: ExerciseProps) {
@@ -27,12 +33,21 @@ export function Exercise(props: ExerciseProps) {
     <GestureCoachProvider
       key={props.block.id}
       revealTarget={props.revealCoachTarget}
+      onActiveChange={props.onCoachActiveChange}
     >
       <ExerciseBody {...props} />
     </GestureCoachProvider>
   );
 }
 function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
+  const instructionRef = useRef<View>(null),
+    imagesRef = useRef<View>(null),
+    answerRef = useRef<View>(null);
+  const showTaskCoach = useTaskCoach(block, {
+    instruction: instructionRef,
+    images: imagesRef,
+    answer: answerRef,
+  });
   const [hint, setHint] = useState(false);
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
@@ -46,205 +61,219 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       : answer.value !== undefined && answer.value !== "";
   return (
     <View style={{ gap: 22 }}>
-      {block.kind !== "read" && block.kind !== "location" && (
-        <View>
-          <Text style={s.prompt}>{block.prompt}</Text>
-        </View>
-      )}
-      {block.kind === "picture" && (
-        <PictureTask
-          block={block}
-          value={Array.isArray(answer.value) ? answer.value : []}
-          onChange={(value) =>
-            onAnswer({ ...answer, value, checked: true, reviewed: false })
-          }
-        />
-      )}
-      {block.kind !== "picture" && !!block.images.length && (
-        <View
-          style={[
-            s.images,
-            block.images.length > 1 && {
-              flexDirection: "row",
-              flexWrap: "wrap",
-            },
-          ]}
-        >
-          {block.images
-            .filter((id) => id !== "p011_balls_row_3_groups")
-            .map((id) => (
-              <View
-                key={id}
-                style={
-                  block.images.length > 1
-                    ? { flexGrow: 1, flexBasis: 110, maxWidth: "100%" }
-                    : { width: "100%" }
-                }
-              >
-                <BookImage
-                  id={id}
-                  maxHeight={block.kind === "read" ? 340 : 270}
-                />
-              </View>
+      <CoachButton label="Покажи, как" onPress={showTaskCoach} />
+      <View ref={instructionRef} collapsable={false}>
+        {block.kind !== "read" && (
+          <View>
+            <Text style={s.prompt}>{block.prompt}</Text>
+          </View>
+        )}
+        {block.kind === "read" && <Text style={s.prompt}>{block.title}</Text>}
+      </View>
+      <View ref={imagesRef} collapsable={false} style={{ gap: 14 }}>
+        {block.kind === "picture" && (
+          <PictureTask
+            block={block}
+            value={Array.isArray(answer.value) ? answer.value : []}
+            onChange={(value) =>
+              onAnswer({ ...answer, value, checked: true, reviewed: false })
+            }
+          />
+        )}
+        {block.kind !== "picture" && !!block.images.length && (
+          <View
+            style={[
+              s.images,
+              block.images.length > 1 && {
+                flexDirection: "row",
+                flexWrap: "wrap",
+              },
+            ]}
+          >
+            {block.images
+              .filter((id) => id !== "p011_balls_row_3_groups")
+              .map((id) => (
+                <View
+                  key={id}
+                  style={
+                    block.images.length > 1
+                      ? { flexGrow: 1, flexBasis: 110, maxWidth: "100%" }
+                      : { width: "100%" }
+                  }
+                >
+                  <BookImage
+                    id={id}
+                    maxHeight={block.kind === "read" ? 340 : 270}
+                  />
+                </View>
+              ))}
+          </View>
+        )}
+      </View>
+      <View ref={answerRef} collapsable={false} style={{ gap: 22 }}>
+        {block.kind === "location" && (
+          <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
+        )}
+        {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
+        {block.kind === "story" && (
+          <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
+        )}
+        {block.kind === "numberGame" && (
+          <NumberGameTask block={block} answer={answer} onAnswer={onAnswer} />
+        )}
+        {block.kind === "practical" && (
+          <PracticalTask
+            block={block}
+            answer={answer}
+            onAnswer={onAnswer}
+            onDrawing={onDrawing}
+          />
+        )}
+        {[
+          "work",
+          "compose",
+          "activity",
+          "recipe",
+          "relation",
+          "targetGame",
+        ].includes(block.kind) && (
+          <CourseTask
+            block={block}
+            answer={answer}
+            onAnswer={onAnswer}
+            onDrawing={onDrawing}
+          />
+        )}
+        {block.kind === "number" && (
+          <View style={s.options}>
+            {Array.from({ length: 11 }, (_, n) => (
+              <AnswerAnchor key={n} value={n}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={`Ответ ${n}`}
+                  accessibilityState={{ selected: answer.value === n }}
+                  onPress={() =>
+                    onAnswer({
+                      ...answer,
+                      value: n,
+                      checked: true,
+                      reviewed: false,
+                    })
+                  }
+                  style={[s.number, answer.value === n && s.selected]}
+                >
+                  <Text
+                    style={[s.digit, answer.value === n && { color: c.white }]}
+                  >
+                    {n}
+                  </Text>
+                </Pressable>
+              </AnswerAnchor>
             ))}
-        </View>
-      )}
-      {block.kind === "location" && (
-        <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
-      )}
-      {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
-      {block.kind === "story" && (
-        <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
-      )}
-      {block.kind === "numberGame" && (
-        <NumberGameTask block={block} answer={answer} onAnswer={onAnswer} />
-      )}
-      {block.kind === "practical" && (
-        <PracticalTask
-          block={block}
-          answer={answer}
-          onAnswer={onAnswer}
-          onDrawing={onDrawing}
-        />
-      )}
-      {[
-        "work",
-        "compose",
-        "activity",
-        "recipe",
-        "relation",
-        "targetGame",
-      ].includes(block.kind) && (
-        <CourseTask
-          block={block}
-          answer={answer}
-          onAnswer={onAnswer}
-          onDrawing={onDrawing}
-        />
-      )}
-      {block.kind === "number" && (
-        <View style={s.options}>
-          {Array.from({ length: 11 }, (_, n) => (
-            <Pressable
-              key={n}
-              accessibilityRole="button"
-              accessibilityLabel={`Ответ ${n}`}
-              accessibilityState={{ selected: answer.value === n }}
-              onPress={() =>
-                onAnswer({
-                  ...answer,
-                  value: n,
-                  checked: true,
-                  reviewed: false,
-                })
-              }
-              style={[s.number, answer.value === n && s.selected]}
-            >
-              <Text style={[s.digit, answer.value === n && { color: c.white }]}>
-                {n}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      )}
-      {block.kind === "choice" && (
-        <View style={s.options}>
-          {block.options.map((v, i) => (
-            <Pressable
-              key={v}
-              accessibilityRole="button"
-              accessibilityState={{ selected: answer.value === v }}
-              onPress={() =>
-                onAnswer({
-                  ...answer,
-                  value: v,
-                  checked: true,
-                  reviewed: false,
-                })
-              }
-              style={[s.option, answer.value === v && s.selected]}
-            >
-              <Text
-                style={[
-                  s.optionIndex,
-                  answer.value === v && { color: "#bfd5c9" },
-                ]}
+          </View>
+        )}
+        {block.kind === "choice" && (
+          <View style={s.options}>
+            {block.options.map((v, i) => (
+              <Pressable
+                key={v}
+                accessibilityRole="button"
+                accessibilityState={{ selected: answer.value === v }}
+                onPress={() =>
+                  onAnswer({
+                    ...answer,
+                    value: v,
+                    checked: true,
+                    reviewed: false,
+                  })
+                }
+                style={[s.option, answer.value === v && s.selected]}
               >
-                {String(i + 1).padStart(2, "0")}
+                <Text
+                  style={[
+                    s.optionIndex,
+                    answer.value === v && { color: "#bfd5c9" },
+                  ]}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </Text>
+                <Text
+                  style={[
+                    s.optionText,
+                    answer.value === v && { color: c.white },
+                  ]}
+                >
+                  {v}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+        {block.kind === "counters" && (
+          <CounterBoard
+            value={numeric}
+            token={block.token}
+            onChange={(value) => update({ value })}
+            onDrawing={onDrawing}
+          />
+        )}
+        {block.kind === "draw" && (
+          <DrawingPad
+            strokes={answer.strokes ?? []}
+            onChange={(strokes) => update({ strokes })}
+            trace={block.trace}
+            onDrawing={onDrawing}
+          />
+        )}
+        {block.kind === "shape" && (
+          <ShapeBoard
+            onDrawing={onDrawing}
+            block={block}
+            value={Array.isArray(answer.value) ? answer.value : []}
+            onChange={(value) => update({ value })}
+          />
+        )}
+        {review && (
+          <Text style={s.hint}>
+            Мешки стоят близко друг к другу. Положи палочки для тех мешков,
+            которые видишь, и нажми «Дальше».
+          </Text>
+        )}
+        {!review && (block.kind === "counters" || block.kind === "shape") && (
+          <Button
+            disabled={!hasValue || done}
+            onPress={() =>
+              onAnswer({
+                ...answer,
+                checked: true,
+                attempts: (answer.attempts ?? 0) + 1,
+              })
+            }
+          >
+            {done ? "✓ Получилось!" : "Проверить ответ"}
+          </Button>
+        )}
+        {answer.checked &&
+          !correct &&
+          (block.kind !== "picture" ||
+            (Array.isArray(answer.value) &&
+              answer.value.some((id) => !block.expected.includes(id)))) && (
+            <View accessibilityRole="alert" style={s.retry}>
+              <Text style={s.retryText}>
+                Пока не совпало. Посмотри ещё раз — у тебя получится.
               </Text>
-              <Text
-                style={[s.optionText, answer.value === v && { color: c.white }]}
-              >
-                {v}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      )}
-      {block.kind === "counters" && (
-        <CounterBoard
-          value={numeric}
-          token={block.token}
-          onChange={(value) => update({ value })}
-          onDrawing={onDrawing}
-        />
-      )}
-      {block.kind === "draw" && (
-        <DrawingPad
-          strokes={answer.strokes ?? []}
-          onChange={(strokes) => update({ strokes })}
-          trace={block.trace}
-          onDrawing={onDrawing}
-        />
-      )}
-      {block.kind === "shape" && (
-        <ShapeBoard
-          onDrawing={onDrawing}
-          block={block}
-          value={Array.isArray(answer.value) ? answer.value : []}
-          onChange={(value) => update({ value })}
-        />
-      )}
-      {review && (
-        <Text style={s.hint}>
-          Мешки стоят близко друг к другу. Положи палочки для тех мешков,
-          которые видишь, и нажми «Дальше».
-        </Text>
-      )}
-      {!review && (block.kind === "counters" || block.kind === "shape") && (
-        <Button
-          disabled={!hasValue || done}
-          onPress={() =>
-            onAnswer({
-              ...answer,
-              checked: true,
-              attempts: (answer.attempts ?? 0) + 1,
-            })
-          }
-        >
-          {done ? "✓ Получилось!" : "Проверить ответ"}
-        </Button>
-      )}
-      {answer.checked &&
-        !correct &&
-        (block.kind !== "picture" ||
-          (Array.isArray(answer.value) &&
-            answer.value.some((id) => !block.expected.includes(id)))) && (
-          <View accessibilityRole="alert" style={s.retry}>
-            <Text style={s.retryText}>
-              Пока не совпало. Посмотри ещё раз — у тебя получится.
+            </View>
+          )}
+        {!review && done && block.kind !== "read" && (
+          <View accessibilityLiveRegion="polite" style={s.success}>
+            <Text style={s.successText}>
+              {review
+                ? "✓ Работа проверена вместе. Можно идти дальше."
+                : "✓ Верно! Можно переходить к следующему шагу."}
             </Text>
           </View>
         )}
-      {!review && done && block.kind !== "read" && (
-        <View accessibilityLiveRegion="polite" style={s.success}>
-          <Text style={s.successText}>
-            {review
-              ? "✓ Работа проверена вместе. Можно идти дальше."
-              : "✓ Верно! Можно переходить к следующему шагу."}
-          </Text>
-        </View>
-      )}
+      </View>
       {block.hint && (
         <View>
           <Pressable
@@ -260,6 +289,21 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           {hint && <Text style={s.hint}>{block.hint}</Text>}
         </View>
       )}
+    </View>
+  );
+}
+function AnswerAnchor({
+  value,
+  children,
+}: {
+  value: number;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<View>(null);
+  useCoachAnchor(`answer:${value}`, ref);
+  return (
+    <View ref={ref} collapsable={false}>
+      {children}
     </View>
   );
 }

@@ -37,3 +37,12 @@ test("an offscreen target never gets a false spotlight somewhere else", () => {
     null,
   );
 });
+
+import { allBlocks } from "../src/content/book.ts";
+import { taskTeaching } from "../src/lib/taskTeaching.ts";
+test("every actual semantic family, including combined practical modes, survives reload", () => {
+  const families = [
+    ...new Set(allBlocks.map((b) => `task:${taskTeaching(b).family}`)),
+  ];
+  assert.deepEqual(readSeenCoaches(JSON.stringify(families)), families);
+});

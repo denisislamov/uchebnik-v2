@@ -3,28 +3,58 @@ import React, { useRef, useState } from "react";
 import { View, Text, Platform } from "react-native";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
+import { nextDigitCard } from "../lib/coachTargets";
 
 export function DigitCards({
   value,
+  expected,
   onChange,
   onDrawing,
 }: {
   value: number[];
+  expected?: number[];
   onChange: (v: number[]) => void;
   onDrawing: (v: boolean) => void;
 }) {
+  const boardRef = useRef<View>(null);
   const sourceRef = useRef<View>(null),
     fieldRef = useRef<View>(null);
-  const showCoach = useGestureCoach("cards", [
-    {
-      ref: sourceRef,
-      text: "Выбери нужную карточку с цифрой. Прижми её пальцем и держи.",
-    },
-    {
-      ref: fieldRef,
-      text: "Не отпуская палец, перенеси карточку в рамку. Слева — десятки, справа — единицы.",
-    },
-  ]);
+  const nextCard = nextDigitCard(value, expected);
+  const showCoach = useGestureCoach(
+    "cards",
+    nextCard
+      ? [
+          {
+            ref: sourceRef,
+            surface: { kind: "token", token: "card", value: nextCard.digit },
+            text: `Возьми карточку с цифрой ${nextCard.digit}. Прижми её пальцем и держи.`,
+            motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
+          },
+          {
+            ref: boardRef,
+            surface: {
+              kind: "cards",
+              value: nextCard.digit,
+              targetIndex: nextCard.index,
+            },
+            motion: {
+              kind: "drag",
+              points: [],
+              from: { ref: sourceRef },
+              to: { ref: fieldRef },
+              token: "card",
+              tokenLabel: String(nextCard.digit),
+            },
+            text: `Не отпуская палец, перенеси карточку в ${nextCard.index === 0 ? "левую рамку — это десятки" : "правую рамку — это единицы"}. Затем отпусти.`,
+          },
+        ]
+      : [
+          {
+            ref: boardRef,
+            text: "Обе карточки уже на нужных местах. Проверь действие.",
+          },
+        ],
+  );
   const [width, setWidth] = useState(320),
     [draft, setDraft] = useState<{
       digit: number;
@@ -127,6 +157,7 @@ export function DigitCards({
         единицы.
       </Text>
       <View
+        ref={boardRef}
         testID="digit-cards"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
         style={{ height: 275, borderRadius: 16, backgroundColor: c.paper }}
@@ -134,7 +165,7 @@ export function DigitCards({
         {[0, 1].map((i) => (
           <View
             key={i}
-            ref={i === 0 ? fieldRef : undefined}
+            ref={i === nextCard?.index ? fieldRef : undefined}
             testID={`digit-slot-${i}`}
             style={{
               position: "absolute",
@@ -158,7 +189,7 @@ export function DigitCards({
         {Array.from({ length: 10 }, (_, digit) => (
           <View
             key={digit}
-            ref={digit === 0 ? sourceRef : undefined}
+            ref={digit === nextCard?.digit ? sourceRef : undefined}
             testID={`digit-source-${digit}`}
             accessibilityRole="button"
             accessibilityLabel={`Карточка ${digit}`}

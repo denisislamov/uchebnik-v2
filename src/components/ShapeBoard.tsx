@@ -17,18 +17,11 @@ export function ShapeBoard({
   onChange: (v: string[]) => void;
   onDrawing: (v: boolean) => void;
 }) {
+  const boardRef = useRef<View>(null),
+    targetRef = useRef<View>(null);
+  const rotateRef = useRef<View>(null);
   const sourceRef = useRef<View>(null),
     fieldRef = useRef<View>(null);
-  const showCoach = useGestureCoach("sticks", [
-    {
-      ref: sourceRef,
-      text: "Возьми палочку внизу: прижми её пальцем и держи.",
-    },
-    {
-      ref: fieldRef,
-      text: "Не отпуская палец, положи палочку на подходящую линию. Если нужно, нажми «Повернуть».",
-    },
-  ]);
   const [width, setWidth] = useState(400),
     [drag, setDrag] = useState<{ index: number; x: number; y: number } | null>(
       null,
@@ -60,6 +53,65 @@ export function ShapeBoard({
     };
   });
   const available = edges.filter((t) => !value.includes(t.key)).slice(0, 1);
+  const turns = available[0]
+    ? ((180 - ((rotation[available[0].index] ?? 0) % 180)) % 180) / 45
+    : 0;
+  const showCoach = useGestureCoach(
+    "sticks",
+    !available.length
+      ? [{ ref: boardRef, text: "Все палочки уже на месте. Проверь фигуру." }]
+      : [
+          ...(turns
+            ? [
+                {
+                  ref: rotateRef,
+                  text: `Перед переносом нажми «Повернуть» ${turns} ${turns === 1 ? "раз" : "раза"}, чтобы палочка совпала с наклоном пунктира. Затем перенеси её, как показано дальше.`,
+                  motion: {
+                    kind: "tap" as const,
+                    points: [{ x: 0.5, y: 0.5 }],
+                  },
+                },
+              ]
+            : []),
+          {
+            ref: sourceRef,
+            surface: { kind: "token", token: "stick" },
+            text: "Возьми палочку внизу: прижми её пальцем и держи.",
+            motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
+          },
+          {
+            ref: boardRef,
+            surface: {
+              kind: "shape",
+              vertices: block.vertices,
+              edges: block.edges,
+              activeEdge: available[0]?.index,
+            },
+            motion: {
+              kind: "drag",
+              points: [],
+              from: { ref: sourceRef },
+              to: { ref: targetRef },
+              surfaceToPoint: available[0]
+                ? {
+                    x:
+                      (block.vertices[block.edges[available[0].index][0]].x +
+                        block.vertices[block.edges[available[0].index][1]].x) /
+                      2,
+                    y:
+                      (block.vertices[block.edges[available[0].index][0]].y +
+                        block.vertices[block.edges[available[0].index][1]].y) /
+                      2,
+                  }
+                : undefined,
+              token: "stick",
+              tokenLength: available[0]?.length,
+              angle: available[0] ? available[0].angle : 0,
+            },
+            text: "Не отпуская палец, положи палочку на подходящую линию. Если нужно, нажми «Повернуть».",
+          },
+        ],
+  );
   const tray = (_index: number) => ({ x: width / 2, y: 330 });
   const webPointer = useRef<number | null>(null);
   function begin(index: number, e: any) {
@@ -160,6 +212,7 @@ export function ShapeBoard({
         «Повернуть».
       </Text>
       <View
+        ref={boardRef}
         testID="stick-board"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
         style={{
@@ -205,6 +258,8 @@ export function ShapeBoard({
           {edges.map((t) => (
             <View
               key={t.key}
+              ref={t.index === available[0]?.index ? targetRef : undefined}
+              collapsable={false}
               testID={`stick-target-${t.index}`}
               style={{
                 position: "absolute",
@@ -261,17 +316,21 @@ export function ShapeBoard({
       </View>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         {available.map((t) => (
-          <Button
-            key={t.key}
-            small
-            secondary
-            label={`Повернуть палочку ${t.index + 1}`}
-            onPress={() =>
-              setRotation((r) => ({ ...r, [t.index]: (r[t.index] ?? 0) + 45 }))
-            }
-          >
-            ↻ Повернуть
-          </Button>
+          <View key={t.key} ref={rotateRef} collapsable={false}>
+            <Button
+              small
+              secondary
+              label={`Повернуть палочку ${t.index + 1}`}
+              onPress={() =>
+                setRotation((r) => ({
+                  ...r,
+                  [t.index]: (r[t.index] ?? 0) + 45,
+                }))
+              }
+            >
+              ↻ Повернуть
+            </Button>
+          </View>
         ))}
       </View>
       {!!message && (

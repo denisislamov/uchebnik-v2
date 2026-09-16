@@ -4,13 +4,29 @@ async function newTestContext(browser, options) {
   const { freshTutorials = false, ...browserOptions } = options ?? {};
   const context = await browser.newContext(browserOptions);
   // Existing task regressions start after onboarding; the dedicated coach suite tests first use.
-  if (!freshTutorials)
-    await context.addInitScript(() => {
-      localStorage.setItem(
-        "uchebnik:gesture-coach:v1",
-        JSON.stringify(["place", "trace", "dot", "sticks", "cards", "picture"]),
-      );
-    });
+  if (!freshTutorials) {
+    const { allBlocks } = await import("../src/content/book.ts");
+    const { taskTeaching } = await import("../src/lib/taskTeaching.ts");
+    const families = [
+      "place",
+      "trace",
+      "dot",
+      "sticks",
+      "cards",
+      "picture",
+      ...new Set(
+        allBlocks.map((block) => `task:${taskTeaching(block).family}`),
+      ),
+    ];
+    await context.addInitScript(
+      (families) =>
+        localStorage.setItem(
+          "uchebnik:gesture-coach:v2",
+          JSON.stringify(families),
+        ),
+      families,
+    );
+  }
   const origin = new URL(baseURL).origin;
   await context.route(/^https?:\/\//, (route) => {
     if (new URL(route.request().url()).origin !== origin) {

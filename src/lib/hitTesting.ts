@@ -1,4 +1,37 @@
 import type { Hotspot, Point } from "../content/types.ts";
+// Bounding-box centres can fall in empty space in a concave object (a chair,
+// for example). Show a tap inside the same geometry used by hit testing.
+export function hotspotTouchPoint(target: Hotspot): Point {
+  const center = { x: target.x + target.w / 2, y: target.y + target.h / 2 };
+  if (!target.polygon || containsPoint(target, center)) return center;
+  const vertices = target.polygon;
+  const levels = [...new Set(vertices.map((p) => p.y))].sort((a, b) => a - b);
+  const samples = [
+    center.y,
+    ...levels.slice(1).map((y, i) => (y + levels[i]) / 2),
+  ];
+  let best = center;
+  let widest = 0;
+  for (const y of samples) {
+    const crossings: number[] = [];
+    for (let i = 0, j = vertices.length - 1; i < vertices.length; j = i++) {
+      const a = vertices[j],
+        b = vertices[i];
+      if (a.y > y !== b.y > y)
+        crossings.push(a.x + ((y - a.y) * (b.x - a.x)) / (b.y - a.y));
+    }
+    crossings.sort((a, b) => a - b);
+    for (let i = 0; i + 1 < crossings.length; i += 2) {
+      const span = crossings[i + 1] - crossings[i];
+      const point = { x: (crossings[i] + crossings[i + 1]) / 2, y };
+      if (span > widest && containsPoint(target, point)) {
+        widest = span;
+        best = point;
+      }
+    }
+  }
+  return best;
+}
 export function containsPoint(t: Hotspot, p: Point) {
   if (t.polygon) {
     let inside = false;
