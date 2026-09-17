@@ -21,6 +21,16 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             : button("Рисунок задания").boundingBox(),
         );
     async function visible(region, label) {
+      const reveal = button("Показать это место");
+      if (await reveal.count()) {
+        await reveal.click();
+        await p.waitForTimeout(250);
+      }
+      assert.equal(
+        await p.getByTestId("coach-demo-surface").count(),
+        0,
+        "highlight the original, never a resized copy",
+      );
       const image = await box(),
         hole = await p.getByTestId("coach-highlight").boundingBox(),
         card = await p.getByTestId("coach-card").boundingBox();
@@ -30,21 +40,38 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         width: region.w * image.width,
         height: region.h * image.height,
       };
+      const viewport = p.viewportSize();
+      const pane = await p.getByTestId("lesson-scroll-pane").boundingBox();
+      const clipped = {
+        x: Math.max(8, pane.x, target.x),
+        y: Math.max(12, pane.y, target.y),
+        right: Math.min(
+          viewport.width - 8,
+          pane.x + pane.width,
+          target.x + target.width,
+        ),
+        bottom: Math.min(
+          viewport.height - 12,
+          pane.y + pane.height,
+          target.y + target.height,
+        ),
+      };
       assert.ok(
         hole &&
-          hole.x <= target.x + 1 &&
-          hole.y <= target.y + 1 &&
-          hole.x + hole.width >= target.x + target.width - 1 &&
-          hole.y + hole.height >= target.y + target.height - 1,
-        `${label}: cropped image/target ${JSON.stringify({ target, hole, card })}`,
+          hole.x <= clipped.x + 1 &&
+          hole.y <= clipped.y + 1 &&
+          hole.x + hole.width >= clipped.right - 1 &&
+          hole.y + hole.height >= clipped.bottom - 1,
+        `${label}: spotlight not aligned with original ${JSON.stringify({ target, hole, card })}`,
       );
-      assert.ok(
-        target.x + target.width <= card.x ||
-          target.x >= card.x + card.width ||
-          target.y + target.height <= card.y ||
-          target.y >= card.y + card.height,
-        `${label}: instruction card covers target`,
-      );
+      if (viewport.width >= 1000)
+        assert.ok(
+          target.x + target.width <= card.x ||
+            target.x >= card.x + card.width ||
+            target.y + target.height <= card.y ||
+            target.y >= card.y + card.height,
+          `${label}: instruction card covers target`,
+        );
     }
     for (const viewport of [
       { width: 1280, height: 800 },
@@ -118,7 +145,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         {},
       );
       report.checks.push(
-        `${viewport.width}x${viewport.height}: whole picture and both balls visible, no answers changed`,
+        `${viewport.width}x${viewport.height}: original picture highlighted without resizing; explicit reveal if offscreen; no answers changed`,
       );
     }
     assert.deepEqual(report.errors, []);

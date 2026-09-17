@@ -42,18 +42,62 @@ const oval = (x: number, y: number, rx: number, ry: number) =>
   );
 const wave = (x: number, y: number) =>
   curve((t) => [x + t, y - 0.12 * Math.sin(t * 2 * Math.PI)], "Проведи волну");
-const hook = (x: number, y: number) =>
-  curve((t) => {
-    if (t < 0.6) {
-      const angle = Math.PI * 0.6 + (t / 0.6) * Math.PI * 1.65;
-      return [
-        x + 0.5 + 0.35 * Math.cos(angle),
-        y + 0.45 + 0.35 * Math.sin(angle),
-      ];
-    }
-    const u = (t - 0.6) / 0.4;
-    return [x + 0.75 * (1 - u), y + 0.7 + 1.3 * u];
-  }, "Обведи крючок высотой в две клетки");
+const hook = (x: number, y: number) => {
+  // PDF 6: inward curl, rounded outer head, then a curved descending stem.
+  const segments = [
+    [
+      [0.5, 0.42],
+      [0.54, 0.24],
+      [0.73, 0.28],
+      [0.66, 0.48],
+    ],
+    [
+      [0.66, 0.48],
+      [0.57, 0.72],
+      [0.18, 0.72],
+      [0.16, 0.42],
+    ],
+    [
+      [0.16, 0.42],
+      [0.12, 0.14],
+      [0.42, 0],
+      [0.62, 0],
+    ],
+    [
+      [0.62, 0],
+      [1.05, 0],
+      [1, 0.42],
+      [0.8, 0.75],
+    ],
+    [
+      [0.8, 0.75],
+      [0.6, 1.1],
+      [0.17, 1.55],
+      [0, 2],
+    ],
+  ];
+  return line(
+    segments.flatMap((p, segment) =>
+      Array.from({ length: segment ? 16 : 17 }, (_, i) => {
+        const t = (i + (segment ? 1 : 0)) / 16,
+          u = 1 - t;
+        return [
+          x +
+            u * u * u * p[0][0] +
+            3 * u * u * t * p[1][0] +
+            3 * u * t * t * p[2][0] +
+            t * t * t * p[3][0],
+          y +
+            u * u * u * p[0][1] +
+            3 * u * u * t * p[1][1] +
+            3 * u * t * t * p[2][1] +
+            t * t * t * p[3][1],
+        ];
+      }),
+    ),
+    "Обведи крючок высотой в две клетки",
+  );
+};
 function repeated(
   count: number,
   make: (x: number, y: number, i: number) => TraceTarget[],

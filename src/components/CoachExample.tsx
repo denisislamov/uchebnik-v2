@@ -2,6 +2,11 @@ import React from "react";
 import { View, Text } from "react-native";
 import { colors as c, fonts as f } from "../theme";
 import { exampleGroups, exampleSelected } from "../lib/teachingExample";
+import {
+  compositionLayout,
+  partPalette,
+  type PartColor,
+} from "../lib/compositionLayout";
 export type ExampleData = {
   kind: string;
   values: number[];
@@ -9,6 +14,9 @@ export type ExampleData = {
   active?: number;
   label?: string;
   labels?: string[];
+  colors?: [PartColor, PartColor];
+  token?: "square" | "circle" | "stick";
+  pattern?: [number, number][];
 };
 /** A worked example is separate from the task, so watching never fills its answer. */
 export function CoachExample({ example }: { example: ExampleData }) {
@@ -18,6 +26,13 @@ export function CoachExample({ example }: { example: ExampleData }) {
     (example.expression ? example.expression.split(/\s+/) : values.map(String));
   const counting = ["count", "groups", "compare"].includes(kind);
   const groups = exampleGroups(kind, values, example.expression);
+  const pattern = example.pattern
+    ? compositionLayout(
+        220,
+        values.reduce((a, b) => a + b, 0),
+        example.pattern,
+      )
+    : undefined;
   return (
     <View
       testID="coach-example"
@@ -26,6 +41,54 @@ export function CoachExample({ example }: { example: ExampleData }) {
       <Text style={{ fontFamily: f.bold, color: c.green, fontSize: 13 }}>
         {example.label && example.label !== "Пример" ? example.label : "Пример"}
       </Text>
+      {kind === "compositionRow" && example.colors && (
+        <View
+          testID="coach-composition-row"
+          style={
+            pattern
+              ? { width: 220, height: 106, alignSelf: "center" }
+              : { flexDirection: "row", justifyContent: "center" }
+          }
+        >
+          {values.flatMap((count, group) =>
+            Array.from({ length: count }, (_, index) => (
+              <View
+                key={`${group}:${index}`}
+                style={{
+                  ...(pattern
+                    ? {
+                        position: "absolute",
+                        left:
+                          pattern.center(index + (group ? values[0] : 0)).x -
+                          pattern.cell / 2,
+                        top:
+                          pattern.center(index + (group ? values[0] : 0)).y -
+                          pattern.cell / 2,
+                      }
+                    : {}),
+                  width: pattern?.cell ?? 22,
+                  height: pattern?.cell ?? 26,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width:
+                      example.token === "stick" ? 5 : (pattern?.cell ?? 22),
+                    height:
+                      example.token === "stick" ? 26 : (pattern?.cell ?? 22),
+                    borderRadius: example.token === "circle" ? 11 : 0,
+                    backgroundColor: partPalette[example.colors![group]].fill,
+                    borderWidth: 1,
+                    borderColor: "#344833",
+                  }}
+                />
+              </View>
+            )),
+          )}
+        </View>
+      )}
       {counting && (
         <View
           style={{ flexDirection: "row", gap: 12, justifyContent: "center" }}

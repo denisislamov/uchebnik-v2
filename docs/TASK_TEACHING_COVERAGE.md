@@ -1,6 +1,6 @@
 # Покрытие учебных объяснений
 
-Реестр: `src/lib/taskTeaching.ts`. Срез runtime `allBlocks`: 1324 заданий, 16 используемых `kind`, 162 семейств объяснений. Union `choice` также поддержан, но в текущем курсе таких заданий нет.
+Реестр: `src/lib/taskTeaching.ts`. Срез runtime `allBlocks`: 1324 заданий, 16 используемых `kind`, 161 семейств объяснений. Union `choice` также поддержан, но в текущем курсе таких заданий нет.
 
 Семейство определяется смыслом работы, а не только жестом: размер, длина и количество; счёт, поиск цифры, отметка нескольких предметов; точки, открытая линия, замкнутый контур, письмо цифры; прибавление, вычитание, умножение, деление; неизвестное число, вопрос к задаче, порядок чисел; монеты, размен, мера длины, масса, объём, десятки; отдельные и последовательные практические действия; составление задач с заданными или своими числами.
 
@@ -44,14 +44,13 @@
 | `picture.add` | `p009-block01` | 1 |
 | `picture.number-meaning.3` | `p010-block06` | 1 |
 | `work.word-reasoning.add` | `p011-lesson01` | 9 |
-| `activity.count-slots` | `p011-lesson02` | 1 |
+| `activity.composition.fixed` | `p011-lesson02` | 8 |
 | `activity.composition.another` | `p011-lesson03` | 8 |
 | `activity.coins.sum` | `p011-lesson04` | 9 |
 | `activity.sequence.numbers.forward.ones` | `p011-lesson05` | 7 |
 | `work.count-and-record` | `p011-lesson06` | 15 |
 | `practical.place-count.multi` | `p012-lesson05` | 1 |
 | `work.word-reasoning.add-subtract` | `p013-lesson01` | 12 |
-| `activity.composition.fixed` | `p013-lesson03` | 7 |
 | `activity.count` | `p014-lesson04` | 3 |
 | `work.calculate.add` | `p016-lesson05` | 53 |
 | `activity.composition.free` | `p019-lesson06` | 11 |

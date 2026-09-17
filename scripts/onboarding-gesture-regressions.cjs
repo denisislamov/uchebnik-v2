@@ -25,6 +25,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
   p.setDefaultTimeout(15000);
   p.on("pageerror", (e) => report.errors.push(e.message));
   const button = (name) => p.getByRole("button", { name, exact: true });
+  async function reveal() {
+    if (await button("Показать это место").count()) {
+      await button("Показать это место").click();
+      await p.waitForTimeout(250);
+    }
+  }
   const answers = () =>
     p.evaluate((KEY) => JSON.parse(localStorage.getItem(KEY)).answers, KEY);
   const point = async () => {
@@ -65,12 +71,16 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       .click();
     await button("Покажи, как").waitFor();
   }
-  async function replayDrag() {
-    await button("Покажи подсказку").click();
+  async function replayDrag(scope = p) {
+    await scope
+      .getByRole("button", { name: "Покажи подсказку", exact: true })
+      .click();
     await p.getByTestId("gesture-coach").waitFor();
     await button("Дальше").click();
     await p.getByTestId("coach-motion-drag").waitFor();
+    await reveal();
     await button("Показать ещё раз").waitFor();
+    await reveal();
   }
   async function drag(from, to) {
     await from.scrollIntoViewIfNeeded();
@@ -103,6 +113,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         await button("Покажи подсказку").click();
         await button("Дальше").click();
         await p.getByTestId("coach-motion-count").waitFor();
+        await reveal();
         const touches = [];
         for (let i = 0; i < 2; i++) {
           await p
@@ -157,42 +168,39 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       { width: 800, height: 390 },
     ]) {
       await check(
-        `counter replay selects next empty square ${viewport.width}x${viewport.height}`,
+        `composition replay places the next adjacent square ${viewport.width}x${viewport.height}`,
         async () => {
           await p.setViewportSize(viewport);
           await open("p011-lesson02", {
             "p011-lesson02": {
-              responses: { 0: "1", "0slots": "0" },
+              responses: { "0left": "1", "0right": "0" },
               checked: false,
             },
           });
-          await p.getByTestId("token-0").waitFor();
+          const board = p.getByTestId("composition-board");
+          await board.getByTestId("composition-token-0-0").waitFor();
           const before = await answers();
-          await replayDrag();
-          const surface = p.getByTestId("coach-demo-surface");
-          let expected;
-          if (await surface.count()) {
-            const box = await surface.boundingBox();
-            expected = {
-              x: box.x + 8 + 0.42 * (box.width - 16),
-              y: box.y + 8 + 0.65 * box.height * 0.55,
-            };
-          } else {
-            const box = await p.getByTestId("token-slot-1").boundingBox();
-            expected = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-          }
-          near(await point(), expected, "empty slot destination");
+          await replayDrag(board);
+          const box = await board
+            .getByTestId("composition-field")
+            .boundingBox();
+          const cell = Math.min(42, (box.width - 24) / 2);
+          const expected = {
+            x: box.x + (box.width - 2 * cell) / 2 + 0.5 * cell,
+            y: box.y + 58 + cell / 2,
+          };
+          near(await point(), expected, "first part destination");
           await button("Закрыть подсказку").click();
           assert.deepEqual(await answers(), before);
           if (viewport.width === 390) {
             await drag(
-              p.getByTestId("token-source"),
-              p.getByTestId("token-slot-1"),
+              board.getByTestId("composition-source-0"),
+              board.getByTestId("composition-field"),
             );
-            await p.getByTestId("token-1").waitFor();
+            await board.getByTestId("composition-token-0-1").waitFor();
           }
           return {
-            seed: "only first square occupied",
+            seed: "one square in the first part",
             destination: 1,
             actualSecondSquarePlaced: viewport.width === 390,
             demonstrationMutatedAnswers: false,
@@ -259,8 +267,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const geometry = await p
           .getByTestId("coach-motion-drag")
           .evaluate((root) => {
-            const line = root.querySelector(
-              '[data-testid="coach-demo-surface"] line',
+            const line = document.querySelector(
+              '[data-testid="stick-board"] line',
             );
             const ghost = [
               ...root.querySelectorAll('rect[fill="#bb8052"]'),
@@ -298,7 +306,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           Math.abs(((((ghostAngle - angle) % 180) + 270) % 180) - 90) < 0.5,
           "same edge angle",
         );
-        const surface = await p.getByTestId("coach-demo-surface").boundingBox();
+        const surface = await p.getByTestId("stick-board").boundingBox();
         near(
           await point(),
           {
@@ -329,22 +337,25 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       },
     );
     await check(
-      "completed slots replay never asks for a missing source",
+      "completed part replay never asks for a missing source",
       async () => {
         await p.setViewportSize({ width: 390, height: 844 });
         await open("p011-lesson02", {
           "p011-lesson02": {
-            responses: { 0: "3", "0slots": "0,1,2" },
+            responses: { "0left": "2", "0right": "1" },
             checked: false,
           },
         });
-        await p.getByTestId("token-2").waitFor();
+        const board = p.getByTestId("composition-board");
+        await board.getByTestId("composition-token-0-1").waitFor();
         const before = await answers();
-        await button("Покажи подсказку").click();
+        await board
+          .getByRole("button", { name: "Покажи подсказку", exact: true })
+          .click();
         await p.getByTestId("coach-instruction").waitFor();
         assert.match(
           await p.getByTestId("coach-instruction").innerText(),
-          /Пересчитай предметы/,
+          /Пересчитай каждый цвет/,
         );
         assert.equal(await p.getByTestId("coach-motion-drag").count(), 0);
         await button("Попробую сам").click();

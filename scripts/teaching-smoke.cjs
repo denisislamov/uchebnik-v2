@@ -21,6 +21,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     p.setDefaultTimeout(18000);
     p.on("pageerror", (e) => report.errors.push(e.message));
     const button = (name) => p.getByRole("button", { name, exact: true });
+    async function reveal() {
+      if (await button("Показать это место").count()) {
+        await button("Показать это место").click();
+        await p.waitForTimeout(250);
+      }
+    }
     async function open(id, answers = {}) {
       const page = pages.find((p) => p.blocks.some((b) => b.id === id));
       await p.goto(baseURL + "/metadata.json");
@@ -110,6 +116,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
       throw Error("Missing demo");
     }
     const tip = async () => {
+      await reveal();
       await p.getByTestId("coach-finger").waitFor();
       const r = await p.getByTestId("coach-finger").boundingBox();
       assert.ok(r, "finger is visible");
@@ -127,6 +134,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
 
     await open("p004-block02");
     await p.getByTestId("coach-motion-count").waitFor();
+    await reveal();
     const positions = [];
     const scene = countingTutorials["p004-block02"];
     for (let i = 0; i < 10; i++) {
@@ -275,34 +283,48 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     await button("Покажи подсказку").click();
     await next();
     await p.getByTestId("coach-motion-drag").waitFor();
-    await p.getByTestId("coach-demo-surface").waitFor();
+    assert.equal(await p.getByTestId("coach-demo-surface").count(), 0);
     await withinCard();
     for (let i = 0; i < 5; i++) {
       const point = await tip(),
         card = await p.getByTestId("coach-card").boundingBox();
-      assert.ok(point.x < card.x && point.y >= 0 && point.y < 375);
+      assert.ok(
+        (point.x < card.x ||
+          point.x > card.x + card.width ||
+          point.y < card.y ||
+          point.y > card.y + card.height) &&
+          point.y >= 0 &&
+          point.y < 375,
+      );
       await p.waitForTimeout(400);
     }
+    await tip();
     await p.screenshot({ path: "docs/teaching-drag-landscape.png" });
     await finish();
     assert.deepEqual(await answers(), {});
     report.checks.push(
-      "short landscape uses visible demonstration space; both drag endpoints and card fit",
+      "short landscape demonstrates on the original board; explicit reveal keeps the current gesture outside the card",
     );
     await open("p004-block02");
     await button("Покажи, как").click();
     await advanceTo("tap");
-    await p.getByTestId("coach-demo-surface").waitFor();
+    assert.equal(await p.getByTestId("coach-demo-surface").count(), 0);
     const answerTip = await tip(),
-      answerBox = await p.getByTestId("coach-demo-surface").boundingBox(),
+      answerBox = await button("Ответ 10").boundingBox(),
       answerCard = await p.getByTestId("coach-card").boundingBox();
     assert.ok(
       Math.hypot(
-        answerTip.x - (answerBox.x + (answerBox.width * 4.5) / 6),
-        answerTip.y - (answerBox.y + answerBox.height * 0.75),
+        answerTip.x - (answerBox.x + answerBox.width / 2),
+        answerTip.y - (answerBox.y + answerBox.height / 2),
       ) < 3,
     );
-    assert.ok(answerTip.x < answerCard.x && answerTip.y < 375);
+    assert.ok(
+      (answerTip.x < answerCard.x ||
+        answerTip.x > answerCard.x + answerCard.width ||
+        answerTip.y < answerCard.y ||
+        answerTip.y > answerCard.y + answerCard.height) &&
+        answerTip.y < 375,
+    );
     await p.screenshot({ path: "docs/teaching-answer-landscape.png" });
     await finish();
     assert.deepEqual(await answers(), {});

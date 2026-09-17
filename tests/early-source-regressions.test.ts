@@ -56,6 +56,7 @@ test("drawing instructions name source objects, including apples on page 22", ()
 });
 test("copy the source grouping, then find a different grouping without mandatory equations", () => {
   for (const [p, start, parts, token] of [
+    [11, 2, [2, 1], "square"],
     [13, 3, [2, 2], "square"],
     [15, 2, [4, 1], "square"],
     [19, 2, [4, 2], "square"],

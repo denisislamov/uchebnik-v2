@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "baseURL": "http://127.0.0.1:8097",
+  "baseURL": "http://127.0.0.1:8099",
   "checks": [
     {
       "name": "chair tutorial touches actual selectable chair polygons",
@@ -27,20 +27,20 @@
       }
     },
     {
-      "name": "counter replay selects next empty square 390x844",
+      "name": "composition replay places the next adjacent square 390x844",
       "passed": true,
       "evidence": {
-        "seed": "only first square occupied",
+        "seed": "one square in the first part",
         "destination": 1,
         "actualSecondSquarePlaced": true,
         "demonstrationMutatedAnswers": false
       }
     },
     {
-      "name": "counter replay selects next empty square 800x390",
+      "name": "composition replay places the next adjacent square 800x390",
       "passed": true,
       "evidence": {
-        "seed": "only first square occupied",
+        "seed": "one square in the first part",
         "destination": 1,
         "actualSecondSquarePlaced": false,
         "demonstrationMutatedAnswers": false
@@ -69,14 +69,14 @@
       "passed": true,
       "evidence": {
         "geometry": {
-          "x1": 134.49599999999998,
-          "y1": 158.11200000000002,
-          "x2": 198,
-          "y2": 48.11984551614604,
-          "ghostLength": 127.00800000000001,
-          "transform": "rotate(-150 178.248 141.11592275807303)"
+          "x1": 237.5,
+          "y1": 216,
+          "x2": 321.5,
+          "y2": 70.50773216421433,
+          "ghostLength": 168,
+          "transform": "rotate(-150 350.5 230.25)"
         },
-        "lineLength": 127.00800000000001,
+        "lineLength": 168,
         "lineAngle": -59.99999999999999,
         "ghostAngle": -60,
         "rotationRecovery": "Перед переносом нажми «Повернуть» 3 раза, чтобы палочка совпала с наклоном пунктира. Затем перенеси её, как показано дальше.",
@@ -84,7 +84,7 @@
       }
     },
     {
-      "name": "completed slots replay never asks for a missing source",
+      "name": "completed part replay never asks for a missing source",
       "passed": true,
       "evidence": {
         "completeField": true,

@@ -154,37 +154,53 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       );
     }
     await open("p011-lesson02");
-    const squareBoard = p.getByTestId("counter-board");
-    for (const [i, index] of [2, 0, 1].entries()) {
-      await drag(
-        squareBoard.getByTestId("token-source"),
-        squareBoard.getByTestId(`token-slot-${index}`),
-      );
-      await squareBoard
-        .getByText(`На поле: ${i + 1}`, { exact: true })
-        .waitFor();
+    const squareBoard = p.getByTestId("composition-board");
+    assert.equal(await squareBoard.count(), 1);
+    await squareBoard.getByTestId("composition-source-0").click();
+    assert.equal(
+      await p.locator('[data-testid^="composition-token-"]').count(),
+      0,
+      "a tap does not place a square",
+    );
+    for (const [group, amount] of [2, 1].entries()) {
+      for (let n = 1; n <= amount; n++) {
+        await drag(
+          squareBoard.getByTestId(`composition-source-${group}`),
+          squareBoard.getByTestId("composition-field"),
+          true,
+        );
+      }
     }
+    await squareBoard
+      .getByTestId("composition-total")
+      .filter({ hasText: "2 и 1 · Всего 3" })
+      .waitFor();
     await p.getByRole("button", { name: /^Проверить(?: ответ)?$/ }).click();
+    await button("✓ Получилось!").waitFor();
     await p.screenshot({
       path: "docs/page11-square-layout.png",
       fullPage: true,
     });
     await p.reload();
     await button("Продолжить занятие  →").click();
-    await squareBoard.getByText("На поле: 3", { exact: true }).waitFor();
-    // Malformed saved indices must never crash the drawing surface.
+    await squareBoard
+      .getByTestId("composition-total")
+      .filter({ hasText: "2 и 1 · Всего 3" })
+      .waitFor();
+    // Malformed saved amounts must not produce impossible objects or completion.
     await p.goto(baseURL + "/metadata.json");
     await p.evaluate((KEY) => {
       const s = JSON.parse(localStorage.getItem(KEY));
-      s.answers["p011-lesson02"].responses = {
-        0: "3",
-        "0slots": "-1,3,NaN,0,0",
-      };
+      s.answers["p011-lesson02"].responses = { "0left": "-1", "0right": "NaN" };
       localStorage.setItem(KEY, JSON.stringify(s));
     }, KEY);
     await p.goto(baseURL);
     await button("Продолжить занятие  →").click();
-    await squareBoard.getByText("На поле: 1", { exact: true }).waitFor();
+    await squareBoard
+      .getByTestId("composition-total")
+      .filter({ hasText: "0 и 0 · Всего 0" })
+      .waitFor();
+    assert.equal(await button("✓ Получилось!").count(), 0);
     for (const [id, answer] of [
       ["p006-block02", "Вверху слева"],
       ["p006-block03", "Вверху справа"],

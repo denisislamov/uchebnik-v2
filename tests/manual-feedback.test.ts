@@ -132,30 +132,42 @@ test("old saves resume the same exercise after removal of editorial steps", () =
   );
   assert.equal(current.block, 2);
 });
-test("square arrangement requires three distinct valid slots and a different second grouping", () => {
-  const b = block("p011-lesson02");
-  assert.equal(
-    isDone(b, { checked: true, responses: { "0": "3", "0slots": "0,0,1" } }),
-    false,
-  );
-  assert.equal(
-    isDone(b, { checked: true, responses: { "0": "3", "0slots": "0,1,3" } }),
-    false,
-  );
-  assert.ok(
-    isDone(b, { checked: true, responses: { "0": "3", "0slots": "2,0,1" } }),
-  );
-  assert.equal(
-    isDone(block("p011-lesson03"), {
-      checked: true,
-      responses: { "0left": "2", "0right": "1" },
-    }),
-    false,
-  );
-  assert.ok(
-    isDone(block("p011-lesson03"), {
-      checked: true,
-      responses: { "0left": "1", "0right": "2" },
-    }),
-  );
+test("the two number-three tasks require 2 + 1, then 1 + 2", () => {
+  for (const [id, left, right] of [
+    ["p011-lesson02", 2, 1],
+    ["p011-lesson03", 1, 2],
+  ] as const) {
+    const b = block(id);
+    assert.ok(b.kind === "activity");
+    assert.equal(b.activity.mode, "composition");
+    assert.equal(b.activity.token, "square");
+    assert.ok(
+      isDone(b, {
+        checked: true,
+        responses: { "0left": String(left), "0right": String(right) },
+      }),
+    );
+    assert.equal(
+      isDone(b, {
+        checked: true,
+        responses: { "0left": String(right), "0right": String(left) },
+      }),
+      false,
+    );
+    assert.equal(
+      isDone(b, { checked: true, responses: { "0": "3", "0slots": "0,1,2" } }),
+      false,
+    );
+    assert.equal(
+      isDone(b, {
+        checked: true,
+        responses: {
+          "0": "3",
+          "0positions":
+            '[{"x":0.2,"y":0.3},{"x":0.5,"y":0.3},{"x":0.8,"y":0.3}]',
+        },
+      }),
+      false,
+    );
+  }
 });

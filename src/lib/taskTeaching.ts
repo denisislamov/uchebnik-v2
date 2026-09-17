@@ -7,6 +7,7 @@ export type TeachingExample = {
     | "compare"
     | "equation"
     | "groups"
+    | "compositionRow"
     | "ruler"
     | "trace"
     | "placeValue"
@@ -16,6 +17,9 @@ export type TeachingExample = {
   active?: number;
   label?: string;
   labels?: string[];
+  colors?: ["green" | "red", "green" | "red"];
+  token?: "square" | "circle" | "stick";
+  pattern?: [number, number][];
 };
 export type TaskTeachingStep = {
   text: string;
@@ -329,6 +333,93 @@ const practicalSteps: Record<string, TaskTeachingStep[]> = {
 
 /** Every Block variant has an explicit route; adding a kind fails the exhaustive check. */
 export function taskTeaching(block: Block): TaskTeaching {
+  const plan = buildTaskTeaching(block);
+  const page = Number(block.id.slice(1, 4));
+  if (!Number.isInteger(page) || page >= 16) return plan;
+  // These pages teach quantities before arithmetic signs are introduced on PDF 16.
+  if (block.kind === "work")
+    return {
+      ...plan,
+      steps: [
+        step(
+          `Прочитай условие и вопросы задания. ${block.prompt}`,
+          "instruction",
+        ),
+        step(
+          /остал|улетел|взял|сорва/.test(
+            [block.prompt, ...block.fields.map((f) => f.label)].join(" "),
+          )
+            ? "Сначала посчитай, сколько было. Посмотри, что изменилось. Для вопроса «Сколько осталось?» считай оставшиеся предметы."
+            : "Рассмотри то, о чём спрашивают. Если нужно узнать, сколько всего, пересчитай обе группы вместе.",
+          "images",
+        ),
+        step(
+          "Отвечай на вопросы по очереди. Для каждого вопроса сосчитай нужные предметы и запиши ответ.",
+        ),
+        check(),
+      ],
+    };
+  if (block.kind === "practical")
+    return {
+      ...plan,
+      steps: [
+        ...block.steps.map((s) =>
+          step(
+            s.instruction +
+              (s.carryFrom ? " Предметы предыдущего шага уже на месте." : ""),
+            "answer",
+          ),
+        ),
+        step(
+          "Выполняй действия по порядку. Когда закончишь, проверь свой ответ.",
+        ),
+      ],
+    };
+  if (block.kind === "activity" && block.activity.mode === "coins")
+    return {
+      ...plan,
+      steps: [
+        step(
+          `Прочитай условие и вопросы задания. ${block.prompt}`,
+          "instruction",
+        ),
+        step(
+          "Посмотри, сколько копеек написано на каждой монете. Выбирай монеты так, чтобы вместе получилось столько копеек, сколько нужно в задании.",
+          "answer",
+        ),
+        step(
+          "Считай копейки, а не количество монет. Лишнюю монету можно убрать.",
+        ),
+        check(),
+      ],
+    };
+  return {
+    ...plan,
+    steps: plan.steps.map((s) => {
+      if (s.example?.kind === "compositionRow")
+        return {
+          ...s,
+          example: {
+            ...s.example,
+            expression: undefined,
+            labels: [
+              String(s.example.values[0]),
+              "и",
+              String(s.example.values[1]),
+            ],
+          },
+        };
+      if (
+        (block.kind === "picture" &&
+          plan.family === "picture.compare-quantity") ||
+        (block.kind === "activity" && block.activity.mode === "count")
+      )
+        return { ...s, example: undefined };
+      return s;
+    }),
+  };
+}
+function buildTaskTeaching(block: Block): TaskTeaching {
   switch (block.kind) {
     case "read":
       return lesson(
@@ -364,15 +455,11 @@ export function taskTeaching(block: Block): TaskTeaching {
           "Найди на рисунке именно те предметы, о которых спрашивают.",
           "images",
         ),
-        ...[0, 1, 2].map((i) =>
+        ...Array.from({ length: block.expected }, (_, i) =>
           step(
-            [
-              "Начинаем: один.",
-              "Следующий: два. Первый уже посчитан.",
-              "Ещё один: три. Последнее число говорит, сколько всего.",
-            ][i],
+            `${i === 0 ? "Начинаем" : "Следующий предмет"}: ${i + 1}.${i === block.expected - 1 ? " Последнее число говорит, сколько всего." : " Считай каждый предмет один раз."}`,
             "images",
-            example("count", [3], String(i + 1), i),
+            example("count", [block.expected], String(i + 1), i),
           ),
         ),
         step("Сосчитай предметы в своём задании и нажми нужную цифру."),
@@ -450,7 +537,14 @@ export function taskTeaching(block: Block): TaskTeaching {
         return lesson(
           "picture.add",
           "Сколько стало?",
-          ...operationSteps.add,
+          step(
+            "На ветке сидела 1 птичка. К ней прилетела ещё 1 птичка.",
+            "images",
+          ),
+          step(
+            "Птичек стало больше. Покажи одну птичку, затем другую. Каждую посчитай один раз.",
+            "images",
+          ),
           step(
             "Теперь рассмотри птиц в задании. Нажми на каждую, чтобы показать, сколько стало.",
             "images",
@@ -484,9 +578,8 @@ export function taskTeaching(block: Block): TaskTeaching {
           "images",
         ),
         step(
-          "Переноси из коробки по одному: один, два, три… Остановись, когда получится столько же.",
+          "Переноси по одному предмету на поле. Остановись, когда каждому предмету на рисунке будет соответствовать один предмет на поле.",
           "answer",
-          example("groups", [3, 3], "столько же"),
         ),
         block.expected === undefined
           ? step(
@@ -951,24 +1044,41 @@ function activityTeaching(
         check(),
       );
     }
-    case "composition":
+    case "composition": {
+      const total = a.targets[0];
+      const parts = a.fixedParts ?? a.differentFrom ?? [1, total - 1];
       return lesson(
         `activity.composition.${a.fixedParts ? "fixed" : a.differentFrom ? "another" : "free"}`,
         "Делим число на две части",
         step(
-          "Пять кружков можно разделить: 2 в одной группе и 3 в другой. Вместе снова 5.",
+          `В одной части ${parts[0]}, в другой ${parts[1]}. Вместе ${total}. Разложим предметы на две части.`,
           "answer",
-          example("groups", [2, 3], "2 + 3 = 5"),
+          a.partColors
+            ? {
+                ...example(
+                  "compositionRow",
+                  parts,
+                  `${parts[0]} + ${parts[1]} = ${total}`,
+                ),
+                colors: a.partColors,
+                token: a.token,
+                pattern: a.compositionPattern,
+              }
+            : example("groups", parts, `${parts[0]} + ${parts[1]} = ${total}`),
         ),
         step(
-          a.fixedParts
-            ? "Сохрани заданные части. Разложи предметы и проверь их общую сумму."
-            : a.differentFrom
-              ? "Найди другой способ, чем в образце. В обеих частях должны быть предметы, а сумма — прежняя."
-              : "Разложи предметы на две непустые группы. Пересчитай обе части и проверь сумму.",
+          (a.partColors
+            ? "Переноси предметы двух цветов на одно поле, рядом друг с другом. "
+            : "") +
+            (a.fixedParts
+              ? "Сохрани заданные части. Разложи предметы и проверь их общую сумму."
+              : a.differentFrom
+                ? "Найди другой способ, чем в образце. В обеих частях должны быть предметы, а сумма — прежняя."
+                : "Разложи предметы на две непустые группы. Пересчитай обе части и проверь сумму."),
         ),
         check(),
       );
+    }
     default: {
       const exhaustive: never = a.mode;
       throw new Error(`Неизвестное действие ${exhaustive}`);

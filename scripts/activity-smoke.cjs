@@ -88,7 +88,11 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await btn("✓ Верно").waitFor();
     report.scenarios.push("story-builder: source rubles, wrong then correct");
     b = allBlocks.find(
-      (b) => b.kind === "activity" && b.activity.mode === "composition",
+      (b) =>
+        b.kind === "activity" &&
+        b.activity.mode === "composition" &&
+        !b.activity.fixedParts &&
+        !b.activity.partColors,
     );
     await open(b);
     await placeToken(p.getByTestId("counter-board").nth(0));

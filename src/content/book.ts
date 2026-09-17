@@ -307,7 +307,7 @@ export const pages: BookPage[] = [
       counters(
         "Огурцы",
         "Положи столько кружков, сколько нарисовано огурцов.",
-        6,
+        7,
         "circle",
         [img(5, "bowl_cucumbers")],
       ),

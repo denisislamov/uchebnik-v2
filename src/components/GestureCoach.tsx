@@ -21,13 +21,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Speech from "expo-speech";
 import { Button } from "./Controls";
 import { CoachSurface, type DemoSurface } from "./CoachSurface";
-import { shapeDemoPoint, shapeDemoEdge } from "../lib/coachGeometry";
+import {
+  coachCardPosition,
+  shapeDemoPoint,
+  shapeDemoEdge,
+} from "../lib/coachGeometry";
 import { assets } from "../content/assets";
 import { CoachExample, type ExampleData } from "./CoachExample";
 import { colors as c, fonts as f } from "../theme";
 import {
   COACH_STORAGE_KEY,
   coachSpotlight,
+  clipCoachRect,
   readSeenCoaches,
   type CoachRect,
 } from "../lib/gestureCoach";
@@ -136,6 +141,18 @@ function measure(view: View): Promise<CoachRect | null> {
     });
   });
 }
+function webScrollPane(target: View): HTMLElement | null {
+  let pane = (target as unknown as HTMLElement).parentElement;
+  while (
+    pane &&
+    !(
+      pane.scrollHeight > pane.clientHeight &&
+      /auto|scroll/.test(getComputedStyle(pane).overflowY)
+    )
+  )
+    pane = pane.parentElement;
+  return pane;
+}
 export function GestureCoachProvider({
   children,
   revealTarget,
@@ -152,13 +169,18 @@ export function GestureCoachProvider({
     [seen, setSeen] = useState<string[] | null>(null),
     [active, setActive] = useState<Active | null>(null),
     [step, setStep] = useState(0);
+  const [resolvedStep, setResolvedStep] = useState(0),
+    [measuring, setMeasuring] = useState(false);
   const [targetRect, setRect] = useState<CoachRect | null>(null),
+    [targetViewport, setTargetViewport] = useState<CoachRect | null>(null),
     [motionPoints, setMotionPoints] = useState<Point[]>([]),
     [cardHeight, setCardHeight] = useState(240),
     [missing, setMissing] = useState(false);
   const [elapsed, setElapsed] = useState(0),
     [paused, setPaused] = useState(false),
-    [replayNonce, setReplayNonce] = useState(0);
+    [replayNonce, setReplayNonce] = useState(0),
+    [positionRevision, setPositionRevision] = useState(0);
+  const measuredPlayback = useRef<string | null>(null);
   const interrupted = useRef(false),
     showing = useRef(false),
     announced = useRef(false);
@@ -167,10 +189,14 @@ export function GestureCoachProvider({
     onActiveChange?.(isActive);
     return () => onActiveChange?.(false);
   }, [isActive, onActiveChange]);
-  const current = active?.targets[step],
+  // Keep the previous complete frame until the next target has been measured.
+  const current = active?.targets[resolvedStep],
     motion = current?.motion;
   const landscape = height < 600 && width > height;
-  const cardWidth = Math.min(landscape ? width * 0.46 : width - 20, 480);
+  const cardWidth = Math.min(
+    landscape ? width * 0.46 : width - 24,
+    Platform.OS === "web" && width >= 1000 ? 320 : 480,
+  );
   const cardLimit = landscape ? height : height - cardHeight - 30;
   // A visible fingertip does not imply that the pictured object is fully visible.
   // Fit the entire image, including steps with no animated gesture.
@@ -182,6 +208,7 @@ export function GestureCoachProvider({
       targetRect.x + targetRect.width > width - 12 ||
       targetRect.y + targetRect.height > cardLimit - 8);
   const needsSurface =
+    Platform.OS !== "web" &&
     !!current?.surface &&
     (landscape ||
       imageClipped ||
@@ -276,7 +303,8 @@ export function GestureCoachProvider({
       }))
     : motionPoints;
   const duration = motion ? demoDuration(motion.kind, points) : 0;
-  const frame = motion ? demoFrame(motion.kind, points, elapsed) : null;
+  const frame =
+    motion && targetRect ? demoFrame(motion.kind, points, elapsed) : null;
   const done = !motion || !!frame?.done;
   const register = useCallback((id: string, tutorial: Tutorial) => {
     entries.current.set(id, tutorial);
@@ -322,6 +350,8 @@ export function GestureCoachProvider({
     showing.current = true;
     interrupted.current = false;
     setStep(0);
+    setResolvedStep(0);
+    setMeasuring(true);
     setRect(null);
     setElapsed(0);
     setPaused(false);
@@ -343,96 +373,140 @@ export function GestureCoachProvider({
   useEffect(() => {
     if (!active) return;
     let cancelled = false;
-    setRect(null);
-    setMissing(false);
-    setElapsed(0);
-    setPaused(false);
+    const playback = JSON.stringify([active.id, step, replayNonce]);
+    setMeasuring(true);
     announced.current = false;
-    const timer = setTimeout(async () => {
-      const target = resolve(active.targets[step]);
-      if (!target) {
-        if (!cancelled) {
-          interrupted.current = true;
-          setMissing(true);
-        }
-        return;
-      }
-      if (Platform.OS === "web")
-        (target as unknown as HTMLElement).scrollIntoView({
-          block: "start",
-          behavior: "instant",
-        });
-      else if (revealTarget) {
-        let timeout: ReturnType<typeof setTimeout> | undefined;
-        await Promise.race([
-          revealTarget(target),
-          new Promise<void>((resolve) => {
-            timeout = setTimeout(resolve, 1000);
-          }),
-        ]);
-        clearTimeout(timeout);
-      }
-      const box = await measure(target);
-      if (cancelled) return;
-      if (!box) {
-        interrupted.current = true;
-        setMissing(true);
-        return;
-      }
-      const movement = active.targets[step].motion;
-      let points = (movement?.points ?? []).map((p) => ({
-        x: box.x + p.x * box.width,
-        y: box.y + p.y * box.height,
-      }));
-      if (movement?.from) {
-        const from = resolve(movement.from);
-        const start = from ? await measure(from) : null;
-        if (cancelled) return;
-        if (start)
-          points = [
-            { x: start.x + start.width / 2, y: start.y + start.height / 2 },
-          ];
-        else {
-          interrupted.current = true;
-          setMissing(true);
+    const timer = setTimeout(
+      async () => {
+        const target = resolve(active.targets[step]);
+        if (!target) {
+          if (!cancelled) {
+            interrupted.current = true;
+            setMissing(true);
+            setResolvedStep(step);
+            setMeasuring(false);
+          }
           return;
         }
-      }
-      if (movement?.to) {
-        const to = resolve(movement.to);
-        const end = to ? await measure(to) : null;
+        // Browser onboarding is an overlay: never scroll or reflow the lesson.
+        if (Platform.OS !== "web" && revealTarget) {
+          let timeout: ReturnType<typeof setTimeout> | undefined;
+          await Promise.race([
+            revealTarget(target),
+            new Promise<void>((resolve) => {
+              timeout = setTimeout(resolve, 1000);
+            }),
+          ]);
+          clearTimeout(timeout);
+        }
+        const box = await measure(target);
         if (cancelled) return;
-        if (end) {
-          const p = movement.toPoint ?? { x: 0.5, y: 0.5 };
-          points = [
-            ...points,
-            { x: end.x + p.x * end.width, y: end.y + p.y * end.height },
-          ];
-        } else {
+        if (!box) {
           interrupted.current = true;
           setMissing(true);
+          setResolvedStep(step);
+          setMeasuring(false);
           return;
         }
-      }
-      setMotionPoints(points);
-      setRect(box);
-    }, 180);
+        const movement = active.targets[step].motion;
+        let points = (movement?.points ?? []).map((p) => ({
+          x: box.x + p.x * box.width,
+          y: box.y + p.y * box.height,
+        }));
+        if (movement?.from) {
+          const from = resolve(movement.from);
+          const start = from ? await measure(from) : null;
+          if (cancelled) return;
+          if (start)
+            points = [
+              { x: start.x + start.width / 2, y: start.y + start.height / 2 },
+            ];
+          else {
+            interrupted.current = true;
+            setMissing(true);
+            setResolvedStep(step);
+            setMeasuring(false);
+            return;
+          }
+        }
+        if (movement?.to) {
+          const to = resolve(movement.to);
+          const end = to ? await measure(to) : null;
+          if (cancelled) return;
+          if (end) {
+            const p = movement.toPoint ?? { x: 0.5, y: 0.5 };
+            points = [
+              ...points,
+              { x: end.x + p.x * end.width, y: end.y + p.y * end.height },
+            ];
+          } else {
+            interrupted.current = true;
+            setMissing(true);
+            setResolvedStep(step);
+            setMeasuring(false);
+            return;
+          }
+        }
+        setMotionPoints(points);
+        setRect(box);
+        if (Platform.OS === "web") {
+          const pane = webScrollPane(target)?.getBoundingClientRect();
+          setTargetViewport(
+            pane
+              ? { x: pane.x, y: pane.y, width: pane.width, height: pane.height }
+              : null,
+          );
+        }
+        setResolvedStep(step);
+        setMissing(false);
+        if (measuredPlayback.current !== playback) {
+          setElapsed(0);
+          setPaused(false);
+          measuredPlayback.current = playback;
+        }
+        setMeasuring(false);
+      },
+      Platform.OS === "web" ? 0 : 180,
+    );
     return () => {
       cancelled = true;
       clearTimeout(timer);
       void Speech.stop();
     };
-  }, [active, step, width, height, revealTarget, replayNonce]);
+  }, [
+    active,
+    step,
+    width,
+    height,
+    revealTarget,
+    replayNonce,
+    positionRevision,
+  ]);
   useEffect(() => {
-    if (!motion || !targetRect || paused || missing || elapsed >= duration)
+    if (
+      !motion ||
+      !targetRect ||
+      measuring ||
+      paused ||
+      missing ||
+      elapsed >= duration
+    )
       return;
     const timer = setInterval(
       () => setElapsed((t) => Math.min(duration, t + 50)),
       50,
     );
     return () => clearInterval(timer);
-  }, [motion, targetRect, paused, missing, duration, elapsed >= duration]);
-  let baseRect = needsSurface ? surfaceBox : targetRect;
+  }, [
+    motion,
+    targetRect,
+    measuring,
+    paused,
+    missing,
+    duration,
+    elapsed >= duration,
+  ]);
+  let baseRect = missing ? null : needsSurface ? surfaceBox : targetRect;
   let highlight = baseRect;
   if (baseRect && motion?.regions && frame) {
     const region = motion.regions[frame.index];
@@ -444,23 +518,57 @@ export function GestureCoachProvider({
         height: region.height * baseRect.height,
       };
   }
-  const hole = highlight
+  const web = Platform.OS === "web";
+  const floatingCard = coachCardPosition(
+    motion && frame && !motion.regions
+      ? { x: frame.point.x - 24, y: frame.point.y - 24, width: 48, height: 48 }
+      : highlight,
+    { width, height },
+    { width: cardWidth, height: cardHeight },
+  );
+  const viewport = targetViewport ?? { x: 0, y: 0, width, height };
+  const rawHole = highlight
     ? coachSpotlight(
         highlight,
-        landscape ? width - cardWidth - 16 : width,
+        !web && landscape ? width - cardWidth - 16 : width,
         height,
-        landscape ? 12 : cardHeight + 30,
+        web || landscape ? 12 : cardHeight + 30,
       )
     : null;
+  const hole = web ? clipCoachRect(rawHole, viewport) : rawHole;
   const finger = frame?.point;
-  const cardTop = landscape ? height : height - cardHeight - 12;
+  const cardTop = web || landscape ? height : height - cardHeight - 12;
+  const fingerUnderCard =
+    web &&
+    !!finger &&
+    finger.x >= floatingCard.x &&
+    finger.x <= floatingCard.x + cardWidth &&
+    finger.y >= floatingCard.y &&
+    finger.y <= floatingCard.y + cardHeight;
   const fingerVisible =
     !!finger &&
-    finger.x >= 0 &&
-    finger.x <= (landscape ? width - cardWidth - 24 : width) &&
-    finger.y >= 10 &&
-    finger.y < cardTop - 6 &&
+    finger.x >= (web ? viewport.x : 0) &&
+    finger.x <=
+      (web
+        ? Math.min(width, viewport.x + viewport.width)
+        : landscape
+          ? width - cardWidth - 24
+          : width) &&
+    finger.y >= Math.max(10, web ? viewport.y : 0) &&
+    finger.y <
+      Math.min(cardTop - 6, web ? viewport.y + viewport.height : height) &&
+    !fingerUnderCard &&
     !missing;
+  const offscreen =
+    web &&
+    !!targetRect &&
+    !missing &&
+    (!hole ||
+      (motion
+        ? !!finger && !fingerVisible
+        : !!highlight &&
+          (highlight.y < viewport.y ||
+            highlight.y + highlight.height > viewport.y + viewport.height)));
   function close(completed: boolean) {
     if (!active) return;
     void Speech.stop();
@@ -477,7 +585,7 @@ export function GestureCoachProvider({
     <Context.Provider value={{ register, anchor, replay }}>
       {children}
       <Modal
-        visible={!!active && (!!targetRect || missing)}
+        visible={!!active}
         transparent
         animationType="none"
         statusBarTranslucent
@@ -487,6 +595,7 @@ export function GestureCoachProvider({
         <View
           testID="gesture-coach"
           accessibilityViewIsModal
+          accessibilityState={{ busy: measuring }}
           style={{ flex: 1 }}
         >
           <View
@@ -494,7 +603,9 @@ export function GestureCoachProvider({
             onStartShouldSetResponder={() => true}
           />
           <View
-            testID={motion ? `coach-motion-${motion.kind}` : undefined}
+            testID={
+              motion && targetRect ? `coach-motion-${motion.kind}` : undefined
+            }
             pointerEvents="none"
             style={{ position: "absolute", inset: 0 }}
           >
@@ -626,7 +737,7 @@ export function GestureCoachProvider({
                     width={8}
                     height={stickLength}
                     rx={3}
-                    fill="#bb8052"
+                    fill={motion.color ?? "#bb8052"}
                     transform={`rotate(${stickAngle - 90} ${finger!.x} ${finger!.y})`}
                   />
                 ) : motion.token === "square" || motion.token === "card" ? (
@@ -636,10 +747,15 @@ export function GestureCoachProvider({
                     width={28}
                     height={28}
                     rx={4}
-                    fill="#1565c0"
+                    fill={motion.color ?? "#1565c0"}
                   />
                 ) : (
-                  <Circle cx={finger!.x} cy={finger!.y} r={14} fill="#1565c0" />
+                  <Circle
+                    cx={finger!.x}
+                    cy={finger!.y}
+                    r={14}
+                    fill={motion.color ?? "#1565c0"}
+                  />
                 ))}
               {fingerVisible &&
                 motion?.kind === "drag" &&
@@ -695,9 +811,11 @@ export function GestureCoachProvider({
             onLayout={(e) => setCardHeight(e.nativeEvent.layout.height)}
             style={{
               position: "absolute",
-              bottom: 12,
-              alignSelf: landscape ? undefined : "center",
-              right: landscape ? 10 : undefined,
+              bottom: web ? undefined : 12,
+              top: web ? floatingCard.y : undefined,
+              left: web ? floatingCard.x : undefined,
+              alignSelf: web || landscape ? undefined : "center",
+              right: !web && landscape ? 10 : undefined,
               width: cardWidth,
               maxHeight:
                 !landscape && current?.surface
@@ -721,7 +839,7 @@ export function GestureCoachProvider({
                 }}
               >
                 <Text style={{ fontFamily: f.bold, color: c.green }}>
-                  Смотри, как · {step + 1}/{active?.targets.length}
+                  Смотри, как · {resolvedStep + 1}/{active?.targets.length}
                 </Text>
                 <Pressable
                   accessibilityRole="button"
@@ -752,6 +870,40 @@ export function GestureCoachProvider({
                   : current?.text}
               </Text>
               {current?.example && <CoachExample example={current.example} />}
+              {offscreen && (
+                <View testID="coach-offscreen-help" style={{ gap: 8 }}>
+                  <Text style={{ fontFamily: f.regular, color: c.ink }}>
+                    Нужная часть задания сейчас не видна. Нажми, чтобы перейти к
+                    ней.
+                  </Text>
+                  <Button
+                    secondary
+                    small
+                    onPress={() => {
+                      const target = current && resolve(current);
+                      if (!target) return;
+                      // Scrolling is a child's explicit choice, never a step side effect.
+                      const element = target as unknown as HTMLElement;
+                      const pane = webScrollPane(target);
+                      if (finger && pane) {
+                        const box = pane.getBoundingClientRect();
+                        pane.scrollTop +=
+                          finger.y -
+                          (Math.max(12, box.top) +
+                            Math.min(height - 12, box.bottom)) /
+                            2;
+                      } else
+                        element.scrollIntoView({
+                          block: "start",
+                          behavior: "instant",
+                        });
+                      setPositionRevision((v) => v + 1);
+                    }}
+                  >
+                    Показать это место
+                  </Button>
+                </View>
+              )}
               {motion && frame && !missing && (
                 <Text
                   testID="coach-demonstration-status"
@@ -799,7 +951,7 @@ export function GestureCoachProvider({
                     Послушать
                   </Text>
                 </Pressable>
-                {motion && !missing && (
+                {motion && targetRect && !missing && (
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel={
@@ -821,16 +973,16 @@ export function GestureCoachProvider({
                 )}
               </View>
               <Button
-                disabled={!done && !missing}
+                disabled={measuring || (!done && !missing)}
                 onPress={() => {
                   void Speech.stop();
                   if (active && step + 1 < active.targets.length) {
                     setStep((v) => v + 1);
-                    setRect(null);
+                    setMeasuring(true);
                   } else close(!missing);
                 }}
               >
-                {active && step + 1 < active.targets.length
+                {active && resolvedStep + 1 < active.targets.length
                   ? "Дальше"
                   : "Попробую сам"}
               </Button>

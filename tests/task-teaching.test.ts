@@ -83,11 +83,11 @@ test("a count demonstration counts one object once, in order", () => {
   );
   assert.deepEqual(
     steps.map((s) => s.example!.active),
-    [0, 1, 2],
+    Array.from({ length: 10 }, (_, i) => i),
   );
   assert.deepEqual(
     steps.map((s) => s.example!.expression),
-    ["1", "2", "3"],
+    Array.from({ length: 10 }, (_, i) => String(i + 1)),
   );
   assert.match(steps.at(-1)!.text, /сколько всего/);
 });
@@ -363,4 +363,31 @@ test("multiple constructed examples and figures explain that all must be complet
   assert.match(prose("p034-source13"), /не повторяй|разные примеры/i);
   assert.match(prose("p100-source05"), /все.*фигур|фигур.*все/i);
   assert.match(prose("p103-source04"), /все.*фигур|фигур.*все/i);
+});
+
+test("composition introductions explain the current number and source parts", () => {
+  for (const id of [
+    "p011-lesson02",
+    "p011-lesson03",
+    "p013-lesson03",
+    "p015-lesson02",
+    "p019-lesson02",
+    "p023-lesson02",
+    "p025-lesson03",
+    "p027-lesson03",
+    "p029-lesson02",
+  ]) {
+    const b = get(id);
+    assert.ok(b.kind === "activity");
+    const parts = b.activity.fixedParts ?? b.activity.differentFrom;
+    assert.ok(parts);
+    const example = teaching(id).steps.find((s) => s.example)?.example;
+    assert.deepEqual(example?.values, parts, id);
+    assert.equal(
+      example?.expression,
+      Number(id.slice(1, 4)) < 16
+        ? undefined
+        : `${parts[0]} + ${parts[1]} = ${b.activity.targets[0]}`,
+    );
+  }
 });

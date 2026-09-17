@@ -1,0 +1,299 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "page": 11,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        2,
+        1
+      ],
+      "another": [
+        1,
+        2
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 13,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        2,
+        2
+      ],
+      "another": [
+        1,
+        3
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 15,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        4,
+        1
+      ],
+      "another": [
+        1,
+        4
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 19,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        4,
+        2
+      ],
+      "another": [
+        1,
+        5
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 23,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        4,
+        3
+      ],
+      "another": [
+        1,
+        6
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 25,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        7,
+        1
+      ],
+      "another": [
+        1,
+        7
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 27,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        8,
+        1
+      ],
+      "another": [
+        1,
+        8
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 29,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "copy": [
+        5,
+        5
+      ],
+      "another": [
+        1,
+        9
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "id": "p040-source02",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "parts": [
+        1,
+        3
+      ],
+      "singleBoard": true,
+      "adjacentTwoColors": true
+    },
+    {
+      "id": "p043-source05",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "parts": [
+        1,
+        4
+      ],
+      "singleBoard": true,
+      "adjacentTwoColors": true
+    },
+    {
+      "id": "p046-source04",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "parts": [
+        1,
+        5
+      ],
+      "singleBoard": true,
+      "adjacentTwoColors": true
+    },
+    {
+      "id": "p048-source09",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "parts": [
+        1,
+        6
+      ],
+      "singleBoard": true,
+      "adjacentTwoColors": true
+    },
+    {
+      "id": "p051-source02",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "parts": [
+        1,
+        7
+      ],
+      "singleBoard": true,
+      "adjacentTwoColors": true
+    },
+    {
+      "page": 11,
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "copy": [
+        2,
+        1
+      ],
+      "another": [
+        1,
+        2
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 29,
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "copy": [
+        5,
+        5
+      ],
+      "another": [
+        1,
+        9
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 11,
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "copy": [
+        2,
+        1
+      ],
+      "another": [
+        1,
+        2
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    },
+    {
+      "page": 29,
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "copy": [
+        5,
+        5
+      ],
+      "another": [
+        1,
+        9
+      ],
+      "singleBoard": true,
+      "sourcePatternAndAlternativeRow": true,
+      "noNumericInput": true,
+      "reload": true
+    }
+  ],
+  "errors": []
+}

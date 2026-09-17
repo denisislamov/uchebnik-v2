@@ -9,6 +9,19 @@ export const COACH_FAMILIES = [
 ] as const;
 export type CoachFamily = string;
 export type CoachRect = { x: number; y: number; width: number; height: number };
+export function clipCoachRect(
+  rect: CoachRect | null,
+  viewport: CoachRect,
+): CoachRect | null {
+  if (!rect) return null;
+  const x = Math.max(rect.x, viewport.x),
+    y = Math.max(rect.y, viewport.y);
+  const right = Math.min(rect.x + rect.width, viewport.x + viewport.width);
+  const bottom = Math.min(rect.y + rect.height, viewport.y + viewport.height);
+  return right > x && bottom > y
+    ? { x, y, width: right - x, height: bottom - y }
+    : null;
+}
 export function readSeenCoaches(raw: string | null): CoachFamily[] {
   try {
     const data: unknown = JSON.parse(raw ?? "[]");

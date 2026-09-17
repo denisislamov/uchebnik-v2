@@ -1,6 +1,21 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readSeenCoaches, coachSpotlight } from "../src/lib/gestureCoach.ts";
+import {
+  readSeenCoaches,
+  coachSpotlight,
+  clipCoachRect,
+} from "../src/lib/gestureCoach.ts";
+test("highlight excludes the fixed header and anything outside the lesson pane", () => {
+  const pane = { x: 0, y: 83, width: 785, height: 292 };
+  assert.deepEqual(
+    clipCoachRect({ x: 60, y: 12, width: 650, height: 200 }, pane),
+    { x: 60, y: 83, width: 650, height: 129 },
+  );
+  assert.equal(
+    clipCoachRect({ x: 100, y: 30, width: 30, height: 30 }, pane),
+    null,
+  );
+});
 test("tutorial history rejects corrupt or unrelated progress and deduplicates families", () => {
   assert.deepEqual(readSeenCoaches("{"), []);
   assert.deepEqual(readSeenCoaches('{"answers":{}}'), []);

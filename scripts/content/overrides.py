@@ -45,7 +45,7 @@ FORMULAS={278:'a+b',280:'a+b',293:'a+b',296:'a+b',335:'a-b',337:'a-b',349:'a-b',
 # Keep one field for each question; alternative worked solutions are not extra questions.
 work(26,[('Сколько всего шишек принёс Миша?',7)])
 work(37,[('Сколько всего камешков нашла Ира?',8),('Сколько камешков осталось у Иры?',6)])
-for n,total in {72:4,99:5,121:6,141:7,155:8}.items():activity(n,'composition',[total],token='square')
+for n,total in {72:4,99:5,121:6,141:7,155:8}.items():activity(n,'composition',[total],token='square',partColors=['green','red'])
 work(199,[('Какое число написано на другой карточке?',2)])
 work(207,[('Число из карточек 1 и 4',14),('Число из карточек 1 и 9',19)])
 work(211,[(f'Какая страница идёт после {n}?',n+1) for n in [11,16,18]])

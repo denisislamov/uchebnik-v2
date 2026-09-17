@@ -44,6 +44,9 @@ export type Activity = {
   objectLabel?: string;
   groupLabels?: string[];
   fixedParts?: number[];
+  partColors?: ["green" | "red", "green" | "red"];
+  /** Positions in cell units, in source color order; omitted for a free strip. */
+  compositionPattern?: [number, number][];
   token?: "circle" | "stick" | "square";
   slots?: Point[];
   differentFrom?: number[];

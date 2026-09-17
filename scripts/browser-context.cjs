@@ -14,6 +14,7 @@ async function newTestContext(browser, options) {
       "sticks",
       "cards",
       "picture",
+      "task:gesture.composition-row",
       ...new Set(
         allBlocks.map((block) => `task:${taskTeaching(block).family}`),
       ),

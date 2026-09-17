@@ -1,4 +1,5 @@
 import { CounterBoard } from "./CounterBoard";
+import { CompositionBoard } from "./CompositionBoard";
 import { composeStory, storySubjects } from "../lib/composeStory";
 import { DrawingPad } from "./DrawingPad";
 import { relationPlan } from "../lib/relationDrawing";
@@ -579,40 +580,66 @@ export function CourseTask({
               )}
               {a.mode === "composition" && (
                 <>
-                  {["left", "right"].map((side, group) => (
-                    <View key={side}>
-                      <Text style={s.note}>
-                        {a.groupLabels?.[group] ??
-                          `${side === "left" ? "Первая" : "Вторая"} часть`}
-                      </Text>
-                      {a.token ? (
-                        <CounterBoard
-                          token={a.token}
-                          objectLabel={a.objectLabel}
-                          value={Number(r[`${i}${side}`]) || 0}
-                          max={target - 1}
-                          onChange={(v) => set(`${i}${side}`, String(v))}
-                          onDrawing={onDrawing}
-                        />
-                      ) : (
-                        stepper(
-                          `${i}${side}`,
-                          side === "left" ? "Первая часть" : "Вторая часть",
-                          target - 1,
-                        )
-                      )}
-                      {!a.token && (
-                        <View style={s.row}>
-                          {Array.from(
-                            { length: Number(r[`${i}${side}`]) || 0 },
-                            (_, j) => (
-                              <View key={j} style={tokenStyle} />
-                            ),
-                          )}
-                        </View>
-                      )}
-                    </View>
-                  ))}
+                  {a.partColors && a.token ? (
+                    <CompositionBoard
+                      total={target}
+                      token={a.token}
+                      colors={a.partColors}
+                      pattern={a.compositionPattern}
+                      showEquation={Number(block.id.slice(1, 4)) >= 16}
+                      parts={[
+                        Number(r[`${i}left`]) || 0,
+                        Number(r[`${i}right`]) || 0,
+                      ]}
+                      onDrawing={onDrawing}
+                      onChange={([left, right]) =>
+                        onAnswer({
+                          ...answer,
+                          checked: false,
+                          responses: {
+                            ...r,
+                            [`${i}left`]: String(left),
+                            [`${i}right`]: String(right),
+                          },
+                        })
+                      }
+                    />
+                  ) : (
+                    ["left", "right"].map((side, group) => (
+                      <View key={side}>
+                        <Text style={s.note}>
+                          {a.groupLabels?.[group] ??
+                            `${side === "left" ? "Первая" : "Вторая"} часть`}
+                        </Text>
+                        {a.token ? (
+                          <CounterBoard
+                            token={a.token}
+                            objectLabel={a.objectLabel}
+                            value={Number(r[`${i}${side}`]) || 0}
+                            max={target - 1}
+                            onChange={(v) => set(`${i}${side}`, String(v))}
+                            onDrawing={onDrawing}
+                          />
+                        ) : (
+                          stepper(
+                            `${i}${side}`,
+                            side === "left" ? "Первая часть" : "Вторая часть",
+                            target - 1,
+                          )
+                        )}
+                        {!a.token && (
+                          <View style={s.row}>
+                            {Array.from(
+                              { length: Number(r[`${i}${side}`]) || 0 },
+                              (_, j) => (
+                                <View key={j} style={tokenStyle} />
+                              ),
+                            )}
+                          </View>
+                        )}
+                      </View>
+                    ))
+                  )}
                 </>
               )}
               {a.mode === "ruler" && (

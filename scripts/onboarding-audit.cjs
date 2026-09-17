@@ -112,6 +112,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
               finger: r(q("coach-finger")),
               surface: r(q("coach-demo-surface")),
               example: !!q("coach-example"),
+              offscreenHelp: !!q("coach-offscreen-help"),
+              pane: r(
+                document.querySelector('[data-testid="lesson-scroll-pane"]'),
+              ),
               motion: el
                 .querySelector('[data-testid^="coach-motion-"]')
                 ?.getAttribute("data-testid"),
@@ -120,10 +124,22 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
           const issues = [];
           if (/Не удалось показать|Этот шаг уже выполнен/.test(text))
             issues.push("unavailable target on untouched task");
-          if (!snapshot.hole && !snapshot.example)
-            issues.push("no visible target");
-          if (snapshot.motion && !snapshot.finger)
+          if (!snapshot.hole && !snapshot.example && !snapshot.offscreenHelp)
+            issues.push("no visible target or explicit way to reveal it");
+          if (snapshot.motion && !snapshot.finger && !snapshot.offscreenHelp)
             issues.push("invisible demonstration finger");
+          if (
+            snapshot.hole &&
+            snapshot.pane &&
+            snapshot.hole.y < snapshot.pane.y - 1
+          )
+            issues.push("highlight leaks over fixed header");
+          if (
+            snapshot.finger &&
+            snapshot.pane &&
+            snapshot.finger.y + 3 < snapshot.pane.y - 1
+          )
+            issues.push("finger points behind fixed header");
           if (snapshot.finger && snapshot.card) {
             const f = { x: snapshot.finger.x + 9, y: snapshot.finger.y + 3 },
               c = snapshot.card;
@@ -190,7 +206,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
       report.errors.length === 0 && report.cases.every((c) => !c.issues.length);
   } finally {
     fs.writeFileSync(
-      `docs/onboarding-audit-${viewport.width}.json`,
+      process.env.AUDIT_OUTPUT || `docs/onboarding-audit-${viewport.width}.json`,
       JSON.stringify(report, null, 2) + "\n",
     );
     await browser.close();

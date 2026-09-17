@@ -20,10 +20,13 @@ def build(assets, calc):
    # Retire the extra equation worksheet without renumbering later saved IDs.
    serial[p]+=1
    return
-  parts={4:[2,2],5:[4,1],6:[4,2],7:[4,3],8:[7,1],9:[8,1],10:[5,5]}[n]
-  token,names=('stick','палочек') if p==25 else ('circle','кружков') if p==27 else ('square','квадратика' if n==4 else 'квадратиков')
-  act(p,f'Разложи {n} {names} так: {parts[0]} и {parts[1]}.','composition',[n],images,token=token,fixedParts=parts)
-  act(p,f'Как ещё можно разложить {n} {names}?','composition',[n],token=token,differentFrom=parts)
+  parts={3:[2,1],4:[2,2],5:[4,1],6:[4,2],7:[4,3],8:[7,1],9:[8,1],10:[5,5]}[n]
+  token,names=('stick','палочек') if p==25 else ('circle','кружков') if p==27 else ('square','квадратика' if n in [3,4] else 'квадратиков')
+  colors=['red','green'] if p in [15,25,27] else ['green','red']
+  patterns={3:[[0,0],[0,1],[1,1]],4:[[0,0],[0,1],[1,0],[1,1]],5:[[0,0],[1,0],[0,1],[1,1],[3,1]],6:[[0,0],[1,0],[0,1],[1,1],[3,0],[3,1]],7:[[0,0],[1,0],[0,1],[1,1],[3,0],[4,0],[3,1]],10:[[0,0],[2,0],[1,1],[0,2],[2,2],[4,0],[6,0],[5,1],[4,2],[6,2]]}
+  copied=act(p,f'Разложи {n} {names} так: {parts[0]} и {parts[1]}.','composition',[n],images,token=token,fixedParts=parts,partColors=colors)
+  if n in patterns:copied['activity']['compositionPattern']=patterns[n]
+  act(p,f'Как ещё можно разложить {n} {names}?','composition',[n],token=token,differentFrom=parts,partColors=colors)
  def more(p,n):
   first=f'{n-1} {"палочки" if n-1 in [2,3,4] else "палочек"}'
   prompt=f'Положи {first} и ещё 1 палочку. Сколько стало палочек?'
@@ -42,8 +45,7 @@ def build(assets, calc):
  b=work(11,'Дети на велосипедах',[('Сколько всего детей катается?',3),('Сколько всего колёс у детского велосипеда?',3)],['children_tricycles'])
  b['prompt']='2 мальчика и 1 девочка катаются на велосипедах. Сколько всего детей катается?\n\nУ детского велосипеда спереди 1 колесо, сзади 2. Сколько всего колёс у детского велосипеда?'
  b['sourceText']=b['prompt']
- b=act(11,'Разложи 3 квадратика так','count',[3],['three_squares_2_1'],token='square',slots=[dict(x=.42,y=.25),dict(x=.42,y=.65),dict(x=.62,y=.65)])
- b=act(11,'Как ещё можно разложить 3 квадратика?','composition',[3],token='square');b['activity']['differentFrom']=[2,1]
+ split(11,3,['three_squares_2_1'])
  coins(11,3);pages[11][-1]['prompt']='Из каких монет можно составить 3 копейки? Набери 3 копейки из монет разрезной таблицы.'
  act(11,'Сделай 2 шага вперёд.','sequence',[1,2])
  work(11,'Два набора мячей',[('В первой группе слева',2),('В первой группе справа',1),('Всего в первой группе',3),('Во второй группе слева',1),('Во второй группе справа',2),('Всего во второй группе',3)],['balls_left_2_and_1','balls_right_1_and_2'])
