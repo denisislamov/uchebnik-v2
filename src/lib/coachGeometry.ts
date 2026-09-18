@@ -1,6 +1,102 @@
 import type { Point } from "../content/types.ts";
 import type { CoachRect } from "./gestureCoach.ts";
 
+/** Reserve separate areas for the explanation and the complete gesture, not its moving finger. */
+export function mobileCoachLayout(
+  focus: CoachRect,
+  viewport: CoachRect,
+  cardSize: { width: number; height: number },
+  scroll: { top: number; max: number },
+) {
+  const gap = 12;
+  const bottom = viewport.y + viewport.height;
+  const right = viewport.x + viewport.width;
+  const candidates =
+    cardSize.width < viewport.width * 0.6
+      ? [
+          {
+            card: {
+              x: right - cardSize.width - gap,
+              y: bottom - cardSize.height - gap,
+            },
+            space: {
+              x: viewport.x + gap,
+              y: viewport.y + gap,
+              width: viewport.width - cardSize.width - gap * 3,
+              height: viewport.height - gap * 2,
+            },
+          },
+          {
+            card: { x: viewport.x + gap, y: bottom - cardSize.height - gap },
+            space: {
+              x: viewport.x + cardSize.width + gap * 2,
+              y: viewport.y + gap,
+              width: viewport.width - cardSize.width - gap * 3,
+              height: viewport.height - gap * 2,
+            },
+          },
+        ]
+      : [
+          {
+            card: {
+              x: viewport.x + (viewport.width - cardSize.width) / 2,
+              y: bottom - cardSize.height - gap,
+            },
+            space: {
+              x: viewport.x + gap,
+              y: viewport.y + gap,
+              width: viewport.width - gap * 2,
+              height: viewport.height - cardSize.height - gap * 3,
+            },
+          },
+          {
+            card: {
+              x: viewport.x + (viewport.width - cardSize.width) / 2,
+              y: gap,
+            },
+            space: {
+              x: viewport.x + gap,
+              y: Math.max(viewport.y + gap, cardSize.height + gap * 2),
+              width: viewport.width - gap * 2,
+              height:
+                bottom -
+                Math.max(viewport.y + gap, cardSize.height + gap * 2) -
+                gap,
+            },
+          },
+        ];
+  const layouts = candidates.map(({ card, space }) => {
+    space.height = Math.max(1, space.height);
+    const delta =
+      focus.height > space.height
+        ? focus.y - space.y
+        : focus.y < space.y || focus.y + focus.height > space.y + space.height
+          ? focus.y + focus.height / 2 - (space.y + space.height / 2)
+          : 0;
+    const scrollDelta = Math.max(
+      -scroll.top,
+      Math.min(scroll.max - scroll.top, delta),
+    );
+    const fits =
+      focus.x >= space.x &&
+      focus.x + focus.width <= space.x + space.width &&
+      focus.y - scrollDelta >= space.y - 0.5 &&
+      focus.y + focus.height - scrollDelta <= space.y + space.height + 0.5;
+    return { card, space, scrollDelta, fits };
+  });
+  return layouts.reduce((best, next) =>
+    (next.fits &&
+      (!best.fits ||
+        Math.abs(next.scrollDelta) < Math.abs(best.scrollDelta))) ||
+    (!next.fits &&
+      !best.fits &&
+      next.space.width * next.space.height >
+        best.space.width * best.space.height)
+      ? next
+      : best,
+  );
+}
+
 /** Position only the floating card; the lesson is never moved to make room. */
 export function coachCardPosition(
   focus: CoachRect | null,

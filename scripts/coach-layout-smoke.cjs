@@ -26,11 +26,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         await reveal.click();
         await p.waitForTimeout(250);
       }
-      assert.equal(
-        await p.getByTestId("coach-demo-surface").count(),
-        0,
-        "highlight the original, never a resized copy",
-      );
+      if (p.viewportSize().width >= 1000)
+        assert.equal(
+          await p.getByTestId("coach-demo-surface").count(),
+          0,
+          "desktop retains the original task",
+        );
       const image = await box(),
         hole = await p.getByTestId("coach-highlight").boundingBox(),
         card = await p.getByTestId("coach-card").boundingBox();
@@ -64,14 +65,13 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           hole.y + hole.height >= clipped.bottom - 1,
         `${label}: spotlight not aligned with original ${JSON.stringify({ target, hole, card })}`,
       );
-      if (viewport.width >= 1000)
-        assert.ok(
-          target.x + target.width <= card.x ||
-            target.x >= card.x + card.width ||
-            target.y + target.height <= card.y ||
-            target.y >= card.y + card.height,
-          `${label}: instruction card covers target`,
-        );
+      assert.ok(
+        target.x + target.width <= card.x ||
+          target.x >= card.x + card.width ||
+          target.y + target.height <= card.y ||
+          target.y >= card.y + card.height,
+        `${label}: instruction card covers target`,
+      );
     }
     for (const viewport of [
       { width: 1280, height: 800 },

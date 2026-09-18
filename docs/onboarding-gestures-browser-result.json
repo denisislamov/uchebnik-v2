@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "baseURL": "http://127.0.0.1:8099",
+  "baseURL": "http://127.0.0.1:8097",
   "checks": [
     {
       "name": "chair tutorial touches actual selectable chair polygons",
@@ -69,15 +69,15 @@
       "passed": true,
       "evidence": {
         "geometry": {
-          "x1": 237.5,
-          "y1": 216,
-          "x2": 321.5,
-          "y2": 70.50773216421433,
-          "ghostLength": 168,
-          "transform": "rotate(-150 350.5 230.25)"
+          "x1": 143.94,
+          "y1": 114.68000000000004,
+          "x2": 190,
+          "y2": 34.90173980337753,
+          "ghostLength": 92.12000000000002,
+          "transform": "rotate(-150 186.97 177.79086990168878)"
         },
-        "lineLength": 168,
-        "lineAngle": -59.99999999999999,
+        "lineLength": 92.12000000000002,
+        "lineAngle": -60.00000000000001,
         "ghostAngle": -60,
         "rotationRecovery": "Перед переносом нажми «Повернуть» 3 раза, чтобы палочка совпала с наклоном пунктира. Затем перенеси её, как показано дальше.",
         "demonstrationMutatedAnswers": false

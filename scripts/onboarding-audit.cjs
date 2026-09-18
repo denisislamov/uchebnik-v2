@@ -140,6 +140,17 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
             snapshot.finger.y + 3 < snapshot.pane.y - 1
           )
             issues.push("finger points behind fixed header");
+          if (snapshot.hole && snapshot.card && viewport.width < 1000) {
+            const h = snapshot.hole,
+              c = snapshot.card;
+            if (
+              h.x < c.x + c.width - 1 &&
+              h.x + h.width > c.x + 1 &&
+              h.y < c.y + c.height - 1 &&
+              h.y + h.height > c.y + 1
+            )
+              issues.push("instruction covers highlighted task");
+          }
           if (snapshot.finger && snapshot.card) {
             const f = { x: snapshot.finger.x + 9, y: snapshot.finger.y + 3 },
               c = snapshot.card;
@@ -206,7 +217,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
       report.errors.length === 0 && report.cases.every((c) => !c.issues.length);
   } finally {
     fs.writeFileSync(
-      process.env.AUDIT_OUTPUT || `docs/onboarding-audit-${viewport.width}.json`,
+      process.env.AUDIT_OUTPUT ||
+        `docs/onboarding-audit-${viewport.width}.json`,
       JSON.stringify(report, null, 2) + "\n",
     );
     await browser.close();

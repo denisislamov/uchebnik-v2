@@ -283,7 +283,6 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     await button("Покажи подсказку").click();
     await next();
     await p.getByTestId("coach-motion-drag").waitFor();
-    assert.equal(await p.getByTestId("coach-demo-surface").count(), 0);
     await withinCard();
     for (let i = 0; i < 5; i++) {
       const point = await tip(),
@@ -303,14 +302,22 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     await finish();
     assert.deepEqual(await answers(), {});
     report.checks.push(
-      "short landscape demonstrates on the original board; explicit reveal keeps the current gesture outside the card",
+      "short landscape keeps the complete demonstration visible beside the card",
     );
     await open("p004-block02");
     await button("Покажи, как").click();
     await advanceTo("tap");
-    assert.equal(await p.getByTestId("coach-demo-surface").count(), 0);
+    const preview = p.getByTestId("coach-demo-surface");
+    const answerBox = (await preview.count())
+      ? await preview
+          .locator("text")
+          .filter({ hasText: /^10$/ })
+          .evaluate((e) => {
+            const r = e.previousElementSibling.getBoundingClientRect();
+            return { x: r.x, y: r.y, width: r.width, height: r.height };
+          })
+      : await button("Ответ 10").boundingBox();
     const answerTip = await tip(),
-      answerBox = await button("Ответ 10").boundingBox(),
       answerCard = await p.getByTestId("coach-card").boundingBox();
     assert.ok(
       Math.hypot(

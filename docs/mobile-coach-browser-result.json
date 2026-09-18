@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "p003-block02"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "p004-block05"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "p008-block01"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "p003-block06"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "id": "p003-block02"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "id": "p004-block05"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "id": "p008-block01"
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "id": "p003-block06"
+    },
+    {
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "id": "p003-block02"
+    },
+    {
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "id": "p004-block05"
+    },
+    {
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "id": "p008-block01"
+    },
+    {
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "id": "p003-block06"
+    }
+  ]
+}

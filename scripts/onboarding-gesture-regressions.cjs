@@ -267,9 +267,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const geometry = await p
           .getByTestId("coach-motion-drag")
           .evaluate((root) => {
-            const line = document.querySelector(
-              '[data-testid="stick-board"] line',
-            );
+            const line =
+              root.querySelector('[data-testid="coach-demo-surface"] line') ??
+              document.querySelector('[data-testid="stick-board"] line');
             const ghost = [
               ...root.querySelectorAll('rect[fill="#bb8052"]'),
             ].find((e) => e.hasAttribute("transform"));
@@ -306,7 +306,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           Math.abs(((((ghostAngle - angle) % 180) + 270) % 180) - 90) < 0.5,
           "same edge angle",
         );
-        const surface = await p.getByTestId("stick-board").boundingBox();
+        const preview = p.getByTestId("coach-demo-surface");
+        const surface = await (
+          (await preview.count()) ? preview : p.getByTestId("stick-board")
+        ).boundingBox();
         near(
           await point(),
           {

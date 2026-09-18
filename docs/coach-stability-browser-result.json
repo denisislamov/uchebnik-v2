@@ -26,7 +26,7 @@
           "h": 318.859375
         }
       },
-      "frames": 83,
+      "frames": 82,
       "gaps": 0,
       "movement": 0,
       "closed": {
@@ -64,7 +64,7 @@
           "h": 318.859375
         }
       },
-      "frames": 83,
+      "frames": 81,
       "gaps": 0,
       "movement": 0,
       "closed": {
@@ -76,93 +76,17 @@
         "w": 650,
         "h": 318.859375
       }
-    },
-    {
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "opened": {
-        "before": {
-          "scroll": 0,
-          "height": 1011,
-          "width": 375,
-          "x": 35,
-          "y": 684,
-          "w": 305,
-          "h": 149.609375
-        },
-        "after": {
-          "scroll": 0,
-          "height": 1011,
-          "width": 375,
-          "x": 35,
-          "y": 684,
-          "w": 305,
-          "h": 149.609375
-        }
-      },
-      "frames": 83,
-      "gaps": 0,
-      "movement": 0,
-      "closed": {
-        "scroll": 0,
-        "height": 1011,
-        "width": 375,
-        "x": 35,
-        "y": 684,
-        "w": 305,
-        "h": 149.609375
-      }
-    },
-    {
-      "viewport": {
-        "width": 800,
-        "height": 375
-      },
-      "opened": {
-        "before": {
-          "scroll": 335,
-          "height": 1228,
-          "width": 785,
-          "x": 71,
-          "y": 389,
-          "w": 643,
-          "h": 315.421875
-        },
-        "after": {
-          "scroll": 335,
-          "height": 1228,
-          "width": 785,
-          "x": 71,
-          "y": 389,
-          "w": 643,
-          "h": 315.421875
-        }
-      },
-      "frames": 82,
-      "gaps": 0,
-      "movement": 0,
-      "closed": {
-        "scroll": 335,
-        "height": 1228,
-        "width": 785,
-        "x": 71,
-        "y": 389,
-        "w": 643,
-        "h": 315.421875
-      }
     }
   ],
   "errors": [],
   "explicitReveal": {
     "before": {
-      "top": 1023,
-      "height": 1784
+      "top": 1014,
+      "height": 1731
     },
     "after": {
-      "top": 487,
-      "height": 1784
+      "top": 527,
+      "height": 1731
     },
     "answersUnchanged": true
   }

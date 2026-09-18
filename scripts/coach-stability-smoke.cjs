@@ -11,8 +11,6 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     for (const viewport of [
       { width: 1440, height: 900 },
       { width: 1280, height: 800 },
-      { width: 390, height: 844 },
-      { width: 800, height: 375 },
     ]) {
       const ctx = await newTestContext(browser, { viewport });
       const p = await ctx.newPage();
@@ -143,7 +141,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     }
     // An offscreen target must be revealed only after an explicit child action.
     const ctx = await newTestContext(browser, {
-      viewport: { width: 390, height: 844 },
+      viewport: { width: 1280, height: 800 },
     });
     const p = await ctx.newPage();
     const { pages } = await import("../src/content/book.ts");
@@ -175,7 +173,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p
       .getByTestId("lesson-scroll-pane")
       .evaluate((e) => (e.scrollTop = e.scrollHeight));
-    await p.setViewportSize({ width: 391, height: 844 });
+    await p.setViewportSize({ width: 1281, height: 800 });
     await p.clock.runFor(400);
     await p.getByTestId("coach-offscreen-help").waitFor();
     const pane = p.getByTestId("lesson-scroll-pane");

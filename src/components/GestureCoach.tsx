@@ -23,6 +23,7 @@ import { Button } from "./Controls";
 import { CoachSurface, type DemoSurface } from "./CoachSurface";
 import {
   coachCardPosition,
+  mobileCoachLayout,
   shapeDemoPoint,
   shapeDemoEdge,
 } from "../lib/coachGeometry";
@@ -176,6 +177,9 @@ export function GestureCoachProvider({
     [motionPoints, setMotionPoints] = useState<Point[]>([]),
     [cardHeight, setCardHeight] = useState(240),
     [missing, setMissing] = useState(false);
+  const [mobileLayout, setMobileLayout] = useState<ReturnType<
+    typeof mobileCoachLayout
+  > | null>(null);
   const [elapsed, setElapsed] = useState(0),
     [paused, setPaused] = useState(false),
     [replayNonce, setReplayNonce] = useState(0),
@@ -193,10 +197,20 @@ export function GestureCoachProvider({
   const current = active?.targets[resolvedStep],
     motion = current?.motion;
   const landscape = height < 600 && width > height;
+  const mobileWeb = Platform.OS === "web" && width < 1000;
+  const sideCard = landscape && (!mobileWeb || !!current?.surface || !!motion);
   const cardWidth = Math.min(
-    landscape ? width * 0.46 : width - 24,
-    Platform.OS === "web" && width >= 1000 ? 320 : 480,
+    sideCard ? width * 0.46 : width - 24,
+    mobileWeb && landscape && !sideCard
+      ? width - 24
+      : Platform.OS === "web" && width >= 1000
+        ? 320
+        : 480,
   );
+  const mobileCardLimit = sideCard
+    ? height - 24
+    : Math.min(320, Math.round(height * 0.44));
+  const mobileCardHeight = Math.min(cardHeight, mobileCardLimit);
   const cardLimit = landscape ? height : height - cardHeight - 30;
   // A visible fingertip does not imply that the pictured object is fully visible.
   // Fit the entire image, including steps with no animated gesture.
@@ -208,19 +222,32 @@ export function GestureCoachProvider({
       targetRect.x + targetRect.width > width - 12 ||
       targetRect.y + targetRect.height > cardLimit - 8);
   const needsSurface =
-    Platform.OS !== "web" &&
     !!current?.surface &&
-    (landscape ||
-      imageClipped ||
-      motionPoints.some(
-        (p) => p.y < 75 || p.y > cardLimit - 40 || p.x < 10 || p.x > width - 40,
-      ));
+    (mobileWeb
+      ? !!mobileLayout && !mobileLayout.fits
+      : Platform.OS !== "web" &&
+        (landscape ||
+          imageClipped ||
+          motionPoints.some(
+            (p) =>
+              p.y < 75 || p.y > cardLimit - 40 || p.x < 10 || p.x > width - 40,
+          )));
   let surfaceBox: CoachRect = {
     x: 12,
     y: landscape ? 38 : 84,
     width: landscape ? width - cardWidth - 36 : width - 24,
     height: Math.max(90, landscape ? height - 66 : cardLimit - 100),
   };
+  if (mobileWeb && mobileLayout) {
+    surfaceBox = { ...mobileLayout.space };
+    // Leave room for the spotlight border and the fingertip below the drawing.
+    surfaceBox = {
+      x: surfaceBox.x + 8,
+      y: surfaceBox.y + 8,
+      width: Math.max(1, surfaceBox.width - 16),
+      height: Math.max(1, surfaceBox.height - 48),
+    };
+  }
   if (
     current?.surface?.kind === "image" ||
     current?.surface?.kind === "trace"
@@ -388,7 +415,8 @@ export function GestureCoachProvider({
           }
           return;
         }
-        // Browser onboarding is an overlay: never scroll or reflow the lesson.
+        // Desktop keeps its floating overlay. Phones reveal the target in a
+        // reserved area before starting the demonstration.
         if (Platform.OS !== "web" && revealTarget) {
           let timeout: ReturnType<typeof setTimeout> | undefined;
           await Promise.race([
@@ -399,15 +427,16 @@ export function GestureCoachProvider({
           ]);
           clearTimeout(timeout);
         }
-        const box = await measure(target);
+        const measuredBox = await measure(target);
         if (cancelled) return;
-        if (!box) {
+        if (!measuredBox) {
           interrupted.current = true;
           setMissing(true);
           setResolvedStep(step);
           setMeasuring(false);
           return;
         }
+        let box = measuredBox;
         const movement = active.targets[step].motion;
         let points = (movement?.points ?? []).map((p) => ({
           x: box.x + p.x * box.width,
@@ -447,6 +476,63 @@ export function GestureCoachProvider({
             return;
           }
         }
+        if (mobileWeb) {
+          const pane = webScrollPane(target);
+          const bounds = pane?.getBoundingClientRect();
+          const viewport = bounds
+            ? {
+                x: Math.max(0, bounds.x),
+                y: Math.max(0, bounds.y),
+                width: Math.min(width, bounds.width),
+                height: Math.min(height, bounds.bottom) - Math.max(0, bounds.y),
+              }
+            : { x: 0, y: 0, width, height };
+          // Protect the whole target and every point of a drag, including the
+          // source token outside the destination board.
+          // A composite board may span the entire page. With no separate
+          // preview, reserve its actual source-to-destination gesture instead.
+          const gestureOnly =
+            points.length > 0 && !active.targets[step].surface;
+          const x = Math.min(
+            gestureOnly ? Infinity : box.x,
+            ...points.map((p) => p.x - 12),
+          );
+          const y = Math.min(
+            gestureOnly ? Infinity : box.y,
+            ...points.map((p) => p.y - 12),
+          );
+          const focus = {
+            x,
+            y,
+            width:
+              Math.max(
+                gestureOnly ? -Infinity : box.x + box.width,
+                ...points.map((p) => p.x + 26),
+              ) - x,
+            height:
+              Math.max(
+                gestureOnly ? -Infinity : box.y + box.height,
+                ...points.map((p) => p.y + 42),
+              ) - y,
+          };
+          const layout = mobileCoachLayout(
+            focus,
+            viewport,
+            { width: cardWidth, height: mobileCardHeight },
+            {
+              top: pane?.scrollTop ?? 0,
+              max: pane ? pane.scrollHeight - pane.clientHeight : 0,
+            },
+          );
+          if (pane && (layout.fits || !active.targets[step].surface)) {
+            const before = pane.scrollTop;
+            pane.scrollTop += layout.scrollDelta;
+            const delta = pane.scrollTop - before;
+            box = { ...box, y: box.y - delta };
+            points = points.map((p) => ({ ...p, y: p.y - delta }));
+          }
+          setMobileLayout(layout);
+        } else setMobileLayout(null);
         setMotionPoints(points);
         setRect(box);
         if (Platform.OS === "web") {
@@ -481,6 +567,9 @@ export function GestureCoachProvider({
     revealTarget,
     replayNonce,
     positionRevision,
+    mobileWeb,
+    cardWidth,
+    mobileCardHeight,
   ]);
   useEffect(() => {
     if (
@@ -519,14 +608,18 @@ export function GestureCoachProvider({
       };
   }
   const web = Platform.OS === "web";
-  const floatingCard = coachCardPosition(
-    motion && frame && !motion.regions
-      ? { x: frame.point.x - 24, y: frame.point.y - 24, width: 48, height: 48 }
-      : highlight,
-    { width, height },
-    { width: cardWidth, height: cardHeight },
-  );
-  const viewport = targetViewport ?? { x: 0, y: 0, width, height };
+  const floatingCard =
+    mobileWeb && mobileLayout
+      ? mobileLayout.card
+      : coachCardPosition(
+          baseRect,
+          { width, height },
+          { width: cardWidth, height: cardHeight },
+        );
+  const viewport =
+    mobileWeb && mobileLayout
+      ? mobileLayout.space
+      : (targetViewport ?? { x: 0, y: 0, width, height });
   const rawHole = highlight
     ? coachSpotlight(
         highlight,
@@ -563,10 +656,12 @@ export function GestureCoachProvider({
     web &&
     !!targetRect &&
     !missing &&
+    !needsSurface &&
     (!hole ||
       (motion
         ? !!finger && !fingerVisible
-        : !!highlight &&
+        : !mobileWeb &&
+          !!highlight &&
           (highlight.y < viewport.y ||
             highlight.y + highlight.height > viewport.y + viewport.height)));
   function close(completed: boolean) {
@@ -817,44 +912,50 @@ export function GestureCoachProvider({
               alignSelf: web || landscape ? undefined : "center",
               right: !web && landscape ? 10 : undefined,
               width: cardWidth,
-              maxHeight:
-                !landscape && current?.surface
+              maxHeight: mobileWeb
+                ? mobileCardLimit
+                : !landscape && current?.surface
                   ? Math.max(180, height - 230)
                   : height - 24,
               borderRadius: 18,
               backgroundColor: c.paper,
             }}
           >
+            <View
+              style={{
+                paddingHorizontal: 14,
+                paddingTop: 6,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: f.bold, color: c.green }}>
+                Смотри, как · {resolvedStep + 1}/{active?.targets.length}
+              </Text>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Закрыть подсказку"
+                onPress={() => close(false)}
+                style={{
+                  width: 44,
+                  height: 44,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text style={{ fontSize: 24 }}>×</Text>
+              </Pressable>
+            </View>
             <ScrollView
+              key={`${active?.id}:${resolvedStep}`}
+              style={{ flexShrink: 1 }}
               contentContainerStyle={{
                 padding: height < 500 ? 10 : 14,
+                paddingTop: 4,
                 gap: 8,
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontFamily: f.bold, color: c.green }}>
-                  Смотри, как · {resolvedStep + 1}/{active?.targets.length}
-                </Text>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Закрыть подсказку"
-                  onPress={() => close(false)}
-                  style={{
-                    width: 44,
-                    height: 36,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ fontSize: 24 }}>×</Text>
-                </Pressable>
-              </View>
               <Text
                 testID="coach-instruction"
                 accessibilityLiveRegion="polite"
@@ -972,6 +1073,8 @@ export function GestureCoachProvider({
                   </Pressable>
                 )}
               </View>
+            </ScrollView>
+            <View style={{ padding: 10, paddingTop: 4 }}>
               <Button
                 disabled={measuring || (!done && !missing)}
                 onPress={() => {
@@ -986,7 +1089,7 @@ export function GestureCoachProvider({
                   ? "Дальше"
                   : "Попробую сам"}
               </Button>
-            </ScrollView>
+            </View>
           </View>
         </View>
       </Modal>
