@@ -4,6 +4,8 @@
 
 ## Запуск
 
+Веб-версия: [uchebnik-v2.onrender.com](https://uchebnik-v2.onrender.com). Параметры публикации и обновления: [Render](docs/DEPLOY_RENDER.md).
+
 Node.js 22.13 или новее:
 
 ```sh
