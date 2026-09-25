@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -129,6 +129,17 @@ function Main() {
     [search, setSearch] = useState("");
   const scroll = useRef<ScrollView>(null),
     saveRevision = useRef(0);
+  // Coaching may scroll the lesson to its target; the child returns to where they were.
+  const lastScroll = useRef(0),
+    coachScroll = useRef<number | null>(null);
+  const onCoachActiveChange = useCallback((active: boolean) => {
+    if (active) coachScroll.current = lastScroll.current;
+    else if (coachScroll.current !== null) {
+      // Reported after the coaching modal has fully closed (see GestureCoach).
+      scroll.current?.scrollTo({ y: coachScroll.current, animated: false });
+      coachScroll.current = null;
+    }
+  }, []);
   const [readAttempt, setReadAttempt] = useState(0);
   const { width: windowWidth } = useWindowDimensions();
   const comparison = !!DebugSourcePanel && !home;
@@ -175,6 +186,7 @@ function Main() {
   }, [progress, ready]);
   useEffect(() => {
     scroll.current?.scrollTo({ y: 0, animated: false });
+    lastScroll.current = 0;
     setDrawing(false);
     setSpeaking(false);
     setSpeechError("");
@@ -334,6 +346,10 @@ function Main() {
           ]}
           ref={scroll}
           scrollEnabled={!drawing}
+          scrollEventThrottle={16}
+          onScroll={(e) => {
+            lastScroll.current = e.nativeEvent.contentOffset.y;
+          }}
           contentContainerStyle={s.scroll}
         >
           <NotebookPaper margin={!compact} />
@@ -690,6 +706,7 @@ function Main() {
                     answer={answer}
                     onAnswer={updateAnswer}
                     onDrawing={setDrawing}
+                    onCoachActiveChange={onCoachActiveChange}
                     revealCoachTarget={(target) =>
                       new Promise<void>((resolve) => {
                         const container = scroll.current?.getInnerViewNode();

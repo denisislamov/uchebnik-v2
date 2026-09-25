@@ -69,15 +69,25 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p
       .getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ })
       .click();
-    await button("Покажи, как").waitFor();
+    await button("Как это сделать?").waitFor();
   }
-  async function replayDrag(scope = p) {
-    await scope
-      .getByRole("button", { name: "Покажи подсказку", exact: true })
-      .click();
+  // One tutorial per task: the gesture demonstration follows the explanation steps.
+  async function advanceUntil(check, limit = 30) {
     await p.getByTestId("gesture-coach").waitFor();
-    await button("Дальше").click();
-    await p.getByTestId("coach-motion-drag").waitFor();
+    for (let i = 0; i < limit; i++) {
+      await p.waitForTimeout(300);
+      if (await check()) return;
+      const heading = await p.getByText(/^Смотри, как ·/).innerText();
+      if (/(\d+)\/\1$/.test(heading))
+        throw Error("tutorial ended before the expected step");
+      await button("Дальше").click();
+      await p.getByText(heading, { exact: true }).waitFor({ state: "detached" });
+    }
+    throw Error("expected step not reached");
+  }
+  async function replayDrag() {
+    await button("Как это сделать?").click();
+    await advanceUntil(() => p.getByTestId("coach-motion-drag").count());
     await reveal();
     await button("Показать ещё раз").waitFor();
     await reveal();
@@ -110,9 +120,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const block = pages
           .flatMap((p) => p.blocks)
           .find((b) => b.id === "p008-block01");
-        await button("Покажи подсказку").click();
-        await button("Дальше").click();
-        await p.getByTestId("coach-motion-count").waitFor();
+        await button("Как это сделать?").click();
+        await advanceUntil(() => p.getByTestId("coach-motion-count").count());
         await reveal();
         const touches = [];
         for (let i = 0; i < 2; i++) {
@@ -180,7 +189,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           const board = p.getByTestId("composition-board");
           await board.getByTestId("composition-token-0-0").waitFor();
           const before = await answers();
-          await replayDrag(board);
+          await replayDrag();
           const box = await board
             .getByTestId("composition-field")
             .boundingBox();
@@ -321,8 +330,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         await button("Закрыть подсказку").click();
         assert.deepEqual(await answers(), before);
         await button("Повернуть палочку 1").click();
-        await button("Покажи подсказку").click();
-        await p.getByTestId("coach-instruction").waitFor();
+        await button("Как это сделать?").click();
+        await advanceUntil(async () =>
+          /Повернуть.*3 раза/.test(
+            await p.getByTestId("coach-instruction").innerText(),
+          ),
+        );
         const instruction = await p
           .getByTestId("coach-instruction")
           .innerText();
@@ -352,16 +365,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const board = p.getByTestId("composition-board");
         await board.getByTestId("composition-token-0-1").waitFor();
         const before = await answers();
-        await board
-          .getByRole("button", { name: "Покажи подсказку", exact: true })
-          .click();
-        await p.getByTestId("coach-instruction").waitFor();
-        assert.match(
-          await p.getByTestId("coach-instruction").innerText(),
-          /Пересчитай каждый цвет/,
+        await button("Как это сделать?").click();
+        await advanceUntil(async () =>
+          /Пересчитай каждый цвет/.test(
+            await p.getByTestId("coach-instruction").innerText(),
+          ),
         );
         assert.equal(await p.getByTestId("coach-motion-drag").count(), 0);
-        await button("Попробую сам").click();
+        await button("Закрыть подсказку").click();
         assert.deepEqual(await answers(), before);
         return {
           completeField: true,

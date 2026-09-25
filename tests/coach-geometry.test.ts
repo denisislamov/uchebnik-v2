@@ -120,5 +120,30 @@ test("a long task reveals its beginning instead of an arbitrary middle", () => {
     { top: 0, max: 2200 },
   );
   assert.equal(1000 - layout.scrollDelta, layout.space.y);
-  assert.ok(layout.space.height > 480, "use the larger unobstructed area");
+  assert.ok(layout.space.height >= 400, "use a full unobstructed area");
+  assert.ok(
+    layout.card.y >= 83 && layout.space.y >= 83,
+    "neither the card nor the demonstration sits over the fixed header",
+  );
+});
+
+test("the top placement starts below the fixed header instead of covering it", () => {
+  const layout = mobileCoachLayout(
+    { x: 35, y: 600, width: 305, height: 200 },
+    { x: 0, y: 83, width: 390, height: 761 },
+    { width: 366, height: 320 },
+    { top: 0, max: 0 },
+  );
+  assert.ok(layout.card.y >= 83 + 12, JSON.stringify(layout.card));
+  assert.ok(layout.space.y >= layout.card.y + 320);
+});
+
+test("the floating desktop card stays inside the lesson pane below a fixed header", () => {
+  const p = coachCardPosition(
+    { x: 300, y: 400, width: 600, height: 300 },
+    { x: 0, y: 83, width: 1280, height: 717 },
+    { width: 360, height: 240 },
+  );
+  assert.ok(p.y >= 83 + 12, JSON.stringify(p));
+  assert.ok(p.y + 240 <= 800);
 });

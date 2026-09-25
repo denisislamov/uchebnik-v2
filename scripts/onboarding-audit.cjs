@@ -23,7 +23,6 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
   try {
     const context = await newTestContext(browser, {
       viewport,
-      freshTutorials: true,
     });
     let p = await context.newPage();
     p.setDefaultTimeout(7000);
@@ -80,6 +79,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
           .getByRole("button", {
             name: /^(Продолжить занятие|Начать заниматься)/,
           })
+          .click();
+        await p
+          .getByRole("button", { name: "Как это сделать?", exact: true })
           .click();
         await p.getByTestId("gesture-coach").waitFor();
         const initialAnswers = await p.evaluate(

@@ -1,4 +1,4 @@
-import { CoachButton, useGestureCoach } from "./GestureCoach";
+import { useGestureCoach } from "./GestureCoach";
 import React, { useRef, useState } from "react";
 import { View, Text, Platform } from "react-native";
 import { Button } from "./Controls";
@@ -20,7 +20,7 @@ export function DigitCards({
   const sourceRef = useRef<View>(null),
     fieldRef = useRef<View>(null);
   const nextCard = nextDigitCard(value, expected);
-  const showCoach = useGestureCoach(
+  useGestureCoach(
     "cards",
     nextCard
       ? [
@@ -151,7 +151,6 @@ export function DigitCards({
         };
   return (
     <View style={{ gap: 12 }}>
-      <CoachButton onPress={showCoach} />
       <Text style={{ fontFamily: f.bold, color: c.ink }}>
         Возьми карточки с цифрами и перенеси в рамки. Слева — десятки, справа —
         единицы.

@@ -1,4 +1,4 @@
-import { CoachButton, useGestureCoach } from "./GestureCoach";
+import { useGestureCoach } from "./GestureCoach";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, Platform, ScrollView } from "react-native";
 import type { Point } from "../content/types";
@@ -43,7 +43,7 @@ export function CounterBoard({
         ? "квадратик"
         : "кружок");
   const full = slots ? !nextSlot : value >= max;
-  const showCoach = useGestureCoach(
+  useGestureCoach(
     "place",
     full
       ? [
@@ -383,7 +383,6 @@ export function CounterBoard({
   );
   return (
     <View testID="counter-board" style={{ gap: 10 }}>
-      <CoachButton onPress={showCoach} />
       <Text style={{ fontFamily: f.bold, color: c.ink, fontSize: 16 }}>
         Возьми{" "}
         {objectLabel ??

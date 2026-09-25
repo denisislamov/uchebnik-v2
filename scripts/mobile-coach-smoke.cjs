@@ -59,7 +59,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           })
           .click();
         await p
-          .getByRole("button", { name: "Покажи, как", exact: true })
+          .getByRole("button", { name: "Как это сделать?", exact: true })
           .click();
         for (let step = 0; step < 12; step++) {
           const modal = p.getByTestId("gesture-coach");

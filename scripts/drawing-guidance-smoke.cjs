@@ -16,11 +16,11 @@ const report = {
 };
 
 function sameBounds(before, during, description) {
+  // The pad must not jump; sub-pixel rounding of the pane scroll (≤ 1 px) is not a jump.
   for (const key of ["x", "y", "width", "height", "scrollTop", "scrollClient"])
-    assert.equal(
-      during[key],
-      before[key],
-      `${description}: ${key} must stay fixed`,
+    assert.ok(
+      Math.abs(during[key] - before[key]) <= 1,
+      `${description}: ${key} must stay fixed (${before[key]} → ${during[key]})`,
     );
 }
 

@@ -15,7 +15,6 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     const ctx = await newTestContext(browser, {
       viewport: { width: 390, height: 844 },
       hasTouch: true,
-      freshTutorials: true,
     });
     const p = await ctx.newPage();
     p.setDefaultTimeout(18000);
@@ -56,7 +55,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
         })
         .click();
       await p
-        .getByRole("button", { name: "Покажи, как", exact: true })
+        .getByRole("button", { name: "Как это сделать?", exact: true })
         .waitFor({ state: "attached" });
     }
     const answers = () =>
@@ -129,10 +128,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
           r.y >= 0 &&
           r.x + r.width <= p.viewportSize().width + 1 &&
           r.y + r.height <= p.viewportSize().height + 1,
+        `card must stay inside ${JSON.stringify(p.viewportSize())}: ${JSON.stringify(r)}`,
       );
     }
 
     await open("p004-block02");
+    await button("Как это сделать?").click();
     await p.getByTestId("coach-motion-count").waitFor();
     await reveal();
     const positions = [];
@@ -174,14 +175,21 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     assert.deepEqual(await answers(), {});
     await button("Ответ 10").click();
     await p.getByText(/✓ Верно!/).waitFor();
+    await open("p004-block02", await answers());
+    await p.waitForTimeout(550);
+    assert.equal(
+      await p.getByTestId("gesture-coach").count(),
+      0,
+      "a solved task never reopens coaching by itself",
+    );
     await open("p004-block03");
     await p.waitForTimeout(550);
     assert.equal(
       await p.getByTestId("gesture-coach").count(),
       0,
-      "same counting type must not auto repeat",
+      "coaching never opens by itself",
     );
-    await button("Покажи, как").click();
+    await button("Как это сделать?").click();
     await p.getByTestId("coach-motion-count").waitFor();
     await button("Пауза").click();
     const frozen = await tip();
@@ -195,6 +203,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
 
     for (const id of ["p003-block02", "p003-block04", "p007-block08"]) {
       await open(id);
+      await button("Как это сделать?").click();
       await p.getByTestId("gesture-coach").waitFor();
       await withinCard();
       await finish();
@@ -215,6 +224,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     );
 
     await open("p004-block05");
+    await button("Как это сделать?").click();
     await p.getByTestId("gesture-coach").waitFor();
     await advanceTo("drag");
     const start = await tip();
@@ -232,6 +242,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     );
 
     await open("p003-block06");
+    await button("Как это сделать?").click();
     await p.getByTestId("gesture-coach").waitFor();
     await advanceTo("trace");
     const a = await tip();
@@ -265,6 +276,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
       const block = examples.find((b) => b.kind === kind);
       assert.ok(block);
       await open(block.id);
+      await button("Как это сделать?").click();
       await p.getByTestId("gesture-coach").waitFor();
       await withinCard();
       assert.ok(
@@ -280,9 +292,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
     // Explicit replay remains visible in a short landscape window; every drag endpoint stays outside the card.
     await p.setViewportSize({ width: 800, height: 375 });
     await open("p004-block05");
-    await button("Покажи подсказку").click();
-    await next();
-    await p.getByTestId("coach-motion-drag").waitFor();
+    await button("Как это сделать?").click();
+    await advanceTo("drag");
     await withinCard();
     for (let i = 0; i < 5; i++) {
       const point = await tip(),
@@ -305,7 +316,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
       "short landscape keeps the complete demonstration visible beside the card",
     );
     await open("p004-block02");
-    await button("Покажи, как").click();
+    await button("Как это сделать?").click();
     await advanceTo("tap");
     const preview = p.getByTestId("coach-demo-surface");
     const answerBox = (await preview.count())

@@ -37,7 +37,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         })
         .click();
       const replay = p.getByRole("button", {
-        name: "Покажи, как",
+        name: "Как это сделать?",
         exact: true,
       });
       await replay.scrollIntoViewIfNeeded();
@@ -165,7 +165,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p.goto(baseURL);
     await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
     await p.clock.install();
-    await p.getByRole("button", { name: "Покажи, как", exact: true }).click();
+    await p
+      .getByRole("button", { name: "Как это сделать?", exact: true })
+      .click();
     await p.clock.runFor(20000);
     await p.getByRole("button", { name: "Дальше", exact: true }).click();
     await p.clock.runFor(400);
@@ -209,6 +211,79 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     );
     report.explicitReveal = { before, after, answersUnchanged: true };
     await ctx.close();
+    // On a phone the tutorial scrolls the lesson to each target; closing it returns the child to where they were.
+    {
+      const ctx = await newTestContext(browser, {
+        viewport: { width: 390, height: 844 },
+        isMobile: true,
+        hasTouch: true,
+      });
+      const p = await ctx.newPage();
+      p.on("pageerror", (e) => report.errors.push(e.message));
+      // PDF 4, the drag task: a long lesson whose tutorial scrolls between the
+      // instruction at the top and the board further down.
+      await p.goto(baseURL + "/metadata.json");
+      await p.evaluate(
+        ({ KEY, block }) =>
+          localStorage.setItem(
+            KEY,
+            JSON.stringify({
+              version: 1,
+              contentRevision: 3,
+              page: 4,
+              block,
+              answers: {},
+            }),
+          ),
+        { KEY, block },
+      );
+      await p.goto(baseURL);
+      await p
+        .getByRole("button", {
+          name: /^(Продолжить занятие|Начать заниматься)/,
+        })
+        .click();
+      const pane = p.getByTestId("lesson-scroll-pane");
+      // Start at the very bottom: the first step explains the instruction at the top,
+      // so the tutorial has to scroll the lesson away from here.
+      await pane.evaluate((e) => (e.scrollTop = e.scrollHeight));
+      await p.waitForTimeout(150);
+      const before = await pane.evaluate((e) => e.scrollTop);
+      assert.ok(
+        before > 200,
+        `lesson must be scrollable for this check (${before})`,
+      );
+      await p
+        .getByRole("button", { name: "Как это сделать?", exact: true })
+        .click();
+      await p.getByTestId("gesture-coach").waitFor();
+      const seen = [];
+      for (let i = 0; i < 3; i++) {
+        const heading = await p.getByText(/^Смотри, как ·/).innerText();
+        if (/(\d+)\/\1$/.test(heading)) break;
+        await p.getByRole("button", { name: "Дальше", exact: true }).click();
+        await p
+          .getByText(heading, { exact: true })
+          .waitFor({ state: "detached" });
+        await p.waitForTimeout(300);
+        seen.push(await pane.evaluate((e) => e.scrollTop));
+      }
+      await p
+        .getByRole("button", { name: "Закрыть подсказку", exact: true })
+        .click();
+      await p.waitForTimeout(250);
+      const after = await pane.evaluate((e) => e.scrollTop);
+      assert.ok(
+        seen.some((y) => Math.abs(y - before) > 40),
+        `the tutorial itself must have scrolled the lesson (${before}; during: ${seen})`,
+      );
+      assert.ok(
+        Math.abs(after - before) <= 8,
+        `closing coaching must return to the original scroll (${before} → ${after}; during: ${seen})`,
+      );
+      report.scrollRestore = { before, during: seen, after };
+      await ctx.close();
+    }
     assert.deepEqual(report.errors, []);
     report.passed = true;
   } catch (e) {

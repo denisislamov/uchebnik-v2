@@ -118,17 +118,12 @@ export function useGestureCoach(
   );
   return () => context?.replay(id);
 }
-export function CoachButton({
-  onPress,
-  label = "Покажи подсказку",
-}: {
-  onPress: () => void;
-  label?: string;
-}) {
+/** The single way into coaching for a task; every block shows exactly one. */
+export function CoachButton({ onPress }: { onPress: () => void }) {
   return (
     <View style={{ alignSelf: "flex-start" }}>
       <Button secondary small onPress={onPress}>
-        {label}
+        Как это сделать?
       </Button>
     </View>
   );
@@ -166,17 +161,18 @@ export function GestureCoachProvider({
   const { width, height } = useWindowDimensions();
   const entries = useRef(new Map<string, Tutorial>()),
     anchors = useRef(new Map<string, React.RefObject<View | null>>());
-  const [revision, setRevision] = useState(0),
-    [seen, setSeen] = useState<string[] | null>(null),
-    [active, setActive] = useState<Active | null>(null),
+  const [active, setActive] = useState<Active | null>(null),
     [step, setStep] = useState(0);
   const [resolvedStep, setResolvedStep] = useState(0),
     [measuring, setMeasuring] = useState(false);
   const [targetRect, setRect] = useState<CoachRect | null>(null),
     [targetViewport, setTargetViewport] = useState<CoachRect | null>(null),
     [motionPoints, setMotionPoints] = useState<Point[]>([]),
-    [cardHeight, setCardHeight] = useState(240),
+    [cardHeight, setCardHeight] = useState<number | null>(null),
     [missing, setMissing] = useState(false);
+  // Until onLayout reports the card, layout math uses an estimate and the card stays hidden.
+  const cardReady = cardHeight !== null,
+    cardBox = cardHeight ?? 240;
   const [mobileLayout, setMobileLayout] = useState<ReturnType<
     typeof mobileCoachLayout
   > | null>(null);
@@ -186,12 +182,17 @@ export function GestureCoachProvider({
     [positionRevision, setPositionRevision] = useState(0);
   const measuredPlayback = useRef<string | null>(null);
   const interrupted = useRef(false),
-    showing = useRef(false),
     announced = useRef(false);
   const isActive = !!active;
   useEffect(() => {
-    onActiveChange?.(isActive);
-    return () => onActiveChange?.(false);
+    if (isActive) onActiveChange?.(true);
+    // On web the modal hands focus back to the opening button only after it has
+    // fully closed, which scrolls that button into view; "closed" is reported
+    // from onDismiss there so the lesson can be restored afterwards.
+    else if (Platform.OS !== "web") onActiveChange?.(false);
+    return () => {
+      if (Platform.OS !== "web") onActiveChange?.(false);
+    };
   }, [isActive, onActiveChange]);
   // Keep the previous complete frame until the next target has been measured.
   const current = active?.targets[resolvedStep],
@@ -204,14 +205,14 @@ export function GestureCoachProvider({
     mobileWeb && landscape && !sideCard
       ? width - 24
       : Platform.OS === "web" && width >= 1000
-        ? 320
+        ? 360
         : 480,
   );
   const mobileCardLimit = sideCard
     ? height - 24
     : Math.min(320, Math.round(height * 0.44));
-  const mobileCardHeight = Math.min(cardHeight, mobileCardLimit);
-  const cardLimit = landscape ? height : height - cardHeight - 30;
+  const mobileCardHeight = Math.min(cardBox, mobileCardLimit);
+  const cardLimit = landscape ? height : height - cardBox - 30;
   // A visible fingertip does not imply that the pictured object is fully visible.
   // Fit the entire image, including steps with no animated gesture.
   const imageClipped =
@@ -335,10 +336,8 @@ export function GestureCoachProvider({
   const done = !motion || !!frame?.done;
   const register = useCallback((id: string, tutorial: Tutorial) => {
     entries.current.set(id, tutorial);
-    setRevision((v) => v + 1);
     return () => {
       entries.current.delete(id);
-      setRevision((v) => v + 1);
     };
   }, []);
   const anchor = useCallback(
@@ -353,29 +352,16 @@ export function GestureCoachProvider({
   const resolve = (target: Anchor) =>
     target.ref?.current ??
     (target.anchor ? anchors.current.get(target.anchor)?.current : null);
-  useEffect(() => {
-    let cancelled = false;
-    saveQueue
-      .catch(() => {})
-      .then(() => AsyncStorage.getItem(COACH_STORAGE_KEY))
-      .then((raw) => {
-        if (!cancelled) setSeen(readSeenCoaches(raw));
-      })
-      .catch(() => {
-        if (!cancelled) setSeen([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Coaching opens only from its button: a child who already knows the gesture
+  // is never interrupted, and a solved task is never re-explained.
   const replay = useCallback((id: string) => {
     const tutorial = entries.current.get(id);
     if (!tutorial) return;
     const gestures = tutorial.includeGestures
       ? [...entries.current].filter(([, t]) => !t.primary).map(([, t]) => t)
       : [];
-    showing.current = true;
     interrupted.current = false;
+    setCardHeight(null);
     setStep(0);
     setResolvedStep(0);
     setMeasuring(true);
@@ -389,14 +375,6 @@ export function GestureCoachProvider({
       families: [tutorial.family, ...gestures.map((t) => t.family)],
     });
   }, []);
-  useEffect(() => {
-    if (seen === null || active || showing.current) return;
-    const candidates = [...entries.current].sort(
-      (a, b) => Number(!!b[1].primary) - Number(!!a[1].primary),
-    );
-    const next = candidates.find(([, t]) => !seen.includes(t.family));
-    if (next) replay(next[0]);
-  }, [revision, seen, active, replay]);
   useEffect(() => {
     if (!active) return;
     let cancelled = false;
@@ -613,8 +591,8 @@ export function GestureCoachProvider({
       ? mobileLayout.card
       : coachCardPosition(
           baseRect,
-          { width, height },
-          { width: cardWidth, height: cardHeight },
+          targetViewport ?? { x: 0, y: 0, width, height },
+          { width: cardWidth, height: cardBox },
         );
   const viewport =
     mobileWeb && mobileLayout
@@ -625,19 +603,19 @@ export function GestureCoachProvider({
         highlight,
         !web && landscape ? width - cardWidth - 16 : width,
         height,
-        web || landscape ? 12 : cardHeight + 30,
+        web || landscape ? 12 : cardBox + 30,
       )
     : null;
   const hole = web ? clipCoachRect(rawHole, viewport) : rawHole;
   const finger = frame?.point;
-  const cardTop = web || landscape ? height : height - cardHeight - 12;
+  const cardTop = web || landscape ? height : height - cardBox - 12;
   const fingerUnderCard =
     web &&
     !!finger &&
     finger.x >= floatingCard.x &&
     finger.x <= floatingCard.x + cardWidth &&
     finger.y >= floatingCard.y &&
-    finger.y <= floatingCard.y + cardHeight;
+    finger.y <= floatingCard.y + cardBox;
   const fingerVisible =
     !!finger &&
     finger.x >= (web ? viewport.x : 0) &&
@@ -667,10 +645,8 @@ export function GestureCoachProvider({
   function close(completed: boolean) {
     if (!active) return;
     void Speech.stop();
-    setSeen((old) => [...new Set([...(old ?? []), ...active.families])]);
     if (completed && !interrupted.current)
       void remember(active.families).catch(() => {});
-    showing.current = false;
     setActive(null);
     setRect(null);
   }
@@ -686,6 +662,7 @@ export function GestureCoachProvider({
         statusBarTranslucent
         navigationBarTranslucent
         onRequestClose={() => close(false)}
+        onDismiss={() => onActiveChange?.(false)}
       >
         <View
           testID="gesture-coach"
@@ -906,9 +883,11 @@ export function GestureCoachProvider({
             onLayout={(e) => setCardHeight(e.nativeEvent.layout.height)}
             style={{
               position: "absolute",
-              bottom: web ? undefined : 12,
-              top: web ? floatingCard.y : undefined,
+              // The first frame has no measured height: anchor to the bottom, invisible, until measured.
+              bottom: web && cardReady ? undefined : 12,
+              top: web && cardReady ? floatingCard.y : undefined,
               left: web ? floatingCard.x : undefined,
+              opacity: cardReady ? 1 : 0,
               alignSelf: web || landscape ? undefined : "center",
               right: !web && landscape ? 10 : undefined,
               width: cardWidth,
@@ -963,8 +942,8 @@ export function GestureCoachProvider({
                 accessibilityLiveRegion="polite"
                 style={{
                   fontFamily: f.bold,
-                  fontSize: 17,
-                  lineHeight: 23,
+                  fontSize: 18,
+                  lineHeight: 25,
                   color: c.ink,
                 }}
               >

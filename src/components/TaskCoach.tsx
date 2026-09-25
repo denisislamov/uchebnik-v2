@@ -99,6 +99,9 @@ export function useTaskCoach(
     targets = targets.filter((s) => s.ref === refs.instruction).slice(0, 1);
   if (!targets.length)
     targets = [{ ref: refs.instruction, text: block.prompt }];
+  // The editorial hint used to hide behind a separate link; now it is part of the same explanation.
+  if (block.hint && !targets.some((t) => t.text === block.hint))
+    targets = [...targets, { ref: refs.instruction, text: block.hint }];
   return useGestureCoach(`task:${plan.family}`, targets, {
     primary: true,
     includeGestures: true,

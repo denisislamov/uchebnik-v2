@@ -1,4 +1,4 @@
-import { CoachButton, useGestureCoach, useCoachAnchor } from "./GestureCoach";
+import { useGestureCoach, useCoachAnchor } from "./GestureCoach";
 import { hotspotTouchPoint, pickTarget } from "../lib/hitTesting";
 import React, { useState, useRef } from "react";
 import { View, Image, Pressable, Text } from "react-native";
@@ -25,7 +25,7 @@ function Picture({
   useCoachAnchor(`image:${id}`, frame);
   const relevant = targets.filter((t) => expected.includes(t.id));
   const region = (t: Hotspot) => ({ x: t.x, y: t.y, width: t.w, height: t.h });
-  const showCoach = useGestureCoach("picture", [
+  useGestureCoach("picture", [
     {
       ref: frame,
       surface: { kind: "image", imageId: id },
@@ -75,7 +75,6 @@ function Picture({
   }
   return (
     <View style={{ gap: 12, width: "100%" }}>
-      <CoachButton onPress={showCoach} />
       <View
         ref={frame}
         style={{

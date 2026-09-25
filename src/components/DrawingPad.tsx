@@ -1,4 +1,4 @@
-import { CoachButton, useGestureCoach } from "./GestureCoach";
+import { useGestureCoach } from "./GestureCoach";
 import React, { useRef, useState } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
@@ -40,7 +40,7 @@ export function DrawingPad({
     color = chosenColor ?? target?.color ?? "#111111";
   const closed = target ? isClosedTrace(target, { columns, rows }) : false;
   const fieldRef = useRef<View>(null);
-  const showCoach = useGestureCoach(target?.dot ? "dot" : "trace", [
+  useGestureCoach(target?.dot ? "dot" : "trace", [
     {
       ref: fieldRef,
       surface: trace
@@ -116,7 +116,6 @@ export function DrawingPad({
     : strokes;
   return (
     <View style={{ gap: 12 }}>
-      <CoachButton onPress={showCoach} />
       {progress && strokes.length > progress.accepted.length && (
         <Text
           accessibilityRole="alert"

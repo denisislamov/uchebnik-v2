@@ -101,7 +101,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           name: /^(Продолжить занятие|Начать заниматься)/,
         })
         .click();
-      await button("Покажи, как").click();
+      await button("Как это сделать?").click();
       await p.getByTestId("gesture-coach").waitFor();
       await p.waitForTimeout(250);
       await p.screenshot({
@@ -119,9 +119,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         { x: 0, y: 0, w: 1, h: 1 },
         `${viewport.width} second explanation`,
       );
-      await button("Закрыть подсказку").click();
-      await button("Покажи подсказку").click();
-      await p.getByTestId("coach-motion-inspect").waitFor();
+      // The picture gesture is the tail of the same single tutorial.
+      while (!(await p.getByTestId("coach-motion-inspect").count())) {
+        const step = await p.getByText(/^Смотри, как ·/).innerText();
+        await button("Дальше").click();
+        await p.getByText(step, { exact: true }).waitFor({ state: "detached" });
+        await p.getByTestId("gesture-coach").waitFor();
+        await p.waitForTimeout(300);
+      }
       await button("Пауза").click();
       await visible(
         { x: 0.055, y: 0.08, w: 0.39, h: 0.82 },

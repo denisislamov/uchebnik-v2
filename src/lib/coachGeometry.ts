@@ -52,16 +52,13 @@ export function mobileCoachLayout(
           {
             card: {
               x: viewport.x + (viewport.width - cardSize.width) / 2,
-              y: gap,
+              y: viewport.y + gap,
             },
             space: {
               x: viewport.x + gap,
-              y: Math.max(viewport.y + gap, cardSize.height + gap * 2),
+              y: viewport.y + cardSize.height + gap * 2,
               width: viewport.width - gap * 2,
-              height:
-                bottom -
-                Math.max(viewport.y + gap, cardSize.height + gap * 2) -
-                gap,
+              height: bottom - (viewport.y + cardSize.height + gap * 2) - gap,
             },
           },
         ];
@@ -97,17 +94,19 @@ export function mobileCoachLayout(
   );
 }
 
-/** Position only the floating card; the lesson is never moved to make room. */
+/** Position only the floating card inside the lesson pane; the lesson is never moved to make room. */
 export function coachCardPosition(
   focus: CoachRect | null,
-  viewport: { width: number; height: number },
+  viewport: { x?: number; y?: number; width: number; height: number },
   card: { width: number; height: number },
 ): Point {
-  const left = 12,
-    right = Math.max(left, viewport.width - card.width - 12);
-  const top = 12,
-    bottom = Math.max(top, viewport.height - card.height - 12);
-  const center = (viewport.width - card.width) / 2;
+  const vx = viewport.x ?? 0,
+    vy = viewport.y ?? 0;
+  const left = vx + 12,
+    right = Math.max(left, vx + viewport.width - card.width - 12);
+  const top = vy + 12,
+    bottom = Math.max(top, vy + viewport.height - card.height - 12);
+  const center = vx + (viewport.width - card.width) / 2;
   const candidates = [
     { x: center, y: bottom },
     { x: left, y: bottom },

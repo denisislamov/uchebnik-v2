@@ -94,7 +94,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await pad.screenshot({ path: "docs/source-hook-after.png" });
     report.checks.push("continuous source hook drawn and saved with mouse");
     await open("p009-block01");
-    await button("Покажи, как").click();
+    await button("Как это сделать?").click();
     const first = await p.getByTestId("coach-instruction").innerText();
     assert.match(first, /1 птичка.*ещё 1 птичка/);
     assert.doesNotMatch(first, /3 \+ 2|круж/);

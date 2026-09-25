@@ -1,4 +1,4 @@
-import { CoachButton, useGestureCoach } from "./GestureCoach";
+import { useGestureCoach } from "./GestureCoach";
 import React, { useState, useRef } from "react";
 import { View, Text, Platform } from "react-native";
 import Svg, { Line } from "react-native-svg";
@@ -56,7 +56,7 @@ export function ShapeBoard({
   const turns = available[0]
     ? ((180 - ((rotation[available[0].index] ?? 0) % 180)) % 180) / 45
     : 0;
-  const showCoach = useGestureCoach(
+  useGestureCoach(
     "sticks",
     !available.length
       ? [{ ref: boardRef, text: "Все палочки уже на месте. Проверь фигуру." }]
@@ -206,7 +206,6 @@ export function ShapeBoard({
   }
   return (
     <View style={{ gap: 12 }}>
-      <CoachButton onPress={showCoach} />
       <Text style={{ fontFamily: f.regular, color: c.muted }}>
         Возьми палочку внизу и положи на пунктир. Чтобы повернуть палочку, нажми
         «Повернуть».

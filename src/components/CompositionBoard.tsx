@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, Text, View } from "react-native";
 import { Button } from "./Controls";
-import { CoachButton, useGestureCoach } from "./GestureCoach";
+import { useGestureCoach } from "./GestureCoach";
 import {
   compositionCounts,
   compositionLayout,
@@ -60,7 +60,7 @@ export function CompositionBoard({
       : token === "stick"
         ? "палочки"
         : "кружки";
-  const showCoach = useGestureCoach(
+  useGestureCoach(
     "task:gesture.composition-row",
     count === total
       ? [
@@ -245,7 +245,6 @@ export function CompositionBoard({
   }
   return (
     <View testID="composition-board" style={{ gap: 10 }}>
-      <CoachButton onPress={showCoach} />
       <Text style={{ fontFamily: f.bold, color: c.ink }}>
         {pattern
           ? `Переноси ${noun} на одно поле. Разложи их как на рисунке.`

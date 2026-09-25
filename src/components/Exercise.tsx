@@ -8,7 +8,7 @@ import { LocationTask } from "./LocationTask";
 import { CounterBoard } from "./CounterBoard";
 import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { colors as c, fonts as f } from "../theme";
@@ -48,7 +48,6 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
     images: imagesRef,
     answer: answerRef,
   });
-  const [hint, setHint] = useState(false);
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
   const update = (patch: Partial<Answer>) =>
@@ -61,7 +60,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       : answer.value !== undefined && answer.value !== "";
   return (
     <View style={{ gap: 22 }}>
-      <CoachButton label="Покажи, как" onPress={showTaskCoach} />
+      <CoachButton onPress={showTaskCoach} />
       <View ref={instructionRef} collapsable={false}>
         {block.kind !== "read" && (
           <View>
@@ -274,21 +273,6 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           </View>
         )}
       </View>
-      {block.hint && (
-        <View>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityState={{ expanded: hint }}
-            onPress={() => setHint(!hint)}
-            style={{ paddingVertical: 12 }}
-          >
-            <Text style={s.hintLink}>
-              {hint ? "− Скрыть подсказку" : "+ Нужна подсказка?"}
-            </Text>
-          </Pressable>
-          {hint && <Text style={s.hint}>{block.hint}</Text>}
-        </View>
-      )}
     </View>
   );
 }
@@ -418,6 +402,5 @@ const s = StyleSheet.create({
     fontSize: 26,
     lineHeight: 32,
   },
-  hintLink: { fontFamily: f.bold, color: c.muted, fontSize: 15 },
   hint: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.muted },
 });

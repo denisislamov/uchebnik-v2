@@ -51,6 +51,18 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
           .click();
         await p.getByText(b.title, { exact: true }).last().waitFor();
         assert.equal(
+          await p
+            .getByRole("button", { name: "Как это сделать?", exact: true })
+            .count(),
+          1,
+          `${b.id}: exactly one coaching button`,
+        );
+        assert.equal(
+          await p.getByTestId("gesture-coach").count(),
+          0,
+          `${b.id}: coaching never opens by itself`,
+        );
+        assert.equal(
           await p.getByTestId("debug-source-panel").count(),
           0,
           "release must not show source comparison",
