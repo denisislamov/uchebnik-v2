@@ -289,6 +289,25 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
       "first arithmetic, story, number-game, recipe and location types have explanatory steps and preserve empty answers",
     );
 
+    // A worked example with a missing number draws an empty box, never the □ glyph.
+    const withBlank = pages
+      .flatMap((p) => p.blocks)
+      .find((b) =>
+        taskTeaching(b).steps.some((s) => s.example?.expression?.includes("□")),
+      );
+    assert.ok(withBlank, "some task teaches with a blank in its example");
+    await open(withBlank.id);
+    await button("Как это сделать?").click();
+    for (let i = 0; i < 30 && !(await p.getByTestId("blank-box").count()); i++)
+      if (await next()) throw Error("no example with a blank reached");
+    assert.ok(await p.getByTestId("blank-box").count());
+    assert.equal(
+      await p.getByTestId("gesture-coach").evaluate((e) => e.innerText.includes("□")),
+      false,
+    );
+    await p.getByRole("button", { name: "Закрыть подсказку", exact: true }).click();
+    report.checks.push("a blank in a worked example is an empty box");
+
     // Explicit replay remains visible in a short landscape window; every drag endpoint stays outside the card.
     await p.setViewportSize({ width: 800, height: 375 });
     await open("p004-block05");

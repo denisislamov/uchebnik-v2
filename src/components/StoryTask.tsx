@@ -11,6 +11,7 @@ import {
   selectStoryVariant,
 } from "../lib/storyAssessment";
 import { Button } from "./Controls";
+import { BLANK, TextWithBlanks } from "./Blank";
 import { colors as c, fonts as f } from "../theme";
 
 export function StoryTask({
@@ -67,7 +68,7 @@ export function StoryTask({
     if (n !== undefined) return String(n);
     if (typeof value !== "number" && "result" in value)
       return "ответ первого действия";
-    return "□";
+    return BLANK;
   };
   if (block.story.requiredVariants)
     return (
@@ -172,12 +173,13 @@ export function StoryTask({
           )}
           <View style={s.card}>
             <Text style={s.label}>Твоя задача</Text>
-            <Text style={s.text}>
-              {variant.description.replace(
+            <TextWithBlanks
+              style={s.text}
+              text={variant.description.replace(
                 /\{(\w+)\}/g,
-                (_, id: string) => r[id] || "□",
+                (_, id: string) => r[id] || BLANK,
               )}
-            </Text>
+            />
             {variant.steps.map((step) => (
               <Text key={step.id} style={s.text}>
                 {step.question}
@@ -216,10 +218,10 @@ export function StoryTask({
                 )}
               </View>
               <View style={s.equation}>
-                <Text style={s.text}>
-                  {operand(step.left)} {r[`${step.id}Operator`] || "□"}{" "}
-                  {operand(step.right)} =
-                </Text>
+                <TextWithBlanks
+                  style={s.text}
+                  text={`${operand(step.left)} ${r[`${step.id}Operator`] || BLANK} ${operand(step.right)} =`}
+                />
                 {input(`${step.id}Result`, `Ответ: ${step.question}`)}
                 <Text style={s.text}>{r.storyUnit ?? ""}</Text>
               </View>

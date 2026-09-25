@@ -5,6 +5,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 (async () => {
   const { pages } = await import("../src/content/book.ts");
   const { isClosedTrace } = await import("../src/lib/tracing.ts");
+  const { promptRepeatsTitle } = await import("../src/lib/blockText.ts");
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL
@@ -61,6 +62,26 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
           await p.getByTestId("gesture-coach").count(),
           0,
           `${b.id}: coaching never opens by itself`,
+        );
+        assert.equal(
+          await p.getByTestId("block-title").count(),
+          1,
+          `${b.id}: one heading element`,
+        );
+        assert.equal(
+          await p.getByTestId("block-title").innerText(),
+          b.title,
+          `${b.id}: the heading is the block title`,
+        );
+        assert.equal(
+          await p.getByTestId("block-prompt").count(),
+          b.kind === "read" || promptRepeatsTitle(b) ? 0 : 1,
+          `${b.id}: the task text is not a second copy of the heading`,
+        );
+        assert.equal(
+          await p.evaluate(() => document.body.innerText.includes("□")),
+          false,
+          `${b.id}: a blank is drawn as a field, not as the □ glyph`,
         );
         assert.equal(
           await p.getByTestId("debug-source-panel").count(),

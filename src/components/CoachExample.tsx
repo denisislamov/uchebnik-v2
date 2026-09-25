@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { colors as c, fonts as f } from "../theme";
+import { BLANK, BlankBox } from "./Blank";
 import { exampleGroups, exampleSelected } from "../lib/teachingExample";
 import {
   compositionLayout,
@@ -253,16 +254,20 @@ export function CoachExample({ example }: { example: ExampleData }) {
                   : undefined,
             }}
           >
-            <Text
-              style={{
-                fontFamily: f.bold,
-                fontSize: 20,
-                color: c.ink,
-                textAlign: "center",
-              }}
-            >
-              {label}
-            </Text>
+            {label === BLANK ? (
+              <BlankBox size={26} />
+            ) : (
+              <Text
+                style={{
+                  fontFamily: f.bold,
+                  fontSize: 20,
+                  color: c.ink,
+                  textAlign: "center",
+                }}
+              >
+                {label}
+              </Text>
+            )}
           </View>
         ))}
       </View>

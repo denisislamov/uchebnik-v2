@@ -6,6 +6,7 @@
     "drag shows hold/move/release between source and target without entering answer",
     "finger follows real copybook trace; demonstrated ink never becomes accepted child stroke",
     "first arithmetic, story, number-game, recipe and location types have explanatory steps and preserve empty answers",
+    "a blank in a worked example is an empty box",
     "short landscape keeps the complete demonstration visible beside the card",
     "counting answer tap stays visible outside card in landscape; demonstration never selects the answer"
   ],

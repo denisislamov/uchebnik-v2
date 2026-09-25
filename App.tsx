@@ -204,12 +204,21 @@ function Main() {
   const pageDone = page.blocks.filter((b) =>
     isDone(b, progress.answers[b.id]),
   ).length;
-  function selectPage(n: number) {
+  function selectPage(n: number, block?: number) {
     const p = pages[n - 1];
-    const index = p.blocks.findIndex((b) => !isDone(b, progress.answers[b.id]));
+    const index =
+      block ?? p.blocks.findIndex((b) => !isDone(b, progress.answers[b.id]));
     setProgress((v) => ({ ...v, page: n, block: index < 0 ? 0 : index }));
     setHome(false);
   }
+  // «№ 500» is a textbook exercise number; a bare number is a page.
+  const query = search.trim(),
+    byExercise = query.includes("№"),
+    queryNumber = Number(query.replace(/[^0-9]/g, ""));
+  const foundStep = (p: (typeof pages)[number]) =>
+    byExercise
+      ? p.blocks.findIndex((b) => b.exerciseNumber === queryNumber)
+      : -1;
   function next() {
     setProgress((p) => {
       const current = pages[p.page - 1].blocks[p.block];
@@ -462,7 +471,7 @@ function Main() {
                 </View>
                 <TextInput
                   accessibilityLabel="Найти страницу или задание"
-                  placeholder="Страница 80 или № 500"
+                  placeholder="Страница 80 · задание № 500"
                   value={search}
                   onChangeText={setSearch}
                   placeholderTextColor={c.muted}
@@ -501,7 +510,12 @@ function Main() {
                         key={p.id}
                         accessibilityRole="button"
                         accessibilityLabel={`Страница ${p.number}. ${p.title}`}
-                        onPress={() => selectPage(p.number)}
+                        onPress={() =>
+                          selectPage(
+                            p.number,
+                            foundStep(p) >= 0 ? foundStep(p) : undefined,
+                          )
+                        }
                         style={({ pressed }) => [
                           s.pageCard,
                           {
@@ -513,11 +527,13 @@ function Main() {
                         <View style={s.cardTop}>
                           <Text style={s.pageNumber}>стр. {p.number}</Text>
                           <Text style={[s.pageStatus, done && s.pageDone]}>
-                            {done
-                              ? "✓"
-                              : p.number < 3
-                                ? "знакомство"
-                                : `${p.blocks.length} шагов`}
+                            {foundStep(p) >= 0
+                              ? `№ ${queryNumber} · шаг ${foundStep(p) + 1}`
+                              : done
+                                ? "✓"
+                                : p.number < 3
+                                  ? "знакомство"
+                                  : `${p.blocks.length} шагов`}
                           </Text>
                         </View>
                         <View style={s.cardArt}>
@@ -636,6 +652,7 @@ function Main() {
                 <View style={s.stepHeading}>
                   <Text style={s.stepText}>
                     Шаг {progress.block + 1} из {page.blocks.length}
+                    {block.exerciseNumber ? ` · № ${block.exerciseNumber}` : ""}
                   </Text>
                   <Text style={s.stepText}>{pageDone} выполнено</Text>
                 </View>
@@ -670,7 +687,7 @@ function Main() {
                     </Pressable>
                   ))}
                 </ScrollView>
-                <View style={s.exerciseCard}>
+                <View testID="exercise-card" style={s.exerciseCard}>
                   <View style={s.exerciseTop}>
                     <Text style={s.exerciseCategory}>
                       {block.kind === "read"
@@ -696,7 +713,6 @@ function Main() {
                       </Text>
                     </Pressable>
                   </View>
-                  <Text style={s.blockTitle}>{block.title}</Text>
                   {speechError !== "" && (
                     <Text style={s.lessonSubtitle}>{speechError}</Text>
                   )}
@@ -1235,13 +1251,6 @@ const s = StyleSheet.create({
     justifyContent: "center",
   },
   speechText: { fontFamily: f.bold, color: c.pen, fontSize: 14 },
-  blockTitle: {
-    fontFamily: f.bold,
-    color: c.ink,
-    fontSize: 26,
-    lineHeight: 32,
-    marginBottom: 18,
-  },
   navigation: {
     flexDirection: "row",
     justifyContent: "space-between",

@@ -10,6 +10,7 @@ import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button } from "./Controls";
+import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
 const tokenStyle = {
   width: 30,
   height: 30,
@@ -165,9 +166,13 @@ export function CourseTask({
               : "О чём будет задача?"}
           </Text>
           {block.context && (
-            <Text style={s.text}>
-              {block.context.replace(/\{([abc])\}/g, (_, key) => r[key] || "□")}
-            </Text>
+            <TextWithBlanks
+              style={s.text}
+              text={block.context.replace(
+                /\{([abc])\}/g,
+                (_, key) => r[key] || BLANK,
+              )}
+            />
           )}
           {block.excludedInputs && (
             <Text style={s.note}>
@@ -189,15 +194,16 @@ export function CourseTask({
                 ],
             "Сюжет",
           )}
-          <Text style={s.note}>
-            Выбери свои числа для схемы{" "}
-            {block.formula
-              .replace(/[abc]/g, (k) => r[k] || "□")
+          <TextWithBlanks
+            style={s.note}
+            text={`Выбери свои числа для схемы ${block.formula
+              .replace(/[abc]/g, (k) => r[k] || BLANK)
               .replace(/\*/g, "×")
-              .replace(/\//g, ":")}
-            . Результат должен быть целым числом от {block.minResult ?? 0} до{" "}
-            {block.max}.
-          </Text>
+              .replace(
+                /\//g,
+                ":",
+              )}. Результат должен быть целым числом от ${block.minResult ?? 0} до ${block.max}.`}
+          />
           {[...new Set(block.formula.match(/[abc]/g) ?? [])].map((k) => (
             <View key={k} style={s.row}>
               <Text style={s.text}>
@@ -273,12 +279,10 @@ export function CourseTask({
       {block.kind === "work" &&
         block.fields.map((field, i) => (
           <View key={field.id} style={s.card}>
-            <Text style={s.label}>
-              {i + 1}. {field.label}
-            </Text>
+            <TextWithBlanks style={s.label} text={`${i + 1}. ${field.label}`} />
             {field.options
-              ? chips(field.id, field.options, field.label)
-              : input(field.id, `${i + 1}. ${field.label}`)}
+              ? chips(field.id, field.options, spokenBlanks(field.label))
+              : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
             {answer.checked && (
               <Text style={s.feedback}>
                 {r[field.id]?.trim() === field.expected
@@ -343,6 +347,7 @@ export function CourseTask({
         <View>
           <Text style={s.note}>
             Нажимай числа по порядку: {block.activity.targets.join(", ")}.
+            Нажатые закрашиваются.
           </Text>
           <View style={s.row}>
             {(block.activity.board
@@ -354,9 +359,19 @@ export function CourseTask({
             ).map((n) => (
               <Pressable
                 key={n}
-                style={s.chip}
+                style={[
+                  s.chip,
+                  block.activity.targets.some(
+                    (t, i) => t === n && r[`${i}visited`] === "yes",
+                  ) && s.chipDone,
+                ]}
                 accessibilityRole="button"
                 accessibilityLabel={`Число ${n}`}
+                accessibilityState={{
+                  selected: block.activity.targets.some(
+                    (t, i) => t === n && r[`${i}visited`] === "yes",
+                  ),
+                }}
                 onPress={() => {
                   const index = block.activity.targets.findIndex(
                     (_, i) => r[`${i}visited`] !== "yes",
@@ -365,7 +380,16 @@ export function CourseTask({
                     set(`${index}visited`, "yes");
                 }}
               >
-                <Text style={s.text}>{n}</Text>
+                <Text
+                  style={[
+                    s.text,
+                    block.activity.targets.some(
+                      (t, i) => t === n && r[`${i}visited`] === "yes",
+                    ) && { color: c.white },
+                  ]}
+                >
+                  {n}
+                </Text>
               </Pressable>
             ))}
           </View>
@@ -757,6 +781,7 @@ export function CourseTask({
   );
 }
 const s = StyleSheet.create({
+  chipDone: { backgroundColor: c.pen, borderColor: c.pen },
   row: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
   card: { padding: 16, borderRadius: 6, backgroundColor: "#f1efe9", gap: 12 },
   label: { fontFamily: f.bold, fontSize: 19, color: c.ink },

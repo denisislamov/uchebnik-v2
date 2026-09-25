@@ -9,19 +9,19 @@
       "opened": {
         "before": {
           "scroll": 0,
-          "height": 1056,
+          "height": 1046,
           "width": 1425,
           "x": 516.5,
-          "y": 623,
+          "y": 613,
           "w": 650,
           "h": 318.859375
         },
         "after": {
           "scroll": 0,
-          "height": 1056,
+          "height": 1046,
           "width": 1425,
           "x": 516.5,
-          "y": 623,
+          "y": 613,
           "w": 650,
           "h": 318.859375
         }
@@ -31,10 +31,10 @@
       "movement": 0,
       "closed": {
         "scroll": 0,
-        "height": 1056,
+        "height": 1046,
         "width": 1425,
         "x": 516.5,
-        "y": 623,
+        "y": 613,
         "w": 650,
         "h": 318.859375
       }
@@ -47,19 +47,19 @@
       "opened": {
         "before": {
           "scroll": 0,
-          "height": 1056,
+          "height": 1046,
           "width": 1265,
           "x": 436.5,
-          "y": 623,
+          "y": 613,
           "w": 650,
           "h": 318.859375
         },
         "after": {
           "scroll": 0,
-          "height": 1056,
+          "height": 1046,
           "width": 1265,
           "x": 436.5,
-          "y": 623,
+          "y": 613,
           "w": 650,
           "h": 318.859375
         }
@@ -69,10 +69,10 @@
       "movement": 0,
       "closed": {
         "scroll": 0,
-        "height": 1056,
+        "height": 1046,
         "width": 1265,
         "x": 436.5,
-        "y": 623,
+        "y": 613,
         "w": 650,
         "h": 318.859375
       }
@@ -81,22 +81,22 @@
   "errors": [],
   "explicitReveal": {
     "before": {
-      "top": 835,
-      "height": 1563
+      "top": 825,
+      "height": 1553
     },
     "after": {
-      "top": 497,
-      "height": 1563
+      "top": 447,
+      "height": 1553
     },
     "answersUnchanged": true
   },
   "scrollRestore": {
-    "before": 814,
+    "before": 802,
     "during": [
-      164,
-      164,
-      700
+      152,
+      152,
+      688
     ],
-    "after": 814
+    "after": 802
   }
 }

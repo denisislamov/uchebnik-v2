@@ -13,6 +13,7 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { colors as c, fonts as f } from "../theme";
 import { isCorrect, isDone, hasInk } from "../lib/assessment";
+import { promptRepeatsTitle } from "../lib/blockText";
 import { BookImage } from "./BookImage";
 import { Button } from "./Controls";
 import { DrawingPad } from "./DrawingPad";
@@ -61,13 +62,15 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   return (
     <View style={{ gap: 22 }}>
       <CoachButton onPress={showTaskCoach} />
-      <View ref={instructionRef} collapsable={false}>
-        {block.kind !== "read" && (
-          <View>
-            <Text style={s.prompt}>{block.prompt}</Text>
-          </View>
+      <View ref={instructionRef} collapsable={false} style={{ gap: 10 }}>
+        <Text testID="block-title" style={s.title}>
+          {block.title}
+        </Text>
+        {block.kind !== "read" && !promptRepeatsTitle(block) && (
+          <Text testID="block-prompt" style={s.prompt}>
+            {block.prompt}
+          </Text>
         )}
-        {block.kind === "read" && <Text style={s.prompt}>{block.title}</Text>}
       </View>
       <View ref={imagesRef} collapsable={false} style={{ gap: 14 }}>
         {block.kind === "picture" && (
@@ -292,7 +295,8 @@ function AnswerAnchor({
   );
 }
 const s = StyleSheet.create({
-  prompt: { fontFamily: f.bold, fontSize: 23, lineHeight: 32, color: c.ink },
+  title: { fontFamily: f.bold, fontSize: 26, lineHeight: 32, color: c.ink },
+  prompt: { fontFamily: f.regular, fontSize: 21, lineHeight: 30, color: c.ink },
   source: {
     fontFamily: f.regular,
     fontSize: 13,

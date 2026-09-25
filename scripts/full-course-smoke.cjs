@@ -50,7 +50,11 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await open(work);
     for (const [i, f] of work.fields.entries())
       await p
-        .getByRole("textbox", { name: `${i + 1}. ${f.label}`, exact: true })
+        // Inputs are named for a screen reader: a blank is «пропуск», not the □ glyph.
+        .getByRole("textbox", {
+          name: `${i + 1}. ${f.label.replace(/□/g, "пропуск")}`,
+          exact: true,
+        })
         .fill(f.expected);
     await btn("Проверить").click();
     await btn("✓ Получилось!").waitFor();
