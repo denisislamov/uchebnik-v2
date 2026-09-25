@@ -319,7 +319,7 @@ export function CounterBoard({
         width: boardWidth,
         height: supplyTop + 110,
         backgroundColor: c.paper,
-        borderRadius: 14,
+        borderRadius: 6,
       }}
     >
       <View
@@ -328,11 +328,11 @@ export function CounterBoard({
         pointerEvents="none"
         style={{
           height: fieldHeight,
-          backgroundColor: c.mint,
-          borderRadius: 14,
+          backgroundColor: c.wash,
+          borderRadius: 6,
           borderWidth: 2,
           borderStyle: "dashed",
-          borderColor: "#71938d",
+          borderColor: "#2b4ba8",
         }}
       />
       {slots?.map((_, i) => (
@@ -360,8 +360,8 @@ export function CounterBoard({
           top: supplyTop,
           width: "100%",
           height: 105,
-          backgroundColor: c.sand,
-          borderRadius: 14,
+          backgroundColor: c.washWarm,
+          borderRadius: 6,
         }}
       >
         <Text

@@ -120,7 +120,7 @@ export function DrawingPad({
       {progress && strokes.length > progress.accepted.length && (
         <Text
           accessibilityRole="alert"
-          style={{ fontFamily: f.regular, color: c.orange }}
+          style={{ fontFamily: f.regular, color: c.red }}
         >
           Образец обновлён. Этот рисунок нужно выполнить заново; остальные
           ответы сохранены.
@@ -130,7 +130,7 @@ export function DrawingPad({
         <View style={{ gap: 8 }}>
           <Text
             accessibilityLiveRegion="polite"
-            style={{ fontFamily: f.bold, color: c.green, fontSize: 17 }}
+            style={{ fontFamily: f.bold, color: c.pen, fontSize: 17 }}
           >
             {progress.done
               ? "Все элементы получились!"
@@ -170,7 +170,7 @@ export function DrawingPad({
               borderRadius: 22,
               backgroundColor: v,
               borderWidth: 4,
-              borderColor: color === v ? "#b7cfb5" : c.card,
+              borderColor: color === v ? "#2b4ba8" : c.card,
             }}
           />
         ))}
@@ -192,7 +192,7 @@ export function DrawingPad({
       {target && (
         <View
           testID="drawing-direction-hint"
-          style={{ padding: 12, borderRadius: 10, backgroundColor: "#edf4fc" }}
+          style={{ padding: 12, borderRadius: 4, backgroundColor: "#e8eef9" }}
         >
           <Text
             style={{
@@ -223,7 +223,7 @@ export function DrawingPad({
             height,
             borderWidth: 1,
             borderColor: "#94b8b5",
-            borderRadius: 10,
+            borderRadius: 4,
             overflow: "hidden",
             backgroundColor: "#fffef9",
           },
@@ -271,7 +271,7 @@ export function DrawingPad({
                 y1={0}
                 x2={(i * width) / columns}
                 y2={height}
-                stroke="#8abfbe"
+                stroke="#b9c8de"
                 strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
               />
             ))}
@@ -282,7 +282,7 @@ export function DrawingPad({
                 y1={(i * height) / rows}
                 x2={width}
                 y2={(i * height) / rows}
-                stroke="#8abfbe"
+                stroke="#b9c8de"
                 strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
               />
             ))}
@@ -335,7 +335,7 @@ export function DrawingPad({
                 d={d(s.points)}
                 stroke={
                   error && !active.current && i === visible.length
-                    ? c.orange
+                    ? c.red
                     : drawingColor(s.color)
                 }
                 strokeWidth={3}
@@ -371,7 +371,7 @@ export function DrawingPad({
           accessibilityRole="alert"
           style={{
             fontFamily: f.bold,
-            color: c.orange,
+            color: c.red,
             fontSize: 15,
             lineHeight: 22,
           }}

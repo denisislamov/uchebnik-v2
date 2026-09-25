@@ -192,7 +192,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                 <Text
                   style={[
                     s.optionIndex,
-                    answer.value === v && { color: "#bfd5c9" },
+                    answer.value === v && { color: "#c7d3f0" },
                   ]}
                 >
                   {String(i + 1).padStart(2, "0")}
@@ -317,11 +317,14 @@ const s = StyleSheet.create({
     marginTop: 7,
   },
   body: { fontFamily: f.regular, fontSize: 18, lineHeight: 29, color: c.ink },
+  // Картинка из книги вклеена на лист: белая рамка, тонкая линия.
   images: {
     gap: 12,
-    backgroundColor: "#f3ebdc",
-    padding: 16,
-    borderRadius: 18,
+    backgroundColor: c.card,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: c.line,
+    borderRadius: 6,
   },
   options: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   number: {
@@ -330,12 +333,12 @@ const s = StyleSheet.create({
     backgroundColor: c.paper,
     borderWidth: 1,
     borderColor: c.line,
-    borderRadius: 14,
+    borderRadius: 6,
     alignItems: "center",
     justifyContent: "center",
   },
-  digit: { fontFamily: f.heavy, color: c.green, fontSize: 25 },
-  selected: { backgroundColor: c.green, borderColor: c.green },
+  digit: { fontFamily: f.heavy, color: c.pen, fontSize: 25 },
+  selected: { backgroundColor: c.pen, borderColor: c.pen },
   option: {
     flexBasis: 210,
     flexGrow: 1,
@@ -346,7 +349,7 @@ const s = StyleSheet.create({
     borderColor: c.line,
     backgroundColor: c.paper,
     padding: 17,
-    borderRadius: 14,
+    borderRadius: 6,
     minHeight: 62,
   },
   optionIndex: { fontFamily: f.bold, color: c.muted, fontSize: 13 },
@@ -354,8 +357,8 @@ const s = StyleSheet.create({
   tray: {
     minHeight: 112,
     padding: 20,
-    backgroundColor: c.mint,
-    borderRadius: 16,
+    backgroundColor: c.wash,
+    borderRadius: 6,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -366,7 +369,7 @@ const s = StyleSheet.create({
   stick: {
     height: 64,
     width: 8,
-    borderRadius: 8,
+    borderRadius: 4,
     backgroundColor: "#bb8052",
     transform: [{ rotate: "8deg" }],
   },
@@ -374,9 +377,9 @@ const s = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: c.green,
+    backgroundColor: c.pen,
     borderWidth: 3,
-    borderColor: "#bdd0b9",
+    borderColor: "#c7d3f0",
   },
   counterTools: {
     flexDirection: "row",
@@ -384,8 +387,13 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     gap: 8,
   },
-  count: { fontFamily: f.heavy, fontSize: 28, color: c.green },
-  review: { padding: 18, gap: 12, borderRadius: 16, backgroundColor: c.sand },
+  count: { fontFamily: f.heavy, fontSize: 28, color: c.pen },
+  review: {
+    padding: 18,
+    gap: 12,
+    borderRadius: 6,
+    backgroundColor: c.washWarm,
+  },
   reviewTitle: { fontFamily: f.bold, color: c.ink, fontSize: 15 },
   reviewBody: {
     fontFamily: f.regular,
@@ -393,10 +401,23 @@ const s = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  retry: { backgroundColor: "#fff0dc", padding: 16, borderRadius: 12 },
-  retryText: { fontFamily: f.bold, color: "#8a4a26", fontSize: 15 },
-  success: { backgroundColor: c.mint, padding: 16, borderRadius: 12 },
-  successText: { fontFamily: f.bold, color: c.green, fontSize: 15 },
+  // Замечание учителя: красной ручкой на полях серой заметки.
+  retry: {
+    backgroundColor: c.washWarm,
+    padding: 14,
+    borderRadius: 4,
+    borderLeftWidth: 3,
+    borderLeftColor: c.red,
+  },
+  retryText: { fontFamily: f.bold, color: c.red, fontSize: 16, lineHeight: 22 },
+  // Отметка учителя: написана красной ручкой прямо на листе.
+  success: { paddingVertical: 4 },
+  successText: {
+    fontFamily: f.hand,
+    color: c.red,
+    fontSize: 26,
+    lineHeight: 32,
+  },
   hintLink: { fontFamily: f.bold, color: c.muted, fontSize: 15 },
   hint: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.muted },
 });

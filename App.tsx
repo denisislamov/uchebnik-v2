@@ -15,9 +15,10 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
-import { Nunito_400Regular } from "@expo-google-fonts/nunito/400Regular";
-import { Nunito_700Bold } from "@expo-google-fonts/nunito/700Bold";
-import { Nunito_800ExtraBold } from "@expo-google-fonts/nunito/800ExtraBold";
+import { Andika_400Regular } from "@expo-google-fonts/andika/400Regular";
+import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
+import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
+import Svg, { Path, Rect } from "react-native-svg";
 import * as Speech from "expo-speech";
 import { pages, allBlocks, lessonPages, extraPages } from "./src/content/book";
 import type { Answer, Progress } from "./src/content/types";
@@ -29,7 +30,8 @@ import {
 } from "./src/lib/assessment";
 import { readProgress, saveProgress } from "./src/lib/storage";
 import { colors as c, fonts as f } from "./src/theme";
-import { Button, ProgressBar } from "./src/components/Controls";
+import { Button, Cells, ProgressBar } from "./src/components/Controls";
+import { NotebookPaper } from "./src/components/NotebookPaper";
 import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
@@ -67,7 +69,7 @@ const DebugSourcePanel =
               </Text>
               <Text
                 testID="debug-source-page"
-                style={{ fontFamily: f.bold, fontSize: 19, color: c.green }}
+                style={{ fontFamily: f.bold, fontSize: 19, color: c.pen }}
               >
                 PDF · страница {pageNumber}
               </Text>
@@ -108,9 +110,9 @@ const DebugSourcePanel =
 
 function Main() {
   const [loaded, fontError] = useFonts({
-    Nunito_400Regular,
-    Nunito_700Bold,
-    Nunito_800ExtraBold,
+    Andika_400Regular,
+    Andika_700Bold,
+    Neucha_400Regular,
   });
   const [progress, setProgress] = useState<Progress>(emptyProgress),
     [ready, setReady] = useState(false),
@@ -259,8 +261,8 @@ function Main() {
   if (!ready || (!loaded && !fontError))
     return (
       <View style={s.loading}>
-        <ActivityIndicator color={c.green} />
-        <Text style={{ color: c.green, marginTop: 20 }}>
+        <ActivityIndicator color={c.pen} />
+        <Text style={{ color: c.pen, marginTop: 20 }}>
           {storageError || "Открываем учебник…"}
         </Text>
         {storageError !== "" && (
@@ -280,19 +282,15 @@ function Main() {
     <SafeAreaView style={s.safe} edges={["top", "bottom", "left", "right"]}>
       <StatusBar style="dark" />
       <View style={[s.header, compact && { paddingHorizontal: 18 }]}>
+        <NotebookPaper />
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="На главную"
           onPress={() => setHome(true)}
           style={s.brand}
         >
-          <View style={s.brandIcon}>
-            <Text style={s.brandGlyph}>а</Text>
-          </View>
-          <View>
-            <Text style={s.brandTitle}>арифметика</Text>
-            <Text style={s.brandSub}>МАЛЕНЬКИЕ ШАГИ · БОЛЬШИЕ ОТКРЫТИЯ</Text>
-          </View>
+          <Text style={s.brandTitle}>Арифметика</Text>
+          <Text style={s.brandSub}>1 класс</Text>
         </Pressable>
         <Pressable
           accessibilityRole="button"
@@ -300,14 +298,15 @@ function Main() {
           onPress={() => setParent(true)}
           style={s.parentButton}
         >
-          <Text style={s.parentText}>
-            {compact ? "Для взрослых" : "Родителям  ↗"}
-          </Text>
+          <LockIcon />
+          {!compact && <Text style={s.parentText}>Родителям</Text>}
         </Pressable>
       </View>
       {storageError !== "" && (
         <View accessibilityRole="alert" style={s.storageError}>
-          <Text style={{ color: "#8a4a26", flex: 1 }}>{storageError}</Text>
+          <Text style={{ color: c.red, fontFamily: f.regular, flex: 1 }}>
+            {storageError}
+          </Text>
           <Button
             small
             secondary
@@ -337,38 +336,32 @@ function Main() {
           scrollEnabled={!drawing}
           contentContainerStyle={s.scroll}
         >
+          <NotebookPaper margin={!compact} />
           {home ? (
             <View
               style={[
                 s.home,
-                compact && { paddingHorizontal: 18, paddingTop: 28 },
+                compact && {
+                  paddingHorizontal: 18,
+                  paddingLeft: 18,
+                  paddingTop: 24,
+                },
               ]}
             >
-              <View
-                style={[s.hero, !wide && { flexDirection: "column", gap: 28 }]}
-              >
-                <View style={[s.heroText, wide && { paddingRight: 48 }]}>
-                  <View style={s.badge}>
-                    <View style={s.badgeDot} />
-                    <Text style={s.badgeText}>
-                      ПЕРВЫЙ КЛАСС · ОТ ОДНОГО ДО СТА
-                    </Text>
+              <View style={[s.cover, !wide && { flexDirection: "column" }]}>
+                <View style={[s.coverText, wide && { paddingRight: 36 }]}>
+                  <View style={s.label}>
+                    <View style={s.labelInner}>
+                      <Text style={s.labelTitle}>Тетрадь</Text>
+                      <Text style={s.labelHand}>по арифметике</Text>
+                      <Text style={s.labelLine}>ученика 1 класса</Text>
+                      <View style={s.labelRule} />
+                      <Text style={s.labelNote}>
+                        по учебнику А. С. Пчёлко и Г. Б. Поляка, 1959
+                      </Text>
+                    </View>
                   </View>
-                  <Text
-                    style={[
-                      s.heroTitle,
-                      compact && { fontSize: 44, lineHeight: 49 },
-                    ]}
-                  >
-                    Большое путешествие{"\n"}начинается{"\n"}с{" "}
-                    <Text style={{ color: c.orange }}>одного.</Text>
-                  </Text>
-                  <Text style={s.heroDescription}>
-                    Считаем рыбок, сравниваем мячи и рисуем первые цифры.
-                    Знакомый учебник — теперь с маленькими открытиями на каждом
-                    шаге.
-                  </Text>
-                  <View style={{ alignSelf: "flex-start", marginTop: 28 }}>
+                  <View style={{ alignSelf: "flex-start", marginTop: 24 }}>
                     <Button
                       onPress={() =>
                         stepsDone || progress.page > 1
@@ -381,53 +374,25 @@ function Main() {
                         : "Начать заниматься  →"}
                     </Button>
                   </View>
-                  <Text style={s.heroFoot}>
-                    Слушай, пробуй и открывай. В своём темпе.
+                  <Text style={s.coverFoot}>
+                    Считаем рыбок, сравниваем мячи и рисуем первые цифры.
                   </Text>
                 </View>
                 <View
                   style={[
-                    s.heroArt,
+                    s.coverArt,
                     !wide && {
                       width: "100%",
-                      maxWidth: 550,
+                      maxWidth: 520,
                       alignSelf: "center",
                     },
                   ]}
                 >
-                  <View style={s.artTag}>
-                    <Text style={s.artTagText}>ИЗ УЧЕБНИКА 1959 ГОДА</Text>
-                  </View>
-                  <BookImage id="p010_boys_fishing" maxHeight={350} />
-                  <View style={s.numberTiles}>
-                    {[1, 2, 3].map((n) => (
-                      <View
-                        key={n}
-                        style={[
-                          s.numberTile,
-                          n === 2 && {
-                            backgroundColor: c.orange,
-                            transform: [{ rotate: "6deg" }],
-                          },
-                          n === 3 && {
-                            backgroundColor: c.sand,
-                            transform: [{ rotate: "-5deg" }],
-                          },
-                        ]}
-                      >
-                        <Text
-                          style={[s.tileDigit, n === 3 && { color: c.green }]}
-                        >
-                          {n}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                  <Text style={s.artCaption}>Два рыбака. И ещё один друг.</Text>
+                  <BookImage id="p010_boys_fishing" maxHeight={320} />
                 </View>
               </View>
               <View style={{ gap: 12, marginTop: 20 }}>
-                <Text style={s.eyebrow}>ВНЕ ЗАНЯТИЙ · МАТЕРИАЛЫ КНИГИ</Text>
+                <Text style={s.eyebrow}>Вне занятий · материалы книги</Text>
                 <View
                   style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
                 >
@@ -449,10 +414,7 @@ function Main() {
                 </View>
               </View>
               <View style={s.pathHeading}>
-                <View>
-                  <Text style={s.eyebrow}>НАША МАЛЕНЬКАЯ ПРОГРАММА</Text>
-                  <Text style={s.sectionTitle}>Весь учебник</Text>
-                </View>
+                <Text style={s.sectionTitle}>Оглавление</Text>
                 <Text style={s.progressText}>
                   {finished} из {lessonPages.length} пройдено
                 </Text>
@@ -487,15 +449,8 @@ function Main() {
                   placeholder="Страница 80 или № 500"
                   value={search}
                   onChangeText={setSearch}
-                  style={{
-                    padding: 14,
-                    borderWidth: 1,
-                    borderColor: c.line,
-                    borderRadius: 12,
-                    fontFamily: f.regular,
-                    fontSize: 18,
-                    color: c.green,
-                  }}
+                  placeholderTextColor={c.muted}
+                  style={s.search}
                 />
               </View>
               <View style={s.pageGrid}>
@@ -540,16 +495,12 @@ function Main() {
                         ]}
                       >
                         <View style={s.cardTop}>
-                          <Text style={s.pageNumber}>
-                            {String(p.number).padStart(2, "0")}
-                          </Text>
-                          <Text
-                            style={[s.pageStatus, done && { color: c.green }]}
-                          >
+                          <Text style={s.pageNumber}>стр. {p.number}</Text>
+                          <Text style={[s.pageStatus, done && s.pageDone]}>
                             {done
                               ? "✓"
                               : p.number < 3
-                                ? "ЗНАКОМСТВО"
+                                ? "знакомство"
                                 : `${p.blocks.length} шагов`}
                           </Text>
                         </View>
@@ -558,8 +509,8 @@ function Main() {
                         </View>
                         <Text style={s.cardTitle}>{p.title}</Text>
                         <Text style={s.cardSubtitle}>{p.subtitle}</Text>
-                        <View style={{ marginTop: "auto", paddingTop: 18 }}>
-                          <ProgressBar value={count / p.blocks.length} />
+                        <View style={{ marginTop: "auto", paddingTop: 16 }}>
+                          <Cells total={p.blocks.length} done={count} />
                         </View>
                       </Pressable>
                     );
@@ -578,7 +529,11 @@ function Main() {
             <View
               style={[
                 s.lessonLayout,
-                compact && { paddingHorizontal: 14, paddingTop: 20 },
+                compact && {
+                  paddingHorizontal: 14,
+                  paddingLeft: 14,
+                  paddingTop: 20,
+                },
               ]}
             >
               {wide && (
@@ -590,7 +545,7 @@ function Main() {
                   >
                     <Text style={s.back}>← Все страницы</Text>
                   </Pressable>
-                  <Text style={s.eyebrow}>СОСЕДНИЕ СТРАНИЦЫ</Text>
+                  <Text style={s.eyebrow}>Соседние страницы</Text>
                   {lessonPages
                     .filter((p) => Math.abs(p.number - page.number) <= 4)
                     .map((p) => (
@@ -605,19 +560,19 @@ function Main() {
                         style={[
                           s.sideItem,
                           page.number === p.number && {
-                            backgroundColor: c.mint,
+                            backgroundColor: c.wash,
                           },
                         ]}
                       >
                         <Text
                           style={[
                             s.sideNumber,
-                            page.number === p.number && { color: c.green },
+                            page.number === p.number && { color: c.pen },
                           ]}
                         >
                           {pageCompleted(p, progress.answers)
                             ? "✓"
-                            : String(p.number).padStart(2, "0")}
+                            : String(p.number)}
                         </Text>
                         <Text style={s.sideTitle}>{p.title}</Text>
                       </Pressable>
@@ -638,7 +593,7 @@ function Main() {
                     onPress={() => setHome(true)}
                   >
                     <Text style={s.back}>
-                      {wide ? "УЧЕБНИК / АРИФМЕТИКА" : "← Все страницы"}
+                      {wide ? "Учебник · Арифметика" : "← Все страницы"}
                     </Text>
                   </Pressable>
                   <Pressable
@@ -664,7 +619,7 @@ function Main() {
                 </Text>
                 <View style={s.stepHeading}>
                   <Text style={s.stepText}>
-                    ШАГ {progress.block + 1} ИЗ {page.blocks.length}
+                    Шаг {progress.block + 1} из {page.blocks.length}
                   </Text>
                   <Text style={s.stepText}>{pageDone} выполнено</Text>
                 </View>
@@ -684,14 +639,13 @@ function Main() {
                       style={[
                         s.stepDot,
                         i === progress.block && s.stepActive,
-                        isDone(b, progress.answers[b.id]) && {
-                          borderColor: c.green,
-                        },
+                        isDone(b, progress.answers[b.id]) && s.stepDone,
                       ]}
                     >
                       <Text
                         style={[
                           s.stepDotText,
+                          isDone(b, progress.answers[b.id]) && s.stepDoneText,
                           i === progress.block && { color: c.white },
                         ]}
                       >
@@ -700,16 +654,16 @@ function Main() {
                     </Pressable>
                   ))}
                 </ScrollView>
-                <View style={[s.exerciseCard, compact && { padding: 20 }]}>
+                <View style={s.exerciseCard}>
                   <View style={s.exerciseTop}>
                     <Text style={s.exerciseCategory}>
                       {block.kind === "read"
-                        ? "РАССМАТРИВАЕМ"
+                        ? "Рассмотри"
                         : block.kind === "draw"
-                          ? "ТВОРЧЕСКАЯ МАСТЕРСКАЯ"
+                          ? "Нарисуй"
                           : block.kind === "shape"
-                            ? "СОБИРАЕМ ФИГУРУ"
-                            : "ПОПРОБУЙ САМ"}
+                            ? "Собери фигуру"
+                            : "Попробуй сам"}
                     </Text>
                     <Pressable
                       accessibilityRole="button"
@@ -872,7 +826,7 @@ function Main() {
                 <View
                   style={{
                     gap: 12,
-                    backgroundColor: c.sand,
+                    backgroundColor: c.washWarm,
                     padding: 16,
                     borderRadius: 12,
                   }}
@@ -915,6 +869,28 @@ function Main() {
     </SafeAreaView>
   );
 }
+function LockIcon() {
+  return (
+    <Svg width={20} height={22} viewBox="0 0 20 22">
+      <Path
+        d="M5 9.5V6.5a5 5 0 0 1 10 0v3"
+        stroke={c.muted}
+        strokeWidth={2}
+        fill="none"
+      />
+      <Rect
+        x={3}
+        y={9.5}
+        width={14}
+        height={10.5}
+        rx={2}
+        stroke={c.muted}
+        strokeWidth={2}
+        fill="none"
+      />
+    </Svg>
+  );
+}
 export default function App() {
   return (
     <SafeAreaProvider>
@@ -930,208 +906,193 @@ const s = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: c.paper,
   },
+  // Три клетки в высоту: линии сетки шапки и листа совпадают.
   header: {
-    paddingVertical: 18,
+    height: 72,
     paddingHorizontal: 42,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
     borderColor: c.line,
     gap: 12,
   },
-  brand: { flexDirection: "row", alignItems: "center", gap: 12, flexShrink: 1 },
-  brandIcon: {
-    width: 42,
-    height: 46,
-    backgroundColor: c.green,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    transform: [{ rotate: "-5deg" }],
-  },
-  brandGlyph: {
-    fontFamily: f.serif,
-    fontSize: 36,
-    color: c.card,
-    lineHeight: 42,
+  brand: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: 10,
+    flexShrink: 1,
   },
   brandTitle: {
-    fontFamily: f.heavy,
-    fontSize: 23,
-    color: c.green,
-    letterSpacing: -0.6,
+    fontFamily: f.hand,
+    fontSize: 30,
+    lineHeight: 34,
+    color: c.pen,
   },
-  brandSub: {
-    fontFamily: f.bold,
-    fontSize: 7,
-    letterSpacing: 0.9,
-    color: c.muted,
-  },
-  parentButton: { paddingVertical: 12, paddingHorizontal: 8 },
-  parentText: { fontFamily: f.bold, fontSize: 14, color: c.green },
-  scroll: { flexGrow: 1 },
-  home: {
-    width: "100%",
-    maxWidth: 1280,
-    alignSelf: "center",
-    padding: 42,
-    paddingTop: 58,
-  },
-  hero: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 40,
-    marginBottom: 64,
-  },
-  heroText: { flex: 1 },
-  badge: {
+  brandSub: { fontFamily: f.regular, fontSize: 14, color: c.muted },
+  parentButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginBottom: 22,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    minHeight: 44,
   },
-  badgeDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: c.orange },
-  badgeText: {
+  parentText: { fontFamily: f.regular, fontSize: 15, color: c.muted },
+  scroll: { flexGrow: 1 },
+  home: {
+    width: "100%",
+    maxWidth: 1180,
+    alignSelf: "center",
+    padding: 42,
+    paddingLeft: 64,
+    paddingTop: 48,
+  },
+  cover: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 32,
+    backgroundColor: c.cover,
+    borderRadius: 6,
+    padding: 28,
+    marginBottom: 44,
+  },
+  coverText: { flex: 1, alignSelf: "stretch", justifyContent: "center" },
+  label: {
+    backgroundColor: c.white,
+    borderWidth: 1.5,
+    borderColor: c.ink,
+    padding: 5,
+  },
+  labelInner: {
+    borderWidth: 1,
+    borderColor: c.ink,
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    alignItems: "center",
+    gap: 4,
+  },
+  labelTitle: {
     fontFamily: f.bold,
-    fontSize: 10,
-    letterSpacing: 1.5,
-    color: c.green,
+    fontSize: 28,
+    lineHeight: 34,
+    color: c.ink,
   },
-  heroTitle: {
-    fontFamily: f.serif,
-    fontSize: 59,
-    lineHeight: 65,
-    color: c.green,
-    letterSpacing: -1.5,
+  labelHand: {
+    fontFamily: f.hand,
+    fontSize: 40,
+    lineHeight: 46,
+    color: c.pen,
   },
-  heroDescription: {
+  labelLine: { fontFamily: f.regular, fontSize: 17, color: c.ink },
+  labelRule: {
+    alignSelf: "stretch",
+    height: 1,
+    backgroundColor: c.line,
+    marginTop: 10,
+    marginBottom: 4,
+  },
+  labelNote: {
     fontFamily: f.regular,
-    fontSize: 17,
-    lineHeight: 28,
-    color: c.muted,
-    marginTop: 24,
-    maxWidth: 455,
-  },
-  heroFoot: {
-    fontFamily: f.regular,
-    color: c.muted,
     fontSize: 12,
+    lineHeight: 16,
+    color: c.muted,
+    textAlign: "center",
+  },
+  coverFoot: {
+    fontFamily: f.regular,
+    color: c.ink,
+    fontSize: 15,
+    lineHeight: 22,
     marginTop: 14,
   },
-  heroArt: {
-    width: "44%",
-    backgroundColor: "#ede5d3",
-    borderRadius: 120,
-    borderBottomLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 28,
-    paddingTop: 48,
-    alignItems: "center",
-  },
-  artTag: {
-    position: "absolute",
-    top: 15,
-    alignSelf: "center",
-    backgroundColor: c.card,
-    paddingHorizontal: 13,
-    paddingVertical: 7,
-    borderRadius: 6,
-    transform: [{ rotate: "-3deg" }],
-  },
-  artTagText: {
-    fontFamily: f.bold,
-    fontSize: 9,
-    letterSpacing: 1.5,
-    color: c.green,
-  },
-  numberTiles: { flexDirection: "row", gap: 15, marginTop: -5 },
-  numberTile: {
-    width: 65,
-    height: 77,
-    backgroundColor: c.green,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    transform: [{ rotate: "-7deg" }],
-    borderWidth: 1,
-    borderColor: "#ffffff55",
-  },
-  tileDigit: {
-    fontFamily: f.serif,
-    fontSize: 51,
-    lineHeight: 63,
-    color: c.card,
-  },
-  artCaption: {
-    fontFamily: f.regular,
-    fontSize: 12,
-    color: c.muted,
-    marginTop: 18,
+  coverArt: {
+    width: "46%",
+    backgroundColor: c.white,
+    borderWidth: 1.5,
+    borderColor: c.ink,
+    padding: 10,
   },
   pathHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
     gap: 16,
-    marginBottom: 22,
+    marginTop: 36,
+    marginBottom: 14,
     flexWrap: "wrap",
   },
   eyebrow: {
-    fontFamily: f.bold,
-    fontSize: 10,
-    letterSpacing: 1.6,
+    fontFamily: f.regular,
+    fontSize: 14,
     color: c.muted,
-    marginBottom: 9,
+    marginBottom: 6,
   },
-  sectionTitle: { fontFamily: f.serif, color: c.green, fontSize: 34 },
+  sectionTitle: {
+    fontFamily: f.hand,
+    color: c.pen,
+    fontSize: 40,
+    lineHeight: 46,
+  },
   progressText: {
-    fontFamily: f.bold,
-    color: c.green,
-    fontSize: 13,
-    paddingBottom: 4,
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 15,
+    paddingBottom: 8,
   },
-  pageGrid: { flexDirection: "row", flexWrap: "wrap", gap: 16, marginTop: 25 },
+  search: {
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    borderBottomWidth: 1.5,
+    borderColor: c.pen,
+    fontFamily: f.regular,
+    fontSize: 20,
+    color: c.ink,
+    maxWidth: 420,
+  },
+  pageGrid: { flexDirection: "row", flexWrap: "wrap", gap: 16, marginTop: 20 },
   pageCard: {
     backgroundColor: c.card,
-    padding: 17,
+    padding: 14,
     borderWidth: 1,
     borderColor: c.line,
-    borderRadius: 18,
-    minHeight: 265,
+    borderRadius: 6,
+    minHeight: 250,
   },
   cardTop: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 15,
+    marginBottom: 12,
+    minHeight: 24,
   },
-  pageNumber: { fontFamily: f.bold, fontSize: 13, color: c.green },
-  pageStatus: {
-    fontFamily: f.bold,
-    fontSize: 9,
-    letterSpacing: 0.6,
-    color: c.muted,
+  pageNumber: { fontFamily: f.bold, fontSize: 14, color: c.pen },
+  pageStatus: { fontFamily: f.regular, fontSize: 13, color: c.muted },
+  pageDone: {
+    fontFamily: f.hand,
+    fontSize: 24,
+    lineHeight: 24,
+    color: c.red,
   },
-  cardArt: { height: 110, justifyContent: "center", marginBottom: 18 },
+  cardArt: { height: 110, justifyContent: "center", marginBottom: 14 },
   cardTitle: {
-    fontFamily: f.heavy,
-    fontSize: 17,
-    lineHeight: 23,
-    color: c.green,
+    fontFamily: f.bold,
+    fontSize: 18,
+    lineHeight: 24,
+    color: c.ink,
   },
   cardSubtitle: {
     fontFamily: f.regular,
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 18,
     color: c.muted,
-    marginTop: 6,
+    marginTop: 4,
   },
   homeFooter: {
-    borderTopWidth: 1,
+    borderTopWidth: 1.5,
     borderColor: c.line,
     marginTop: 42,
-    paddingTop: 22,
+    paddingTop: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 20,
@@ -1139,7 +1100,7 @@ const s = StyleSheet.create({
   footerText: {
     fontFamily: f.regular,
     color: c.muted,
-    fontSize: 11,
+    fontSize: 12,
     lineHeight: 18,
   },
   lessonLayout: {
@@ -1147,38 +1108,45 @@ const s = StyleSheet.create({
     maxWidth: 1230,
     alignSelf: "center",
     padding: 38,
+    paddingLeft: 64,
     flexDirection: "row",
     gap: 55,
   },
   sidebar: { width: 235, paddingTop: 4 },
-  back: { fontFamily: f.bold, fontSize: 12, color: c.muted },
+  back: { fontFamily: f.bold, fontSize: 15, color: c.pen },
   sideItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
-    borderRadius: 12,
-    padding: 13,
-    marginTop: 4,
+    gap: 12,
+    borderRadius: 4,
+    padding: 11,
+    marginTop: 2,
   },
-  sideNumber: { fontFamily: f.bold, color: c.muted, fontSize: 12, width: 22 },
-  sideTitle: { fontFamily: f.bold, color: c.green, fontSize: 13, flex: 1 },
+  sideNumber: {
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 13,
+    width: 28,
+  },
+  sideTitle: { fontFamily: f.bold, color: c.ink, fontSize: 14, flex: 1 },
   sideNote: {
     marginTop: 32,
-    padding: 18,
-    backgroundColor: c.sand,
-    borderRadius: 16,
+    padding: 16,
+    backgroundColor: c.washWarm,
+    borderRadius: 4,
   },
   sideNoteTitle: {
-    fontFamily: f.bold,
-    fontSize: 13,
-    color: c.green,
-    marginBottom: 8,
+    fontFamily: f.hand,
+    fontSize: 22,
+    lineHeight: 26,
+    color: c.pen,
+    marginBottom: 6,
   },
   sideNoteText: {
     fontFamily: f.regular,
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 20,
-    color: c.muted,
+    color: c.ink,
   },
   lessonMain: { flex: 1, minWidth: 0, maxWidth: 780 },
   lessonTop: {
@@ -1186,95 +1154,87 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 10,
-    marginBottom: 26,
+    marginBottom: 20,
   },
   sourceLink: {
     fontFamily: f.bold,
-    color: c.green,
-    fontSize: 13,
+    color: c.pen,
+    fontSize: 15,
     paddingVertical: 10,
   },
   lessonTitle: {
-    fontFamily: f.serif,
-    color: c.green,
-    fontSize: 42,
-    lineHeight: 49,
+    fontFamily: f.hand,
+    color: c.pen,
+    fontSize: 46,
+    lineHeight: 52,
   },
   lessonSubtitle: {
     fontFamily: f.regular,
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 22,
     color: c.muted,
-    marginTop: 10,
+    marginTop: 6,
   },
   stepHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 27,
+    marginTop: 24,
     marginBottom: 10,
   },
-  stepText: {
-    fontFamily: f.bold,
-    color: c.muted,
-    fontSize: 10,
-    letterSpacing: 1,
-  },
-  stepDots: { gap: 7, paddingVertical: 17 },
+  stepText: { fontFamily: f.regular, color: c.muted, fontSize: 14 },
+  stepDots: { gap: 8, paddingVertical: 16 },
   stepDot: {
-    width: 39,
-    height: 39,
-    borderWidth: 1,
+    width: 40,
+    height: 40,
+    borderWidth: 1.5,
     borderColor: c.line,
-    borderRadius: 12,
+    borderRadius: 4,
+    backgroundColor: c.card,
     alignItems: "center",
     justifyContent: "center",
   },
-  stepActive: { backgroundColor: c.green, borderColor: c.green },
-  stepDotText: { fontFamily: f.bold, color: c.green, fontSize: 12 },
-  exerciseCard: {
-    backgroundColor: c.card,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: c.line,
-    padding: 32,
-  },
+  stepActive: { backgroundColor: c.pen, borderColor: c.pen },
+  stepDone: { borderColor: c.red },
+  stepDotText: { fontFamily: f.bold, color: c.pen, fontSize: 16 },
+  stepDoneText: { fontFamily: f.hand, color: c.red, fontSize: 24 },
+  exerciseCard: { paddingTop: 4 },
   exerciseTop: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
-    marginBottom: 18,
+    marginBottom: 14,
     flexWrap: "wrap",
   },
-  exerciseCategory: {
-    fontFamily: f.bold,
-    color: c.orange,
-    fontSize: 9,
-    letterSpacing: 1.3,
-  },
+  exerciseCategory: { fontFamily: f.regular, color: c.muted, fontSize: 14 },
   speechButton: {
-    backgroundColor: c.mint,
+    backgroundColor: c.card,
+    borderWidth: 1.5,
+    borderColor: c.pen,
     paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 10,
+    paddingVertical: 8,
+    borderRadius: 4,
+    minHeight: 40,
+    justifyContent: "center",
   },
-  speechText: { fontFamily: f.bold, color: c.green, fontSize: 12 },
+  speechText: { fontFamily: f.bold, color: c.pen, fontSize: 14 },
   blockTitle: {
-    fontFamily: f.serif,
-    color: c.green,
-    fontSize: 29,
-    marginBottom: 20,
+    fontFamily: f.bold,
+    color: c.ink,
+    fontSize: 26,
+    lineHeight: 32,
+    marginBottom: 18,
   },
   navigation: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 14,
-    marginTop: 22,
+    marginTop: 26,
   },
   saveNote: {
     fontFamily: f.regular,
     color: c.muted,
-    fontSize: 11,
+    fontSize: 12,
     textAlign: "center",
     marginTop: 22,
   },
@@ -1286,14 +1246,15 @@ const s = StyleSheet.create({
     gap: 12,
   },
   modalTitle: {
-    fontFamily: f.bold,
-    fontSize: 22,
-    color: c.green,
+    fontFamily: f.hand,
+    fontSize: 30,
+    lineHeight: 34,
+    color: c.pen,
     flexShrink: 1,
   },
   modalShade: {
     flex: 1,
-    backgroundColor: "#162b26aa",
+    backgroundColor: "#1f2433aa",
     justifyContent: "center",
     alignItems: "center",
     padding: 18,
@@ -1303,17 +1264,19 @@ const s = StyleSheet.create({
     width: "100%",
     maxHeight: "90%",
     backgroundColor: c.card,
-    borderRadius: 22,
+    borderRadius: 6,
+    borderWidth: 1.5,
+    borderColor: c.ink,
     overflow: "hidden",
   },
   parentBody: {
     fontFamily: f.regular,
-    color: c.green,
+    color: c.ink,
     fontSize: 16,
     lineHeight: 25,
   },
   storageError: {
-    backgroundColor: "#fff0dc",
+    backgroundColor: c.washWarm,
     padding: 12,
     flexDirection: "row",
     alignItems: "center",

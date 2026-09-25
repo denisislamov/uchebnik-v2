@@ -102,13 +102,13 @@ export function PracticalTask({
           <View
             key={previous.id}
             style={{
-              backgroundColor: c.mint,
+              backgroundColor: c.wash,
               padding: 12,
-              borderRadius: 12,
+              borderRadius: 6,
               gap: 8,
             }}
           >
-            <Text style={{ fontFamily: f.bold, color: c.green }}>
+            <Text style={{ fontFamily: f.bold, color: c.pen }}>
               ✓ {i + 1}. {previous.instruction}
             </Text>
             <PracticalPreview
@@ -162,7 +162,7 @@ export function PracticalTask({
                 style={{
                   borderWidth: 1,
                   borderColor: c.line,
-                  borderRadius: 12,
+                  borderRadius: 6,
                   padding: 14,
                   fontSize: 24,
                   color: c.ink,
@@ -348,7 +348,7 @@ export function PracticalTask({
                   style={{
                     borderColor: c.line,
                     borderWidth: 2,
-                    borderRadius: 12,
+                    borderRadius: 6,
                     padding: 14,
                     fontSize: 24,
                     color: c.ink,

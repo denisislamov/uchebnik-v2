@@ -50,7 +50,7 @@ export function CoachSurface({
       : { x: p.x * width, y: p.y * height };
   return (
     <View
-      style={{ width, height, backgroundColor: "#fffdf8", borderRadius: 12 }}
+      style={{ width, height, backgroundColor: "#fffdf8", borderRadius: 6 }}
     >
       <Svg width={width} height={height}>
         {surface.kind === "answer" &&
@@ -67,7 +67,7 @@ export function CoachSurface({
                   height={size}
                   rx={10}
                   fill="#fff"
-                  stroke="#71938d"
+                  stroke="#2b4ba8"
                   strokeWidth={2}
                 />
                 <SvgText
@@ -76,7 +76,7 @@ export function CoachSurface({
                   textAnchor="middle"
                   fontSize={26}
                   fontWeight="bold"
-                  fill="#23594e"
+                  fill="#2b4ba8"
                 >
                   {value}
                 </SvgText>
@@ -116,7 +116,7 @@ export function CoachSurface({
                 x2={(i * width) / surface.columns}
                 y1={0}
                 y2={height}
-                stroke="#aad5d6"
+                stroke="#c7d3f0"
                 strokeWidth={0.8}
               />
             ))}
@@ -127,7 +127,7 @@ export function CoachSurface({
                 x2={width}
                 y1={(i * height) / surface.rows}
                 y2={(i * height) / surface.rows}
-                stroke="#aad5d6"
+                stroke="#c7d3f0"
                 strokeWidth={0.8}
               />
             ))}
@@ -167,8 +167,8 @@ export function CoachSurface({
               width={width - 16}
               height={height * 0.55}
               rx={12}
-              fill="#e5f0e8"
-              stroke="#71938d"
+              fill="#e8eef9"
+              stroke="#2b4ba8"
               strokeDasharray="5 5"
             />
             <Rect
@@ -177,7 +177,7 @@ export function CoachSurface({
               width={width - 16}
               height={height * 0.3}
               rx={12}
-              fill="#f1e5cf"
+              fill="#f1efe9"
             />
           </>
         )}
@@ -191,7 +191,7 @@ export function CoachSurface({
                 cx={x}
                 cy={y}
                 r={15}
-                stroke="#71938d"
+                stroke="#2b4ba8"
                 fill="none"
                 strokeDasharray="3 3"
               />
@@ -203,7 +203,7 @@ export function CoachSurface({
                 width={surface.token === "stick" ? 8 : 34}
                 height={34}
                 rx={3}
-                stroke="#71938d"
+                stroke="#2b4ba8"
                 fill="none"
                 strokeDasharray="3 3"
               />
@@ -218,7 +218,7 @@ export function CoachSurface({
               width={40}
               height={height * 0.28}
               rx={6}
-              stroke="#23594e"
+              stroke="#2b4ba8"
               strokeDasharray="4 4"
               fill="#fff"
             />
@@ -231,7 +231,7 @@ export function CoachSurface({
               y1={point(surface.vertices[a]).y}
               x2={point(surface.vertices[b]).x}
               y2={point(surface.vertices[b]).y}
-              stroke="#71938d"
+              stroke="#2b4ba8"
               strokeWidth={3}
               strokeDasharray="5 5"
             />

@@ -220,8 +220,8 @@ export function ShapeBoard({
             440,
             365 + Math.max(...edges.map((t) => t.length)) / 2,
           ),
-          backgroundColor: c.mint,
-          borderRadius: 16,
+          backgroundColor: c.wash,
+          borderRadius: 6,
           overflow: "hidden",
         }}
       >
@@ -247,7 +247,7 @@ export function ShapeBoard({
                   y1={a.y}
                   x2={b.x}
                   y2={b.y}
-                  stroke={value.includes(t.key) ? "#bb8052" : "#71938d"}
+                  stroke={value.includes(t.key) ? "#bb8052" : "#2b4ba8"}
                   strokeWidth={value.includes(t.key) ? 9 : 3}
                   strokeDasharray={value.includes(t.key) ? undefined : "6 5"}
                   strokeLinecap="round"
@@ -336,12 +336,12 @@ export function ShapeBoard({
       {!!message && (
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, color: c.green }}
+          style={{ fontFamily: f.bold, color: c.pen }}
         >
           {message}
         </Text>
       )}
-      <Text style={{ fontFamily: f.bold, color: c.green }}>
+      <Text style={{ fontFamily: f.bold, color: c.pen }}>
         Палочек: {value.length} из {edges.length}
       </Text>
       <Button

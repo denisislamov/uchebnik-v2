@@ -9,19 +9,19 @@
       "opened": {
         "before": {
           "scroll": 0,
-          "height": 1232,
+          "height": 1186,
           "width": 1425,
-          "x": 490.5,
-          "y": 724,
+          "x": 516.5,
+          "y": 683,
           "w": 650,
           "h": 318.859375
         },
         "after": {
           "scroll": 0,
-          "height": 1232,
+          "height": 1186,
           "width": 1425,
-          "x": 490.5,
-          "y": 724,
+          "x": 516.5,
+          "y": 683,
           "w": 650,
           "h": 318.859375
         }
@@ -31,10 +31,10 @@
       "movement": 0,
       "closed": {
         "scroll": 0,
-        "height": 1232,
+        "height": 1186,
         "width": 1425,
-        "x": 490.5,
-        "y": 724,
+        "x": 516.5,
+        "y": 683,
         "w": 650,
         "h": 318.859375
       }
@@ -47,32 +47,32 @@
       "opened": {
         "before": {
           "scroll": 0,
-          "height": 1232,
+          "height": 1186,
           "width": 1265,
-          "x": 410.5,
-          "y": 724,
+          "x": 436.5,
+          "y": 683,
           "w": 650,
           "h": 318.859375
         },
         "after": {
           "scroll": 0,
-          "height": 1232,
+          "height": 1186,
           "width": 1265,
-          "x": 410.5,
-          "y": 724,
+          "x": 436.5,
+          "y": 683,
           "w": 650,
           "h": 318.859375
         }
       },
-      "frames": 81,
+      "frames": 82,
       "gaps": 0,
       "movement": 0,
       "closed": {
         "scroll": 0,
-        "height": 1232,
+        "height": 1186,
         "width": 1265,
-        "x": 410.5,
-        "y": 724,
+        "x": 436.5,
+        "y": 683,
         "w": 650,
         "h": 318.859375
       }
@@ -81,12 +81,12 @@
   "errors": [],
   "explicitReveal": {
     "before": {
-      "top": 1014,
-      "height": 1731
+      "top": 963,
+      "height": 1691
     },
     "after": {
-      "top": 527,
-      "height": 1731
+      "top": 497,
+      "height": 1691
     },
     "answersUnchanged": true
   }

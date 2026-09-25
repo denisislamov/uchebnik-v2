@@ -95,7 +95,7 @@ function Picture({
             accessible={false}
             source={a.source}
             resizeMode="stretch"
-            style={{ width: "100%", height: "100%", borderRadius: 10 }}
+            style={{ width: "100%", height: "100%", borderRadius: 4 }}
           />
           <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
             <Svg width={width} height={height}>
@@ -108,8 +108,8 @@ function Picture({
                       points={t.polygon
                         .map((p) => `${p.x * width},${p.y * height}`)
                         .join(" ")}
-                      fill="#23594e25"
-                      stroke={c.green}
+                      fill="#2b4ba822"
+                      stroke={c.pen}
                       strokeWidth={3}
                     />
                   ) : t.ellipse ? (
@@ -119,8 +119,8 @@ function Picture({
                       cy={(t.y + t.h / 2) * height}
                       rx={(t.w * width) / 2}
                       ry={(t.h * height) / 2}
-                      fill="#23594e25"
-                      stroke={c.green}
+                      fill="#2b4ba822"
+                      stroke={c.pen}
                       strokeWidth={3}
                     />
                   ) : (
@@ -131,8 +131,8 @@ function Picture({
                       width={t.w * width}
                       height={t.h * height}
                       rx={6}
-                      fill="#23594e25"
-                      stroke={c.green}
+                      fill="#2b4ba822"
+                      stroke={c.pen}
                       strokeWidth={3}
                     />
                   ),
@@ -200,13 +200,13 @@ export function PictureTask({
       {block.expected.length > 1 && (
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, color: c.green, fontSize: 20 }}
+          style={{ fontFamily: f.bold, color: c.pen, fontSize: 20 }}
         >
           Отмечено: {value.filter((x) => x !== "miss").length}
         </Text>
       )}
       {miss && (
-        <Text style={{ fontFamily: f.bold, color: c.orange }}>
+        <Text style={{ fontFamily: f.bold, color: c.red }}>
           Нажми прямо на предмет или цифру.
         </Text>
       )}

@@ -237,7 +237,7 @@ export function CompositionBoard({
             backgroundColor: partPalette[colors[group]].fill,
             borderRadius: token === "circle" ? size / 2 : 0,
             borderWidth: 1,
-            borderColor: "#344833",
+            borderColor: "#1f2433",
           }}
         />
       </View>
@@ -260,11 +260,11 @@ export function CompositionBoard({
           testID="composition-field"
           style={{
             height: 148,
-            borderRadius: 14,
-            backgroundColor: c.mint,
+            borderRadius: 6,
+            backgroundColor: c.wash,
             borderWidth: 2,
             borderStyle: "dashed",
-            borderColor: "#71938d",
+            borderColor: "#2b4ba8",
           }}
         />
         {Array.from({ length: total }, (_, i) => (
@@ -306,8 +306,8 @@ export function CompositionBoard({
             top: 168,
             width: "100%",
             height: 108,
-            backgroundColor: c.sand,
-            borderRadius: 14,
+            backgroundColor: c.washWarm,
+            borderRadius: 6,
           }}
         >
           <Text

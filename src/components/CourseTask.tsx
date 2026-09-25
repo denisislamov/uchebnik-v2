@@ -14,7 +14,7 @@ const tokenStyle = {
   width: 30,
   height: 30,
   borderRadius: 15,
-  backgroundColor: c.green,
+  backgroundColor: c.pen,
   margin: 3,
 };
 export function CourseTask({
@@ -107,7 +107,7 @@ export function CourseTask({
               height: 240,
               borderRadius: 120,
               borderWidth: 2,
-              borderColor: c.green,
+              borderColor: c.pen,
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -123,10 +123,10 @@ export function CourseTask({
                   height: 240 - i * 70,
                   borderRadius: 120,
                   borderWidth: 2,
-                  borderColor: c.green,
+                  borderColor: c.pen,
                   alignItems: "center",
                   backgroundColor:
-                    i === 0 ? c.paper : i === 1 ? c.mint : c.sand,
+                    i === 0 ? c.paper : i === 1 ? c.wash : c.washWarm,
                 }}
                 onPress={() => {
                   if (courseCorrect(block, answer)) return;
@@ -649,7 +649,7 @@ export function CourseTask({
                       style={{
                         height: 12,
                         width: `${(target / (target > 10 ? 100 : 10)) * 100}%`,
-                        backgroundColor: c.orange,
+                        backgroundColor: c.red,
                         marginVertical: 12,
                       }}
                     />
@@ -668,7 +668,7 @@ export function CourseTask({
                           onPress={() => set(key, String(v))}
                           style={[
                             s.tick,
-                            value === v && { backgroundColor: c.mint },
+                            value === v && { backgroundColor: c.wash },
                           ]}
                         >
                           <Text style={s.note}>│</Text>
@@ -758,15 +758,15 @@ export function CourseTask({
 }
 const s = StyleSheet.create({
   row: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
-  card: { padding: 16, borderRadius: 16, backgroundColor: "#f8f4ea", gap: 12 },
+  card: { padding: 16, borderRadius: 6, backgroundColor: "#f1efe9", gap: 12 },
   label: { fontFamily: f.bold, fontSize: 19, color: c.ink },
-  text: { fontFamily: f.bold, fontSize: 20, color: c.green },
+  text: { fontFamily: f.bold, fontSize: 20, color: c.pen },
   note: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.ink },
   input: {
     backgroundColor: c.white,
     borderWidth: 2,
-    borderColor: c.green,
-    borderRadius: 12,
+    borderColor: c.pen,
+    borderRadius: 6,
     width: 86,
     minHeight: 54,
     textAlign: "center",
@@ -774,30 +774,30 @@ const s = StyleSheet.create({
     fontSize: 26,
     color: c.ink,
   },
-  operator: { fontSize: 28, color: c.green },
+  operator: { fontSize: 28, color: c.pen },
   chip: {
     padding: 12,
     minWidth: 48,
     minHeight: 48,
     borderWidth: 1,
-    borderColor: c.green,
-    borderRadius: 12,
+    borderColor: c.pen,
+    borderRadius: 6,
     alignItems: "center",
   },
-  selected: { backgroundColor: c.green },
-  feedback: { fontFamily: f.bold, color: c.green, fontSize: 16 },
+  selected: { backgroundColor: c.pen },
+  feedback: { fontFamily: f.bold, color: c.pen, fontSize: 16 },
   group: {
     padding: 12,
     borderWidth: 2,
-    borderColor: c.green,
-    borderRadius: 16,
+    borderColor: c.pen,
+    borderRadius: 6,
     maxWidth: 200,
     minHeight: 90,
   },
   bundle: {
     width: 30,
     height: 70,
-    backgroundColor: c.green,
+    backgroundColor: c.pen,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
@@ -808,13 +808,13 @@ const s = StyleSheet.create({
     alignItems: "center",
     minHeight: 60,
     borderBottomWidth: 2,
-    borderColor: c.green,
+    borderColor: c.pen,
   },
   vessel: {
     height: 140,
     width: 120,
     borderWidth: 3,
-    borderColor: c.green,
+    borderColor: c.pen,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
@@ -822,7 +822,7 @@ const s = StyleSheet.create({
   balance: {
     height: 5,
     width: 200,
-    backgroundColor: c.green,
+    backgroundColor: c.pen,
     marginVertical: 20,
   },
 });

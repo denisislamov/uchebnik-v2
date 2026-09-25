@@ -23,8 +23,8 @@ export function BookImage({
         style={{
           alignSelf: "center",
           padding: 16,
-          borderRadius: 16,
-          backgroundColor: "#edf4fc",
+          borderRadius: 6,
+          backgroundColor: "#e8eef9",
           maxWidth: 360,
           width: "100%",
           gap: 8,
@@ -38,7 +38,7 @@ export function BookImage({
               style={{
                 width: 40,
                 height: 40,
-                borderRadius: 10,
+                borderRadius: 4,
                 borderWidth: 1,
                 borderColor: "#aac5e1",
                 alignItems: "center",
@@ -82,7 +82,7 @@ export function BookImage({
           width: "100%",
           aspectRatio: a.width / a.height,
           maxHeight,
-          borderRadius: 8,
+          borderRadius: 4,
         }}
       />
     </View>

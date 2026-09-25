@@ -719,7 +719,7 @@ export function GestureCoachProvider({
                   style={{
                     position: "absolute",
                     inset: -8,
-                    borderRadius: 10,
+                    borderRadius: 4,
                     backgroundColor: c.paper,
                   }}
                 />
@@ -739,7 +739,7 @@ export function GestureCoachProvider({
                     left: 0,
                     right: 0,
                     height: hole.y,
-                    backgroundColor: "#102426bf",
+                    backgroundColor: "#1f2433bf",
                   }}
                 />
                 <View
@@ -749,7 +749,7 @@ export function GestureCoachProvider({
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: "#102426bf",
+                    backgroundColor: "#1f2433bf",
                   }}
                 />
                 <View
@@ -759,7 +759,7 @@ export function GestureCoachProvider({
                     left: 0,
                     width: hole.x,
                     height: hole.height,
-                    backgroundColor: "#102426bf",
+                    backgroundColor: "#1f2433bf",
                   }}
                 />
                 <View
@@ -769,7 +769,7 @@ export function GestureCoachProvider({
                     left: hole.x + hole.width,
                     right: 0,
                     height: hole.height,
-                    backgroundColor: "#102426bf",
+                    backgroundColor: "#1f2433bf",
                   }}
                 />
                 <View
@@ -782,7 +782,7 @@ export function GestureCoachProvider({
                     height: hole.height,
                     borderWidth: 2,
                     borderColor: "#ffda72",
-                    borderRadius: 8,
+                    borderRadius: 4,
                   }}
                 />
               </>
@@ -791,7 +791,7 @@ export function GestureCoachProvider({
                 style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: "#102426bf",
+                  backgroundColor: "#1f2433bf",
                 }}
               />
             )}
@@ -917,7 +917,9 @@ export function GestureCoachProvider({
                 : !landscape && current?.surface
                   ? Math.max(180, height - 230)
                   : height - 24,
-              borderRadius: 18,
+              borderRadius: 6,
+              borderWidth: 1.5,
+              borderColor: c.pen,
               backgroundColor: c.paper,
             }}
           >
@@ -930,7 +932,7 @@ export function GestureCoachProvider({
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontFamily: f.bold, color: c.green }}>
+              <Text style={{ fontFamily: f.bold, color: c.pen }}>
                 Смотри, как · {resolvedStep + 1}/{active?.targets.length}
               </Text>
               <Pressable
@@ -1009,7 +1011,7 @@ export function GestureCoachProvider({
                 <Text
                   testID="coach-demonstration-status"
                   accessibilityLiveRegion="polite"
-                  style={{ fontFamily: f.bold, color: c.green }}
+                  style={{ fontFamily: f.bold, color: c.pen }}
                 >
                   {motion.kind === "count"
                     ? `${Math.min(frame.index + 1, motion.points.length)} из ${motion.points.length}${motion.labels?.[frame.index] ? ` · ${motion.labels[frame.index]}` : ""}`
@@ -1048,7 +1050,7 @@ export function GestureCoachProvider({
                   }}
                   style={{ padding: 8, minHeight: 40 }}
                 >
-                  <Text style={{ fontFamily: f.bold, color: c.green }}>
+                  <Text style={{ fontFamily: f.bold, color: c.pen }}>
                     Послушать
                   </Text>
                 </Pressable>
@@ -1067,7 +1069,7 @@ export function GestureCoachProvider({
                     }
                     style={{ padding: 8, minHeight: 40 }}
                   >
-                    <Text style={{ fontFamily: f.bold, color: c.green }}>
+                    <Text style={{ fontFamily: f.bold, color: c.pen }}>
                       {done ? "Ещё раз" : paused ? "Продолжить показ" : "Пауза"}
                     </Text>
                   </Pressable>

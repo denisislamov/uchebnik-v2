@@ -33,9 +33,9 @@ function MeaningCard({
         testID={`meaning-${target.id}`}
         style={{
           borderWidth: 2,
-          borderColor: selected ? c.green : "#d7e1da",
-          borderRadius: 16,
-          backgroundColor: selected ? "#e5f1e9" : c.paper,
+          borderColor: selected ? c.pen : "#a9b6cc",
+          borderRadius: 6,
+          backgroundColor: selected ? "#e8eef9" : c.paper,
           padding: 12,
           gap: 10,
         }}
@@ -57,7 +57,7 @@ function MeaningCard({
                 style={{
                   width: 28,
                   height: 28,
-                  borderRadius: 14,
+                  borderRadius: 6,
                   backgroundColor: "#1565c0",
                 }}
               />
@@ -82,7 +82,7 @@ function MeaningCard({
           {target.label}
         </Text>
         <Text
-          style={{ fontFamily: f.regular, color: c.green, textAlign: "center" }}
+          style={{ fontFamily: f.regular, color: c.pen, textAlign: "center" }}
         >
           {selected ? "Рассмотрели" : "Коснись рисунка"}
         </Text>
@@ -126,7 +126,7 @@ export function NumberMeaning({
         <Text
           testID="meaning-feedback"
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, fontSize: 22, color: c.green }}
+          style={{ fontFamily: f.bold, fontSize: 22, color: c.pen }}
         >
           {active.label}.{" "}
           {active.label.startsWith("Цифра")

@@ -128,7 +128,7 @@ export function PracticalPreview({
                 height: 56,
                 borderWidth: 1,
                 borderColor: c.line,
-                borderRadius: 8,
+                borderRadius: 4,
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: c.paper,

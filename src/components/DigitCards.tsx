@@ -160,7 +160,7 @@ export function DigitCards({
         ref={boardRef}
         testID="digit-cards"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-        style={{ height: 275, borderRadius: 16, backgroundColor: c.paper }}
+        style={{ height: 275, borderRadius: 6, backgroundColor: c.paper }}
       >
         {[0, 1].map((i) => (
           <View
@@ -175,8 +175,8 @@ export function DigitCards({
               height: 60,
               borderWidth: 2,
               borderStyle: "dashed",
-              borderColor: c.green,
-              borderRadius: 10,
+              borderColor: c.pen,
+              borderRadius: 4,
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -201,8 +201,8 @@ export function DigitCards({
                 top: 136 + Math.floor(digit / 5) * 65,
                 width: 48,
                 height: 48,
-                borderRadius: 10,
-                backgroundColor: c.mint,
+                borderRadius: 4,
+                backgroundColor: c.wash,
                 alignItems: "center",
                 justifyContent: "center",
               },
@@ -228,8 +228,8 @@ export function DigitCards({
               top: draft.y - 24,
               width: 48,
               height: 48,
-              borderRadius: 10,
-              backgroundColor: c.green,
+              borderRadius: 4,
+              backgroundColor: c.pen,
               alignItems: "center",
               justifyContent: "center",
               zIndex: 3,

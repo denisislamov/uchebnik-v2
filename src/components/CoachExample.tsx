@@ -36,9 +36,9 @@ export function CoachExample({ example }: { example: ExampleData }) {
   return (
     <View
       testID="coach-example"
-      style={{ backgroundColor: c.mint, borderRadius: 12, padding: 10, gap: 8 }}
+      style={{ backgroundColor: c.wash, borderRadius: 6, padding: 10, gap: 8 }}
     >
-      <Text style={{ fontFamily: f.bold, color: c.green, fontSize: 13 }}>
+      <Text style={{ fontFamily: f.bold, color: c.pen, fontSize: 13 }}>
         {example.label && example.label !== "Пример" ? example.label : "Пример"}
       </Text>
       {kind === "compositionRow" && example.colors && (
@@ -81,7 +81,7 @@ export function CoachExample({ example }: { example: ExampleData }) {
                     borderRadius: example.token === "circle" ? 11 : 0,
                     backgroundColor: partPalette[example.colors![group]].fill,
                     borderWidth: 1,
-                    borderColor: "#344833",
+                    borderColor: "#1f2433",
                   }}
                 />
               </View>
@@ -105,7 +105,7 @@ export function CoachExample({ example }: { example: ExampleData }) {
                 borderWidth: 2,
                 borderColor:
                   kind !== "count" && active === i ? "#d49717" : "transparent",
-                borderRadius: 8,
+                borderRadius: 4,
               }}
             >
               {Array.from({ length: Math.min(12, group.count) }, (_, j) => {
@@ -122,9 +122,9 @@ export function CoachExample({ example }: { example: ExampleData }) {
                     style={{
                       width: 22,
                       height: 22,
-                      borderRadius: 12,
+                      borderRadius: 6,
                       backgroundColor: removed
-                        ? "#dedbd2"
+                        ? "#d9e2ef"
                         : i === 1
                           ? "#cc4536"
                           : "#2563a6",
@@ -172,7 +172,7 @@ export function CoachExample({ example }: { example: ExampleData }) {
             flexDirection: "row",
             justifyContent: "space-between",
             borderTopWidth: 2,
-            borderColor: c.green,
+            borderColor: c.pen,
           }}
         >
           {Array.from(
@@ -183,7 +183,7 @@ export function CoachExample({ example }: { example: ExampleData }) {
                 style={{
                   alignItems: "center",
                   borderTopWidth: i === active ? 5 : 1,
-                  borderColor: i === active ? "#d49717" : c.green,
+                  borderColor: i === active ? "#d49717" : c.pen,
                 }}
               >
                 <Text
@@ -202,9 +202,7 @@ export function CoachExample({ example }: { example: ExampleData }) {
         >
           {["Десятки", "Единицы"].map((label, i) => (
             <View key={i} style={{ alignItems: "center", gap: 5 }}>
-              <Text style={{ fontFamily: f.bold, color: c.green }}>
-                {label}
-              </Text>
+              <Text style={{ fontFamily: f.bold, color: c.pen }}>{label}</Text>
               <View style={{ flexDirection: "row", gap: 3 }}>
                 {Array.from({ length: values[i] ?? 0 }, (_, j) => (
                   <View
@@ -248,7 +246,7 @@ export function CoachExample({ example }: { example: ExampleData }) {
                 !counting && exampleSelected(kind, i, 0, active)
                   ? "#d49717"
                   : "transparent",
-              borderRadius: 8,
+              borderRadius: 4,
               backgroundColor:
                 !counting && exampleSelected(kind, i, 0, active)
                   ? "#fff0bd"

@@ -26,12 +26,12 @@ export function Button({
       style={({ pressed }) => [
         s.button,
         secondary && s.secondary,
-        small && { paddingVertical: 10, paddingHorizontal: 16 },
+        small && s.small,
         disabled && { opacity: 0.45 },
-        pressed && { opacity: 0.8 },
+        pressed && (secondary ? s.secondaryPressed : s.pressed),
       ]}
     >
-      <Text style={[s.label, secondary && { color: c.green }]}>{children}</Text>
+      <Text style={[s.label, secondary && s.secondaryLabel]}>{children}</Text>
     </Pressable>
   );
 }
@@ -48,23 +48,74 @@ export function ProgressBar({ value }: { value: number }) {
     </View>
   );
 }
+/** Ряд клеток: закрашенная клетка — выполненный шаг. */
+export function Cells({
+  total,
+  done,
+  size = 12,
+}: {
+  total: number;
+  done: number;
+  size?: number;
+}) {
+  return (
+    <View
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: total, now: done }}
+      style={s.cells}
+    >
+      {Array.from({ length: total }, (_, i) => (
+        <View
+          key={i}
+          style={[
+            s.cell,
+            { width: size, height: size },
+            i < done && s.cellDone,
+          ]}
+        />
+      ))}
+    </View>
+  );
+}
 const s = StyleSheet.create({
   button: {
-    backgroundColor: c.green,
-    borderRadius: 14,
-    paddingHorizontal: 24,
-    paddingVertical: 15,
-    minHeight: 48,
+    backgroundColor: c.pen,
+    borderRadius: 6,
+    borderBottomWidth: 3,
+    borderBottomColor: c.penDark,
+    paddingHorizontal: 22,
+    paddingVertical: 13,
+    minHeight: 50,
     alignItems: "center",
     justifyContent: "center",
   },
-  secondary: { backgroundColor: c.mint, borderWidth: 1, borderColor: c.line },
-  label: { fontFamily: f.bold, color: c.white, fontSize: 16 },
+  pressed: { backgroundColor: c.penDark },
+  secondary: {
+    backgroundColor: c.card,
+    borderWidth: 1.5,
+    borderColor: c.pen,
+    borderBottomWidth: 3,
+    borderBottomColor: c.pen,
+  },
+  secondaryPressed: { backgroundColor: c.wash },
+  small: { paddingVertical: 8, paddingHorizontal: 14, minHeight: 40 },
+  label: { fontFamily: f.bold, color: c.white, fontSize: 17 },
+  secondaryLabel: { color: c.pen },
   track: {
-    height: 6,
-    backgroundColor: c.line,
-    borderRadius: 8,
+    height: 8,
+    backgroundColor: c.card,
+    borderWidth: 1,
+    borderColor: c.line,
+    borderRadius: 2,
     overflow: "hidden",
   },
-  fill: { height: 6, backgroundColor: c.green, borderRadius: 8 },
+  fill: { height: 8, backgroundColor: c.pen },
+  cells: { flexDirection: "row", flexWrap: "wrap", gap: 3 },
+  cell: {
+    borderWidth: 1,
+    borderColor: c.line,
+    borderRadius: 2,
+    backgroundColor: c.card,
+  },
+  cellDone: { backgroundColor: c.pen, borderColor: c.pen },
 });
