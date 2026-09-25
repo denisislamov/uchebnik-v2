@@ -32,6 +32,37 @@ def pairs(s):
  return out
 
 def fields(p):return [{'id':f'q{i+1}','label':str(label),'expected':str(v)} for i,(label,v) in enumerate(p)]
+OPNAMES={'+':'сложение','−':'вычитание','-':'вычитание','×':'умножение','·':'умножение','∙':'умножение',':':'деление','÷':'деление'}
+def examplesHeading(t):
+ kinds={OPNAMES[c] for c in re.findall(r'[+−\-×·∙:÷]',t) if c in OPNAMES}
+ return f'Примеры на {next(iter(kinds))}' if len(kinds)==1 else 'Примеры'
+ACTIVITY_HEADINGS={'sequence':'Считай по порядку','coins':'Монеты','composition':'Состав числа','ruler':'Измерь','place':'Где что стоит','balance':'Весы','liquid':'Мерки','groups':'Разложи поровну','count':'Сосчитай'}
+def heading(b,data):
+ # Testers could not tell what a step asks from a bare «№ 241»; the number now lives in the step header,
+ # and the heading names the kind of work: from the spec's role when it has one, else from the built task.
+ role=b['role'].lower();t=b['text'];kind=data.get('kind')
+ if role.startswith('задача'):return 'Задача'
+ if role.startswith('пример'):return examplesHeading(t)
+ if role.startswith(('упражнение','задание')):return 'Упражнение'
+ if role.startswith('практическ'):return 'Практическое задание'
+ if role.startswith(('инструкция','образец','правило','пояснение')):return 'Рассмотри'
+ if role.startswith('таблица'):return 'Таблица'
+ if role.startswith('игра'):return 'Игра'
+ if role.startswith('счётн'):return 'Счёт'
+ if kind=='story':return 'Задача'
+ if kind=='compose':return 'Составь задачу' if data.get('story') else 'Составь примеры'
+ if kind=='recipe':return 'Своя задача'
+ if kind=='practical':return 'Практическое задание'
+ if kind=='activity':return ACTIVITY_HEADINGS.get(data['activity'].get('mode'),'Упражнение')
+ if kind=='relation':return 'Нарисуй'
+ if kind=='numberGame':return 'Игра с числами'
+ if kind=='targetGame':return 'Игра'
+ if kind=='read':return 'Рассмотри'
+ if kind=='work':
+  if bareExamples(t):return examplesHeading(t)
+  if '?' in t:return 'Задача'
+ return 'Упражнение'
+def bareExamples(t):return not re.search('[А-Яа-яёЁ]{3}',re.sub(r'(?:[Сс]трока|[Сс]толбик|[Кк]олонка|[Сс]толбец|[Рр]яд|[Рр]амка)\s*\d*\s*:','',t))
 def work(p):return {'kind':'work','fields':fields(p)}
 def act(mode,targets,**kw):return {'kind':'activity','activity':dict(mode=mode,targets=targets,**kw)}
 def rule(op='+',left=None,right=None,result=None,max=20):return {k:v for k,v in dict(operator=op,left=left,right=right,result=result,max=max).items() if v is not None}
@@ -125,7 +156,7 @@ for page in source:
   # The source prints one problem across the page break, not a second exercise.
   if n==489 and n in seen_continuations:continue
   if n==489:seen_continuations.add(n)
-  base=dict(id=b['id'],title=f'№ {n}' if n else b['title'],prompt=t,sourceText=t,images=b['images'],exerciseNumber=n)
+  base=dict(id=b['id'],title=b['title'],prompt=t,sourceText=t,images=b['images'],exerciseNumber=n)
   if p<30:continue # Explicit first-decade mapping below.
   if not t or (not n and re.search(r'служебн|колонцифр|номер страницы|сигнатур|Концовочная',role+' '+b['title'],re.I)):continue
   if n in OV:data=OV[n]
@@ -151,6 +182,9 @@ for page in source:
   if n in QUESTION_FIELDS and data.get('kind')=='work':
    data=dict(data,fields=QUESTION_FIELDS[n]+data['fields'])
    if n==515:data.pop('prompt',None)
+  # A column of expressions is the whole source text; the fields carry the expressions, the prompt says what to do.
+  if n and data.get('kind')=='work' and bareExamples(t) and 'prompt' not in data:base['prompt']='Реши примеры и запиши ответы.'
+  if n:base['title']=heading(b,data)
   blocks.append(dict(base,**data))
  out.append(dict(id=f'page-{p:03}',number=p,title=page['topic'].split(':')[0][:80],subtitle=('Первый десяток' if p<59 else 'Второй десяток' if p<126 else 'Первая сотня'),hero=f'page_{p:03}',sourceDoc=f'textbook/page_docs/arithmetic_grade1_pchelko_1959_p{p:03}.md',blocks=blocks))
 if unresolved:(ROOT/'scripts/content/unresolved.json').write_text(json.dumps(unresolved,ensure_ascii=False,indent=2)+'\n')

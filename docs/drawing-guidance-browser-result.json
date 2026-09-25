@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "startedAt": "2026-09-25T10:46:00.533Z",
+  "startedAt": "2026-09-25T11:02:57.192Z",
   "mouse": [
     {
       "width": 390,
@@ -240,5 +240,5 @@
     "docs/drawing-guidance-p008-block14-1280.png"
   ],
   "errors": [],
-  "finishedAt": "2026-09-25T10:46:19.034Z"
+  "finishedAt": "2026-09-25T11:03:16.015Z"
 }
