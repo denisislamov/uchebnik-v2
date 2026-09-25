@@ -18,7 +18,6 @@ import {
 } from "react-native";
 import Svg, { Path, Circle, Rect, Text as SvgText } from "react-native-svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Speech from "expo-speech";
 import { Button } from "./Controls";
 import { CoachSurface, type DemoSurface } from "./CoachSurface";
 import {
@@ -535,7 +534,6 @@ export function GestureCoachProvider({
     return () => {
       cancelled = true;
       clearTimeout(timer);
-      void Speech.stop();
     };
   }, [
     active,
@@ -644,7 +642,6 @@ export function GestureCoachProvider({
             highlight.y + highlight.height > viewport.y + viewport.height)));
   function close(completed: boolean) {
     if (!active) return;
-    void Speech.stop();
     if (completed && !interrupted.current)
       void remember(active.families).catch(() => {});
     setActive(null);
@@ -1017,22 +1014,6 @@ export function GestureCoachProvider({
                   justifyContent: "space-between",
                 }}
               >
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Послушать подсказку"
-                  onPress={() => {
-                    void Speech.stop();
-                    Speech.speak(current?.text ?? "", {
-                      language: "ru-RU",
-                      rate: 0.85,
-                    });
-                  }}
-                  style={{ padding: 8, minHeight: 40 }}
-                >
-                  <Text style={{ fontFamily: f.bold, color: c.pen }}>
-                    Послушать
-                  </Text>
-                </Pressable>
                 {motion && targetRect && !missing && (
                   <Pressable
                     accessibilityRole="button"
@@ -1059,7 +1040,6 @@ export function GestureCoachProvider({
               <Button
                 disabled={measuring || (!done && !missing)}
                 onPress={() => {
-                  void Speech.stop();
                   if (active && step + 1 < active.targets.length) {
                     setStep((v) => v + 1);
                     setMeasuring(true);

@@ -19,7 +19,6 @@ import { Andika_400Regular } from "@expo-google-fonts/andika/400Regular";
 import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
 import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
 import Svg, { Path, Rect } from "react-native-svg";
-import * as Speech from "expo-speech";
 import { pages, allBlocks, lessonPages, extraPages } from "./src/content/book";
 import type { Answer, Progress } from "./src/content/types";
 import {
@@ -122,8 +121,6 @@ function Main() {
     [confirmReset, setConfirmReset] = useState(false),
     [drawing, setDrawing] = useState(false),
     [storageError, setStorageError] = useState(""),
-    [speaking, setSpeaking] = useState(false),
-    [speechError, setSpeechError] = useState(""),
     [zoom, setZoom] = useState(false),
     [catalogSection, setCatalogSection] = useState(0),
     [search, setSearch] = useState("");
@@ -167,7 +164,6 @@ function Main() {
       });
     return () => {
       mounted = false;
-      void Speech.stop();
     };
   }, [readAttempt]);
   useEffect(() => {
@@ -201,9 +197,6 @@ function Main() {
     scroll.current?.scrollTo({ y: 0, animated: false });
     lastScroll.current = 0;
     setDrawing(false);
-    setSpeaking(false);
-    setSpeechError("");
-    void Speech.stop();
   }, [progress.page, progress.block, home]);
   const page = pages[progress.page - 1],
     block = page.blocks[progress.block],
@@ -272,25 +265,6 @@ function Main() {
   }
   function updateAnswer(a: Answer) {
     setProgress((p) => ({ ...p, answers: { ...p.answers, [block.id]: a } }));
-  }
-  function speak() {
-    if (speaking) {
-      void Speech.stop();
-      setSpeaking(false);
-      return;
-    }
-    setSpeechError("");
-    setSpeaking(true);
-    Speech.speak(block.kind === "read" ? block.body : block.prompt, {
-      language: "ru-RU",
-      rate: 0.85,
-      onDone: () => setSpeaking(false),
-      onStopped: () => setSpeaking(false),
-      onError: () => {
-        setSpeaking(false);
-        setSpeechError("Озвучивание недоступно. Прочитайте задание вместе.");
-      },
-    });
   }
   if (!ready || (!loaded && !fontError))
     return (
@@ -717,24 +691,7 @@ function Main() {
                             ? "Собери фигуру"
                             : "Попробуй сам"}
                     </Text>
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        speaking
-                          ? "Остановить озвучивание"
-                          : "Послушать задание"
-                      }
-                      onPress={speak}
-                      style={s.speechButton}
-                    >
-                      <Text style={s.speechText}>
-                        {speaking ? "■ Стоп" : "♫ Слушать"}
-                      </Text>
-                    </Pressable>
                   </View>
-                  {speechError !== "" && (
-                    <Text style={s.lessonSubtitle}>{speechError}</Text>
-                  )}
                   <Exercise
                     key={block.id}
                     block={block}
@@ -868,8 +825,8 @@ function Main() {
                 только на этом устройстве; аккаунта и синхронизации нет.
               </Text>
               <Text style={s.parentBody}>
-                Озвучивание использует голос устройства. Доступность русского
-                голоса зависит от системы.
+                Озвучивание временно отключено: кнопки «Слушать» нет, пока не
+                выбран голос диктора. Читайте задания вместе.
               </Text>
               <Text style={s.parentBody}>
                 Выполнено {stepsDone} из {allBlocks.length} шагов.
@@ -1259,17 +1216,6 @@ const s = StyleSheet.create({
     flexWrap: "wrap",
   },
   exerciseCategory: { fontFamily: f.regular, color: c.muted, fontSize: 14 },
-  speechButton: {
-    backgroundColor: c.card,
-    borderWidth: 1.5,
-    borderColor: c.pen,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 4,
-    minHeight: 40,
-    justifyContent: "center",
-  },
-  speechText: { fontFamily: f.bold, color: c.pen, fontSize: 14 },
   navigation: {
     flexDirection: "row",
     justifyContent: "space-between",

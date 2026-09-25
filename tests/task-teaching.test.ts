@@ -97,7 +97,8 @@ test("read screens explain what to do and how to continue", () => {
     .steps.map((s) => s.text)
     .join(" ");
   assert.match(text, /Рассмотри/);
-  assert.match(text, /послушай/);
+  // The voice button is hidden for now; the read step asks to read together instead.
+  assert.match(text, /Прочитай текст вместе со взрослым/);
   assert.match(text, /«Дальше»/);
 });
 
