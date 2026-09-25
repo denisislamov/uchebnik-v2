@@ -184,6 +184,19 @@ function Main() {
           );
       });
   }, [progress, ready]);
+  // Mobile browsers hide their address bar while scrolling; sized with 100vh
+  // the app then overflows the visible area and the bottom of a lesson is
+  // cut off. Size it to the dynamic viewport where the browser supports it.
+  useEffect(() => {
+    if (Platform.OS !== "web" || typeof document === "undefined") return;
+    if (typeof CSS === "undefined" || !CSS.supports("height", "100dvh")) return;
+    for (const element of [
+      document.documentElement,
+      document.body,
+      document.getElementById("root"),
+    ])
+      if (element) element.style.height = "100dvh";
+  }, []);
   useEffect(() => {
     scroll.current?.scrollTo({ y: 0, animated: false });
     lastScroll.current = 0;
@@ -299,30 +312,35 @@ function Main() {
         )}
       </View>
     );
+  // On phones and tablets the header scrolls away with the page: pinned, it
+  // only ate room that a long task needs. Wide screens keep it in place.
+  const header = (
+    <View style={[s.header, compact && { paddingHorizontal: 18 }]}>
+      <NotebookPaper />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="На главную"
+        onPress={() => setHome(true)}
+        style={s.brand}
+      >
+        <Text style={s.brandTitle}>Арифметика</Text>
+        <Text style={s.brandSub}>1 класс</Text>
+      </Pressable>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Информация для родителей"
+        onPress={() => setParent(true)}
+        style={s.parentButton}
+      >
+        <LockIcon />
+        {!compact && <Text style={s.parentText}>Родителям</Text>}
+      </Pressable>
+    </View>
+  );
   return (
     <SafeAreaView style={s.safe} edges={["top", "bottom", "left", "right"]}>
       <StatusBar style="dark" />
-      <View style={[s.header, compact && { paddingHorizontal: 18 }]}>
-        <NotebookPaper />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="На главную"
-          onPress={() => setHome(true)}
-          style={s.brand}
-        >
-          <Text style={s.brandTitle}>Арифметика</Text>
-          <Text style={s.brandSub}>1 класс</Text>
-        </Pressable>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Информация для родителей"
-          onPress={() => setParent(true)}
-          style={s.parentButton}
-        >
-          <LockIcon />
-          {!compact && <Text style={s.parentText}>Родителям</Text>}
-        </Pressable>
-      </View>
+      {wide && header}
       {storageError !== "" && (
         <View accessibilityRole="alert" style={s.storageError}>
           <Text style={{ color: c.red, fontFamily: f.regular, flex: 1 }}>
@@ -361,6 +379,7 @@ function Main() {
           }}
           contentContainerStyle={s.scroll}
         >
+          {!wide && header}
           <NotebookPaper margin={!compact} />
           {home ? (
             <View

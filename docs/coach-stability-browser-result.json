@@ -26,7 +26,7 @@
           "h": 318.859375
         }
       },
-      "frames": 83,
+      "frames": 82,
       "gaps": 0,
       "movement": 0,
       "closed": {
@@ -91,12 +91,12 @@
     "answersUnchanged": true
   },
   "scrollRestore": {
-    "before": 786,
+    "before": 696,
     "during": [
-      150,
-      150,
-      686
+      18,
+      18,
+      632
     ],
-    "after": 786
+    "after": 696
   }
 }

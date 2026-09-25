@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "headerBefore": 18.5,
+      "headerAfter": -381.5,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 180
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "headerBefore": 18.5,
+      "headerAfter": -381.5,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 270
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "headerBefore": 18.5,
+      "headerAfter": 18.5,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 270
+    }
+  ],
+  "errors": []
+}

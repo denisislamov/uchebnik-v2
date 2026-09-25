@@ -9,7 +9,13 @@ import { CounterBoard } from "./CounterBoard";
 import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
 import React, { useRef } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import type { Answer, Block } from "../content/types";
 import { colors as c, fonts as f } from "../theme";
 import { isCorrect, isDone, hasInk } from "../lib/assessment";
@@ -49,6 +55,9 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
     images: imagesRef,
     answer: answerRef,
   });
+  // On a phone a full-height illustration pushes the answer off screen; keep
+  // the picture and the place to answer within one view.
+  const compact = useWindowDimensions().width < 600;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
   const update = (patch: Partial<Answer>) =>
@@ -116,7 +125,15 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                 >
                   <BookImage
                     id={id}
-                    maxHeight={block.kind === "read" ? 340 : 270}
+                    maxHeight={
+                      compact
+                        ? block.kind === "read"
+                          ? 240
+                          : 180
+                        : block.kind === "read"
+                          ? 340
+                          : 270
+                    }
                   />
                 </View>
               ))}
