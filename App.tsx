@@ -19,7 +19,12 @@ import { Andika_400Regular } from "@expo-google-fonts/andika/400Regular";
 import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
 import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
 import Svg, { Path, Rect } from "react-native-svg";
-import * as Speech from "expo-speech";
+import { narrator } from "./src/lib/narrator";
+import { narrationLines } from "./src/lib/narrationLines";
+import {
+  readAutoNarration,
+  writeAutoNarration,
+} from "./src/lib/narrationSettings";
 import { pages, allBlocks, lessonPages, extraPages } from "./src/content/book";
 import type { Answer, Progress } from "./src/content/types";
 import {
@@ -124,6 +129,7 @@ function Main() {
     [storageError, setStorageError] = useState(""),
     [speaking, setSpeaking] = useState(false),
     [speechError, setSpeechError] = useState(""),
+    [autoNarration, setAutoNarration] = useState(true),
     [zoom, setZoom] = useState(false),
     [catalogSection, setCatalogSection] = useState(0),
     [search, setSearch] = useState("");
@@ -167,9 +173,24 @@ function Main() {
       });
     return () => {
       mounted = false;
-      void Speech.stop();
+      narrator.stop();
     };
   }, [readAttempt]);
+  // The voice is one object for the whole app; the button mirrors its state.
+  const manualSpeech = useRef(false);
+  useEffect(
+    () =>
+      narrator.subscribe((state) => {
+        setSpeaking(state.speaking);
+        if (state.error && manualSpeech.current)
+          setSpeechError("Озвучивание недоступно. Прочитайте задание вместе.");
+        if (!state.speaking) manualSpeech.current = false;
+      }),
+    [],
+  );
+  useEffect(() => {
+    void readAutoNarration().then(setAutoNarration);
+  }, []);
   useEffect(() => {
     if (!ready) return;
     const revision = ++saveRevision.current;
@@ -201,9 +222,8 @@ function Main() {
     scroll.current?.scrollTo({ y: 0, animated: false });
     lastScroll.current = 0;
     setDrawing(false);
-    setSpeaking(false);
     setSpeechError("");
-    void Speech.stop();
+    narrator.stop();
   }, [progress.page, progress.block, home]);
   const page = pages[progress.page - 1],
     block = page.blocks[progress.block],
@@ -273,24 +293,20 @@ function Main() {
   function updateAnswer(a: Answer) {
     setProgress((p) => ({ ...p, answers: { ...p.answers, [block.id]: a } }));
   }
+  // A child of this age does not read: every task is read aloud when it opens,
+  // unless a parent turned that off. The button repeats it or stops it.
+  useEffect(() => {
+    if (home || !ready || !autoNarration) return;
+    narrator.say(narrationLines(block));
+  }, [progress.page, progress.block, home, ready, autoNarration, block]);
   function speak() {
     if (speaking) {
-      void Speech.stop();
-      setSpeaking(false);
+      narrator.stop();
       return;
     }
     setSpeechError("");
-    setSpeaking(true);
-    Speech.speak(block.kind === "read" ? block.body : block.prompt, {
-      language: "ru-RU",
-      rate: 0.85,
-      onDone: () => setSpeaking(false),
-      onStopped: () => setSpeaking(false),
-      onError: () => {
-        setSpeaking(false);
-        setSpeechError("Озвучивание недоступно. Прочитайте задание вместе.");
-      },
-    });
+    manualSpeech.current = true;
+    narrator.say(narrationLines(block));
   }
   if (!ready || (!loaded && !fontError))
     return (
@@ -868,9 +884,25 @@ function Main() {
                 только на этом устройстве; аккаунта и синхронизации нет.
               </Text>
               <Text style={s.parentBody}>
-                Озвучивание использует голос устройства. Доступность русского
-                голоса зависит от системы.
+                {autoNarration
+                  ? "Задания читаются вслух сами, когда открываются."
+                  : "Задания читаются вслух только по кнопке «Слушать»."}{" "}
+                Пока звучит голос устройства; записи диктора подключаются через
+                манифест.
               </Text>
+              <Button
+                secondary
+                onPress={() => {
+                  const next = !autoNarration;
+                  setAutoNarration(next);
+                  void writeAutoNarration(next);
+                  if (!next) narrator.stop();
+                }}
+              >
+                {autoNarration
+                  ? "Выключить автоозвучивание"
+                  : "Включить автоозвучивание"}
+              </Button>
               <Text style={s.parentBody}>
                 Выполнено {stepsDone} из {allBlocks.length} шагов.
               </Text>

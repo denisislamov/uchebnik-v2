@@ -20,7 +20,9 @@
     "test:debug": "node scripts/debug-source-smoke.cjs",
     "test:release-guard": "node scripts/check-release-debug-guard.cjs",
     "lint:texts": "python3 scripts/content/lint_texts.py --report docs/TEXT_LINT.md",
-    "audit:hints": "node --experimental-strip-types scripts/content/hints_audit.mjs"
+    "audit:hints": "node --experimental-strip-types scripts/content/hints_audit.mjs",
+    "tts:phrases": "node --experimental-strip-types scripts/tts/phrases.mjs",
+    "tts:generate": "python3 scripts/tts/generate.py"
   },
   "dependencies": {
     "@expo-google-fonts/andika": "^0.4.1",
