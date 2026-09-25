@@ -63,9 +63,20 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
     <View style={{ gap: 22 }}>
       <CoachButton onPress={showTaskCoach} />
       <View ref={instructionRef} collapsable={false} style={{ gap: 10 }}>
-        <Text testID="block-title" style={s.title}>
-          {block.title}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Text testID="block-title" style={s.title}>
+            {block.title}
+          </Text>
+          {done && (
+            <Text
+              testID="done-mark"
+              accessibilityLabel="выполнено"
+              style={s.doneMark}
+            >
+              ✓
+            </Text>
+          )}
+        </View>
         {block.kind !== "read" && !promptRepeatsTitle(block) && (
           <Text testID="block-prompt" style={s.prompt}>
             {block.prompt}
@@ -243,7 +254,8 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         )}
         {!review && (block.kind === "counters" || block.kind === "shape") && (
           <Button
-            disabled={!hasValue || done}
+            disabled={!hasValue}
+            done={done}
             onPress={() =>
               onAnswer({
                 ...answer,
@@ -296,6 +308,7 @@ function AnswerAnchor({
 }
 const s = StyleSheet.create({
   title: { fontFamily: f.bold, fontSize: 26, lineHeight: 32, color: c.ink },
+  doneMark: { fontFamily: f.hand, fontSize: 32, lineHeight: 32, color: c.red },
   prompt: { fontFamily: f.regular, fontSize: 21, lineHeight: 30, color: c.ink },
   source: {
     fontFamily: f.regular,

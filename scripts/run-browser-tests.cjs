@@ -71,6 +71,7 @@ async function run(file) {
           "scripts/onboarding-all-views.cjs",
           "scripts/drawing-guidance-smoke.cjs",
           "scripts/search-smoke.cjs",
+          "scripts/status-smoke.cjs",
           "scripts/all-pages-smoke.cjs",
         ])
       await run(file);

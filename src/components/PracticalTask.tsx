@@ -334,6 +334,7 @@ export function PracticalTask({
             </View>
           ))}
           <Button
+            done={answer.checked && correct}
             onPress={() =>
               onAnswer({
                 ...answer,

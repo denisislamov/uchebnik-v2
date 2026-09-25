@@ -765,6 +765,7 @@ export function CourseTask({
           );
         })}
       <Button
+        done={answer.checked && courseCorrect(block, answer)}
         onPress={() =>
           onAnswer({
             ...answer,

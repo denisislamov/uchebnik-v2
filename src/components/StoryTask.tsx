@@ -229,6 +229,7 @@ export function StoryTask({
           ))}
           {!embedded && (
             <Button
+              done={answer.checked && storyCorrect(block, answer)}
               onPress={() =>
                 onAnswer({
                   ...answer,

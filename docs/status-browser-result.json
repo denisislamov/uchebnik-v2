@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "lipBefore": "3px",
+      "doneMark": true,
+      "nextHeight": 54
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "lipBefore": "3px",
+      "doneMark": true,
+      "nextHeight": 54
+    }
+  ],
+  "errors": []
+}
