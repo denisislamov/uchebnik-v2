@@ -66,8 +66,23 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           await modal.waitFor();
           await p.clock.runFor(500);
           const heading = await modal.getByText(/^Смотри, как ·/).innerText();
-          const card = await p.getByTestId("coach-card").boundingBox();
-          const hole = await p.getByTestId("coach-highlight").boundingBox();
+          // Measuring and placing the card is asynchronous and slower on CI:
+          // wait until the highlight exists and the card sits inside the viewport.
+          let card = null,
+            hole = null;
+          for (let i = 0; i < 40; i++) {
+            card = await p.getByTestId("coach-card").boundingBox();
+            hole = await p.getByTestId("coach-highlight").boundingBox();
+            if (
+              hole &&
+              card &&
+              card.y >= 0 &&
+              card.y + card.height <= viewport.height + 1
+            )
+              break;
+            await p.clock.runFor(100);
+            await p.waitForTimeout(25);
+          }
           assert.ok(
             hole,
             `${id} ${heading}: target must be visible automatically`,
