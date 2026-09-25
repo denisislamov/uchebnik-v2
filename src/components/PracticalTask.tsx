@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TextInput, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput } from "react-native";
 import type { Answer, Block, PracticalState } from "../content/types";
 import {
   practicalCorrect,
@@ -29,8 +29,6 @@ export function PracticalTask({
   onDrawing: (value: boolean) => void;
 }) {
   const [message, setMessage] = useState("");
-  const scroll = useRef<ScrollView>(null),
-    [viewportWidth, setViewportWidth] = useState(320);
   const current = block.steps.findIndex(
     (step) =>
       !answer.practical?.[step.id]?.confirmed ||
@@ -77,19 +75,6 @@ export function PracticalTask({
     progress && !progress.done
       ? trace!.stages[progress.stage][progress.index]
       : undefined;
-  useEffect(() => {
-    if (!trace || trace.columns <= 16 || !target) return;
-    const sheetWidth = trace.columns * 28;
-    const xs = target.points.map((p) => p.x * sheetWidth);
-    const middle = (Math.min(...xs) + Math.max(...xs)) / 2;
-    scroll.current?.scrollTo({
-      x: Math.max(
-        0,
-        Math.min(sheetWidth - viewportWidth, middle - viewportWidth / 2),
-      ),
-      animated: false,
-    });
-  }, [step?.id, progress?.index, trace?.columns, viewportWidth]);
   const correct = practicalCorrect(block, answer);
   const sideBySide =
     step?.groupLabels?.[0] === "Слева" && step?.groupLabels?.[1] === "Справа";
@@ -233,25 +218,13 @@ export function PracticalTask({
                   следующему пунктиру.
                 </Text>
               )}
-              <ScrollView
-                ref={scroll}
-                onLayout={(e) => setViewportWidth(e.nativeEvent.layout.width)}
-                horizontal={trace.columns > 16}
-                contentContainerStyle={
-                  trace.columns > 16
-                    ? { width: trace.columns * 28 }
-                    : { width: "100%" }
-                }
-              >
-                <View style={{ width: "100%" }}>
-                  <DrawingPad
-                    strokes={state.strokes ?? []}
-                    trace={trace}
-                    onDrawing={onDrawing}
-                    onChange={(strokes) => update({ ...state, strokes })}
-                  />
-                </View>
-              </ScrollView>
+              {/* The pad owns the sheet: fingertip cells and sideways scrolling to the current line. */}
+              <DrawingPad
+                strokes={state.strokes ?? []}
+                trace={trace}
+                onDrawing={onDrawing}
+                onChange={(strokes) => update({ ...state, strokes })}
+              />
             </View>
           )}
           {step.mode === "construct" && (

@@ -119,11 +119,15 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             });
           if (step === 0 && viewport.width === 390 && id === "p003-block02") {
             await p.setViewportSize({ width: 844, height: 390 });
-            await p.clock.runFor(700);
+            // Re-measurement after rotation is asynchronous: wait for the
+            // highlight to come back instead of a fixed slice of fake time.
+            let rotatedHole = null;
+            for (let i = 0; i < 40 && !rotatedHole; i++) {
+              await p.clock.runFor(100);
+              await p.waitForTimeout(25);
+              rotatedHole = await p.getByTestId("coach-highlight").boundingBox();
+            }
             const rotatedCard = await p.getByTestId("coach-card").boundingBox();
-            const rotatedHole = await p
-              .getByTestId("coach-highlight")
-              .boundingBox();
             assert.ok(
               rotatedHole &&
                 (rotatedHole.x + rotatedHole.width <= rotatedCard.x + 1 ||

@@ -1,7 +1,8 @@
 import type { StorySpec } from "./storyTypes";
 import type { NumberGameSpec } from "./numberGameTypes";
 export type Point = { x: number; y: number };
-export type Stroke = { color: string; points: Point[] };
+/** `cellPx` records how large a grid cell was on the screen the stroke was drawn on. */
+export type Stroke = { color: string; points: Point[]; cellPx?: number };
 export type Hotspot = {
   id: string;
   image: number;

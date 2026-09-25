@@ -162,6 +162,16 @@ async function settle(page) {
         report.screenshots.push(screenshot);
         const before = await metrics(page);
         assert.equal(before.gutter, "stable");
+        const cell = before.width / block.trace.columns;
+        assert.ok(
+          cell >= 44 - 0.5,
+          `${width}px: a grid cell must stay a fingertip target, got ${cell.toFixed(1)} px`,
+        );
+        assert.ok(
+          width < 600 || before.width <= width,
+          `a wide screen keeps the sheet inside the viewport (${before.width} of ${width})`,
+        );
+        report.mouse.push({ width, cellPx: Math.round(cell * 10) / 10 });
         await page.mouse.move(
           before.x + before.width / 2,
           before.y + before.height / 4,
