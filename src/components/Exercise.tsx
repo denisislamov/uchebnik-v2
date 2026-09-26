@@ -9,19 +9,14 @@ import { CounterBoard } from "./CounterBoard";
 import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
 import React, { useRef } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-} from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { colors as c, fonts as f } from "../theme";
 import { isCorrect, isDone, hasInk } from "../lib/assessment";
 import { promptRepeatsTitle } from "../lib/blockText";
 import { BookImage } from "./BookImage";
-import { Button } from "./Controls";
+import { useTaskSize } from "./taskSize";
+import { Button, RetryNote } from "./Controls";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { PracticalTask } from "./PracticalTask";
@@ -57,7 +52,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   });
   // On a phone a full-height illustration pushes the answer off screen; keep
   // the picture and the place to answer within one view.
-  const compact = useWindowDimensions().width < 600;
+  const size = useTaskSize();
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
   const update = (patch: Partial<Answer>) =>
@@ -69,28 +64,43 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       ? Array.isArray(answer.value) && answer.value.length > 0
       : answer.value !== undefined && answer.value !== "";
   return (
-    <View style={{ gap: 22 }}>
-      <CoachButton onPress={showTaskCoach} />
-      <View ref={instructionRef} collapsable={false} style={{ gap: 10 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <Text testID="block-title" style={s.title}>
-            {block.title}
-          </Text>
-          {done && (
+    <View style={{ gap: size.compact ? 14 : 22 }}>
+      {size.compact && <CoachButton onPress={showTaskCoach} />}
+      {/* On wider screens the button sits beside the heading: a row of its own
+          pushed the task a whole line down. */}
+      <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
+        <View
+          ref={instructionRef}
+          collapsable={false}
+          style={{ gap: 10, flex: 1, minWidth: 0 }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Text
-              testID="done-mark"
-              accessibilityLabel="выполнено"
-              style={s.doneMark}
+              testID="block-title"
+              style={[s.title, size.wide && { fontSize: 30, lineHeight: 36 }]}
             >
-              ✓
+              {block.title}
+            </Text>
+            {done && (
+              <Text
+                testID="done-mark"
+                accessibilityLabel="выполнено"
+                style={s.doneMark}
+              >
+                ✓
+              </Text>
+            )}
+          </View>
+          {block.kind !== "read" && !promptRepeatsTitle(block) && (
+            <Text
+              testID="block-prompt"
+              style={[s.prompt, size.wide && { fontSize: 24, lineHeight: 34 }]}
+            >
+              {block.prompt}
             </Text>
           )}
         </View>
-        {block.kind !== "read" && !promptRepeatsTitle(block) && (
-          <Text testID="block-prompt" style={s.prompt}>
-            {block.prompt}
-          </Text>
-        )}
+        {!size.compact && <CoachButton onPress={showTaskCoach} />}
       </View>
       <View ref={imagesRef} collapsable={false} style={{ gap: 14 }}>
         {block.kind === "picture" && (
@@ -125,15 +135,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                 >
                   <BookImage
                     id={id}
-                    maxHeight={
-                      compact
-                        ? block.kind === "read"
-                          ? 240
-                          : 180
-                        : block.kind === "read"
-                          ? 340
-                          : 270
-                    }
+                    maxHeight={block.kind === "read" ? size.read : size.picture}
                   />
                 </View>
               ))}
@@ -289,11 +291,9 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           (block.kind !== "picture" ||
             (Array.isArray(answer.value) &&
               answer.value.some((id) => !block.expected.includes(id)))) && (
-            <View accessibilityRole="alert" style={s.retry}>
-              <Text style={s.retryText}>
-                Пока не совпало. Посмотри ещё раз — у тебя получится.
-              </Text>
-            </View>
+            <RetryNote>
+              Пока не совпало. Посмотри ещё раз — у тебя получится.
+            </RetryNote>
           )}
         {!review && done && block.kind !== "read" && (
           <View accessibilityLiveRegion="polite" style={s.success}>
@@ -419,15 +419,6 @@ const s = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  // Замечание учителя: красной ручкой на полях серой заметки.
-  retry: {
-    backgroundColor: c.washWarm,
-    padding: 14,
-    borderRadius: 4,
-    borderLeftWidth: 3,
-    borderLeftColor: c.red,
-  },
-  retryText: { fontFamily: f.bold, color: c.red, fontSize: 16, lineHeight: 22 },
   // Отметка учителя: написана красной ручкой прямо на листе.
   success: { paddingVertical: 4 },
   successText: {

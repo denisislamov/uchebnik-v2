@@ -1,5 +1,6 @@
 import React from "react";
 import { Pressable, Text, StyleSheet, View } from "react-native";
+import Svg, { Path } from "react-native-svg";
 import { colors as c, fonts as f } from "../theme";
 /** `done`: the action already succeeded — flat, no pen lip, not pressable, still fully legible. */
 export function Button({
@@ -42,6 +43,41 @@ export function Button({
         {children}
       </Text>
     </Pressable>
+  );
+}
+/**
+ * «Попробуй ещё раз»: не красная отметка учителя, а заметка карандашом —
+ * своя краска, пунктирная рамка и круглый значок со стрелкой по кругу, чтобы
+ * «не получилось» нельзя было спутать с галочкой «верно».
+ */
+export function RetryNote({
+  children,
+  alert = true,
+}: {
+  children: React.ReactNode;
+  alert?: boolean;
+}) {
+  return (
+    <View
+      testID="retry-note"
+      accessibilityRole={alert ? "alert" : undefined}
+      accessibilityLiveRegion="polite"
+      style={s.retry}
+    >
+      <View style={s.retryBadge}>
+        <Svg width={18} height={18} viewBox="0 0 24 24">
+          <Path
+            d="M19 12a7 7 0 1 1-2.05-4.95M19 4v4h-4"
+            stroke={c.white}
+            strokeWidth={2.6}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </Svg>
+      </View>
+      <Text style={s.retryText}>{children}</Text>
+    </View>
   );
 }
 export function ProgressBar({ value }: { value: number }) {
@@ -120,6 +156,33 @@ const s = StyleSheet.create({
   label: { fontFamily: f.bold, color: c.white, fontSize: 17, lineHeight: 24 },
   secondaryLabel: { color: c.pen },
   doneLabel: { color: c.pen },
+  retry: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    backgroundColor: c.retryWash,
+    borderWidth: 1.5,
+    borderStyle: "dashed",
+    borderColor: c.retry,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+  retryBadge: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: c.retry,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  retryText: {
+    flex: 1,
+    fontFamily: f.bold,
+    color: c.retry,
+    fontSize: 16,
+    lineHeight: 22,
+  },
   track: {
     height: 8,
     backgroundColor: c.card,

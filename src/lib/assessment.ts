@@ -70,6 +70,13 @@ export const isDone = (block: Block, answer?: Answer) =>
     block.kind === "draw" ||
     (block.kind === "counters" && block.expected === undefined) ||
     answer?.checked === true);
+/** «Дальше» opens only after the step is solved; reading and free practice are finished by pressing it. */
+export const canAdvance = (block: Block, answer?: Answer) =>
+  block.kind === "read" ||
+  (block.kind === "counters" &&
+    block.expected === undefined &&
+    Number(answer?.value) > 0) ||
+  isDone(block, answer);
 export const pageCompleted = (
   page: BookPage,
   answers: Record<string, Answer>,

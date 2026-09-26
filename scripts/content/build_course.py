@@ -176,9 +176,9 @@ for page in source:
   if data is None and n:unresolved.append(dict(page=p,number=n,id=b['id'],text=t,solution=sol));continue
   if data is None:
    if not n and t.lower() in ['нет','нет.','—']:continue
-   data=dict(kind='read',body=t,prompt='Рассмотри и послушай')
+   data=dict(kind='read',body=t,prompt='Рассмотри')
   # Printed ready examples remain demonstrations, not forced answer fields.
-  if not n and re.search('образец|правило|пояснение|заголовок',role,re.I):data=dict(kind='read',body=t,prompt='Рассмотри и послушай')
+  if not n and re.search('образец|правило|пояснение|заголовок',role,re.I):data=dict(kind='read',body=t,prompt='Рассмотри')
   if n in QUESTION_FIELDS and data.get('kind')=='work':
    data=dict(data,fields=QUESTION_FIELDS[n]+data['fields'])
    if n==515:data.pop('prompt',None)
@@ -196,7 +196,7 @@ for p,blocks in build(assets,calc).items():out[p-11]['blocks']=blocks
 for page in out:
  used={x for b in page['blocks'] for x in b['images']}
  missing=[a['id'] for a in assets if a['page']==page['number'] and a['id'] not in used]
- if missing:page['blocks'].insert(0,dict(id=f"p{page['number']:03}-source-art",kind='read',title='Рисунки страницы',prompt='Рассмотри и послушай',body='Рассмотри рисунки. Затем переходи к заданиям.',images=missing))
+ if missing:page['blocks'].insert(0,dict(id=f"p{page['number']:03}-source-art",kind='read',title='Рисунки страницы',prompt='Рассмотри',body='Рассмотри рисунки. Затем переходи к заданиям.',images=missing))
  if not page['blocks']:page['blocks']=[dict(id=f"p{page['number']:03}-original",kind='read',title=page['title'],prompt='Рассмотри страницу',body='Оригинальная страница учебника.',images=[page['hero']])]
 if unresolved:raise SystemExit('Unresolved exercise mappings')
 # Parts that the original combines with a numbered calculation are additional actions.

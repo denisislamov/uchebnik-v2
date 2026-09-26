@@ -1,4 +1,4 @@
-/** Phones and tablets scroll the header away, the app is sized to the dynamic viewport, and a phone keeps the picture near the answer. */
+/** Phones and tablets scroll the header away, the app is sized to the dynamic viewport, a phone keeps the picture near the answer, and «Дальше» waits for a solved task. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
@@ -42,7 +42,11 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       if (dvh.supported) assert.equal(dvh.html, "100dvh", "app sized to the dynamic viewport");
       const image = await p.getByTestId(`book-image-${page.blocks[index].images[0]}`).boundingBox();
       assert.ok(image, "illustration rendered");
-      if (viewport.width < 600) assert.ok(image.height <= 180 + 1, `phone illustration stays compact (${image.height})`);
+      // The picture's share follows the screen height: small enough on a phone to keep the answer in view, not tiny on a monitor.
+      if (viewport.width < 600) assert.ok(image.height <= viewport.height * 0.3 + 1, `phone illustration stays compact (${image.height})`);
+      if (viewport.width >= 1000) assert.ok(image.height >= 270 - 1, `desktop illustration is not shrunk (${image.height})`);
+      const next = p.getByRole("button", { name: "Дальше →", exact: true });
+      assert.equal(await next.getAttribute("aria-disabled"), "true", "«Дальше» waits until the task is solved");
       report.checks.push({ viewport, headerBefore: before.y, headerAfter: after && after.y, dvh, imageHeight: image.height });
       await ctx.close();
     }

@@ -24,6 +24,7 @@ import type { Answer, Progress } from "./src/content/types";
 import {
   emptyProgress,
   isDone,
+  canAdvance,
   pageCompleted,
   parseProgress,
 } from "./src/lib/assessment";
@@ -225,7 +226,9 @@ function Main() {
     byExercise
       ? p.blocks.findIndex((b) => b.exerciseNumber === queryNumber)
       : -1;
+  const advance = canAdvance(block, answer);
   function next() {
+    if (!advance) return;
     setProgress((p) => {
       const current = pages[p.page - 1].blocks[p.block];
       const answers =
@@ -612,7 +615,7 @@ function Main() {
                 </View>
               )}
               <View style={s.lessonMain}>
-                <View style={s.lessonTop}>
+                <View style={[s.lessonTop, compact && { marginBottom: 4 }]}>
                   <Pressable
                     accessibilityRole="button"
                     onPress={() => setHome(true)}
@@ -634,26 +637,42 @@ function Main() {
                 <Text
                   style={[
                     s.lessonTitle,
-                    compact && { fontSize: 33, lineHeight: 39 },
+                    compact && { fontSize: 28, lineHeight: 33 },
                   ]}
                 >
                   {page.title}
                 </Text>
-                <Text style={s.lessonSubtitle}>
+                <Text
+                  style={[
+                    s.lessonSubtitle,
+                    compact && { fontSize: 13, lineHeight: 18, marginTop: 2 },
+                  ]}
+                >
                   Страница {page.number} · {page.subtitle}
                 </Text>
-                <View style={s.stepHeading}>
+                <View
+                  style={[
+                    s.stepHeading,
+                    compact && { marginTop: 10, marginBottom: 0 },
+                  ]}
+                >
                   <Text style={s.stepText}>
                     Шаг {progress.block + 1} из {page.blocks.length}
                     {block.exerciseNumber ? ` · № ${block.exerciseNumber}` : ""}
                   </Text>
                   <Text style={s.stepText}>{pageDone} выполнено</Text>
                 </View>
-                <ProgressBar value={pageDone / page.blocks.length} />
+                {/* On a phone the step squares already show progress; the bar only took height. */}
+                {!compact && (
+                  <ProgressBar value={pageDone / page.blocks.length} />
+                )}
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={s.stepDots}
+                  contentContainerStyle={[
+                    s.stepDots,
+                    compact && { paddingTop: 10, paddingBottom: 12 },
+                  ]}
                 >
                   {page.blocks.map((b, i) => (
                     <Pressable
@@ -681,17 +700,6 @@ function Main() {
                   ))}
                 </ScrollView>
                 <View testID="exercise-card" style={s.exerciseCard}>
-                  <View style={s.exerciseTop}>
-                    <Text style={s.exerciseCategory}>
-                      {block.kind === "read"
-                        ? "Рассмотри"
-                        : block.kind === "draw"
-                          ? "Нарисуй"
-                          : block.kind === "shape"
-                            ? "Собери фигуру"
-                            : "Попробуй сам"}
-                    </Text>
-                  </View>
                   <Exercise
                     key={block.id}
                     block={block}
@@ -732,13 +740,18 @@ function Main() {
                   >
                     ← Назад
                   </Button>
-                  <Button onPress={next}>
+                  <Button disabled={!advance} onPress={next}>
                     {!(progress.page >= 3 && progress.page < 142) &&
                     progress.block === page.blocks.length - 1
                       ? "К страницам →"
                       : "Дальше →"}
                   </Button>
                 </View>
+                {!advance && (
+                  <Text testID="next-locked-note" style={s.lockNote}>
+                    «Дальше» откроется, когда задание получится.
+                  </Text>
+                )}
                 <Text style={s.saveNote}>
                   Ответы и рисунки сохраняются на этом устройстве.
                 </Text>
@@ -1114,9 +1127,10 @@ const s = StyleSheet.create({
   },
   lessonLayout: {
     width: "100%",
-    maxWidth: 1230,
+    maxWidth: 1440,
     alignSelf: "center",
     padding: 38,
+    paddingTop: 26,
     paddingLeft: 64,
     flexDirection: "row",
     gap: 55,
@@ -1157,7 +1171,7 @@ const s = StyleSheet.create({
     lineHeight: 20,
     color: c.ink,
   },
-  lessonMain: { flex: 1, minWidth: 0, maxWidth: 780 },
+  lessonMain: { flex: 1, minWidth: 0, maxWidth: 1000 },
   lessonTop: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -1187,11 +1201,11 @@ const s = StyleSheet.create({
   stepHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 24,
-    marginBottom: 10,
+    marginTop: 14,
+    marginBottom: 8,
   },
   stepText: { fontFamily: f.regular, color: c.muted, fontSize: 14 },
-  stepDots: { gap: 8, paddingVertical: 16 },
+  stepDots: { gap: 8, paddingTop: 12, paddingBottom: 18 },
   stepDot: {
     width: 40,
     height: 40,
@@ -1207,20 +1221,19 @@ const s = StyleSheet.create({
   stepDotText: { fontFamily: f.bold, color: c.pen, fontSize: 16 },
   stepDoneText: { fontFamily: f.hand, color: c.red, fontSize: 24 },
   exerciseCard: { paddingTop: 4 },
-  exerciseTop: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 12,
-    marginBottom: 14,
-    flexWrap: "wrap",
-  },
-  exerciseCategory: { fontFamily: f.regular, color: c.muted, fontSize: 14 },
   navigation: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 14,
     marginTop: 26,
+  },
+  lockNote: {
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: "right",
+    marginTop: 10,
   },
   saveNote: {
     fontFamily: f.regular,

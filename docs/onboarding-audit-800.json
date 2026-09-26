@@ -86,8 +86,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -145,8 +145,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -313,14 +313,14 @@
           "text": "Нажимай прямо на рисунок. Отмеченный предмет подсветится. Нажми ещё раз, чтобы снять отметку.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 55,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -487,14 +487,14 @@
           "text": "Нажимай прямо на рисунок. Отмеченный предмет подсветится. Нажми ещё раз, чтобы снять отметку.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 55,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -603,8 +603,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -630,8 +630,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -740,13 +740,13 @@
           },
           "hole": {
             "x": 56,
-            "y": 149,
+            "y": 144,
             "width": 70,
             "height": 74
           },
           "finger": {
             "x": 82,
-            "y": 183,
+            "y": 178,
             "width": 34,
             "height": 44
           },
@@ -774,7 +774,7 @@
           "hole": {
             "x": 56,
             "y": 55,
-            "width": 699,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -839,15 +839,15 @@
           "text": "Мы насчитали 5. Положи по одному предмету за каждый посчитанный: на поле должно быть столько же.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 40,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -866,15 +866,15 @@
           "text": "Возьми предмет внизу и перенеси на поле. Чтобы убрать лишний, перетащи его обратно или нажми «Отменить».",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 40,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -982,8 +982,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1009,8 +1009,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1081,8 +1081,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1108,8 +1108,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1266,9 +1266,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 55,
-            "width": 699,
-            "height": 88
+            "y": 40,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -1402,15 +1402,15 @@
           "text": "Затем посмотри, слева он или справа. Это два разных вопроса.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 194,
+            "y": 29,
             "width": 699,
-            "height": 164
+            "height": 157
           },
           "finger": null,
           "surface": null,
@@ -1429,15 +1429,15 @@
           "text": "Выбери ответ для каждого вопроса и проверь оба.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 194,
+            "y": 29,
             "width": 699,
-            "height": 164
+            "height": 157
           },
           "finger": null,
           "surface": null,
@@ -1463,7 +1463,7 @@
           "hole": {
             "x": 56,
             "y": 55,
-            "width": 699,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1496,9 +1496,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -1523,9 +1523,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -1595,8 +1595,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1622,8 +1622,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1752,14 +1752,14 @@
           "text": "Нажимай прямо на рисунок. Отмеченный предмет подсветится. Нажми ещё раз, чтобы снять отметку.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 55,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1868,8 +1868,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -1927,8 +1927,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -2037,9 +2037,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -2267,9 +2267,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 40,
-            "width": 699,
-            "height": 118
+            "y": 25,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -2301,8 +2301,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -2328,8 +2328,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -2400,8 +2400,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -2427,8 +2427,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -2580,9 +2580,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 89,
-            "width": 699,
-            "height": 88
+            "y": 59,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -2614,9 +2614,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -2673,9 +2673,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -2947,8 +2947,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -2974,8 +2974,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -3084,9 +3084,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -3342,9 +3342,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 40,
-            "width": 699,
-            "height": 118
+            "y": 25,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -3466,15 +3466,15 @@
           "text": "Нажимай прямо на рисунок. Отмеченный предмет подсветится. Нажми ещё раз, чтобы снять отметку.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 25,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -3582,9 +3582,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -3812,9 +3812,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 40,
-            "width": 699,
-            "height": 118
+            "y": 25,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -3847,7 +3847,7 @@
           "hole": {
             "x": 56,
             "y": 12,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -4340,8 +4340,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -4455,9 +4455,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -4543,9 +4543,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -4822,9 +4822,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -5106,9 +5106,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -5576,9 +5576,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -5664,9 +5664,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -5806,9 +5806,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 80
+            "y": 220,
+            "width": 503.5625,
+            "height": 112
           },
           "finger": null,
           "surface": null,
@@ -5921,9 +5921,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 48
+            "y": 323,
+            "width": 503.5625,
+            "height": 40
           },
           "finger": null,
           "surface": null,
@@ -6117,9 +6117,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -6259,8 +6259,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -6401,8 +6401,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -6544,7 +6544,7 @@
           "hole": {
             "x": 56,
             "y": 12,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -6679,14 +6679,14 @@
           "text": "Прочитай, какие числа уже заданы. Их нужно сохранить, а остальные подобрать самому.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -6827,9 +6827,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -6969,8 +6969,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -7111,9 +7111,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -7358,9 +7358,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -7630,9 +7630,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -7793,14 +7793,14 @@
           "text": "Прочитай условие и вопрос. Определи, что произошло с количеством и что нужно узнать.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -7995,8 +7995,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -8242,9 +8242,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -8411,8 +8411,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -8527,7 +8527,7 @@
           "hole": {
             "x": 56,
             "y": 189,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -8767,14 +8767,14 @@
           "text": "Прочитай первое действие. Выполни его на поле, затем переходи к следующему.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -9126,9 +9126,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -9349,8 +9349,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -9567,8 +9567,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -9763,9 +9763,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -9960,7 +9960,7 @@
           "hole": {
             "x": 56,
             "y": 189,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -10331,9 +10331,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -10473,9 +10473,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -10730,9 +10730,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -11085,9 +11085,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -11412,14 +11412,14 @@
           "text": "Прочитай первое действие. Выполни его на поле, затем переходи к следующему.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -11692,8 +11692,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -11719,9 +11719,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 30,
+            "y": 12,
             "width": 699,
-            "height": 156
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -11746,9 +11746,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 30,
+            "y": 12,
             "width": 699,
-            "height": 156
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -11862,14 +11862,14 @@
           "text": "Прочитай первое действие. Выполни его на поле, затем переходи к следующему.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -12162,9 +12162,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -12277,8 +12277,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -12535,7 +12535,7 @@
           "hole": {
             "x": 56,
             "y": 12,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -12970,9 +12970,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -13085,9 +13085,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -13379,8 +13379,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -13636,9 +13636,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -14116,9 +14116,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -14373,8 +14373,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -14569,9 +14569,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -15083,9 +15083,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -15198,8 +15198,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -15286,9 +15286,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 120
+            "y": 201,
+            "width": 503.5625,
+            "height": 150
           },
           "finger": null,
           "surface": null,
@@ -15482,9 +15482,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 216,
+            "width": 503.5625,
+            "height": 120
           },
           "finger": null,
           "surface": null,
@@ -15678,9 +15678,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -15820,8 +15820,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -15962,8 +15962,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -16212,9 +16212,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -16408,9 +16408,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -16599,8 +16599,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -16856,9 +16856,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -17009,9 +17009,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -17200,9 +17200,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -17396,9 +17396,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -17592,8 +17592,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -17815,8 +17815,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -18011,9 +18011,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -18126,8 +18126,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -18296,7 +18296,7 @@
           "hole": {
             "x": 56,
             "y": 189,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -18518,9 +18518,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -18660,9 +18660,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -18775,9 +18775,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -18945,7 +18945,7 @@
           "hole": {
             "x": 56,
             "y": 189,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -19195,7 +19195,7 @@
           "hole": {
             "x": 56,
             "y": 12,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -19336,9 +19336,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -19478,8 +19478,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -19674,8 +19674,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -19978,9 +19978,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -20289,9 +20289,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -20659,8 +20659,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -20882,9 +20882,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -21132,9 +21132,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -21328,8 +21328,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -21572,14 +21572,14 @@
           "text": "Прочитай первое действие. Выполни его на поле, затем переходи к следующему.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -21833,7 +21833,7 @@
           },
           "finger": {
             "x": 201,
-            "y": 258.890625,
+            "y": 268.484375,
             "width": 34,
             "height": 44
           },
@@ -21866,14 +21866,14 @@
           "text": "Прочитай условие и вопрос. Определи, что произошло с количеством и что нужно узнать.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -22068,8 +22068,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -22318,9 +22318,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -22541,9 +22541,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -22694,8 +22694,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -22836,9 +22836,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 118
+            "y": 202,
+            "width": 503.5625,
+            "height": 148
           },
           "finger": null,
           "surface": null,
@@ -22979,7 +22979,7 @@
           "hole": {
             "x": 56,
             "y": 189,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -23201,8 +23201,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -23505,9 +23505,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -23647,9 +23647,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -23870,8 +23870,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -24093,8 +24093,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -24316,8 +24316,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -24492,9 +24492,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -24581,7 +24581,7 @@
           "hole": {
             "x": 56,
             "y": 12,
-            "width": 699,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -24668,9 +24668,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -24837,9 +24837,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 88
+            "y": 217,
+            "width": 503.5625,
+            "height": 118
           },
           "finger": null,
           "surface": null,
@@ -25006,8 +25006,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -25317,8 +25317,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -25470,8 +25470,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -25623,8 +25623,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 232,
+            "width": 503.5625,
             "height": 88
           },
           "finger": null,
@@ -25650,9 +25650,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 30,
+            "y": 12,
             "width": 699,
-            "height": 156
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -25677,9 +25677,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 30,
+            "y": 12,
             "width": 699,
-            "height": 156
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -25711,8 +25711,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -25934,9 +25934,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
-            "height": 140
+            "y": 189,
+            "width": 503.5625,
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26087,8 +26087,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -26114,9 +26114,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26141,9 +26141,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26168,9 +26168,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26195,9 +26195,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26222,9 +26222,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26249,9 +26249,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26276,9 +26276,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26303,9 +26303,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26330,9 +26330,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26357,9 +26357,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26384,9 +26384,9 @@
           },
           "hole": {
             "x": 56,
-            "y": 27,
+            "y": 12,
             "width": 699,
-            "height": 159
+            "height": 174
           },
           "finger": null,
           "surface": null,
@@ -26412,14 +26412,14 @@
           "text": "Прочитай, какие числа уже заданы. Их нужно сохранить, а остальные подобрать самому.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -26743,14 +26743,14 @@
           "text": "Прочитай, какие числа уже заданы. Их нужно сохранить, а остальные подобрать самому.",
           "card": {
             "x": 12,
-            "y": 12,
+            "y": 198,
             "width": 776,
             "height": 165
           },
           "hole": {
             "x": 56,
-            "y": 189,
-            "width": 699,
+            "y": 12,
+            "width": 503.5625,
             "height": 174
           },
           "finger": null,
@@ -26945,8 +26945,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,
@@ -27141,8 +27141,8 @@
           },
           "hole": {
             "x": 56,
-            "y": 223,
-            "width": 699,
+            "y": 217,
+            "width": 503.5625,
             "height": 118
           },
           "finger": null,

@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "startedAt": "2026-09-25T11:22:16.609Z",
+  "startedAt": "2026-09-26T01:29:56.838Z",
   "mouse": [
     {
       "width": 390,
@@ -24,50 +24,50 @@
       ],
       "before": {
         "x": -77,
-        "y": 313,
+        "y": 283,
         "width": 528,
         "height": 352,
-        "scrollTop": 731,
+        "scrollTop": 634,
         "scrollClient": 374,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": -77,
-        "y": 313,
+        "y": 283,
         "width": 528,
         "height": 352,
-        "scrollTop": 731,
+        "scrollTop": 634,
         "scrollClient": 374,
         "overflow": "hidden",
         "gutter": "stable"
       },
       "after": {
         "x": -77,
-        "y": 313,
+        "y": 283,
         "width": 528,
         "height": 352,
-        "scrollTop": 731,
+        "scrollTop": 634,
         "scrollClient": 374,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryBefore": {
         "x": -77,
-        "y": 257,
+        "y": 205,
         "width": 528,
         "height": 352,
-        "scrollTop": 787,
+        "scrollTop": 712,
         "scrollClient": 374,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryDuring": {
         "x": -77,
-        "y": 257,
+        "y": 205,
         "width": 528,
         "height": 352,
-        "scrollTop": 787,
+        "scrollTop": 712,
         "scrollClient": 374,
         "overflow": "hidden",
         "gutter": "stable"
@@ -95,50 +95,50 @@
       ],
       "before": {
         "x": 64,
-        "y": 279,
+        "y": 249,
         "width": 642,
         "height": 428,
-        "scrollTop": 743,
+        "scrollTop": 675,
         "scrollClient": 744,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": 64,
-        "y": 279,
+        "y": 249,
         "width": 642,
         "height": 428,
-        "scrollTop": 743,
+        "scrollTop": 675,
         "scrollClient": 744,
         "overflow": "hidden",
         "gutter": "stable"
       },
       "after": {
         "x": 64,
-        "y": 278,
+        "y": 248,
         "width": 642,
         "height": 428,
-        "scrollTop": 744,
+        "scrollTop": 676,
         "scrollClient": 744,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryBefore": {
         "x": 64,
-        "y": 245,
+        "y": 185,
         "width": 642,
         "height": 428,
-        "scrollTop": 777,
+        "scrollTop": 739,
         "scrollClient": 744,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryDuring": {
         "x": 64,
-        "y": 245,
+        "y": 185,
         "width": 642,
         "height": 428,
-        "scrollTop": 777,
+        "scrollTop": 739,
         "scrollClient": 744,
         "overflow": "hidden",
         "gutter": "stable"
@@ -183,20 +183,20 @@
       "direction": "down",
       "before": {
         "x": -69,
-        "y": 201,
+        "y": 149,
         "width": 528,
         "height": 352,
-        "scrollTop": 843,
+        "scrollTop": 768,
         "scrollClient": 390,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": -69,
-        "y": 201,
+        "y": 149,
         "width": 528,
         "height": 352,
-        "scrollTop": 843,
+        "scrollTop": 768,
         "scrollClient": 390,
         "overflow": "hidden",
         "gutter": "stable"
@@ -208,20 +208,20 @@
       "direction": "up",
       "before": {
         "x": -69,
-        "y": 201,
+        "y": 149,
         "width": 528,
         "height": 352,
-        "scrollTop": 843,
+        "scrollTop": 768,
         "scrollClient": 390,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": -69,
-        "y": 201,
+        "y": 149,
         "width": 528,
         "height": 352,
-        "scrollTop": 843,
+        "scrollTop": 768,
         "scrollClient": 390,
         "overflow": "hidden",
         "gutter": "stable"
@@ -240,5 +240,5 @@
     "docs/drawing-guidance-p008-block14-1280.png"
   ],
   "errors": [],
-  "finishedAt": "2026-09-25T11:22:35.972Z"
+  "finishedAt": "2026-09-26T01:30:14.702Z"
 }

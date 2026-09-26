@@ -9,7 +9,7 @@ import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
-import { Button } from "./Controls";
+import { Button, RetryNote } from "./Controls";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
 const tokenStyle = {
   width: 30,
@@ -283,13 +283,12 @@ export function CourseTask({
             {field.options
               ? chips(field.id, field.options, spokenBlanks(field.label))
               : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
-            {answer.checked && (
-              <Text style={s.feedback}>
-                {r[field.id]?.trim() === field.expected
-                  ? "✓ Верно"
-                  : "Попробуй ещё раз"}
-              </Text>
-            )}
+            {answer.checked &&
+              (r[field.id]?.trim() === field.expected ? (
+                <Text style={s.feedback}>✓ Верно</Text>
+              ) : (
+                <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
+              ))}
           </View>
         ))}
       {block.kind === "compose" &&
@@ -334,13 +333,12 @@ export function CourseTask({
                 )}
               </View>
             )}
-            {answer.checked && (
-              <Text style={s.feedback}>
-                {compositionCorrect(rule, r[`${i}a`], r[`${i}b`], r[`${i}c`])
-                  ? "✓ Вычисление верное"
-                  : "Проверь числа и действие"}
-              </Text>
-            )}
+            {answer.checked &&
+              (compositionCorrect(rule, r[`${i}a`], r[`${i}b`], r[`${i}c`]) ? (
+                <Text style={s.feedback}>✓ Вычисление верное</Text>
+              ) : (
+                <RetryNote alert={false}>Проверь числа и действие</RetryNote>
+              ))}
           </View>
         ))}
       {block.kind === "activity" && block.activity.mode === "sequence" && (
@@ -811,7 +809,7 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   selected: { backgroundColor: c.pen },
-  feedback: { fontFamily: f.bold, color: c.pen, fontSize: 16 },
+  feedback: { fontFamily: f.hand, color: c.red, fontSize: 22, lineHeight: 26 },
   group: {
     padding: 12,
     borderWidth: 2,

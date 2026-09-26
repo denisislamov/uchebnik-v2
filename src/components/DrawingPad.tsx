@@ -12,7 +12,7 @@ import {
 } from "../lib/tracing";
 import { traceDirections, traceArrowGeometry } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
-import { Button, ProgressBar } from "./Controls";
+import { Button, ProgressBar, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
 export function DrawingPad({
   strokes,
@@ -386,7 +386,7 @@ export function DrawingPad({
                     d={d(s.points)}
                     stroke={
                       error && !active.current && i === visible.length
-                        ? c.red
+                        ? c.retry
                         : drawingColor(s.color)
                     }
                     strokeWidth={3}
@@ -419,19 +419,7 @@ export function DrawingPad({
           </View>
         </ScrollView>
       </View>
-      {error !== "" && (
-        <Text
-          accessibilityRole="alert"
-          style={{
-            fontFamily: f.bold,
-            color: c.red,
-            fontSize: 15,
-            lineHeight: 22,
-          }}
-        >
-          {error}
-        </Text>
-      )}
+      {error !== "" && <RetryNote>{error}</RetryNote>}
       <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
         Клетки одинаковые по ширине и высоте. Пунктир подсказывает путь.
         {scrollable ? " Лист шире экрана и сам подъезжает к нужной линии." : ""}

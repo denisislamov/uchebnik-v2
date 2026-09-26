@@ -11,7 +11,7 @@ import {
 import { CounterBoard } from "./CounterBoard";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
-import { Button } from "./Controls";
+import { Button, RetryNote } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
 import { traceProgress } from "../lib/tracing";
 import { DigitCards } from "./DigitCards";
@@ -262,14 +262,7 @@ export function PracticalTask({
           >
             Проверить действие
           </Button>
-          {!!message && (
-            <Text
-              accessibilityRole="alert"
-              style={{ fontFamily: f.bold, color: c.ink }}
-            >
-              {message}
-            </Text>
-          )}
+          {!!message && <RetryNote>{message}</RetryNote>}
         </View>
       )}
       {current < 0 && (

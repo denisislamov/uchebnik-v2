@@ -5,6 +5,8 @@ import { View, Image, Pressable, Text } from "react-native";
 import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
 import type { Block, Hotspot, Point } from "../content/types";
 import { assets } from "../content/assets";
+import { RetryNote } from "./Controls";
+import { useTaskSize } from "./taskSize";
 import { colors as c, fonts as f } from "../theme";
 import { NumberMeaning } from "./NumberMeaning";
 function Picture({
@@ -56,10 +58,12 @@ function Picture({
         : undefined,
     },
   ]);
+  const size = useTaskSize();
   const [width, setWidth] = useState(280);
-  const height = (width * a.height) / a.width;
-  const pick = (x: number, y: number) => {
-    const target = pickTarget(targets, { x, y }, width, height);
+  // A 3px pen line whatever the picture's scale.
+  const stroke = a.width / width;
+  const pick = (x: number, y: number, w: number, h: number) => {
+    const target = pickTarget(targets, { x, y }, w, h);
     onPick(target?.id ?? "miss");
   };
   function press(e: any, fallback?: string) {
@@ -70,7 +74,7 @@ function Picture({
       return;
     }
     frame.current?.measureInWindow((x, y, w, h) =>
-      pick((pageX - x) / w, (pageY - y) / h),
+      pick((pageX - x) / w, (pageY - y) / h, w, h),
     );
   }
   return (
@@ -79,7 +83,7 @@ function Picture({
         ref={frame}
         style={{
           width: "100%",
-          maxWidth: Math.min(650, (420 * a.width) / a.height),
+          maxWidth: Math.min(960, (size.target * a.width) / a.height),
           alignSelf: "center",
         }}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
@@ -88,7 +92,7 @@ function Picture({
           accessibilityRole="button"
           accessibilityLabel="Рисунок задания"
           onPress={(e) => press(e)}
-          style={{ width: "100%", height }}
+          style={{ width: "100%", aspectRatio: a.width / a.height }}
         >
           <Image
             accessible={false}
@@ -97,7 +101,13 @@ function Picture({
             style={{ width: "100%", height: "100%", borderRadius: 4 }}
           />
           <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
-            <Svg width={width} height={height}>
+            {/* Drawn in the picture's own pixels and scaled with it, so a
+                resized window never leaves the marks where the picture was. */}
+            <Svg
+              width="100%"
+              height="100%"
+              viewBox={`0 0 ${a.width} ${a.height}`}
+            >
               {targets
                 .filter((t) => selected.includes(t.id))
                 .map((t) =>
@@ -105,34 +115,34 @@ function Picture({
                     <Polygon
                       key={t.id}
                       points={t.polygon
-                        .map((p) => `${p.x * width},${p.y * height}`)
+                        .map((p) => `${p.x * a.width},${p.y * a.height}`)
                         .join(" ")}
                       fill="#2b4ba822"
                       stroke={c.pen}
-                      strokeWidth={3}
+                      strokeWidth={3 * stroke}
                     />
                   ) : t.ellipse ? (
                     <Ellipse
                       key={t.id}
-                      cx={(t.x + t.w / 2) * width}
-                      cy={(t.y + t.h / 2) * height}
-                      rx={(t.w * width) / 2}
-                      ry={(t.h * height) / 2}
+                      cx={(t.x + t.w / 2) * a.width}
+                      cy={(t.y + t.h / 2) * a.height}
+                      rx={(t.w * a.width) / 2}
+                      ry={(t.h * a.height) / 2}
                       fill="#2b4ba822"
                       stroke={c.pen}
-                      strokeWidth={3}
+                      strokeWidth={3 * stroke}
                     />
                   ) : (
                     <Rect
                       key={t.id}
-                      x={t.x * width}
-                      y={t.y * height}
-                      width={t.w * width}
-                      height={t.h * height}
-                      rx={6}
+                      x={t.x * a.width}
+                      y={t.y * a.height}
+                      width={t.w * a.width}
+                      height={t.h * a.height}
+                      rx={6 * stroke}
                       fill="#2b4ba822"
                       stroke={c.pen}
-                      strokeWidth={3}
+                      strokeWidth={3 * stroke}
                     />
                   ),
                 )}
@@ -147,10 +157,10 @@ function Picture({
               onPress={(e) => press(e, t.id)}
               style={{
                 position: "absolute",
-                left: t.x * width,
-                top: t.y * height,
-                width: t.w * width,
-                height: t.h * height,
+                left: `${t.x * 100}%`,
+                top: `${t.y * 100}%`,
+                width: `${t.w * 100}%`,
+                height: `${t.h * 100}%`,
               }}
             />
           ))}
@@ -204,11 +214,7 @@ export function PictureTask({
           Отмечено: {value.filter((x) => x !== "miss").length}
         </Text>
       )}
-      {miss && (
-        <Text style={{ fontFamily: f.bold, color: c.red }}>
-          Нажми прямо на предмет или цифру.
-        </Text>
-      )}
+      {miss && <RetryNote>Нажми прямо на предмет или цифру.</RetryNote>}
     </View>
   );
 }

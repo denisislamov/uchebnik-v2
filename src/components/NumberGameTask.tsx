@@ -9,7 +9,7 @@ import {
   setNumberGameResponse,
 } from "../lib/numberGame";
 import { colors as c, fonts as f } from "../theme";
-import { Button } from "./Controls";
+import { Button, RetryNote } from "./Controls";
 
 export function NumberGameTask({
   block,
@@ -63,13 +63,16 @@ export function NumberGameTask({
                 );
               })}
             </View>
-            {answer.checked && (
-              <Text accessibilityLiveRegion="polite" style={s.feedback}>
-                {responses[item.id] === item.expected
-                  ? "✓ Верно"
-                  : "Прочитай число ещё раз и выбери его название."}
-              </Text>
-            )}
+            {answer.checked &&
+              (responses[item.id] === item.expected ? (
+                <Text accessibilityLiveRegion="polite" style={s.feedback}>
+                  ✓ Верно
+                </Text>
+              ) : (
+                <RetryNote alert={false}>
+                  Прочитай число ещё раз и выбери его название.
+                </RetryNote>
+              ))}
           </View>
         ))}
         <Button onPress={check}>Проверить</Button>
@@ -144,11 +147,7 @@ export function NumberGameTask({
           >
             Открыть карточку
           </Button>
-          {!!message && (
-            <Text accessibilityLiveRegion="polite" style={s.feedback}>
-              {message}
-            </Text>
-          )}
+          {!!message && <RetryNote>{message}</RetryNote>}
         </View>
       )}
       {numberGameCorrect(block, answer) && (
@@ -157,9 +156,9 @@ export function NumberGameTask({
         </Text>
       )}
       {answer.checked && !numberGameCorrect(block, answer) && (
-        <Text accessibilityLiveRegion="polite" style={s.feedback}>
+        <RetryNote>
           Сначала разгадай и открой карточки в обеих загадках.
-        </Text>
+        </RetryNote>
       )}
       <Button onPress={check}>Проверить</Button>
     </View>

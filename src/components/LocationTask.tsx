@@ -8,6 +8,7 @@ import {
   type LocationAxis,
   type LocationBlock,
 } from "../lib/location";
+import { RetryNote } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
 
 export function LocationTask({
@@ -52,9 +53,9 @@ export function LocationTask({
         <Text style={s.prompt}>{block.verticalPrompt}</Text>
         {choices("vertical")}
         {verticalWrong && (
-          <Text accessibilityRole="alert" style={s.hint}>
+          <RetryNote>
             Посмотри ещё раз: рисунок ближе к верху или к низу доски?
-          </Text>
+          </RetryNote>
         )}
       </View>
       {stage !== "vertical" && (
@@ -91,5 +92,4 @@ const s = StyleSheet.create({
   selected: { backgroundColor: c.pen, borderColor: c.pen },
   optionText: { fontFamily: f.heavy, fontSize: 22, color: c.ink },
   selectedText: { color: c.white },
-  hint: { fontFamily: f.bold, color: c.red, fontSize: 17, lineHeight: 24 },
 });
