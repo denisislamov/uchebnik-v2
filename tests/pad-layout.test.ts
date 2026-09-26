@@ -26,3 +26,17 @@ test("target span is measured in cells", () => {
   assert.ok(Math.abs(targetSpanCells([{ x: 0.1 }, { x: 0.6 }], 12) - 6) < 1e-9);
   assert.equal(targetSpanCells([], 12), 0);
 });
+test("a short wide window caps the sheet height down to a pointer-sized cell", () => {
+  assert.equal(
+    padCellSize(1000, 12, 2, { height: 480, rows: 8, minCell: 28 }),
+    60,
+  );
+  assert.equal(
+    padCellSize(1000, 12, 2, { height: 160, rows: 8, minCell: 28 }),
+    28,
+  );
+  assert.equal(
+    padCellSize(1000, 12, 2, { height: 2000, rows: 8, minCell: 28 }),
+    1000 / 12,
+  );
+});

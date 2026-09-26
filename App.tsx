@@ -139,12 +139,14 @@ function Main() {
     }
   }, []);
   const [readAttempt, setReadAttempt] = useState(0);
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const comparison = !!DebugSourcePanel && !home;
   const sideBySide = windowWidth >= 900;
   const width = comparison && sideBySide ? windowWidth * 0.52 : windowWidth;
   const wide = width >= 1000,
-    compact = width < 600;
+    compact = width < 600,
+    // Laptop-height window: same rule as useTaskSize, the header folds down.
+    short = !compact && windowHeight < 900;
   useEffect(() => {
     let mounted = true;
     readProgress()
@@ -317,7 +319,7 @@ function Main() {
   return (
     <SafeAreaView style={s.safe} edges={["top", "bottom", "left", "right"]}>
       <StatusBar style="dark" />
-      {wide && header}
+      {wide && home && header}
       {storageError !== "" && (
         <View accessibilityRole="alert" style={s.storageError}>
           <Text style={{ color: c.red, fontFamily: f.regular, flex: 1 }}>
@@ -356,8 +358,9 @@ function Main() {
           }}
           contentContainerStyle={s.scroll}
         >
-          {!wide && header}
+          {/* The page's ruling is drawn first: the header and all text lie on it. */}
           <NotebookPaper margin={!compact} />
+          {!wide && home && header}
           {home ? (
             <View
               style={[
@@ -562,17 +565,11 @@ function Main() {
                   paddingLeft: 14,
                   paddingTop: 20,
                 },
+                short && { paddingTop: 10 },
               ]}
             >
               {wide && (
                 <View style={s.sidebar}>
-                  <Pressable
-                    accessibilityRole="button"
-                    onPress={() => setHome(true)}
-                    style={{ paddingBottom: 28 }}
-                  >
-                    <Text style={s.back}>← Все страницы</Text>
-                  </Pressable>
                   <Text style={s.eyebrow}>Соседние страницы</Text>
                   {lessonPages
                     .filter((p) => Math.abs(p.number - page.number) <= 4)
@@ -615,15 +612,27 @@ function Main() {
                 </View>
               )}
               <View style={s.lessonMain}>
-                <View style={[s.lessonTop, compact && { marginBottom: 4 }]}>
+                {/* One row: the arrow home, the page's name, the original. The
+                    app header stays on the contents page; here it only
+                    repeated «Арифметика» and took a line. */}
+                <View style={s.lessonTop}>
                   <Pressable
                     accessibilityRole="button"
+                    accessibilityLabel="На главную"
                     onPress={() => setHome(true)}
+                    hitSlop={8}
+                    style={s.backButton}
                   >
-                    <Text style={s.back}>
-                      {wide ? "Учебник · Арифметика" : "← Все страницы"}
-                    </Text>
+                    <BackArrow />
                   </Pressable>
+                  <Text
+                    style={[
+                      s.lessonTitle,
+                      (compact || short) && { fontSize: 28, lineHeight: 33 },
+                    ]}
+                  >
+                    {page.title}
+                  </Text>
                   <Pressable
                     accessibilityRole="button"
                     onPress={() => {
@@ -636,34 +645,38 @@ function Main() {
                 </View>
                 <Text
                   style={[
-                    s.lessonTitle,
-                    compact && { fontSize: 28, lineHeight: 33 },
-                  ]}
-                >
-                  {page.title}
-                </Text>
-                <Text
-                  style={[
                     s.lessonSubtitle,
-                    compact && { fontSize: 13, lineHeight: 18, marginTop: 2 },
+                    (compact || short) && {
+                      fontSize: 13,
+                      lineHeight: 18,
+                      marginTop: 2,
+                    },
                   ]}
                 >
                   Страница {page.number} · {page.subtitle}
+                  {short && block.exerciseNumber
+                    ? ` · № ${block.exerciseNumber}`
+                    : ""}
                 </Text>
-                <View
-                  style={[
-                    s.stepHeading,
-                    compact && { marginTop: 10, marginBottom: 0 },
-                  ]}
-                >
-                  <Text style={s.stepText}>
-                    Шаг {progress.block + 1} из {page.blocks.length}
-                    {block.exerciseNumber ? ` · № ${block.exerciseNumber}` : ""}
-                  </Text>
-                  <Text style={s.stepText}>{pageDone} выполнено</Text>
-                </View>
+                {/* On a laptop screen the step squares carry the count, as on a phone. */}
+                {!short && (
+                  <View
+                    style={[
+                      s.stepHeading,
+                      compact && { marginTop: 10, marginBottom: 0 },
+                    ]}
+                  >
+                    <Text style={s.stepText}>
+                      Шаг {progress.block + 1} из {page.blocks.length}
+                      {block.exerciseNumber
+                        ? ` · № ${block.exerciseNumber}`
+                        : ""}
+                    </Text>
+                    <Text style={s.stepText}>{pageDone} выполнено</Text>
+                  </View>
+                )}
                 {/* On a phone the step squares already show progress; the bar only took height. */}
-                {!compact && (
+                {!compact && !short && (
                   <ProgressBar value={pageDone / page.blocks.length} />
                 )}
                 <ScrollView
@@ -672,6 +685,7 @@ function Main() {
                   contentContainerStyle={[
                     s.stepDots,
                     compact && { paddingTop: 10, paddingBottom: 12 },
+                    short && { paddingTop: 8, paddingBottom: 6 },
                   ]}
                 >
                   {page.blocks.map((b, i) => (
@@ -699,7 +713,10 @@ function Main() {
                     </Pressable>
                   ))}
                 </ScrollView>
-                <View testID="exercise-card" style={s.exerciseCard}>
+                <View
+                  testID="exercise-card"
+                  style={[s.exerciseCard, short && { paddingTop: 0 }]}
+                >
                   <Exercise
                     key={block.id}
                     block={block}
@@ -729,7 +746,7 @@ function Main() {
                     }
                   />
                 </View>
-                <View style={s.navigation}>
+                <View style={[s.navigation, short && { marginTop: 12 }]}>
                   <Button
                     secondary
                     disabled={
@@ -889,6 +906,20 @@ function Main() {
         </View>
       </Modal>
     </SafeAreaView>
+  );
+}
+function BackArrow() {
+  return (
+    <Svg width={20} height={20} viewBox="0 0 24 24">
+      <Path
+        d="M15 5 L8 12 L15 19"
+        fill="none"
+        stroke={c.pen}
+        strokeWidth={2.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
   );
 }
 function LockIcon() {
@@ -1136,7 +1167,6 @@ const s = StyleSheet.create({
     gap: 55,
   },
   sidebar: { width: 235, paddingTop: 4 },
-  back: { fontFamily: f.bold, fontSize: 15, color: c.pen },
   sideItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -1174,10 +1204,18 @@ const s = StyleSheet.create({
   lessonMain: { flex: 1, minWidth: 0, maxWidth: 1000 },
   lessonTop: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    gap: 10,
-    marginBottom: 20,
+    gap: 12,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: c.line,
+    backgroundColor: c.card,
+    alignItems: "center",
+    justifyContent: "center",
   },
   sourceLink: {
     fontFamily: f.bold,
@@ -1186,6 +1224,8 @@ const s = StyleSheet.create({
     paddingVertical: 10,
   },
   lessonTitle: {
+    flex: 1,
+    minWidth: 0,
     fontFamily: f.hand,
     color: c.pen,
     fontSize: 46,
@@ -1197,6 +1237,8 @@ const s = StyleSheet.create({
     lineHeight: 22,
     color: c.muted,
     marginTop: 6,
+    // Under the title, not under the arrow.
+    marginLeft: 52,
   },
   stepHeading: {
     flexDirection: "row",

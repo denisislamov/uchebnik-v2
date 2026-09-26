@@ -40,7 +40,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       if (await button(`Открыть страницу ${n}`).count())
         await button(`Открыть страницу ${n}`).click();
       else {
-        await button("← Все страницы").click();
+        await button("На главную").click();
         await p
           .getByRole("textbox", {
             name: "Найти страницу или задание",

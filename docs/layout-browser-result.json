@@ -6,42 +6,45 @@
         "width": 390,
         "height": 844
       },
-      "headerBefore": 18.5,
-      "headerAfter": -381.5,
+      "homeArrow": 22,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 253
+      "imageHeight": 252.765625
     },
     {
       "viewport": {
         "width": 768,
         "height": 1024
       },
-      "headerBefore": 18.5,
-      "headerAfter": -381.5,
+      "homeArrow": 32,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 435
+      "imageHeight": 464
     },
     {
       "viewport": {
         "width": 1280,
         "height": 900
       },
-      "headerBefore": 18.5,
-      "headerAfter": 18.5,
+      "homeArrow": 32,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 340
+      "imageHeight": 339.765625
+    },
+    {
+      "phoneSheet": [
+        492.59375,
+        492.59375
+      ]
     }
   ],
   "errors": []

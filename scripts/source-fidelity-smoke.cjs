@@ -89,7 +89,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     const sheet = page.getByTestId("practical-sheet");
     if (await sheet.count()) await sheet.scrollIntoViewIfNeeded();
     else await pad.scrollIntoViewIfNeeded();
-    const b = await pad.boundingBox();
+    // The sheet glides to the next line; measure it once it has stopped.
+    let b = await pad.boundingBox();
+    for (let k = 0; k < 20; k++) {
+      await page.waitForTimeout(60);
+      const next = await pad.boundingBox();
+      if (next && b && Math.abs(next.x - b.x) < 0.5) break;
+      b = next;
+    }
     assert.ok(b);
     for (const point of points)
       assert.ok(

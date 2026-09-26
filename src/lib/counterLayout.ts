@@ -13,6 +13,8 @@ export function counterBoardLayout(
   viewportWidth: number,
   count: number,
   layout: CounterLayoutMode = "groups",
+  /** An empty field's height; a laptop window asks for a lower one. */
+  minFieldHeight = 190,
 ): CounterBoardGeometry {
   const viewport = Math.max(48, viewportWidth);
   const placed = Math.max(0, Math.floor(count));
@@ -23,7 +25,10 @@ export function counterBoardLayout(
   const width = row ? Math.max(viewport, placed * 58 + 14) : viewport;
   const fieldHeight = row
     ? 100
-    : Math.max(190, Math.ceil(Math.max(placed, 1) / columns) * 58 + 16);
+    : Math.max(
+        minFieldHeight,
+        Math.ceil(Math.max(placed, 1) / columns) * 58 + 16,
+      );
   return {
     width,
     columns,

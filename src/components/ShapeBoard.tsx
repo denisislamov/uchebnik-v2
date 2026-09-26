@@ -6,6 +6,7 @@ import type { Block } from "../content/types";
 import { edgeKey } from "../lib/assessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button } from "./Controls";
+import { useTaskSize } from "./taskSize";
 export function ShapeBoard({
   block,
   value,
@@ -35,9 +36,14 @@ export function ShapeBoard({
     y: number;
   } | null>(null);
   const [rotation, setRotation] = useState<Record<number, number>>({});
-  const scale = Math.min(width - 32, 240);
+  // On a wide, low window the stick waits to the right of the shape instead
+  // of under it: the board is half as tall and stays on screen.
+  const landscape = useTaskSize().short && width >= 420;
+  const scale = landscape
+    ? Math.min(240, width * 0.5 - 24)
+    : Math.min(width - 32, 240);
   const vertices = block.vertices.map((p) => ({
-    x: (width - scale) / 2 + p.x * scale,
+    x: (landscape ? width * 0.3 : width / 2) - scale / 2 + p.x * scale,
     y: 24 + p.y * scale,
   }));
   const edges = block.edges.map(([a, b], index) => {
@@ -112,7 +118,12 @@ export function ShapeBoard({
           },
         ],
   );
-  const tray = (_index: number) => ({ x: width / 2, y: 330 });
+  const longest = Math.max(...edges.map((t) => t.length));
+  const tray = (_index: number) =>
+    landscape
+      ? { x: width * 0.76, y: 24 + scale / 2 }
+      : { x: width / 2, y: 330 };
+  const fieldHeight = landscape ? scale + 48 : 270;
   const webPointer = useRef<number | null>(null);
   function begin(index: number, e: any) {
     active.current = {
@@ -207,18 +218,17 @@ export function ShapeBoard({
   return (
     <View style={{ gap: 12 }}>
       <Text style={{ fontFamily: f.regular, color: c.muted }}>
-        Возьми палочку внизу и положи на пунктир. Чтобы повернуть палочку, нажми
-        «Повернуть».
+        Возьми палочку {landscape ? "справа" : "внизу"} и положи на пунктир.
+        Чтобы повернуть палочку, нажми «Повернуть».
       </Text>
       <View
         ref={boardRef}
         testID="stick-board"
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
         style={{
-          height: Math.max(
-            440,
-            365 + Math.max(...edges.map((t) => t.length)) / 2,
-          ),
+          height: landscape
+            ? Math.max(fieldHeight, 24 + scale / 2 + longest / 2 + 16)
+            : Math.max(440, 365 + longest / 2),
           backgroundColor: c.wash,
           borderRadius: 6,
           overflow: "hidden",
@@ -232,10 +242,10 @@ export function ShapeBoard({
             top: 0,
             left: 0,
             right: 0,
-            height: 270,
+            height: fieldHeight,
           }}
         >
-          <Svg width={width} height={270}>
+          <Svg width={width} height={fieldHeight}>
             {edges.map((t) => {
               const a = vertices[block.edges[t.index][0]],
                 b = vertices[block.edges[t.index][1]];
@@ -313,7 +323,15 @@ export function ShapeBoard({
           );
         })}
       </View>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+      {/* Rotate, count and undo share one row: under the board they took three. */}
+      <View
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
         {available.map((t) => (
           <View key={t.key} ref={rotateRef} collapsable={false}>
             <Button
@@ -331,6 +349,21 @@ export function ShapeBoard({
             </Button>
           </View>
         ))}
+        <Text style={{ fontFamily: f.bold, color: c.pen, flexGrow: 1 }}>
+          Палочек: {value.length} из {edges.length}
+        </Text>
+        <Button
+          small
+          secondary
+          label="Убрать последнюю палочку"
+          disabled={!value.length}
+          onPress={() => {
+            onChange(value.slice(0, -1));
+            setMessage("");
+          }}
+        >
+          Убрать последнюю
+        </Button>
       </View>
       {!!message && (
         <Text
@@ -340,20 +373,6 @@ export function ShapeBoard({
           {message}
         </Text>
       )}
-      <Text style={{ fontFamily: f.bold, color: c.pen }}>
-        Палочек: {value.length} из {edges.length}
-      </Text>
-      <Button
-        small
-        secondary
-        disabled={!value.length}
-        onPress={() => {
-          onChange(value.slice(0, -1));
-          setMessage("");
-        }}
-      >
-        Убрать последнюю палочку
-      </Button>
     </View>
   );
 }

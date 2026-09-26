@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
 import { Image, View, Text } from "react-native";
 import { assets } from "../content/assets";
@@ -10,6 +10,9 @@ export function BookImage({
   maxHeight?: number;
 }) {
   const frame = useRef<View>(null);
+  // react-native-web gives an <Image> its file's height, not the aspect
+  // ratio's; in a narrow column that left white bands above and below.
+  const [frameWidth, setFrameWidth] = useState(0);
   useCoachAnchor(`image:${id}`, frame);
   const count = /abacus_(\d+)$/.exec(id);
   if (count) {
@@ -68,6 +71,7 @@ export function BookImage({
     <View
       ref={frame}
       testID={`book-image-${id}`}
+      onLayout={(e) => setFrameWidth(e.nativeEvent.layout.width)}
       style={{
         alignSelf: "center",
         width: "100%",
@@ -82,6 +86,9 @@ export function BookImage({
           width: "100%",
           aspectRatio: a.width / a.height,
           maxHeight,
+          ...(frameWidth > 0 && {
+            height: Math.min(maxHeight, (frameWidth * a.height) / a.width),
+          }),
           borderRadius: 4,
         }}
       />

@@ -53,6 +53,14 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   // On a phone a full-height illustration pushes the answer off screen; keep
   // the picture and the place to answer within one view.
   const size = useTaskSize();
+  // A laptop window is wide but low: the sample goes to the left of the work
+  // instead of above it, so both fit under the lesson header.
+  const beside =
+    size.wide &&
+    size.short &&
+    block.kind !== "picture" &&
+    block.kind !== "read" &&
+    block.images.length > 0;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
   const update = (patch: Partial<Answer>) =>
@@ -64,7 +72,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       ? Array.isArray(answer.value) && answer.value.length > 0
       : answer.value !== undefined && answer.value !== "";
   return (
-    <View style={{ gap: size.compact ? 14 : 22 }}>
+    <View style={{ gap: size.short ? 10 : size.compact ? 14 : 22 }}>
       {size.compact && <CoachButton onPress={showTaskCoach} />}
       {/* On wider screens the button sits beside the heading: a row of its own
           pushed the task a whole line down. */}
@@ -77,7 +85,10 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Text
               testID="block-title"
-              style={[s.title, size.wide && { fontSize: 30, lineHeight: 36 }]}
+              style={[
+                s.title,
+                size.wide && !size.short && { fontSize: 30, lineHeight: 36 },
+              ]}
             >
               {block.title}
             </Text>
@@ -94,7 +105,10 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           {block.kind !== "read" && !promptRepeatsTitle(block) && (
             <Text
               testID="block-prompt"
-              style={[s.prompt, size.wide && { fontSize: 24, lineHeight: 34 }]}
+              style={[
+                s.prompt,
+                size.wide && !size.short && { fontSize: 24, lineHeight: 34 },
+              ]}
             >
               {block.prompt}
             </Text>
@@ -102,208 +116,233 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         </View>
         {!size.compact && <CoachButton onPress={showTaskCoach} />}
       </View>
-      <View ref={imagesRef} collapsable={false} style={{ gap: 14 }}>
-        {block.kind === "picture" && (
-          <PictureTask
-            block={block}
-            value={Array.isArray(answer.value) ? answer.value : []}
-            onChange={(value) =>
-              onAnswer({ ...answer, value, checked: true, reviewed: false })
-            }
-          />
-        )}
-        {block.kind !== "picture" && !!block.images.length && (
-          <View
-            style={[
-              s.images,
-              block.images.length > 1 && {
-                flexDirection: "row",
-                flexWrap: "wrap",
-              },
-            ]}
-          >
-            {block.images
-              .filter((id) => id !== "p011_balls_row_3_groups")
-              .map((id) => (
-                <View
-                  key={id}
-                  style={
-                    block.images.length > 1
-                      ? { flexGrow: 1, flexBasis: 110, maxWidth: "100%" }
-                      : { width: "100%" }
-                  }
-                >
-                  <BookImage
-                    id={id}
-                    maxHeight={block.kind === "read" ? size.read : size.picture}
-                  />
-                </View>
+      <View
+        style={
+          beside
+            ? { flexDirection: "row", alignItems: "flex-start", gap: 28 }
+            : { gap: size.compact || size.short ? 14 : 22 }
+        }
+      >
+        <View
+          ref={imagesRef}
+          collapsable={false}
+          style={[{ gap: 14 }, beside && { flex: 5, minWidth: 0 }]}
+        >
+          {block.kind === "picture" && (
+            <PictureTask
+              block={block}
+              value={Array.isArray(answer.value) ? answer.value : []}
+              onChange={(value) =>
+                onAnswer({ ...answer, value, checked: true, reviewed: false })
+              }
+            />
+          )}
+          {block.kind !== "picture" && !!block.images.length && (
+            <View
+              style={[
+                s.images,
+                block.images.length > 1 && {
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                },
+              ]}
+            >
+              {block.images
+                .filter((id) => id !== "p011_balls_row_3_groups")
+                .map((id) => (
+                  <View
+                    key={id}
+                    style={
+                      block.images.length > 1
+                        ? { flexGrow: 1, flexBasis: 110, maxWidth: "100%" }
+                        : { width: "100%" }
+                    }
+                  >
+                    <BookImage
+                      id={id}
+                      maxHeight={
+                        beside
+                          ? size.beside
+                          : block.kind === "read"
+                            ? size.read
+                            : size.picture
+                      }
+                    />
+                  </View>
+                ))}
+            </View>
+          )}
+        </View>
+        <View
+          ref={answerRef}
+          collapsable={false}
+          style={[{ gap: 22 }, beside && { flex: 6, minWidth: 0 }]}
+        >
+          {block.kind === "location" && (
+            <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
+          )}
+          {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
+          {block.kind === "story" && (
+            <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
+          )}
+          {block.kind === "numberGame" && (
+            <NumberGameTask block={block} answer={answer} onAnswer={onAnswer} />
+          )}
+          {block.kind === "practical" && (
+            <PracticalTask
+              block={block}
+              answer={answer}
+              onAnswer={onAnswer}
+              onDrawing={onDrawing}
+            />
+          )}
+          {[
+            "work",
+            "compose",
+            "activity",
+            "recipe",
+            "relation",
+            "targetGame",
+          ].includes(block.kind) && (
+            <CourseTask
+              block={block}
+              answer={answer}
+              onAnswer={onAnswer}
+              onDrawing={onDrawing}
+            />
+          )}
+          {block.kind === "number" && (
+            <View style={s.options}>
+              {Array.from({ length: 11 }, (_, n) => (
+                <AnswerAnchor key={n} value={n}>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={`Ответ ${n}`}
+                    accessibilityState={{ selected: answer.value === n }}
+                    onPress={() =>
+                      onAnswer({
+                        ...answer,
+                        value: n,
+                        checked: true,
+                        reviewed: false,
+                      })
+                    }
+                    style={[s.number, answer.value === n && s.selected]}
+                  >
+                    <Text
+                      style={[
+                        s.digit,
+                        answer.value === n && { color: c.white },
+                      ]}
+                    >
+                      {n}
+                    </Text>
+                  </Pressable>
+                </AnswerAnchor>
               ))}
-          </View>
-        )}
-      </View>
-      <View ref={answerRef} collapsable={false} style={{ gap: 22 }}>
-        {block.kind === "location" && (
-          <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
-        )}
-        {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
-        {block.kind === "story" && (
-          <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
-        )}
-        {block.kind === "numberGame" && (
-          <NumberGameTask block={block} answer={answer} onAnswer={onAnswer} />
-        )}
-        {block.kind === "practical" && (
-          <PracticalTask
-            block={block}
-            answer={answer}
-            onAnswer={onAnswer}
-            onDrawing={onDrawing}
-          />
-        )}
-        {[
-          "work",
-          "compose",
-          "activity",
-          "recipe",
-          "relation",
-          "targetGame",
-        ].includes(block.kind) && (
-          <CourseTask
-            block={block}
-            answer={answer}
-            onAnswer={onAnswer}
-            onDrawing={onDrawing}
-          />
-        )}
-        {block.kind === "number" && (
-          <View style={s.options}>
-            {Array.from({ length: 11 }, (_, n) => (
-              <AnswerAnchor key={n} value={n}>
+            </View>
+          )}
+          {block.kind === "choice" && (
+            <View style={s.options}>
+              {block.options.map((v, i) => (
                 <Pressable
+                  key={v}
                   accessibilityRole="button"
-                  accessibilityLabel={`Ответ ${n}`}
-                  accessibilityState={{ selected: answer.value === n }}
+                  accessibilityState={{ selected: answer.value === v }}
                   onPress={() =>
                     onAnswer({
                       ...answer,
-                      value: n,
+                      value: v,
                       checked: true,
                       reviewed: false,
                     })
                   }
-                  style={[s.number, answer.value === n && s.selected]}
+                  style={[s.option, answer.value === v && s.selected]}
                 >
                   <Text
-                    style={[s.digit, answer.value === n && { color: c.white }]}
+                    style={[
+                      s.optionIndex,
+                      answer.value === v && { color: "#c7d3f0" },
+                    ]}
                   >
-                    {n}
+                    {String(i + 1).padStart(2, "0")}
+                  </Text>
+                  <Text
+                    style={[
+                      s.optionText,
+                      answer.value === v && { color: c.white },
+                    ]}
+                  >
+                    {v}
                   </Text>
                 </Pressable>
-              </AnswerAnchor>
-            ))}
-          </View>
-        )}
-        {block.kind === "choice" && (
-          <View style={s.options}>
-            {block.options.map((v, i) => (
-              <Pressable
-                key={v}
-                accessibilityRole="button"
-                accessibilityState={{ selected: answer.value === v }}
-                onPress={() =>
-                  onAnswer({
-                    ...answer,
-                    value: v,
-                    checked: true,
-                    reviewed: false,
-                  })
-                }
-                style={[s.option, answer.value === v && s.selected]}
-              >
-                <Text
-                  style={[
-                    s.optionIndex,
-                    answer.value === v && { color: "#c7d3f0" },
-                  ]}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </Text>
-                <Text
-                  style={[
-                    s.optionText,
-                    answer.value === v && { color: c.white },
-                  ]}
-                >
-                  {v}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        )}
-        {block.kind === "counters" && (
-          <CounterBoard
-            value={numeric}
-            token={block.token}
-            onChange={(value) => update({ value })}
-            onDrawing={onDrawing}
-          />
-        )}
-        {block.kind === "draw" && (
-          <DrawingPad
-            strokes={answer.strokes ?? []}
-            onChange={(strokes) => update({ strokes })}
-            trace={block.trace}
-            onDrawing={onDrawing}
-          />
-        )}
-        {block.kind === "shape" && (
-          <ShapeBoard
-            onDrawing={onDrawing}
-            block={block}
-            value={Array.isArray(answer.value) ? answer.value : []}
-            onChange={(value) => update({ value })}
-          />
-        )}
-        {review && (
-          <Text style={s.hint}>
-            Мешки стоят близко друг к другу. Положи палочки для тех мешков,
-            которые видишь, и нажми «Дальше».
-          </Text>
-        )}
-        {!review && (block.kind === "counters" || block.kind === "shape") && (
-          <Button
-            disabled={!hasValue}
-            done={done}
-            onPress={() =>
-              onAnswer({
-                ...answer,
-                checked: true,
-                attempts: (answer.attempts ?? 0) + 1,
-              })
-            }
-          >
-            {done ? "✓ Получилось!" : "Проверить ответ"}
-          </Button>
-        )}
-        {answer.checked &&
-          !correct &&
-          (block.kind !== "picture" ||
-            (Array.isArray(answer.value) &&
-              answer.value.some((id) => !block.expected.includes(id)))) && (
-            <RetryNote>
-              Пока не совпало. Посмотри ещё раз — у тебя получится.
-            </RetryNote>
+              ))}
+            </View>
           )}
-        {!review && done && block.kind !== "read" && (
-          <View accessibilityLiveRegion="polite" style={s.success}>
-            <Text style={s.successText}>
-              {review
-                ? "✓ Работа проверена вместе. Можно идти дальше."
-                : "✓ Верно! Можно переходить к следующему шагу."}
+          {block.kind === "counters" && (
+            <CounterBoard
+              value={numeric}
+              token={block.token}
+              onChange={(value) => update({ value })}
+              onDrawing={onDrawing}
+            />
+          )}
+          {block.kind === "draw" && (
+            <DrawingPad
+              strokes={answer.strokes ?? []}
+              onChange={(strokes) => update({ strokes })}
+              trace={block.trace}
+              onDrawing={onDrawing}
+            />
+          )}
+          {block.kind === "shape" && (
+            <ShapeBoard
+              onDrawing={onDrawing}
+              block={block}
+              value={Array.isArray(answer.value) ? answer.value : []}
+              onChange={(value) => update({ value })}
+            />
+          )}
+          {review && (
+            <Text style={s.hint}>
+              Мешки стоят близко друг к другу. Положи палочки для тех мешков,
+              которые видишь, и нажми «Дальше».
             </Text>
-          </View>
-        )}
+          )}
+          {!review && (block.kind === "counters" || block.kind === "shape") && (
+            <Button
+              disabled={!hasValue}
+              done={done}
+              onPress={() =>
+                onAnswer({
+                  ...answer,
+                  checked: true,
+                  attempts: (answer.attempts ?? 0) + 1,
+                })
+              }
+            >
+              {done ? "✓ Получилось!" : "Проверить ответ"}
+            </Button>
+          )}
+          {answer.checked &&
+            !correct &&
+            (block.kind !== "picture" ||
+              (Array.isArray(answer.value) &&
+                answer.value.some((id) => !block.expected.includes(id)))) && (
+              <RetryNote>
+                Пока не совпало. Посмотри ещё раз — у тебя получится.
+              </RetryNote>
+            )}
+          {!review && done && block.kind !== "read" && (
+            <View accessibilityLiveRegion="polite" style={s.success}>
+              <Text style={s.successText}>
+                {review
+                  ? "✓ Работа проверена вместе. Можно идти дальше."
+                  : "✓ Верно! Можно переходить к следующему шагу."}
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );

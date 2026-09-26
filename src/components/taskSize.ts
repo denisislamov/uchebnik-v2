@@ -11,21 +11,33 @@ const clamp = (v: number, min: number, max: number) =>
 export function useTaskSize() {
   const { width, height } = useWindowDimensions();
   const compact = width < 600,
-    wide = width >= 1000;
+    wide = width >= 1000,
+    // A laptop browser leaves 700–850px: the lesson header folds down like a
+    // phone's so the task and «Дальше» still fit without scrolling.
+    short = !compact && height < 900;
   return {
     compact,
     wide,
+    short,
     /** Illustration next to something to answer. */
     picture: compact
       ? clamp(height * 0.3, 170, 280)
-      : clamp(height - 560, 270, 600),
+      : short
+        ? clamp(height - 470, 180, 460)
+        : clamp(height - 560, 270, 600),
     /** Illustration of a step that is only looked at. */
     read: compact
       ? clamp(height * 0.4, 220, 360)
-      : clamp(height - 460, 340, 700),
+      : short
+        ? clamp(height - 360, 220, 540)
+        : clamp(height - 460, 340, 700),
     /** Picture that is itself the answer: it gets the most room. */
     target: compact
       ? clamp(height * 0.42, 240, 420)
-      : clamp(height - 580, 300, 680),
+      : short
+        ? clamp(height - 470, 200, 480)
+        : clamp(height - 580, 300, 680),
+    /** Sample beside the work on a wide, low window: the column's height. */
+    beside: clamp(height - 330, 200, 560),
   };
 }

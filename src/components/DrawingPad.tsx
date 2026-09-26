@@ -1,6 +1,13 @@
 import { useGestureCoach } from "./GestureCoach";
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, Pressable, Platform, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Platform,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
 import type { Stroke, Point, TracePlan } from "../content/types";
 import {
@@ -14,6 +21,7 @@ import { traceDirections, traceArrowGeometry } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
 import { Button, ProgressBar, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
+import { useTaskSize } from "./taskSize";
 export function DrawingPad({
   strokes,
   onChange,
@@ -47,7 +55,26 @@ export function DrawingPad({
         ...trace.stages.flat().map((t) => targetSpanCells(t.points, columns)),
       )
     : 0;
-  const width = padCellSize(containerWidth, columns, widestTarget) * columns,
+  const { compact, short } = useTaskSize();
+  // On a laptop the sheet takes what is left of the window under it, keeping
+  // room for the hint and «Дальше»; a phone scrolls and keeps fingertip cells.
+  const windowHeight = useWindowDimensions().height;
+  const sheetBox = useRef<View>(null),
+    [sheetTop, setSheetTop] = useState<number | null>(null);
+  const width =
+      padCellSize(
+        containerWidth,
+        columns,
+        widestTarget,
+        short && sheetTop !== null
+          ? {
+              height: windowHeight - sheetTop - 150,
+              rows,
+              // Smaller cells only for a mouse or trackpad, never for a finger.
+              minCell: finePointer() ? 28 : 44,
+            }
+          : undefined,
+      ) * columns,
     scrollable = width > containerWidth + 0.5;
   const height = (width * rows) / columns,
     color = chosenColor ?? target?.color ?? "#111111";
@@ -65,8 +92,8 @@ export function DrawingPad({
           targetCenter * width - containerWidth / 2,
         ),
       ),
-      // Instant, so the sheet is already in place when the next line is drawn.
-      animated: false,
+      // A short glide, not a jump: the child sees where the next line is.
+      animated: true,
     });
   }, [scrollable, targetCenter, width, containerWidth]);
   const closed = target ? isClosedTrace(target, { columns, rows }) : false;
@@ -162,25 +189,44 @@ export function DrawingPad({
       )}
       {progress && (
         <View style={{ gap: 8 }}>
-          <Text
-            accessibilityLiveRegion="polite"
-            style={{ fontFamily: f.bold, color: c.pen, fontSize: 17 }}
+          {/* Two lines kept even for a short name: the sheet below stays put. */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              gap: 12,
+              minHeight: compact ? 44 : undefined,
+            }}
           >
-            {progress.done
-              ? "Все элементы получились!"
-              : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
-          </Text>
+            <Text
+              accessibilityLiveRegion="polite"
+              numberOfLines={2}
+              style={{
+                flex: 1,
+                fontFamily: f.bold,
+                color: c.pen,
+                fontSize: 17,
+                lineHeight: 22,
+              }}
+            >
+              {progress.done
+                ? "Все элементы получились!"
+                : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
+            </Text>
+            {trace!.stages.length > 1 && !progress.done && (
+              <Text
+                style={{
+                  fontFamily: f.regular,
+                  color: c.muted,
+                  fontSize: 13,
+                  lineHeight: 22,
+                }}
+              >
+                лист {progress.stage + 1} из {trace!.stages.length}
+              </Text>
+            )}
+          </View>
           <ProgressBar value={progress.completed / progress.total} />
-          <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
-            Лист {progress.stage + 1} из {trace!.stages.length} ·{" "}
-            {closed
-              ? "начинай с любого места контура"
-              : target?.bidirectional
-                ? /ствол/i.test(target.label)
-                  ? "ствол можно вести вверх или вниз"
-                  : "можно начинать с любого конца линии"
-                : "начинай с яркой точки"}
-          </Text>
         </View>
       )}
       <View
@@ -223,33 +269,16 @@ export function DrawingPad({
           Отменить штрих
         </Button>
       </View>
-      {target && (
-        <View
-          testID="drawing-direction-hint"
-          style={{ padding: 12, borderRadius: 4, backgroundColor: "#e8eef9" }}
-        >
-          <Text
-            style={{
-              fontFamily: f.bold,
-              color: directionColor,
-              fontSize: 15,
-              lineHeight: 22,
-            }}
-          >
-            {target.dot
-              ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
-              : closed
-                ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
-                : target.bidirectional
-                  ? /ствол/i.test(target.label)
-                    ? "Веди ствол по пунктиру вверх или вниз."
-                    : "Начни с любого конца. Веди по пунктиру."
-                  : "Начни с яркой точки. Веди по пунктиру в сторону синей стрелки."}
-          </Text>
-        </View>
-      )}
       <View
-        onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+        ref={sheetBox}
+        onLayout={(e) => {
+          setContainerWidth(e.nativeEvent.layout.width);
+          sheetBox.current?.measureInWindow((_x, y) =>
+            setSheetTop((old) =>
+              old !== null && Math.abs(old - y) < 4 ? old : y,
+            ),
+          );
+        }}
         style={{ width: "100%" }}
       >
         <ScrollView
@@ -258,7 +287,10 @@ export function DrawingPad({
           scrollEnabled={scrollable && !drawingNow}
           showsHorizontalScrollIndicator={scrollable}
           canCancelContentTouches={false}
-          contentContainerStyle={{ width }}
+          contentContainerStyle={{
+            width: Math.max(width, containerWidth),
+            justifyContent: "center",
+          }}
           style={{ width: "100%" }}
         >
           <View
@@ -419,11 +451,41 @@ export function DrawingPad({
           </View>
         </ScrollView>
       </View>
+      {/* Everything that changes from line to line sits under the sheet:
+          above it, a hint growing by a line pushed the sheet under the finger. */}
+      {target && (
+        <View
+          testID="drawing-direction-hint"
+          style={{ padding: 12, borderRadius: 4, backgroundColor: "#e8eef9" }}
+        >
+          <Text
+            style={{
+              fontFamily: f.bold,
+              color: directionColor,
+              fontSize: 15,
+              lineHeight: 22,
+            }}
+          >
+            {target.dot
+              ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
+              : closed
+                ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
+                : target.bidirectional
+                  ? /ствол/i.test(target.label)
+                    ? "Веди ствол по пунктиру вверх или вниз."
+                    : "Начни с любого конца. Веди по пунктиру."
+                  : "Начни с яркой точки. Веди по пунктиру в сторону синей стрелки."}
+          </Text>
+        </View>
+      )}
       {error !== "" && <RetryNote>{error}</RetryNote>}
-      <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
-        Клетки одинаковые по ширине и высоте. Пунктир подсказывает путь.
-        {scrollable ? " Лист шире экрана и сам подъезжает к нужной линии." : ""}
-      </Text>
     </View>
+  );
+}
+function finePointer() {
+  return (
+    Platform.OS === "web" &&
+    typeof window !== "undefined" &&
+    !!window.matchMedia?.("(pointer: fine)").matches
   );
 }
