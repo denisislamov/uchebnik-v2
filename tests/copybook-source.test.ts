@@ -8,7 +8,7 @@ test("page 6 has twelve black waves without added dots", () => {
   assert.ok(b.kind === "draw" && b.trace);
   const targets = b.trace.stages.flat();
   assert.equal(targets.length, 12);
-  assert.ok(targets.every((t) => !t.dot && t.color === "#232d2b"));
+  assert.ok(targets.every((t) => !t.dot && t.color === "#111111"));
 });
 test("four flags are two cells wide with inward notches; last flag is mirrored", () => {
   const flags = allBlocks
@@ -16,12 +16,13 @@ test("four flags are two cells wide with inward notches; last flag is mirrored",
     .find((b) => b.title.includes("Нарисуй"))!;
   assert.ok(flags.kind === "draw" && flags.trace);
   for (let i = 0; i < 4; i++) {
-    const points: { x: number; y: number }[] = flags.trace.stages[
-      i
-    ][1].points.map((p) => ({
-      x: p.x * 12,
-      y: p.y * 8,
-    }));
+    const points: { x: number; y: number }[] = flags.trace.stages
+      .flat()
+      .filter((t) => t.label.startsWith("Обведи флажок"))
+      [i].points.map((p) => ({
+        x: p.x * flags.trace!.columns,
+        y: p.y * flags.trace!.rows,
+      }));
     assert.equal(points.length, 5);
     const direction = i === 3 ? -1 : 1;
     assert.equal(points[1].x - points[0].x, 2 * direction);

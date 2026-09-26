@@ -1,8 +1,8 @@
 import { numberTrace } from "./fullBook.ts";
 import type { Point, TracePlan, TraceTarget } from "./types.ts";
-export const INK = "#232d2b",
-  RED = "#ce6548",
-  GREEN = "#23594e";
+export const INK = "#111111",
+  RED = "#d62828",
+  BLUE = "#1565c0";
 // Coordinates are in notebook cells: 12 columns by 8 rows on every device.
 const point = (x: number, y: number): Point => ({ x: x / 12, y: y / 8 });
 const line = (
@@ -13,6 +13,7 @@ const line = (
   label,
   color,
   points: coords.map(([x, y]) => point(x, y)),
+  bidirectional: /ствол/.test(label),
   grid: coords.every(([x, y]) => Number.isInteger(x) && Number.isInteger(y)),
 });
 const dot = (x: number, y: number, color = RED): TraceTarget => ({
@@ -41,18 +42,62 @@ const oval = (x: number, y: number, rx: number, ry: number) =>
   );
 const wave = (x: number, y: number) =>
   curve((t) => [x + t, y - 0.12 * Math.sin(t * 2 * Math.PI)], "Проведи волну");
-const hook = (x: number, y: number) =>
-  curve((t) => {
-    if (t < 0.6) {
-      const angle = Math.PI * 0.6 + (t / 0.6) * Math.PI * 1.65;
-      return [
-        x + 0.5 + 0.35 * Math.cos(angle),
-        y + 0.45 + 0.35 * Math.sin(angle),
-      ];
-    }
-    const u = (t - 0.6) / 0.4;
-    return [x + 0.75 * (1 - u), y + 0.7 + 1.3 * u];
-  }, "Обведи крючок высотой в две клетки");
+const hook = (x: number, y: number) => {
+  // PDF 6: inward curl, rounded outer head, then a curved descending stem.
+  const segments = [
+    [
+      [0.5, 0.42],
+      [0.54, 0.24],
+      [0.73, 0.28],
+      [0.66, 0.48],
+    ],
+    [
+      [0.66, 0.48],
+      [0.57, 0.72],
+      [0.18, 0.72],
+      [0.16, 0.42],
+    ],
+    [
+      [0.16, 0.42],
+      [0.12, 0.14],
+      [0.42, 0],
+      [0.62, 0],
+    ],
+    [
+      [0.62, 0],
+      [1.05, 0],
+      [1, 0.42],
+      [0.8, 0.75],
+    ],
+    [
+      [0.8, 0.75],
+      [0.6, 1.1],
+      [0.17, 1.55],
+      [0, 2],
+    ],
+  ];
+  return line(
+    segments.flatMap((p, segment) =>
+      Array.from({ length: segment ? 16 : 17 }, (_, i) => {
+        const t = (i + (segment ? 1 : 0)) / 16,
+          u = 1 - t;
+        return [
+          x +
+            u * u * u * p[0][0] +
+            3 * u * u * t * p[1][0] +
+            3 * u * t * t * p[2][0] +
+            t * t * t * p[3][0],
+          y +
+            u * u * u * p[0][1] +
+            3 * u * u * t * p[1][1] +
+            3 * u * t * t * p[2][1] +
+            t * t * t * p[3][1],
+        ];
+      }),
+    ),
+    "Обведи крючок высотой в две клетки",
+  );
+};
 function repeated(
   count: number,
   make: (x: number, y: number, i: number) => TraceTarget[],
@@ -141,51 +186,60 @@ const marks: TracePlan = {
     ),
   ],
 };
-const fruit = (n: number, mushroom = false): TracePlan => ({
-  columns: 12,
-  rows: 8,
-  stages: [
-    ...Array.from({ length: n }, () =>
-      mushroom
+const fruit = (n: number, mushroom = false): TracePlan => {
+  const targets: TraceTarget[] = [];
+  for (let i = 0; i < n; i++) {
+    const x = 6 + (i - (n - 1) / 2) * 3,
+      y = 2.5;
+    targets.push(
+      ...(mushroom
         ? [
             curve(
               (t) => [
-                6 - 3 * Math.cos(t * Math.PI),
-                4 - 2.4 * Math.sin(t * Math.PI),
+                x - 1.2 * Math.cos(t * Math.PI),
+                y - Math.sin(t * Math.PI),
               ],
               "Нарисуй шляпку",
             ),
             line(
               [
-                [9, 4],
-                [3, 4],
+                [x + 1.2, y],
+                [x - 1.2, y],
               ],
               "Закрой шляпку",
             ),
             line(
               [
-                [5, 4],
-                [5, 6],
-                [7, 6],
-                [7, 4],
+                [x - 0.4, y],
+                [x - 0.4, y + 1],
+                [x + 0.4, y + 1],
+                [x + 0.4, y],
               ],
               "Нарисуй ножку",
             ),
           ]
         : [
-            oval(6, 4, 1.7, n === 2 ? 2 : 1.5),
+            oval(x, y, 0.85, n === 2 ? 1 : 0.75),
             line(
               [
-                [6, 2.5],
-                [7, 1],
+                [x, y - (n === 2 ? 1 : 0.75)],
+                [x + 0.5, y - 1.6],
               ],
               "Нарисуй черенок",
             ),
-          ],
-    ),
-    numberTrace(n).stages[0],
-  ],
-});
+          ]),
+    );
+  }
+  targets.push(
+    ...numberTrace(n)
+      .stages.flat()
+      .map((t) => ({
+        ...t,
+        points: t.points.map((p) => ({ ...p, y: p.y + 3.3 / 8 })),
+      })),
+  );
+  return { columns: 12, rows: 8, stages: [targets] };
+};
 export const tracePlans: Record<string, TracePlan> = {
   "p003-block06": repeated(12, (x, y, i) => [
     line(

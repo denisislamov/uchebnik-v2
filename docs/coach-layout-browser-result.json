@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "1280x800: original picture highlighted without resizing; explicit reveal if offscreen; no answers changed",
+    "390x844: original picture highlighted without resizing; explicit reveal if offscreen; no answers changed",
+    "800x375: original picture highlighted without resizing; explicit reveal if offscreen; no answers changed",
+    "320x568: original picture highlighted without resizing; explicit reveal if offscreen; no answers changed"
+  ],
+  "errors": []
+}

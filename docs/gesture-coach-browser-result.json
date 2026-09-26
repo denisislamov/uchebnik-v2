@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "width": 390,
+      "firstUse": true,
+      "replay": true,
+      "persisted": true,
+      "blocksUnderlyingTouches": true,
+      "tomatoes": {
+        "sevenRejected": true,
+        "eightAccepted": true
+      },
+      "families": [
+        "place",
+        "trace",
+        "dot",
+        "sticks",
+        "picture",
+        "cards"
+      ]
+    },
+    {
+      "width": 1280,
+      "firstUse": true,
+      "replay": true,
+      "persisted": true,
+      "blocksUnderlyingTouches": true,
+      "tomatoes": {
+        "sevenRejected": true,
+        "eightAccepted": true
+      },
+      "families": [
+        "place",
+        "trace",
+        "dot",
+        "sticks",
+        "picture",
+        "cards"
+      ]
+    }
+  ],
+  "errors": [],
+  "shortWindow": true,
+  "missingSourceNotPersisted": true
+}

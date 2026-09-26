@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "homeArrow": 22,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 252.765625
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "homeArrow": 32,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 464
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "homeArrow": 32,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 339.765625
+    },
+    {
+      "phoneSheet": [
+        492.59375,
+        492.59375
+      ]
+    }
+  ],
+  "errors": []
+}

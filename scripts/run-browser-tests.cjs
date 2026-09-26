@@ -51,12 +51,31 @@ async function run(file) {
     }
     if (serverError) throw serverError;
     if (!ready) throw Error("Test server did not start");
-    for (const file of [
-      "scripts/browser-smoke.cjs",
-      "scripts/full-course-smoke.cjs",
-      "scripts/activity-smoke.cjs",
-      "scripts/all-pages-smoke.cjs",
-    ])
+    for (const file of process.argv.length > 2
+      ? process.argv.slice(2)
+      : [
+          "scripts/browser-smoke.cjs",
+          "scripts/full-course-smoke.cjs",
+          "scripts/activity-smoke.cjs",
+          "scripts/child-revisions-smoke.cjs",
+          "scripts/manual-feedback-smoke.cjs",
+          "scripts/source-fidelity-smoke.cjs",
+          "scripts/gesture-coach-smoke.cjs",
+          "scripts/coach-layout-smoke.cjs",
+          "scripts/coach-stability-smoke.cjs",
+          "scripts/mobile-coach-smoke.cjs",
+          "scripts/onboarding-gesture-regressions.cjs",
+          "scripts/number-meaning-smoke.cjs",
+          "scripts/composition-pairs-smoke.cjs",
+          "scripts/source-feedback-smoke.cjs",
+          "scripts/onboarding-all-views.cjs",
+          "scripts/drawing-guidance-smoke.cjs",
+          "scripts/search-smoke.cjs",
+          "scripts/status-smoke.cjs",
+          "scripts/layout-smoke.cjs",
+          "scripts/laptop-fit-smoke.cjs",
+          "scripts/all-pages-smoke.cjs",
+        ])
       await run(file);
   } finally {
     server.kill();

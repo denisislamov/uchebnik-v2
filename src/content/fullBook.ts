@@ -1,3 +1,4 @@
+import { sampleDigit } from "./handwrittenDigits.ts";
 import { fullBookData } from "./fullBookData.ts";
 import type {
   Block,
@@ -14,8 +15,9 @@ const path = (
 ): TraceTarget => ({
   points: points.map(([x, y]) => pt(x, y)),
   label,
-  color: "#232d2b",
+  color: "#111111",
   grid,
+  bidirectional: /ствол/.test(label),
 });
 const oval = (x: number, y: number, rx: number, ry: number) =>
   path(
@@ -27,126 +29,39 @@ const oval = (x: number, y: number, rx: number, ry: number) =>
     false,
   );
 export function numberTrace(n: number): TracePlan {
-  const forms: Record<string, number[][][]> = {
-    "1": [
-      [
-        [0, 0.5],
-        [0.5, 0],
-        [0.5, 2],
-      ],
-    ],
-    "2": [
-      [
-        [0, 0.4],
-        [0.15, 0.1],
-        [0.5, 0],
-        [0.85, 0.1],
-        [1, 0.4],
-        [0.9, 0.7],
-        [0, 2],
-        [1, 2],
-      ],
-    ],
-    "3": [
-      [
-        [0, 0.15],
-        [0.5, 0],
-        [0.9, 0.3],
-        [0.85, 0.65],
-        [0.45, 0.9],
-        [0.9, 1.1],
-        [1, 1.5],
-        [0.8, 1.85],
-        [0.4, 2],
-        [0, 1.8],
-      ],
-    ],
-    "4": [
-      [
-        [0.3, 0],
-        [0, 1.15],
-        [1, 1.15],
-      ],
-      [
-        [0.8, 0],
-        [0.8, 2],
-      ],
-    ],
-    "5": [
-      [
-        [0.85, 0],
-        [0.25, 0],
-        [0.1, 0.85],
-        [0.65, 0.75],
-        [1, 1.05],
-        [0.95, 1.55],
-        [0.65, 1.9],
-        [0.2, 2],
-        [0, 1.8],
-      ],
-    ],
-    "6": [
-      [
-        [0.85, 0],
-        [0.4, 0.2],
-        [0.1, 0.75],
-        [0, 1.4],
-        [0.15, 1.9],
-        [0.6, 2],
-        [0.95, 1.7],
-        [1, 1.2],
-        [0.7, 0.9],
-        [0.2, 1],
-        [0, 1.4],
-      ],
-    ],
-    "7": [
-      [
-        [0, 0],
-        [1, 0],
-        [0.3, 2],
-      ],
-      [
-        [0.15, 0.9],
-        [0.85, 0.9],
-      ],
-    ],
-    "9": [
-      [
-        [0.9, 0.7],
-        [0.8, 0.1],
-        [0.4, 0],
-        [0.05, 0.2],
-        [0, 0.65],
-        [0.3, 1],
-        [0.7, 0.95],
-        [0.9, 0.7],
-        [0.85, 1.4],
-        [0.55, 1.9],
-        [0.1, 2],
-      ],
-    ],
-  };
   const targets: TraceTarget[] = [];
-  for (const [i, digit] of [...String(n)].entries()) {
-    const x = 4 + i * 2,
-      y = 2;
-    if (digit === "0") targets.push(oval(x + 0.5, y + 1, 0.5, 1));
-    else if (digit === "8")
+  if (n === 10) {
+    targets.push(
+      path(
+        [
+          [48, 39],
+          [71, 20],
+          [49, 77],
+        ].map(([x, y]) => [4 + (x - 43) / 29, 2 + (y - 20) / 29]),
+        "Напиши 1 по образцу числа 10",
+        false,
+      ),
+    );
+    for (const points of sampleDigit("0"))
       targets.push(
-        oval(x + 0.5, y + 0.5, 0.45, 0.5),
-        oval(x + 0.5, y + 1.5, 0.5, 0.5),
-      );
-    else
-      targets.push(
-        ...forms[digit].map((points) =>
-          path(
-            points.map(([a, b]) => [x + a, y + b]),
-            `Напиши ${digit} в клетках`,
-            false,
-          ),
+        path(
+          points.map((p) => [4 + 28 / 29 + p.x, 2 + p.y]),
+          "Напиши 0 по образцу числа 10",
+          false,
         ),
       );
+    return { columns: 12, rows: 8, stages: [targets] };
+  }
+  for (const [i, digit] of [...String(n)].entries()) {
+    for (const points of sampleDigit(digit)) {
+      targets.push(
+        path(
+          points.map((p) => [4 + i + p.x, 2 + p.y]),
+          `Напиши ${digit} по образцу`,
+          false,
+        ),
+      );
+    }
   }
   return { columns: 12, rows: 8, stages: [targets] };
 }
@@ -286,8 +201,35 @@ function drawing(spec: string): TracePlan {
         ),
       ]);
   }
-  stages.push(...numberTrace(n).stages);
-  return { columns: 12, rows: 8, stages };
+  const columns = Math.min(5, n) * 3 + 1,
+    rows = Math.ceil(n / 5) * 4 + 5;
+  const together = stages.flatMap((targets, i) =>
+    targets.map((t) => ({
+      ...t,
+      points: t.points.map((p) => ({
+        x:
+          (p.x * 12 -
+            4 +
+            1 +
+            (i % 5) * 3 +
+            (kind === "flag" && i === n - 1 ? 2 : 0)) /
+          columns,
+        y: (p.y * 8 - 2 + 2 + Math.floor(i / 5) * 4) / rows,
+      })),
+    })),
+  );
+  together.push(
+    ...numberTrace(n)
+      .stages.flat()
+      .map((t) => ({
+        ...t,
+        points: t.points.map((p) => ({
+          x: (p.x * 12 - 4 + columns / 2 - 0.5) / columns,
+          y: (p.y * 8 - 2 + rows - 3) / rows,
+        })),
+      })),
+  );
+  return { columns, rows, stages: [together] };
 }
 function construction(
   shapes: string[],
@@ -307,15 +249,15 @@ function construction(
       });
     else if (shape === "triangle")
       points = [
-        [x, y + 0.4],
+        [x, y + (w * Math.sqrt(3)) / 2],
         [x + w / 2, y],
-        [x + w, y + 0.4],
+        [x + w, y + (w * Math.sqrt(3)) / 2],
       ];
     else if (shape === "house")
       points = [
         [0.3, 0.8],
         [0.3, 0.4],
-        [0.5, 0.15],
+        [0.5, 0.4 - (0.4 * Math.sqrt(3)) / 2],
         [0.7, 0.4],
         [0.7, 0.8],
       ];
@@ -323,8 +265,8 @@ function construction(
       points = [
         [x, y],
         [x + w, y],
-        [x + w, y + 0.4],
-        [x, y + 0.4],
+        [x + w, y + w],
+        [x, y + w],
       ];
     const offset = vertices.length;
     vertices.push(...points.map(([x, y]) => ({ x, y })));

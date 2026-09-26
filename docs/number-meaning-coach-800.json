@@ -1,0 +1,735 @@
+{
+  "passed": true,
+  "viewport": {
+    "width": 800,
+    "height": 375
+  },
+  "cases": [
+    {
+      "id": "p007-block07",
+      "family": "picture.number-meaning.1",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Рисунки разные. Посмотрим, что у них общего. Коснись каждого рисунка, как показывает палец.",
+          "card": {
+            "x": 422,
+            "y": 122,
+            "width": 368,
+            "height": 241
+          },
+          "hole": {
+            "x": 63,
+            "y": 75,
+            "width": 345,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Один гриб. Это тоже 1.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 40.9375,
+            "width": 400,
+            "height": 303.09375
+          },
+          "finger": {
+            "x": 201,
+            "y": 175.140625,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 48.9375,
+            "width": 396,
+            "height": 287.09375
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Одна белка. Это тоже 1.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 43.0625,
+            "width": 400,
+            "height": 298.84375
+          },
+          "finger": {
+            "x": 201,
+            "y": 175.34375,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 51.0625,
+            "width": 396,
+            "height": 282.84375
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Один ёж. Это тоже 1.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 52.5,
+            "width": 400,
+            "height": 280
+          },
+          "finger": {
+            "x": 201,
+            "y": 176.296875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 60.5,
+            "width": 396,
+            "height": 264
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Одна точка. Это тоже 1.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 85.5,
+            "width": 400,
+            "height": 214
+          },
+          "finger": {
+            "x": 201,
+            "y": 179.59375,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 93.5,
+            "width": 396,
+            "height": 198
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "Один кружок. Это тоже 1.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 30.328125,
+            "y": 30,
+            "width": 359.328125,
+            "height": 325
+          },
+          "finger": {
+            "x": 201,
+            "y": 174.046875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 38.328125,
+            "y": 38,
+            "width": 343.328125,
+            "height": 309
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 7,
+          "text": "Цифра 1. Так записывают это число.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 65.671875,
+            "y": 30,
+            "width": 288.640625,
+            "height": 325
+          },
+          "finger": {
+            "x": 201,
+            "y": 174.046875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 73.671875,
+            "y": 38,
+            "width": 272.640625,
+            "height": 309
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 8,
+          "text": "Гриб, белка, ёж, точка и кружок — разные. Но на каждом рисунке их по одному. Это число один. Его записывают цифрой 1.",
+          "card": {
+            "x": 422,
+            "y": 99,
+            "width": 368,
+            "height": 264
+          },
+          "hole": {
+            "x": 63,
+            "y": 75,
+            "width": 345,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p008-block08",
+      "family": "picture.number-meaning.2",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Рисунки разные. Посмотрим, что у них общего. Коснись каждого рисунка, как показывает палец.",
+          "card": {
+            "x": 422,
+            "y": 122,
+            "width": 368,
+            "height": 241
+          },
+          "hole": {
+            "x": 63,
+            "y": 75,
+            "width": 345,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Два конька. Это тоже 2.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 65.6875,
+            "width": 400,
+            "height": 253.59375
+          },
+          "finger": {
+            "x": 201,
+            "y": 177.609375,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 73.6875,
+            "width": 396,
+            "height": 237.59375
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Две лыжи. Это тоже 2.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 94.921875,
+            "width": 400,
+            "height": 195.140625
+          },
+          "finger": {
+            "x": 201,
+            "y": 180.53125,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 102.921875,
+            "width": 396,
+            "height": 179.140625
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Два колеса. Это тоже 2.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 62.203125,
+            "width": 400,
+            "height": 260.578125
+          },
+          "finger": {
+            "x": 201,
+            "y": 177.265625,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 70.203125,
+            "width": 396,
+            "height": 244.578125
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Две точки. Это тоже 2.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 88.6875,
+            "width": 400,
+            "height": 207.609375
+          },
+          "finger": {
+            "x": 201,
+            "y": 179.90625,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 96.6875,
+            "width": 396,
+            "height": 191.609375
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "Два кружка. Это тоже 2.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 60.75,
+            "width": 400,
+            "height": 263.5
+          },
+          "finger": {
+            "x": 201,
+            "y": 177.125,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 68.75,
+            "width": 396,
+            "height": 247.5
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 7,
+          "text": "Два жетона. Это тоже 2.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 281.328125,
+            "y": 75,
+            "width": 126.671875,
+            "height": 232
+          },
+          "finger": {
+            "x": 383.5,
+            "y": 177.1875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": null,
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 8,
+          "text": "Цифра 2. Так записывают это число.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 66.8125,
+            "y": 30,
+            "width": 286.375,
+            "height": 325
+          },
+          "finger": {
+            "x": 201,
+            "y": 174.046875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 74.8125,
+            "y": 38,
+            "width": 270.375,
+            "height": 309
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 9,
+          "text": "Два конька, две лыжи, два колеса. Точек и кружков тоже по два. Предметы разные, а количество одинаковое. Это число два. Его записывают цифрой 2.",
+          "card": {
+            "x": 422,
+            "y": 99,
+            "width": 368,
+            "height": 264
+          },
+          "hole": {
+            "x": 63,
+            "y": 75,
+            "width": 345,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p010-block06",
+      "family": "picture.number-meaning.3",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Рисунки разные. Посмотрим, что у них общего. Коснись каждого рисунка, как показывает палец.",
+          "card": {
+            "x": 422,
+            "y": 122,
+            "width": 368,
+            "height": 241
+          },
+          "hole": {
+            "x": 63,
+            "y": 75,
+            "width": 345,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Три мальчика. Это тоже 3.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 77.96875,
+            "width": 400,
+            "height": 229.03125
+          },
+          "finger": {
+            "x": 201,
+            "y": 178.84375,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 85.96875,
+            "width": 396,
+            "height": 213.03125
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Три рыбы. Это тоже 3.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 70.9375,
+            "width": 400,
+            "height": 243.109375
+          },
+          "finger": {
+            "x": 201,
+            "y": 178.140625,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 78.9375,
+            "width": 396,
+            "height": 227.109375
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Три красные ягоды. Это тоже 3.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 70.5,
+            "width": 400,
+            "height": 244
+          },
+          "finger": {
+            "x": 201,
+            "y": 178.09375,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 78.5,
+            "width": 396,
+            "height": 228
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Три точки. Это тоже 3.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 8,
+            "y": 82.5,
+            "width": 400,
+            "height": 220
+          },
+          "finger": {
+            "x": 201,
+            "y": 179.296875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 12,
+            "y": 90.5,
+            "width": 396,
+            "height": 204
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "Три кружка. Это тоже 3.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 29.3125,
+            "y": 30,
+            "width": 361.34375,
+            "height": 325
+          },
+          "finger": {
+            "x": 201,
+            "y": 174.046875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 37.3125,
+            "y": 38,
+            "width": 345.34375,
+            "height": 309
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 7,
+          "text": "Цифра 3. Так записывают это число.",
+          "card": {
+            "x": 422,
+            "y": 141,
+            "width": 368,
+            "height": 222
+          },
+          "hole": {
+            "x": 73.25,
+            "y": 30,
+            "width": 273.5,
+            "height": 325
+          },
+          "finger": {
+            "x": 201,
+            "y": 174.046875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": {
+            "x": 81.25,
+            "y": 38,
+            "width": 257.5,
+            "height": 309
+          },
+          "example": false,
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 8,
+          "text": "Три мальчика, три рыбы, три красные ягоды. Точек и кружков тоже по три. Предметы разные, а количество одинаковое. Это число три. Его записывают цифрой 3.",
+          "card": {
+            "x": 422,
+            "y": 76,
+            "width": 368,
+            "height": 287
+          },
+          "hole": {
+            "x": 63,
+            "y": 75,
+            "width": 345,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "issues": []
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "errors": []
+}

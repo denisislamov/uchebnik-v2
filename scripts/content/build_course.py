@@ -4,6 +4,7 @@ Unknown exercise numbers fail the build; originals remain available separately.
 import json,re,ast,operator,sys
 from pathlib import Path
 from overrides import OV,FRAMES,FORMULAS
+from question_tasks import QUESTION_FIELDS
 ROOT=Path(__file__).resolve().parents[2]
 source=json.loads((ROOT/'scripts/content/source_blocks.json').read_text())
 assets=json.loads((ROOT/'textbook/data/assets.json').read_text())
@@ -20,7 +21,7 @@ def calc(s):
 EXPR=r'\d+(?:[ \t]*[+−\-×·∙:÷*][ \t]*\d+)+'
 def exprs(s):
  s=re.sub(r'(?:[Сс]трока|[Сс]толбик|[Кк]олонка|[Сс]толбец|[Рр]яд)\s*\d+\s*:', '', s)
- return [m.group() for m in re.finditer(EXPR,s) if not re.match(r'\s*=\s*\d',s[m.end():])]
+ return [m.group() for m in re.finditer(EXPR,s) if not re.match(r'[ \t]*=[ \t]*\d',s[m.end():])]
 def stripunits(s):return re.sub(r'(?<=\d)\s*(?:руб\.?|коп\.?|кг|см|м|л)(?=\s*[+−\-×·∙:÷*=])','',s)
 def pairs(s):
  out=[]
@@ -31,6 +32,37 @@ def pairs(s):
  return out
 
 def fields(p):return [{'id':f'q{i+1}','label':str(label),'expected':str(v)} for i,(label,v) in enumerate(p)]
+OPNAMES={'+':'сложение','−':'вычитание','-':'вычитание','×':'умножение','·':'умножение','∙':'умножение',':':'деление','÷':'деление'}
+def examplesHeading(t):
+ kinds={OPNAMES[c] for c in re.findall(r'[+−\-×·∙:÷]',t) if c in OPNAMES}
+ return f'Примеры на {next(iter(kinds))}' if len(kinds)==1 else 'Примеры'
+ACTIVITY_HEADINGS={'sequence':'Считай по порядку','coins':'Монеты','composition':'Состав числа','ruler':'Измерь','place':'Где что стоит','balance':'Весы','liquid':'Мерки','groups':'Разложи поровну','count':'Сосчитай'}
+def heading(b,data):
+ # Testers could not tell what a step asks from a bare «№ 241»; the number now lives in the step header,
+ # and the heading names the kind of work: from the spec's role when it has one, else from the built task.
+ role=b['role'].lower();t=b['text'];kind=data.get('kind')
+ if role.startswith('задача'):return 'Задача'
+ if role.startswith('пример'):return examplesHeading(t)
+ if role.startswith(('упражнение','задание')):return 'Упражнение'
+ if role.startswith('практическ'):return 'Практическое задание'
+ if role.startswith(('инструкция','образец','правило','пояснение')):return 'Рассмотри'
+ if role.startswith('таблица'):return 'Таблица'
+ if role.startswith('игра'):return 'Игра'
+ if role.startswith('счётн'):return 'Счёт'
+ if kind=='story':return 'Задача'
+ if kind=='compose':return 'Составь задачу' if data.get('story') else 'Составь примеры'
+ if kind=='recipe':return 'Своя задача'
+ if kind=='practical':return 'Практическое задание'
+ if kind=='activity':return ACTIVITY_HEADINGS.get(data['activity'].get('mode'),'Упражнение')
+ if kind=='relation':return 'Нарисуй'
+ if kind=='numberGame':return 'Игра с числами'
+ if kind=='targetGame':return 'Игра'
+ if kind=='read':return 'Рассмотри'
+ if kind=='work':
+  if bareExamples(t):return examplesHeading(t)
+  if '?' in t:return 'Задача'
+ return 'Упражнение'
+def bareExamples(t):return not re.search('[А-Яа-яёЁ]{3}',re.sub(r'(?:[Сс]трока|[Сс]толбик|[Кк]олонка|[Сс]толбец|[Рр]яд|[Рр]амка)\s*\d*\s*:','',t))
 def work(p):return {'kind':'work','fields':fields(p)}
 def act(mode,targets,**kw):return {'kind':'activity','activity':dict(mode=mode,targets=targets,**kw)}
 def rule(op='+',left=None,right=None,result=None,max=20):return {k:v for k,v in dict(operator=op,left=left,right=right,result=result,max=max).items() if v is not None}
@@ -105,12 +137,26 @@ def creative(b,p):
  for m in re.finditer(r'(\d+)(?:\s*(?:кг|м|л))?\s+(взять|разделить на)\s+(\d+)',t):rules.append(rule('×' if m[2]=='взять' else ':',int(m[1]),int(m[3]),max=maxval))
  return compose(rules,True) if rules else None
 
+from practical_tasks import PRACTICAL,SOURCE_WORK
+OV.update(SOURCE_WORK)
+OV.update(PRACTICAL)
+from story_tasks import STORY
+OV.update(STORY)
+from similar_tasks import SIMILAR,SIMILAR_561
+for n,metadata in SIMILAR.items(): OV[n].update(metadata)
+from number_game_tasks import NUMBER_GAMES
+OV.update(NUMBER_GAMES)
+
 out=[];unresolved=[]
+seen_continuations=set()
 for page in source:
  p=page['number']; blocks=[]
  for b in page['blocks']:
   n=b['number'];t=clean(b['text']);role=b['role'];sol=b['solution'];data=None
-  base=dict(id=b['id'],title=f'№ {n}' if n else b['title'],prompt=t,sourceText=t,images=b['images'],exerciseNumber=n)
+  # The source prints one problem across the page break, not a second exercise.
+  if n==489 and n in seen_continuations:continue
+  if n==489:seen_continuations.add(n)
+  base=dict(id=b['id'],title=b['title'],prompt=t,sourceText=t,images=b['images'],exerciseNumber=n)
   if p<30:continue # Explicit first-decade mapping below.
   if not t or (not n and re.search(r'служебн|колонцифр|номер страницы|сигнатур|Концовочная',role+' '+b['title'],re.I)):continue
   if n in OV:data=OV[n]
@@ -123,14 +169,22 @@ for page in source:
    eq=pairs(sol)
    if eq:data=work([(e+' =',v) for e,v in eq])
    else:
-    m=re.search(r'(?:Ответ(?:ы)?\s*:|^)(\d+)(?:[ .;]|$)',sol)
+    # Only a complete unambiguous scalar key may fall back to one answer.
+    # Lists, place values and explanations require an explicit contract above.
+    m=re.fullmatch(r'(?:Ответ(?:ы)?\s*:\s*)?(\d+)(?:\s+(?:детей|рублей|копеек))?[.]?',sol.strip())
     if m:data=work([('Ответ',int(m[1]))])
   if data is None and n:unresolved.append(dict(page=p,number=n,id=b['id'],text=t,solution=sol));continue
   if data is None:
    if not n and t.lower() in ['нет','нет.','—']:continue
-   data=dict(kind='read',body=t,prompt='Рассмотри и послушай')
+   data=dict(kind='read',body=t,prompt='Рассмотри')
   # Printed ready examples remain demonstrations, not forced answer fields.
-  if not n and re.search('образец|правило|пояснение|заголовок',role,re.I):data=dict(kind='read',body=t,prompt='Рассмотри и послушай')
+  if not n and re.search('образец|правило|пояснение|заголовок',role,re.I):data=dict(kind='read',body=t,prompt='Рассмотри')
+  if n in QUESTION_FIELDS and data.get('kind')=='work':
+   data=dict(data,fields=QUESTION_FIELDS[n]+data['fields'])
+   if n==515:data.pop('prompt',None)
+  # A column of expressions is the whole source text; the fields carry the expressions, the prompt says what to do.
+  if n and data.get('kind')=='work' and bareExamples(t) and 'prompt' not in data:base['prompt']='Реши примеры и запиши ответы.'
+  if n:base['title']=heading(b,data)
   blocks.append(dict(base,**data))
  out.append(dict(id=f'page-{p:03}',number=p,title=page['topic'].split(':')[0][:80],subtitle=('Первый десяток' if p<59 else 'Второй десяток' if p<126 else 'Первая сотня'),hero=f'page_{p:03}',sourceDoc=f'textbook/page_docs/arithmetic_grade1_pchelko_1959_p{p:03}.md',blocks=blocks))
 if unresolved:(ROOT/'scripts/content/unresolved.json').write_text(json.dumps(unresolved,ensure_ascii=False,indent=2)+'\n')
@@ -142,14 +196,16 @@ for p,blocks in build(assets,calc).items():out[p-11]['blocks']=blocks
 for page in out:
  used={x for b in page['blocks'] for x in b['images']}
  missing=[a['id'] for a in assets if a['page']==page['number'] and a['id'] not in used]
- if missing:page['blocks'].insert(0,dict(id=f"p{page['number']:03}-source-art",kind='read',title='Рисунки страницы',prompt='Рассмотри и послушай',body='Рассмотри рисунки. Затем переходи к заданиям.',images=missing))
+ if missing:page['blocks'].insert(0,dict(id=f"p{page['number']:03}-source-art",kind='read',title='Рисунки страницы',prompt='Рассмотри',body='Рассмотри рисунки. Затем переходи к заданиям.',images=missing))
  if not page['blocks']:page['blocks']=[dict(id=f"p{page['number']:03}-original",kind='read',title=page['title'],prompt='Рассмотри страницу',body='Оригинальная страница учебника.',images=[page['hero']])]
 if unresolved:raise SystemExit('Unresolved exercise mappings')
 # Parts that the original combines with a numbered calculation are additional actions.
 extras={104:[dict(id='p104-compose561',kind='recipe',title='Своя задача к № 561',prompt='Выбери числа для похожей задачи про примеры в столбиках.',formula='a*b+c',max=20,images=[])],105:[dict(id='p105-count571',kind='activity',title='Считай по пять',prompt='Считай по пять до двадцати.',activity=dict(mode='sequence',targets=[5,10,15,20]),images=[])],142:[dict(id='p142-play892',kind='targetGame',title='Сыграй сам',prompt='Игроки ходят по очереди. Нажимай на круг: 10, 20 или 30 очков. Кто первым наберёт 100?',images=[])]}
-extras[103]=[dict(id='p103-squares554',kind='construction',title='Собери три квадрата к № 554',prompt='Соедини точки. Для каждого квадрата нужны четыре отдельные палочки.',shapes=['square']*3,images=[])]
 for p,n,div,values in [(117,654,4,[4,8,12,16,20]),(119,672,5,[5,10,15,20])]:extras.setdefault(p,[]).append(dict(id=f'p{p:03}-division{n}',title=f'Запиши деление к № {n}',prompt='Запиши, сколько предметов получилось в каждой группе.',images=[],**work([(f'{v} : {div} =',v//div) for v in values])))
-for p,blocks in extras.items():out[p-11]['blocks'].extend(blocks)
+for p,blocks in extras.items():
+ for block in blocks:
+  if block['id']=='p104-compose561': block.update(SIMILAR_561)
+ out[p-11]['blocks'].extend(blocks)
 # Attach necessary visual givens to the task itself, including legacy pages.
 imageMap={30:['p034_five_buttons'],149:['p050_saucer_cup_prices'],360:['p078_soap_2_rub','p078_toothbrush_3_rub','p078_bandage_1_rub'],591:['p108_spoon_6_rubles','p108_fork_4_rubles','p108_knife_3_rubles'],711:['p124_three_books_brace_6_rub'],712:['p124_three_books_6_rub_each'],892:['p142_target_circles_10_20_30']}
 for page in out:

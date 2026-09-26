@@ -1,3 +1,6 @@
+import { CounterBoard } from "./CounterBoard";
+import { CompositionBoard } from "./CompositionBoard";
+import { composeStory, storySubjects } from "../lib/composeStory";
 import { DrawingPad } from "./DrawingPad";
 import { relationPlan } from "../lib/relationDrawing";
 import { BookImage } from "./BookImage";
@@ -6,12 +9,13 @@ import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
-import { Button } from "./Controls";
+import { Button, RetryNote } from "./Controls";
+import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
 const tokenStyle = {
   width: 30,
   height: 30,
   borderRadius: 15,
-  backgroundColor: c.green,
+  backgroundColor: c.pen,
   margin: 3,
 };
 export function CourseTask({
@@ -104,7 +108,7 @@ export function CourseTask({
               height: 240,
               borderRadius: 120,
               borderWidth: 2,
-              borderColor: c.green,
+              borderColor: c.pen,
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -120,10 +124,10 @@ export function CourseTask({
                   height: 240 - i * 70,
                   borderRadius: 120,
                   borderWidth: 2,
-                  borderColor: c.green,
+                  borderColor: c.pen,
                   alignItems: "center",
                   backgroundColor:
-                    i === 0 ? c.paper : i === 1 ? c.mint : c.sand,
+                    i === 0 ? c.paper : i === 1 ? c.wash : c.washWarm,
                 }}
                 onPress={() => {
                   if (courseCorrect(block, answer)) return;
@@ -156,35 +160,60 @@ export function CourseTask({
       )}
       {block.kind === "recipe" && (
         <View style={s.card}>
-          <Text style={s.label}>О чём будет задача?</Text>
+          <Text style={s.label}>
+            {block.context
+              ? "Составь похожую задачу со своими числами"
+              : "О чём будет задача?"}
+          </Text>
+          {block.context && (
+            <TextWithBlanks
+              style={s.text}
+              text={block.context.replace(
+                /\{([abc])\}/g,
+                (_, key) => r[key] || BLANK,
+              )}
+            />
+          )}
+          {block.excludedInputs && (
+            <Text style={s.note}>
+              Измени хотя бы одно число из исходной задачи. Сохрани её смысл.
+            </Text>
+          )}
           {chips(
             "story",
-            [
-              "яблоки",
-              "книги",
-              "карандаши",
-              "метры",
-              "рубли",
-              "литры",
-              "килограммы",
-            ],
+            block.unit
+              ? [block.unit]
+              : [
+                  "яблоки",
+                  "книги",
+                  "карандаши",
+                  "метры",
+                  "рубли",
+                  "литры",
+                  "килограммы",
+                ],
             "Сюжет",
           )}
-          <Text style={s.note}>
-            Выбери свои числа для схемы{" "}
-            {block.formula
-              .replace(/[abc]/g, (k) => r[k] || "□")
+          <TextWithBlanks
+            style={s.note}
+            text={`Выбери свои числа для схемы ${block.formula
+              .replace(/[abc]/g, (k) => r[k] || BLANK)
               .replace(/\*/g, "×")
-              .replace(/\//g, ":")}
-            . Результат должен быть целым числом от 0 до {block.max}.
-          </Text>
+              .replace(
+                /\//g,
+                ":",
+              )}. Результат должен быть целым числом от ${block.minResult ?? 0} до ${block.max}.`}
+          />
           {[...new Set(block.formula.match(/[abc]/g) ?? [])].map((k) => (
             <View key={k} style={s.row}>
               <Text style={s.text}>
-                {{ a: "Первое число", b: "Второе число", c: "Третье число" }[k]}{" "}
+                {block.inputLabels?.[k] ??
+                  { a: "Первое число", b: "Второе число", c: "Третье число" }[
+                    k
+                  ]}{" "}
                 =
               </Text>
-              {input(k, `Число ${k}`)}
+              {input(k, block.inputLabels?.[k] ?? `Число ${k}`)}
             </View>
           ))}
           <Text style={s.label}>Результат всей задачи</Text>
@@ -250,19 +279,16 @@ export function CourseTask({
       {block.kind === "work" &&
         block.fields.map((field, i) => (
           <View key={field.id} style={s.card}>
-            <Text style={s.label}>
-              {i + 1}. {field.label}
-            </Text>
+            <TextWithBlanks style={s.label} text={`${i + 1}. ${field.label}`} />
             {field.options
-              ? chips(field.id, field.options, field.label)
-              : input(field.id, `${i + 1}. ${field.label}`)}
-            {answer.checked && (
-              <Text style={s.feedback}>
-                {r[field.id]?.trim() === field.expected
-                  ? "✓ Верно"
-                  : "Попробуй ещё раз"}
-              </Text>
-            )}
+              ? chips(field.id, field.options, spokenBlanks(field.label))
+              : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
+            {answer.checked &&
+              (r[field.id]?.trim() === field.expected ? (
+                <Text style={s.feedback}>✓ Верно</Text>
+              ) : (
+                <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
+              ))}
           </View>
         ))}
       {block.kind === "compose" &&
@@ -271,20 +297,7 @@ export function CourseTask({
             <Text style={s.label}>
               {block.story ? "Придумай задачу" : "Составь пример"} {i + 1}
             </Text>
-            {block.story &&
-              chips(
-                `${i}story`,
-                [
-                  "яблоки",
-                  "книги",
-                  "карандаши",
-                  "метры",
-                  "рубли",
-                  "литры",
-                  "килограммы",
-                ],
-                "О чём задача",
-              )}
+            {block.story && chips(`${i}story`, storySubjects, "О чём задача")}
             <Text style={s.note}>
               {rule.left !== undefined ? `Первое число: ${rule.left}. ` : ""}
               {rule.right !== undefined ? `Второе число: ${rule.right}. ` : ""}
@@ -301,29 +314,38 @@ export function CourseTask({
               {input(`${i}c`, "Результат")}
             </View>
             {block.story && r[`${i}story`] && (
-              <Text style={s.note}>
-                {rule.operator === "+"
-                  ? `Было ${r[`${i}a`] || "…"}. Добавили ${r[`${i}b`] || "…"}. Сколько стало?`
-                  : rule.operator === "−"
-                    ? `Было ${r[`${i}a`] || "…"}. Убрали ${r[`${i}b`] || "…"}. Сколько осталось?`
-                    : rule.operator === "×"
-                      ? `В каждой группе ${r[`${i}a`] || "…"}. Таких групп ${r[`${i}b`] || "…"}. Сколько всего?`
-                      : `${r[`${i}a`] || "…"} разделили на ${r[`${i}b`] || "…"} равных частей. Сколько в каждой?`}
-              </Text>
+              <View style={{ gap: 12 }}>
+                <Text style={s.text}>
+                  {
+                    composeStory(
+                      rule.operator,
+                      r[`${i}story`],
+                      r[`${i}a`],
+                      r[`${i}b`],
+                    ).condition
+                  }
+                </Text>
+                <Text style={s.label}>Выбери вопрос к своей задаче</Text>
+                {chips(
+                  `${i}question`,
+                  composeStory(rule.operator, r[`${i}story`]).options,
+                  `Вопрос к задаче ${i + 1}`,
+                )}
+              </View>
             )}
-            {answer.checked && (
-              <Text style={s.feedback}>
-                {compositionCorrect(rule, r[`${i}a`], r[`${i}b`], r[`${i}c`])
-                  ? "✓ Вычисление верное"
-                  : "Проверь числа и действие"}
-              </Text>
-            )}
+            {answer.checked &&
+              (compositionCorrect(rule, r[`${i}a`], r[`${i}b`], r[`${i}c`]) ? (
+                <Text style={s.feedback}>✓ Вычисление верное</Text>
+              ) : (
+                <RetryNote alert={false}>Проверь числа и действие</RetryNote>
+              ))}
           </View>
         ))}
       {block.kind === "activity" && block.activity.mode === "sequence" && (
         <View>
           <Text style={s.note}>
             Нажимай числа по порядку: {block.activity.targets.join(", ")}.
+            Нажатые закрашиваются.
           </Text>
           <View style={s.row}>
             {(block.activity.board
@@ -335,9 +357,19 @@ export function CourseTask({
             ).map((n) => (
               <Pressable
                 key={n}
-                style={s.chip}
+                style={[
+                  s.chip,
+                  block.activity.targets.some(
+                    (t, i) => t === n && r[`${i}visited`] === "yes",
+                  ) && s.chipDone,
+                ]}
                 accessibilityRole="button"
                 accessibilityLabel={`Число ${n}`}
+                accessibilityState={{
+                  selected: block.activity.targets.some(
+                    (t, i) => t === n && r[`${i}visited`] === "yes",
+                  ),
+                }}
                 onPress={() => {
                   const index = block.activity.targets.findIndex(
                     (_, i) => r[`${i}visited`] !== "yes",
@@ -346,7 +378,16 @@ export function CourseTask({
                     set(`${index}visited`, "yes");
                 }}
               >
-                <Text style={s.text}>{n}</Text>
+                <Text
+                  style={[
+                    s.text,
+                    block.activity.targets.some(
+                      (t, i) => t === n && r[`${i}visited`] === "yes",
+                    ) && { color: c.white },
+                  ]}
+                >
+                  {n}
+                </Text>
               </Pressable>
             ))}
           </View>
@@ -378,15 +419,42 @@ export function CourseTask({
                 {a.labels?.[i] ??
                   (a.measure
                     ? "Измерь предмет на рисунке"
-                    : a.mode === "groups"
-                      ? `Разложи ${target} предметов поровну между ${a.groups} группами`
-                      : a.mode === "place"
-                        ? `Число ${target}: десятки и единицы`
-                        : a.mode === "composition"
-                          ? `Разложи ${target} на две части`
-                          : `Набери ${target} ${a.unit ?? ""}`)}
+                    : a.mode === "count"
+                      ? (a.groupLabels?.[i] ??
+                        "Положи столько предметов, сколько на рисунке")
+                      : a.mode === "groups"
+                        ? `Разложи ${target} предметов поровну между ${a.groups} группами`
+                        : a.mode === "place"
+                          ? `Число ${target}: десятки и единицы`
+                          : a.mode === "composition"
+                            ? `Разложи ${target} на две части`
+                            : `Набери ${target} ${a.unit ?? ""}`)}
               </Text>
-              {a.mode === "count" && (
+              {a.mode === "count" && a.token && (
+                <CounterBoard
+                  value={value}
+                  token={a.token}
+                  slots={a.slots}
+                  occupied={(r[`${i}slots`] || "")
+                    .split(",")
+                    .filter(Boolean)
+                    .map(Number)}
+                  onPlaced={(indices) =>
+                    onAnswer({
+                      ...answer,
+                      checked: false,
+                      responses: {
+                        ...r,
+                        [key]: String(indices.length),
+                        [`${i}slots`]: indices.join(","),
+                      },
+                    })
+                  }
+                  onChange={(v) => set(key, String(v))}
+                  onDrawing={onDrawing}
+                />
+              )}
+              {a.mode === "count" && !a.token && (
                 <>
                   <View style={s.row}>
                     {Array.from({ length: value }, (_, j) => (
@@ -399,22 +467,45 @@ export function CourseTask({
               {a.mode === "coins" && (
                 <>
                   <View style={s.row}>
-                    {(a.denominations ?? [1, 2, 3, 5, 10, 15, 20]).map((n) => (
-                      <Pressable
-                        key={n}
-                        style={[s.chip, { borderRadius: 40 }]}
-                        accessibilityRole="button"
-                        accessibilityLabel={`Монета ${n} копеек`}
-                        onPress={() => {
-                          if (value + n <= 200) set(key, String(value + n));
-                        }}
-                      >
-                        <Text style={s.text}>{n} к.</Text>
-                      </Pressable>
-                    ))}
+                    {(a.denominations ?? [1, 2, 3, 5, 10, 15, 20])
+                      .filter((n) => !a.exchange || n < target)
+                      .map((n) => (
+                        <Pressable
+                          key={n}
+                          style={[s.chip, { borderRadius: 40 }]}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Монета ${n} копеек`}
+                          onPress={() => {
+                            if (value + n <= 200)
+                              onAnswer({
+                                ...answer,
+                                checked: false,
+                                responses: {
+                                  ...r,
+                                  [key]: String(value + n),
+                                  [`${i}coins`]: [r[`${i}coins`], String(n)]
+                                    .filter(Boolean)
+                                    .join(","),
+                                },
+                              });
+                          }}
+                        >
+                          <Text style={s.text}>{n} к.</Text>
+                        </Pressable>
+                      ))}
                   </View>
                   <Text style={s.text}>В кошельке: {value} копеек</Text>
-                  <Button small secondary onPress={() => set(key, "0")}>
+                  <Button
+                    small
+                    secondary
+                    onPress={() =>
+                      onAnswer({
+                        ...answer,
+                        checked: false,
+                        responses: { ...r, [key]: "0", [`${i}coins`]: "" },
+                      })
+                    }
+                  >
                     Вернуть монеты
                   </Button>
                 </>
@@ -511,26 +602,66 @@ export function CourseTask({
               )}
               {a.mode === "composition" && (
                 <>
-                  {["left", "right"].map((side) => (
-                    <View key={side}>
-                      <Text style={s.note}>
-                        {side === "left" ? "Первая" : "Вторая"} часть
-                      </Text>
-                      {stepper(
-                        `${i}${side}`,
-                        side === "left" ? "Первая часть" : "Вторая часть",
-                        target - 1,
-                      )}
-                      <View style={s.row}>
-                        {Array.from(
-                          { length: Number(r[`${i}${side}`]) || 0 },
-                          (_, j) => (
-                            <View key={j} style={tokenStyle} />
-                          ),
+                  {a.partColors && a.token ? (
+                    <CompositionBoard
+                      total={target}
+                      token={a.token}
+                      colors={a.partColors}
+                      pattern={a.compositionPattern}
+                      showEquation={Number(block.id.slice(1, 4)) >= 16}
+                      parts={[
+                        Number(r[`${i}left`]) || 0,
+                        Number(r[`${i}right`]) || 0,
+                      ]}
+                      onDrawing={onDrawing}
+                      onChange={([left, right]) =>
+                        onAnswer({
+                          ...answer,
+                          checked: false,
+                          responses: {
+                            ...r,
+                            [`${i}left`]: String(left),
+                            [`${i}right`]: String(right),
+                          },
+                        })
+                      }
+                    />
+                  ) : (
+                    ["left", "right"].map((side, group) => (
+                      <View key={side}>
+                        <Text style={s.note}>
+                          {a.groupLabels?.[group] ??
+                            `${side === "left" ? "Первая" : "Вторая"} часть`}
+                        </Text>
+                        {a.token ? (
+                          <CounterBoard
+                            token={a.token}
+                            objectLabel={a.objectLabel}
+                            value={Number(r[`${i}${side}`]) || 0}
+                            max={target - 1}
+                            onChange={(v) => set(`${i}${side}`, String(v))}
+                            onDrawing={onDrawing}
+                          />
+                        ) : (
+                          stepper(
+                            `${i}${side}`,
+                            side === "left" ? "Первая часть" : "Вторая часть",
+                            target - 1,
+                          )
+                        )}
+                        {!a.token && (
+                          <View style={s.row}>
+                            {Array.from(
+                              { length: Number(r[`${i}${side}`]) || 0 },
+                              (_, j) => (
+                                <View key={j} style={tokenStyle} />
+                              ),
+                            )}
+                          </View>
                         )}
                       </View>
-                    </View>
-                  ))}
+                    ))
+                  )}
                 </>
               )}
               {a.mode === "ruler" && (
@@ -540,7 +671,7 @@ export function CourseTask({
                       style={{
                         height: 12,
                         width: `${(target / (target > 10 ? 100 : 10)) * 100}%`,
-                        backgroundColor: c.orange,
+                        backgroundColor: c.red,
                         marginVertical: 12,
                       }}
                     />
@@ -559,7 +690,7 @@ export function CourseTask({
                           onPress={() => set(key, String(v))}
                           style={[
                             s.tick,
-                            value === v && { backgroundColor: c.mint },
+                            value === v && { backgroundColor: c.wash },
                           ]}
                         >
                           <Text style={s.note}>│</Text>
@@ -632,6 +763,7 @@ export function CourseTask({
           );
         })}
       <Button
+        done={answer.checked && courseCorrect(block, answer)}
         onPress={() =>
           onAnswer({
             ...answer,
@@ -648,16 +780,17 @@ export function CourseTask({
   );
 }
 const s = StyleSheet.create({
+  chipDone: { backgroundColor: c.pen, borderColor: c.pen },
   row: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
-  card: { padding: 16, borderRadius: 16, backgroundColor: "#f8f4ea", gap: 12 },
+  card: { padding: 16, borderRadius: 6, backgroundColor: "#f1efe9", gap: 12 },
   label: { fontFamily: f.bold, fontSize: 19, color: c.ink },
-  text: { fontFamily: f.bold, fontSize: 20, color: c.green },
+  text: { fontFamily: f.bold, fontSize: 20, color: c.pen },
   note: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.ink },
   input: {
     backgroundColor: c.white,
     borderWidth: 2,
-    borderColor: c.green,
-    borderRadius: 12,
+    borderColor: c.pen,
+    borderRadius: 6,
     width: 86,
     minHeight: 54,
     textAlign: "center",
@@ -665,30 +798,30 @@ const s = StyleSheet.create({
     fontSize: 26,
     color: c.ink,
   },
-  operator: { fontSize: 28, color: c.green },
+  operator: { fontSize: 28, color: c.pen },
   chip: {
     padding: 12,
     minWidth: 48,
     minHeight: 48,
     borderWidth: 1,
-    borderColor: c.green,
-    borderRadius: 12,
+    borderColor: c.pen,
+    borderRadius: 6,
     alignItems: "center",
   },
-  selected: { backgroundColor: c.green },
-  feedback: { fontFamily: f.bold, color: c.green, fontSize: 16 },
+  selected: { backgroundColor: c.pen },
+  feedback: { fontFamily: f.hand, color: c.red, fontSize: 22, lineHeight: 26 },
   group: {
     padding: 12,
     borderWidth: 2,
-    borderColor: c.green,
-    borderRadius: 16,
+    borderColor: c.pen,
+    borderRadius: 6,
     maxWidth: 200,
     minHeight: 90,
   },
   bundle: {
     width: 30,
     height: 70,
-    backgroundColor: c.green,
+    backgroundColor: c.pen,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
@@ -699,13 +832,13 @@ const s = StyleSheet.create({
     alignItems: "center",
     minHeight: 60,
     borderBottomWidth: 2,
-    borderColor: c.green,
+    borderColor: c.pen,
   },
   vessel: {
     height: 140,
     width: 120,
     borderWidth: 3,
-    borderColor: c.green,
+    borderColor: c.pen,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
@@ -713,7 +846,7 @@ const s = StyleSheet.create({
   balance: {
     height: 5,
     width: 200,
-    backgroundColor: c.green,
+    backgroundColor: c.pen,
     marginVertical: 20,
   },
 });

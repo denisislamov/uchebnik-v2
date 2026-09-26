@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "baseURL": "http://127.0.0.1:8094",
+  "checks": [
+    {
+      "name": "chair tutorial touches actual selectable chair polygons",
+      "passed": true,
+      "evidence": {
+        "touches": [
+          {
+            "target": "chair-left",
+            "normalized": {
+              "x": 0.3213706772334294,
+              "y": 0.7299868286257867
+            }
+          },
+          {
+            "target": "chair-right",
+            "normalized": {
+              "x": 0.6909221902017291,
+              "y": 0.6749597541343481
+            }
+          }
+        ],
+        "actualAction": "two copied taps select both chairs",
+        "demonstrationMutatedAnswers": false
+      }
+    },
+    {
+      "name": "composition replay places the next adjacent square 390x844",
+      "passed": true,
+      "evidence": {
+        "seed": "one square in the first part",
+        "destination": 1,
+        "actualSecondSquarePlaced": true,
+        "demonstrationMutatedAnswers": false
+      }
+    },
+    {
+      "name": "composition replay places the next adjacent square 800x390",
+      "passed": true,
+      "evidence": {
+        "seed": "one square in the first part",
+        "destination": 1,
+        "actualSecondSquarePlaced": false,
+        "demonstrationMutatedAnswers": false
+      }
+    },
+    {
+      "name": "digit tutorial chooses 1 for tens then 4 for units after actual first placement",
+      "passed": true,
+      "evidence": [
+        {
+          "digit": 1,
+          "index": 0,
+          "actualDragAccepted": true,
+          "demonstrationMutatedAnswers": false
+        },
+        {
+          "digit": 4,
+          "index": 1,
+          "actualDragAccepted": true,
+          "demonstrationMutatedAnswers": false
+        }
+      ]
+    },
+    {
+      "name": "landscape shape ghost matches full destination stick and rotated replay explains recovery",
+      "passed": true,
+      "evidence": {
+        "geometry": {
+          "x1": 127.672,
+          "y1": 155.18400000000003,
+          "x2": 190,
+          "y2": 47.22873726584704,
+          "ghostLength": 124.656,
+          "transform": "rotate(-150 178.836 121.20636863292353)"
+        },
+        "lineLength": 124.656,
+        "lineAngle": -60.00000000000001,
+        "ghostAngle": -60,
+        "rotationRecovery": "Перед переносом нажми «Повернуть» 3 раза, чтобы палочка совпала с наклоном пунктира. Затем перенеси её, как показано дальше.",
+        "demonstrationMutatedAnswers": false
+      }
+    },
+    {
+      "name": "completed part replay never asks for a missing source",
+      "passed": true,
+      "evidence": {
+        "completeField": true,
+        "missingSourceDemonstration": false,
+        "demonstrationMutatedAnswers": false
+      }
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "Chromium only; native-device measurement and touch acceptance not run."
+  ]
+}

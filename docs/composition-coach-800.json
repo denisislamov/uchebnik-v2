@@ -1,0 +1,294 @@
+{
+  "passed": true,
+  "viewport": {
+    "width": 800,
+    "height": 375
+  },
+  "cases": [
+    {
+      "id": "p011-lesson02",
+      "family": "activity.composition.fixed",
+      "steps": [
+        {
+          "index": 1,
+          "text": "В одной части 2, в другой 1. Вместе 3. Разложим предметы на две части.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Переноси предметы двух цветов на одно поле, рядом друг с другом. Сохрани заданные части. Разложи предметы и проверь их общую сумму.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 216,
+            "y": 20,
+            "width": 368,
+            "height": 343
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь зелёные квадратики. Прижми один предмет пальцем.",
+          "card": {
+            "x": 216,
+            "y": 16,
+            "width": 368,
+            "height": 347
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Перенеси его на общее поле. Клади квадратики рядом: сначала одного цвета, затем другого.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "А здесь красные квадратики. Перенеси нужное количество на то же поле. Два цвета покажут две части числа.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p011-lesson03",
+      "family": "activity.composition.another",
+      "steps": [
+        {
+          "index": 1,
+          "text": "В одной части 2, в другой 1. Вместе 3. Разложим предметы на две части.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Переноси предметы двух цветов на одно поле, рядом друг с другом. Найди другой способ, чем в образце. В обеих частях должны быть предметы, а сумма — прежняя.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 216,
+            "y": 20,
+            "width": 368,
+            "height": 343
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь зелёные квадратики. Прижми один предмет пальцем.",
+          "card": {
+            "x": 216,
+            "y": 16,
+            "width": 368,
+            "height": 347
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Перенеси его на общее поле. Клади квадратики рядом: сначала одного цвета, затем другого.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "А здесь красные квадратики. Перенеси нужное количество на то же поле. Два цвета покажут две части числа.",
+          "card": {
+            "x": 216,
+            "y": 12,
+            "width": 368,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 800,
+            "height": 292
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "errors": []
+}

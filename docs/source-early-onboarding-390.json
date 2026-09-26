@@ -1,0 +1,1817 @@
+{
+  "passed": true,
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "cases": [
+    {
+      "id": "p004-block02",
+      "family": "number.count-picture",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Посчитаем детей по одному. Палец показывает, кого уже посчитали. Не пропускай предметы и не считай один дважды.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 299
+          },
+          "hole": {
+            "x": 110.0625,
+            "y": 709.265625,
+            "width": 42.953125,
+            "height": 80.09375
+          },
+          "finger": {
+            "x": 122.546875,
+            "y": 768.75,
+            "width": 34,
+            "height": 44
+          },
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-count",
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Всего 10. Найди это число среди ответов и нажми на него. Посмотри, как.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p004-block05",
+      "family": "counters.same-amount",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Посчитаем деревья по одному. Палец показывает, кого уже посчитали. Не пропускай предметы и не считай один дважды.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 299
+          },
+          "hole": {
+            "x": 63.546875,
+            "y": 748.234375,
+            "width": 39.25,
+            "height": 83.75
+          },
+          "finger": {
+            "x": 74.171875,
+            "y": 818.546875,
+            "width": 34,
+            "height": 44
+          },
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-count",
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Мы насчитали 5. Положи по одному предмету за каждый посчитанный: на поле должно быть столько же.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 249
+          },
+          "hole": {
+            "x": 27,
+            "y": 562,
+            "width": 321,
+            "height": 112
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Здесь можно взять палочку. Прижми пальцем и держи.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p005-block01",
+      "family": "counters.visible",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Сосчитай нужные предметы на рисунке. Каждому предмету будет соответствовать одна палочка или кружок.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 374
+          },
+          "hole": {
+            "x": 43,
+            "y": 696,
+            "width": 289,
+            "height": 136
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Переноси по одному предмету на поле. Остановись, когда каждому предмету на рисунке будет соответствовать один предмет на поле.",
+          "card": {
+            "x": 12,
+            "y": 458,
+            "width": 366,
+            "height": 374
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Некоторые предметы могут заслонять друг друга. Покажи те, которые видишь, и нажми «Дальше».",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь можно взять палочку. Прижми пальцем и держи.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p006-block07",
+      "family": "draw.open",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Посмотри на образец: какие линии, фигуры и цвета в нём повторяются?",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 226
+          },
+          "hole": {
+            "x": 27,
+            "y": 562,
+            "width": 321,
+            "height": 80
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Начни с яркой точки. Не отрывая палец, веди по пунктиру в сторону синей стрелки. Стрелка показывает направление движения.",
+          "card": {
+            "x": 12,
+            "y": 431,
+            "width": 366,
+            "height": 401
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-trace",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p007-block02",
+      "family": "picture.compare-quantity",
+      "steps": [
+        {
+          "index": 1,
+          "text": "В одной группе один ребёнок. В другой несколько детей — их много.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 708,
+            "width": 321,
+            "height": 124
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Сравни количество детей в группах. Нажми группу, которую просят найти.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 708,
+            "width": 321,
+            "height": 124
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Сначала внимательно рассмотри предметы. Подумай, что нужно найти по заданию.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 276
+          },
+          "hole": {
+            "x": 228.296875,
+            "y": 752.53125,
+            "width": 80.046875,
+            "height": 79.453125
+          },
+          "finger": {
+            "x": 259.3125,
+            "y": 832.140625,
+            "width": 34,
+            "height": 44
+          },
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-inspect",
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Коснись нужного предмета и подними палец. Чтобы убрать отметку, нажми ещё раз.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 276
+          },
+          "hole": {
+            "x": 118.5,
+            "y": 770.359375,
+            "width": 113.59375,
+            "height": 56.078125
+          },
+          "finger": {
+            "x": 166.296875,
+            "y": 795.390625,
+            "width": 34,
+            "height": 44
+          },
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p007-block11",
+      "family": "number.quantity-symbol",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Найди на рисунке именно те предметы, о которых спрашивают.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 702,
+            "width": 321,
+            "height": 130
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Начинаем: 1. Последнее число говорит, сколько всего.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 487
+          },
+          "hole": {
+            "x": 27,
+            "y": 702,
+            "width": 321,
+            "height": 130
+          },
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Сосчитай предметы в своём задании и нажми нужную цифру.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 702,
+            "width": 321,
+            "height": 130
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p008-block05",
+      "family": "practical.place-count+add.multi",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Положи 1 палочку.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 305
+          },
+          "hole": {
+            "x": 27,
+            "y": 702,
+            "width": 321,
+            "height": 130
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Положи ещё 1 палочку. Предметы предыдущего шага уже на месте.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 702,
+            "width": 321,
+            "height": 130
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Выполняй действия по порядку. Когда закончишь, проверь свой ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 702,
+            "width": 321,
+            "height": 130
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь можно взять палочку. Прижми пальцем и держи.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p009-block01",
+      "family": "picture.add",
+      "steps": [
+        {
+          "index": 1,
+          "text": "На ветке сидела 1 птичка. К ней прилетела ещё 1 птичка.",
+          "card": {
+            "x": 12,
+            "y": 504,
+            "width": 366,
+            "height": 328
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Птичек стало больше. Покажи одну птичку, затем другую. Каждую посчитай один раз.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Теперь рассмотри птиц в задании. Нажми на каждую, чтобы показать, сколько стало.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Сначала внимательно рассмотри предметы. Подумай, что нужно найти по заданию.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-inspect",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Отмечай нужные предметы по одному. Посмотри, как палец касается каждого из них.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-count",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p011-lesson01",
+      "family": "work.word-reasoning.add",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Прочитай условие и вопросы задания. 2 мальчика и 1 девочка катаются на велосипедах. Сколько всего детей катается?\n\nУ детского велосипеда спереди 1 колесо, сзади 2. Сколько всего колёс у детского велосипеда?",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 466
+          },
+          "hole": {
+            "x": 27,
+            "y": 562,
+            "width": 321,
+            "height": 270
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Рассмотри то, о чём спрашивают. Если нужно узнать, сколько всего, пересчитай обе группы вместе.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Отвечай на вопросы по очереди. Для каждого вопроса сосчитай нужные предметы и запиши ответ.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p011-lesson02",
+      "family": "activity.composition.fixed",
+      "steps": [
+        {
+          "index": 1,
+          "text": "В одной части 2, в другой 1. Вместе 3. Разложим предметы на две части.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 537
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Переноси предметы двух цветов на одно поле, рядом друг с другом. Сохрани заданные части. Разложи предметы и проверь их общую сумму.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 374
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь зелёные квадратики. Прижми один предмет пальцем.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Перенеси его на общее поле. Предмет встанет на место, как в образце. Продолжай раскладывать предметы двух цветов.",
+          "card": {
+            "x": 12,
+            "y": 431,
+            "width": 366,
+            "height": 401
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "А здесь красные квадратики. Перенеси нужное количество на то же поле. Два цвета покажут две части числа.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p011-lesson03",
+      "family": "activity.composition.another",
+      "steps": [
+        {
+          "index": 1,
+          "text": "В одной части 2, в другой 1. Вместе 3. Разложим предметы на две части.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 457
+          },
+          "hole": {
+            "x": 27,
+            "y": 736,
+            "width": 321,
+            "height": 96
+          },
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Переноси предметы двух цветов на одно поле, рядом друг с другом. Найди другой способ, чем в образце. В обеих частях должны быть предметы, а сумма — прежняя.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 397
+          },
+          "hole": {
+            "x": 27,
+            "y": 736,
+            "width": 321,
+            "height": 96
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 351
+          },
+          "hole": {
+            "x": 27,
+            "y": 736,
+            "width": 321,
+            "height": 96
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь зелёные квадратики. Прижми один предмет пальцем.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Перенеси его на общее поле. Клади квадратики рядом: сначала одного цвета, затем другого.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        },
+        {
+          "index": 6,
+          "text": "А здесь красные квадратики. Перенеси нужное количество на то же поле. Два цвета покажут две части числа.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p011-lesson04",
+      "family": "activity.coins.sum",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Прочитай условие и вопросы задания. Из каких монет можно составить 3 копейки? Набери 3 копейки из монет разрезной таблицы.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 272
+          },
+          "hole": {
+            "x": 27,
+            "y": 562,
+            "width": 321,
+            "height": 144
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Посмотри, сколько копеек написано на каждой монете. Выбирай монеты так, чтобы вместе получилось столько копеек, сколько нужно в задании.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 374
+          },
+          "hole": {
+            "x": 27,
+            "y": 734,
+            "width": 321,
+            "height": 98
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Считай копейки, а не количество монет. Лишнюю монету можно убрать.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 734,
+            "width": 321,
+            "height": 98
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 351
+          },
+          "hole": {
+            "x": 27,
+            "y": 734,
+            "width": 321,
+            "height": 98
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p011-lesson06",
+      "family": "work.count-and-record",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Прочитай условие и вопросы задания. Два набора мячей",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 226
+          },
+          "hole": {
+            "x": 27,
+            "y": 562,
+            "width": 321,
+            "height": 48
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Рассмотри то, о чём спрашивают. Если нужно узнать, сколько всего, пересчитай обе группы вместе.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 249
+          },
+          "hole": {
+            "x": 27,
+            "y": 616,
+            "width": 321,
+            "height": 208
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Отвечай на вопросы по очереди. Для каждого вопроса сосчитай нужные предметы и запиши ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p012-lesson05",
+      "family": "practical.place-count.multi",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Покажи столько палочек, сколько ножек у стола.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 741,
+            "width": 321,
+            "height": 91
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Покажи столько палочек, сколько ножек у стула.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 741,
+            "width": 321,
+            "height": 91
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Выполняй действия по порядку. Когда закончишь, проверь свой ответ.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 328
+          },
+          "hole": {
+            "x": 27,
+            "y": 741,
+            "width": 321,
+            "height": 91
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь можно взять палочку. Прижми пальцем и держи.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p013-lesson01",
+      "family": "work.word-reasoning.add-subtract",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Прочитай условие и вопросы задания. Птички на ветке",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 226
+          },
+          "hole": {
+            "x": 27,
+            "y": 562,
+            "width": 321,
+            "height": 48
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Сначала посчитай, сколько было. Посмотри, что изменилось. Для вопроса «Сколько осталось?» считай оставшиеся предметы.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 374
+          },
+          "hole": {
+            "x": 27,
+            "y": 616,
+            "width": 321,
+            "height": 216
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Отвечай на вопросы по очереди. Для каждого вопроса сосчитай нужные предметы и запиши ответ.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
+    },
+    {
+      "id": "p014-lesson04",
+      "family": "activity.count",
+      "steps": [
+        {
+          "index": 1,
+          "text": "Сосчитай предметы в задании по одному. Для каждого положи один предмет на поле.",
+          "card": {
+            "x": 12,
+            "y": 12,
+            "width": 366,
+            "height": 249
+          },
+          "hole": {
+            "x": 43,
+            "y": 730,
+            "width": 289,
+            "height": 102
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Переноси предметы из коробки. Если есть отмеченные места, заполняй их по одному.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Когда закончишь, нажми «Проверить». Если что-то не получилось, пересчитай и исправь ответ.",
+          "card": {
+            "x": 12,
+            "y": 481,
+            "width": 366,
+            "height": 351
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Здесь можно взять палочку. Прижми пальцем и держи.",
+          "card": {
+            "x": 12,
+            "y": 477,
+            "width": 366,
+            "height": 355
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-tap",
+          "issues": []
+        },
+        {
+          "index": 5,
+          "text": "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+          "card": {
+            "x": 12,
+            "y": 454,
+            "width": 366,
+            "height": 378
+          },
+          "hole": null,
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": true,
+          "pane": {
+            "x": 0,
+            "y": 83,
+            "width": 390,
+            "height": 761
+          },
+          "motion": "coach-motion-drag",
+          "issues": []
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "errors": []
+}

@@ -1,23 +1,27 @@
-import { Platform } from "react-native";
+// «Тетрадь в клетку»: цвета настоящей школьной тетради, а не фирменная палитра.
 export const colors = {
-  paper: "#f7f4ec",
-  card: "#fffdf7",
-  ink: "#243e36",
-  muted: "#65736b",
-  green: "#23594e",
-  mint: "#e4eee4",
-  line: "#dedfd2",
-  orange: "#ce6548",
-  sand: "#f1e6cf",
+  paper: "#fcfbf7", // лист тетради
+  card: "#ffffff", // вклеенный белый лист
+  ink: "#1f2433", // печатный текст
+  muted: "#6b7280", // карандаш
+  pen: "#2b4ba8", // синяя паста: действия, ссылки, выбор
+  penDark: "#1d367f", // нижняя кромка нажимаемой кнопки
+  red: "#c8352e", // красная ручка учителя: только отметка «верно»
+  retry: "#a14f08", // оранжевый карандаш: «попробуй ещё раз», не путать с отметкой
+  retryWash: "#fdf0e1", // заливка заметки «ещё раз»
+  wash: "#e8eef9", // голубая заливка полей и выделений
+  washWarm: "#f1efe9", // серая заливка заметок
+  line: "#a9b6cc", // линейка и рамки
+  grid: "#d9e2ef", // клетка
+  margin: "#e9a3a3", // поля
+  cover: "#cfdceb", // обложка
   white: "#ffffff",
 };
 export const fonts = {
-  regular: "Nunito_400Regular",
-  bold: "Nunito_700Bold",
-  heavy: "Nunito_800ExtraBold",
-  serif: Platform.select({
-    ios: "Georgia",
-    android: "serif",
-    default: "Georgia",
-  }),
+  // Andika сделана для тех, кто учится читать: простая «а», понятная «д».
+  regular: "Andika_400Regular",
+  bold: "Andika_700Bold",
+  heavy: "Andika_700Bold",
+  // Neucha: то, что «написано ручкой» — заголовки, отметки учителя.
+  hand: "Neucha_400Regular",
 };

@@ -66,7 +66,7 @@ const counters = (
   token,
   images,
   review,
-  hint: "Нажимай «Добавить», чтобы положить один предмет. Лишний можно убрать.",
+  hint: "Возьми предмет внизу и перенеси на поле. Чтобы убрать лишний, перетащи его обратно или нажми «Отменить».",
 });
 const draw = (
   title: string,
@@ -98,13 +98,13 @@ const shape = (
   images: [image],
   vertices: down
     ? [
-        { x: 0.15, y: 0.2 },
-        { x: 0.85, y: 0.2 },
+        { x: 0.15, y: 0.8 - (0.7 * Math.sqrt(3)) / 2 },
+        { x: 0.85, y: 0.8 - (0.7 * Math.sqrt(3)) / 2 },
         { x: 0.5, y: 0.8 },
       ]
     : [
         { x: 0.15, y: 0.8 },
-        { x: 0.5, y: 0.2 },
+        { x: 0.5, y: 0.8 - (0.7 * Math.sqrt(3)) / 2 },
         { x: 0.85, y: 0.8 },
       ],
   edges: triangle
@@ -122,7 +122,7 @@ const shape = (
           [0, 1],
           [1, 2],
         ],
-  hint: "Выбери две точки: между ними появится палочка. Нажми те же точки, чтобы убрать её.",
+  hint: "Перетащи палочки на пунктир, чтобы собрать фигуру.",
 });
 function page(
   n: number,
@@ -138,12 +138,15 @@ function page(
     subtitle,
     hero,
     sourceDoc: `textbook/page_docs/arithmetic_grade1_pchelko_1959_p${String(n).padStart(3, "0")}.md`,
-    blocks: blocks.map((b, i) =>
-      childInteraction({
+    blocks: blocks.map((b, i) => {
+      const interactive = childInteraction({
         ...b,
         id: `p${String(n).padStart(3, "0")}-block${String(i + 1).padStart(2, "0")}`,
-      } as Block),
-    ),
+      } as Block);
+      if (n === 9 && i === 0)
+        interactive.prompt = `${b.prompt} Нажми на птичек, чтобы показать ответ.`;
+      return interactive;
+    }),
   };
 }
 export const pages: BookPage[] = [
@@ -304,14 +307,14 @@ export const pages: BookPage[] = [
       counters(
         "Огурцы",
         "Положи столько кружков, сколько нарисовано огурцов.",
-        6,
+        7,
         "circle",
         [img(5, "bowl_cucumbers")],
       ),
       counters(
         "Помидоры",
         "Положи столько кружков, сколько нарисовано помидоров.",
-        7,
+        8,
         "circle",
         [img(5, "basket_tomatoes")],
       ),
@@ -340,23 +343,33 @@ export const pages: BookPage[] = [
         "Дети работают на участке: сажают деревце, ухаживают за клумбой. Расскажи, кто чем занят.",
         [img(6, "children_planting_garden")],
       ),
-      ...[
-        ["Флажок", "blackboard_flag_star", "Вверху слева"],
-        ["Звёздочка", "blackboard_flag_star", "Вверху справа"],
-        ["Домик", "blackboard_house_tree", "Внизу слева"],
-        ["Ёлочка", "blackboard_house_tree", "Внизу справа"],
-      ].map(([t, im, e]) =>
-        choice(
-          t,
-          `Где на своей доске находится ${t.toLowerCase()}?`,
-          ["Вверху слева", "Вверху справа", "Внизу слева", "Внизу справа"],
-          e,
-          [img(6, im)],
-          t === "Флажок"
+      ...(
+        [
+          ["Флажок", "blackboard_flag_star", "Вверху", "Слева", "расположен"],
+          [
+            "Звёздочка",
+            "blackboard_flag_star",
+            "Вверху",
+            "Справа",
+            "расположена",
+          ],
+          ["Домик", "blackboard_house_tree", "Внизу", "Слева", "расположен"],
+          ["Ёлочка", "blackboard_house_tree", "Внизу", "Справа", "расположена"],
+        ] as const
+      ).map(([title, im, vertical, horizontal, verb]): BlockDraft => ({
+        kind: "location",
+        title,
+        prompt: `Где ${verb} ${title.toLowerCase()}: вверху или внизу?`,
+        verticalPrompt: `Где ${verb} ${title.toLowerCase()}: вверху или внизу?`,
+        horizontalPrompt: `Где ${verb} ${title.toLowerCase()}: слева или справа?`,
+        location: { vertical, horizontal },
+        images: [img(6, im)],
+        sourceText:
+          title === "Флажок"
             ? "Где расположен флажок: вверху или внизу? слева или справа?"
             : "Где расположены звёздочка? домик? ёлочка?",
-        ),
-      ),
+        hint: "Рассмотри доску. Сначала выбери верх или низ, затем левую или правую сторону.",
+      })),
       draw(
         "Колечки",
         "Нарисуй верхний ряд: кольца с красной точкой внутри.",
@@ -404,8 +417,8 @@ export const pages: BookPage[] = [
         number(t, "Сколько предметов на рисунке?", 1, [img(7, im)]),
       ),
       counters(
-        "Одна бусина",
-        "Положи один кружок — столько же, сколько бусин.",
+        "Один жетон",
+        "Положи один кружок — столько же, сколько жетонов на карточке.",
         1,
         "circle",
         [img(7, "abacus_1")],
@@ -456,13 +469,31 @@ export const pages: BookPage[] = [
       number("Колёса", "Сколько колёс у велосипеда?", 2, [
         img(8, "bicycle_two_wheels"),
       ]),
-      counters(
-        "Одна и ещё одна",
-        "Положи 1 палочку. Положи ещё 1 палочку. Сколько стало палочек?",
-        2,
-        "stick",
-        [],
-      ),
+      {
+        kind: "practical",
+        title: "Одна и ещё одна",
+        prompt:
+          "Положи 1 палочку. Положи ещё 1 палочку. Сколько стало палочек?",
+        images: [],
+        steps: [
+          {
+            id: "first",
+            instruction: "Положи 1 палочку.",
+            mode: "place",
+            token: "stick",
+            counts: [1],
+          },
+          {
+            id: "more",
+            instruction: "Положи ещё 1 палочку.",
+            mode: "place",
+            token: "stick",
+            counts: [2],
+            carryFrom: "first",
+          },
+        ],
+        fields: [{ id: "q1", label: "Сколько стало палочек?", expected: "2" }],
+      },
       shape(
         "Угол вершиной вверх",
         "Составь из двух палочек угол вершиной вверх.",
@@ -479,7 +510,7 @@ export const pages: BookPage[] = [
       ),
       read(
         "Это число 2",
-        "Две бусины, две точки, два зелёных кружка и цифра 2.",
+        "Два жетона, две точки, два зелёных кружка и цифра 2.",
         [
           img(8, "abacus_2"),
           img(8, "domino_2"),
@@ -583,7 +614,7 @@ export const pages: BookPage[] = [
     ]),
     counters(
       "Две и ещё одна",
-      "Положи столько кружков, сколько бусин на проволоке.",
+      "Положи столько кружков, сколько жетонов на карточке.",
       3,
       "circle",
       [img(10, "abacus_3")],
@@ -637,4 +668,27 @@ export const pages: BookPage[] = [
   ]),
 ];
 pages.push(...remainingPages);
+for (const p of pages)
+  for (const b of p.blocks) {
+    if (!b.images.some((id) => id.includes("abacus_"))) continue;
+    const modern = (text: string) =>
+      text
+        .replace(/на (счётах|счетах|проволоке)/gi, "на карточке")
+        .replace(/бусин/g, "жетон")
+        .replace(/счёты|счеты|абак/gi, "карточка с жетонами");
+    b.prompt = modern(b.prompt);
+    b.title = modern(b.title);
+    if (b.kind === "read") b.body = modern(b.body);
+    if (b.kind === "work")
+      b.fields = b.fields.map((field) => ({
+        ...field,
+        label: modern(field.label),
+      }));
+  }
 export const allBlocks = pages.flatMap((p) => p.blocks);
+
+// Source pages stay addressable by PDF number; only these pages count as lessons.
+export const lessonPages = pages.filter(
+  (p) => p.number >= 3 && p.number <= 142,
+);
+export const extraPages = pages.filter((p) => [1, 143, 144].includes(p.number));

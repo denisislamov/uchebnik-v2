@@ -19,13 +19,19 @@ for (const spec of catalog)
     assert.equal(page.number, spec.pdfPage);
     assert.equal(page.sourceDoc, `textbook/${spec.document}`);
     assert.ok(fs.existsSync(page.sourceDoc));
-    const expected = [...new Set(spec.exerciseNumbers)].sort(
+    // №489 starts on 92 and continues on 93; one complete interactive task lives on 92.
+    const expected = [...new Set(spec.exerciseNumbers)].filter(n=>!(spec.pdfPage===93 && n===489)).sort(
       (a: any, b: any) => a - b,
     );
     const actual = [
       ...new Set(page.blocks.map((b) => b.exerciseNumber).filter(Boolean)),
     ].sort((a: any, b: any) => a - b);
     assert.deepEqual(actual, expected);
+    if (spec.pdfPage===93) {
+      const continued=pages[91].blocks.find(b=>b.exerciseNumber===489);
+      assert.ok(continued?.kind==='work');
+      assert.deepEqual(continued.fields.map(f=>f.expected),['14','1']);
+    }
     const used = new Set(page.blocks.flatMap((b) => b.images));
     for (const id of spec.assetIds)
       assert.ok(used.has(id), `${page.number}: missing ${id}`);

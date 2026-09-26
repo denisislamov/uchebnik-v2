@@ -4,6 +4,8 @@ const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 (async () => {
   const { pages } = await import("../src/content/book.ts");
+  const { isClosedTrace } = await import("../src/lib/tracing.ts");
+  const { promptRepeatsTitle } = await import("../src/lib/blockText.ts");
   const browser = await chromium.launch({
     headless: true,
     ...(process.env.BROWSER_CHANNEL
@@ -13,6 +15,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
   const report = {
     passed: false,
     pages: [],
+    excluded: [{page:2,reason:"Title page removed from activities"}],
     errors: [],
     viewport: { width: 1280, height: 1000 },
   };
@@ -24,7 +27,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     p.setDefaultTimeout(12000);
     p.on("pageerror", (e) => report.errors.push(e.message));
     await p.goto(baseURL);
-    for (const page of pages) {
+    for (const page of pages.filter((p) => p.number !== 2)) {
       await p.getByRole("button", { name: "На главную", exact: true }).click();
       await p
         .getByRole("textbox", {
@@ -48,6 +51,43 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
           })
           .click();
         await p.getByText(b.title, { exact: true }).last().waitFor();
+        assert.equal(
+          await p
+            .getByRole("button", { name: "Как это сделать?", exact: true })
+            .count(),
+          1,
+          `${b.id}: exactly one coaching button`,
+        );
+        assert.equal(
+          await p.getByTestId("gesture-coach").count(),
+          0,
+          `${b.id}: coaching never opens by itself`,
+        );
+        assert.equal(
+          await p.getByTestId("block-title").count(),
+          1,
+          `${b.id}: one heading element`,
+        );
+        assert.equal(
+          await p.getByTestId("block-title").innerText(),
+          b.title,
+          `${b.id}: the heading is the block title`,
+        );
+        assert.equal(
+          await p.getByTestId("block-prompt").count(),
+          b.kind === "read" || promptRepeatsTitle(b) ? 0 : 1,
+          `${b.id}: the task text is not a second copy of the heading`,
+        );
+        assert.equal(
+          await p.evaluate(() => document.body.innerText.includes("□")),
+          false,
+          `${b.id}: a blank is drawn as a field, not as the □ glyph`,
+        );
+        assert.equal(
+          await p.getByTestId("debug-source-panel").count(),
+          0,
+          "release must not show source comparison",
+        );
         await p.waitForFunction(() =>
           [...document.images].every((i) => i.complete && i.naturalWidth > 0),
         );
@@ -70,7 +110,12 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
             b.id,
           );
           const arrows = await p.getByTestId("drawing-direction-arrow").count();
-          assert.equal(arrows > 0, !b.trace.stages[0][0].dot, b.id);
+          assert.equal(
+            arrows > 0,
+            !b.trace.stages[0][0].dot &&
+              !isClosedTrace(b.trace.stages[0][0], b.trace),
+            b.id,
+          );
         }
         assert.equal(
           await p.getByText("Мы рассмотрели", { exact: true }).count(),

@@ -47,16 +47,6 @@
       ]
     },
     {
-      "page": 2,
-      "blocks": [
-        {
-          "id": "p002-block01",
-          "kind": "read",
-          "passed": true
-        }
-      ]
-    },
-    {
       "page": 3,
       "blocks": [
         {
@@ -181,22 +171,22 @@
         },
         {
           "id": "p006-block02",
-          "kind": "picture",
+          "kind": "location",
           "passed": true
         },
         {
           "id": "p006-block03",
-          "kind": "picture",
+          "kind": "location",
           "passed": true
         },
         {
           "id": "p006-block04",
-          "kind": "picture",
+          "kind": "location",
           "passed": true
         },
         {
           "id": "p006-block05",
-          "kind": "picture",
+          "kind": "location",
           "passed": true
         },
         {
@@ -281,7 +271,7 @@
       "blocks": [
         {
           "id": "p008-block01",
-          "kind": "read",
+          "kind": "picture",
           "passed": true
         },
         {
@@ -301,7 +291,7 @@
         },
         {
           "id": "p008-block05",
-          "kind": "counters",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -465,11 +455,6 @@
       "page": 11,
       "blocks": [
         {
-          "id": "p011-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p011-lesson01",
           "kind": "work",
           "passed": true
@@ -481,7 +466,7 @@
         },
         {
           "id": "p011-lesson03",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -491,6 +476,11 @@
         },
         {
           "id": "p011-lesson05",
+          "kind": "activity",
+          "passed": true
+        },
+        {
+          "id": "p011-walk-three",
           "kind": "activity",
           "passed": true
         },
@@ -510,11 +500,6 @@
       "page": 12,
       "blocks": [
         {
-          "id": "p012-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p012-lesson01",
           "kind": "work",
           "passed": true
@@ -531,12 +516,12 @@
         },
         {
           "id": "p012-lesson04",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p012-lesson05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -566,7 +551,7 @@
         },
         {
           "id": "p013-lesson04",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -585,11 +570,6 @@
       "page": 14,
       "blocks": [
         {
-          "id": "p014-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p014-lesson01",
           "kind": "work",
           "passed": true
@@ -601,7 +581,7 @@
         },
         {
           "id": "p014-lesson03",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -631,7 +611,7 @@
         },
         {
           "id": "p015-lesson03",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -660,27 +640,27 @@
       "page": 16,
       "blocks": [
         {
-          "id": "p016-illustrations",
+          "id": "p016-lesson01",
           "kind": "read",
           "passed": true
         },
         {
-          "id": "p016-lesson01",
-          "kind": "work",
-          "passed": true
-        },
-        {
           "id": "p016-lesson02",
-          "kind": "work",
+          "kind": "read",
           "passed": true
         },
         {
           "id": "p016-lesson03",
-          "kind": "work",
+          "kind": "read",
           "passed": true
         },
         {
           "id": "p016-lesson04",
+          "kind": "read",
+          "passed": true
+        },
+        {
+          "id": "p016-lesson05",
           "kind": "work",
           "passed": true
         }
@@ -689,11 +669,6 @@
     {
       "page": 17,
       "blocks": [
-        {
-          "id": "p017-illustrations",
-          "kind": "read",
-          "passed": true
-        },
         {
           "id": "p017-lesson01",
           "kind": "work",
@@ -706,7 +681,7 @@
         },
         {
           "id": "p017-lesson03",
-          "kind": "work",
+          "kind": "read",
           "passed": true
         },
         {
@@ -719,11 +694,6 @@
     {
       "page": 18,
       "blocks": [
-        {
-          "id": "p018-illustrations",
-          "kind": "read",
-          "passed": true
-        },
         {
           "id": "p018-lesson01",
           "kind": "work",
@@ -751,7 +721,7 @@
         },
         {
           "id": "p018-lesson06",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -765,11 +735,6 @@
       "page": 19,
       "blocks": [
         {
-          "id": "p019-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p019-lesson01",
           "kind": "work",
           "passed": true
@@ -781,7 +746,7 @@
         },
         {
           "id": "p019-lesson03",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -797,11 +762,6 @@
         {
           "id": "p019-lesson06",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p019-lesson07",
-          "kind": "work",
           "passed": true
         },
         {
@@ -830,13 +790,8 @@
       "page": 20,
       "blocks": [
         {
-          "id": "p020-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p020-lesson01",
-          "kind": "work",
+          "kind": "read",
           "passed": true
         }
       ]
@@ -845,18 +800,13 @@
       "page": 21,
       "blocks": [
         {
-          "id": "p021-illustrations",
+          "id": "p021-lesson01",
           "kind": "read",
           "passed": true
         },
         {
-          "id": "p021-lesson01",
-          "kind": "work",
-          "passed": true
-        },
-        {
           "id": "p021-lesson02",
-          "kind": "work",
+          "kind": "read",
           "passed": true
         },
         {
@@ -870,18 +820,13 @@
       "page": 22,
       "blocks": [
         {
-          "id": "p022-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p022-lesson01",
           "kind": "work",
           "passed": true
         },
         {
           "id": "p022-lesson02",
-          "kind": "draw",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -896,7 +841,7 @@
         },
         {
           "id": "p022-lesson05",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -921,7 +866,7 @@
         },
         {
           "id": "p023-lesson03",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -932,11 +877,6 @@
         {
           "id": "p023-lesson05",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p023-lesson06",
-          "kind": "work",
           "passed": true
         },
         {
@@ -965,11 +905,6 @@
       "page": 24,
       "blocks": [
         {
-          "id": "p024-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p024-lesson01",
           "kind": "work",
           "passed": true
@@ -991,7 +926,7 @@
         },
         {
           "id": "p024-lesson05",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -1021,7 +956,7 @@
         },
         {
           "id": "p025-lesson04",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -1032,11 +967,6 @@
         {
           "id": "p025-lesson06",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p025-lesson07",
-          "kind": "work",
           "passed": true
         },
         {
@@ -1065,11 +995,6 @@
       "page": 26,
       "blocks": [
         {
-          "id": "p026-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p026-lesson01",
           "kind": "work",
           "passed": true
@@ -1086,7 +1011,7 @@
         },
         {
           "id": "p026-lesson04",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -1121,7 +1046,7 @@
         },
         {
           "id": "p027-lesson04",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -1132,11 +1057,6 @@
         {
           "id": "p027-lesson06",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p027-lesson07",
-          "kind": "work",
           "passed": true
         },
         {
@@ -1164,11 +1084,6 @@
     {
       "page": 28,
       "blocks": [
-        {
-          "id": "p028-illustrations",
-          "kind": "read",
-          "passed": true
-        },
         {
           "id": "p028-lesson01",
           "kind": "work",
@@ -1205,11 +1120,6 @@
       "page": 29,
       "blocks": [
         {
-          "id": "p029-illustrations",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p029-lesson01",
           "kind": "work",
           "passed": true
@@ -1221,7 +1131,7 @@
         },
         {
           "id": "p029-lesson03",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -1232,11 +1142,6 @@
         {
           "id": "p029-lesson05",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p029-lesson06",
-          "kind": "work",
           "passed": true
         },
         {
@@ -1616,7 +1521,7 @@
         },
         {
           "id": "p037-source02",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -1631,7 +1536,7 @@
         },
         {
           "id": "p037-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -1656,7 +1561,7 @@
         },
         {
           "id": "p037-source10",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         }
       ]
@@ -1786,7 +1691,7 @@
         },
         {
           "id": "p040-source02",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
@@ -1796,7 +1701,7 @@
         },
         {
           "id": "p040-source04",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -1891,7 +1796,7 @@
         },
         {
           "id": "p041-source08",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2006,12 +1911,12 @@
         },
         {
           "id": "p043-source05",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
           "id": "p043-source06",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2101,7 +2006,7 @@
         },
         {
           "id": "p044-source08",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2191,12 +2096,12 @@
         },
         {
           "id": "p046-source04",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
           "id": "p046-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2356,12 +2261,12 @@
         },
         {
           "id": "p048-source09",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
           "id": "p048-source10",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         }
       ]
@@ -2451,7 +2356,7 @@
         },
         {
           "id": "p050-source04",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -2491,12 +2396,12 @@
         },
         {
           "id": "p051-source02",
-          "kind": "work",
+          "kind": "activity",
           "passed": true
         },
         {
           "id": "p051-source03",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2766,12 +2671,12 @@
         },
         {
           "id": "p056-source07",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
           "id": "p056-source08",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -2801,17 +2706,17 @@
         },
         {
           "id": "p057-source03",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
           "id": "p057-source04",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
           "id": "p057-source05",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -2841,7 +2746,7 @@
         },
         {
           "id": "p058-source02",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2851,7 +2756,7 @@
         },
         {
           "id": "p058-source04",
-          "kind": "work",
+          "kind": "numberGame",
           "passed": true
         }
       ]
@@ -2876,7 +2781,7 @@
         },
         {
           "id": "p059-source03",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -2891,7 +2796,7 @@
         },
         {
           "id": "p059-source06",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         }
       ]
@@ -2911,7 +2816,7 @@
         },
         {
           "id": "p060-source02",
-          "kind": "activity",
+          "kind": "work",
           "passed": true
         },
         {
@@ -2931,12 +2836,12 @@
       "blocks": [
         {
           "id": "p061-source01",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p061-source02",
-          "kind": "work",
+          "kind": "numberGame",
           "passed": true
         },
         {
@@ -3066,7 +2971,7 @@
         },
         {
           "id": "p063-source06",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3171,7 +3076,7 @@
         },
         {
           "id": "p065-source04",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -3221,7 +3126,7 @@
         },
         {
           "id": "p066-source04",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3291,7 +3196,7 @@
         },
         {
           "id": "p067-source06",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3301,7 +3206,7 @@
         },
         {
           "id": "p067-source08",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         }
       ]
@@ -3311,7 +3216,7 @@
       "blocks": [
         {
           "id": "p068-source01",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3321,7 +3226,7 @@
         },
         {
           "id": "p068-source03",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3651,7 +3556,7 @@
         },
         {
           "id": "p074-source02",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3666,12 +3571,12 @@
         },
         {
           "id": "p074-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p074-source06",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -3891,7 +3796,7 @@
         },
         {
           "id": "p078-source05",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -4436,7 +4341,7 @@
         },
         {
           "id": "p088-source05",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -4541,7 +4446,7 @@
         },
         {
           "id": "p090-source06",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -4692,11 +4597,6 @@
         {
           "id": "p093-source-art",
           "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p093-source01",
-          "kind": "work",
           "passed": true
         },
         {
@@ -5091,7 +4991,7 @@
         },
         {
           "id": "p100-source05",
-          "kind": "compose",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -5126,7 +5026,7 @@
         },
         {
           "id": "p101-source02",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -5181,7 +5081,7 @@
         },
         {
           "id": "p102-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -5231,7 +5131,7 @@
         },
         {
           "id": "p103-source04",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -5246,7 +5146,7 @@
         },
         {
           "id": "p103-source07",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -5257,11 +5157,6 @@
         {
           "id": "p103-source09",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p103-squares554",
-          "kind": "shape",
           "passed": true
         }
       ]
@@ -5415,11 +5310,6 @@
       "page": 107,
       "blocks": [
         {
-          "id": "p107-source-art",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p107-source01",
           "kind": "recipe",
           "passed": true
@@ -5491,7 +5381,7 @@
         },
         {
           "id": "p108-source06",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -5541,7 +5431,7 @@
         },
         {
           "id": "p109-source06",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -5551,7 +5441,7 @@
         },
         {
           "id": "p109-source08",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -5601,7 +5491,7 @@
         },
         {
           "id": "p110-source08",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         }
       ]
@@ -5611,7 +5501,7 @@
       "blocks": [
         {
           "id": "p111-source01",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -5821,7 +5711,7 @@
         },
         {
           "id": "p115-source07",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -5966,7 +5856,7 @@
         },
         {
           "id": "p118-source03",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6076,7 +5966,7 @@
         },
         {
           "id": "p120-source03",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6096,7 +5986,7 @@
         },
         {
           "id": "p120-source07",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -6126,7 +6016,7 @@
         },
         {
           "id": "p121-source03",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6146,7 +6036,7 @@
         },
         {
           "id": "p121-source07",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6201,7 +6091,7 @@
         },
         {
           "id": "p122-source05",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -6211,7 +6101,7 @@
         },
         {
           "id": "p122-source07",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -6241,7 +6131,7 @@
         },
         {
           "id": "p123-source02",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -6296,12 +6186,12 @@
         },
         {
           "id": "p124-source03",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
           "id": "p124-source04",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -6360,11 +6250,6 @@
       "page": 126,
       "blocks": [
         {
-          "id": "p126-source-art",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p126-source01",
           "kind": "read",
           "passed": true
@@ -6376,22 +6261,22 @@
         },
         {
           "id": "p126-source04",
-          "kind": "activity",
+          "kind": "work",
           "passed": true
         },
         {
           "id": "p126-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p126-source06",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p126-source07",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6581,7 +6466,7 @@
         },
         {
           "id": "p129-source11",
-          "kind": "activity",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6591,17 +6476,17 @@
         },
         {
           "id": "p129-source13",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p129-source14",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p129-source15",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -6771,7 +6656,7 @@
         },
         {
           "id": "p132-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -7016,12 +6901,12 @@
         },
         {
           "id": "p136-source04",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
           "id": "p136-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -7096,12 +6981,12 @@
         },
         {
           "id": "p137-source08",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
           "id": "p137-source09",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -7186,7 +7071,7 @@
       "blocks": [
         {
           "id": "p139-source01",
-          "kind": "recipe",
+          "kind": "story",
           "passed": true
         },
         {
@@ -7201,7 +7086,7 @@
         },
         {
           "id": "p139-source04",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -7301,7 +7186,7 @@
         },
         {
           "id": "p140-source12",
-          "kind": "recipe",
+          "kind": "story",
           "passed": true
         }
       ]
@@ -7331,7 +7216,7 @@
         },
         {
           "id": "p141-source05",
-          "kind": "work",
+          "kind": "practical",
           "passed": true
         },
         {
@@ -7391,7 +7276,7 @@
         },
         {
           "id": "p142-source04",
-          "kind": "compose",
+          "kind": "story",
           "passed": true
         },
         {
@@ -7445,6 +7330,12 @@
           "passed": true
         }
       ]
+    }
+  ],
+  "excluded": [
+    {
+      "page": 2,
+      "reason": "Title page removed from activities"
     }
   ],
   "errors": [],

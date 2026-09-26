@@ -20,7 +20,7 @@ for n in range(11,145):
  rows={}
  for row in answers.splitlines():
   if re.match(r'^\|\s*\d+',row):
-   cells=[x.strip() for x in row.split('|')[1:-1]];num=int(re.match(r'\d+',cells[0]).group());rows[num]=cells
+   cells=[x.strip() for x in row.split('|')[1:-1]];num=int(re.match(r'\d+',cells[0]).group());rows.setdefault(num,[]).append(cells)
  blocks=[]
  for i,m in enumerate(re.finditer(r'^### (.*?)\n(.*?)(?=^### |\Z)',body,re.M|re.S)):
   title,raw=m.groups();num=None
@@ -29,20 +29,29 @@ for n in range(11,145):
   # The labeled text section can include fenced arithmetic columns and several lines.
   textmatch=re.search(r'- \*\*Текст[^*]*\*\*:?\s*(.*?)(?=\n- \*\*|\Z)',raw,re.S)
   text=textmatch.group(1) if textmatch else raw
+  # A fenced verbatim table ends at its fence. Layout commentary after it
+  # may repeat examples, and is not part of the child's printed assignment.
+  fenced=re.match(r'\s*```[^\n]*\n(.*?)\n\s*```',text,re.S)
+  if fenced:text=fenced.group(1)
   rolematch=re.search(r'- \*\*Тип блока:\*\*\s*(.*)',raw)
   role=rolematch.group(1) if rolematch else title
   if not num:
    nm=re.match(r'[«\s]*(\d+)\.',text)
    if nm:num=int(nm.group(1))
   imageids=list(dict.fromkeys(re.findall(r'p\d{3}_[a-z0-9_]+(?=\.png)',raw)))
-  key=rows.get(num)
-  solution=key[3] if key and len(key)>=4 else ''
+  keys=rows.get(num,[])
+  # Match split frames to their own key row instead of overwriting equal numbers.
+  matching=[key for key in keys if any(imageid in ' '.join(key) for imageid in imageids)]
+  key=matching[0] if len(matching)==1 else keys[0] if len(keys)==1 else None
+  # A combined answer table for two distinct frames must not be copied twice.
+  repeated=len(re.findall(r'(?:№\s*|Задание\s+)'+str(num)+r'(?!\d)',body))>1 if num else False
+  solution=key[3] if key and len(key)>=4 and not (repeated and len(keys)==1) else ''
   if not solution:
    for label in ['Педагогическая функция','Предлагаемая интерактивная реализация']:
     mm=re.search(rf'- \*\*{label}:\*\*\s*(.*?)(?=\n- \*\*|\Z)',raw,re.S)
     if mm:solution+='\n'+mm.group(1)
    if not textmatch:
-    localized=re.search(rf'№\s*{num}\s*[:.]\s*(.*?)(?=№\s*\d|\n###|\Z)',answers,re.S) if num else None
+    localized=re.search(rf'№\s*{num}\s*[:.]\s*(.*?)(?=№\s*\d|[.]\s+[А-ЯЁ][а-яё]+:|\n###|\Z)',answers,re.S) if num else None
     solution=localized.group(1) if localized else ''
   blocks.append(dict(id=f'p{n:03}-source{i+1:02}',title=clean(title),number=num,role=role,text=clean(text),raw=raw,solution=clean(solution),images=imageids))
  topic=re.search(r'\*\*Тема страницы:\*\* (.*)',doc).group(1)

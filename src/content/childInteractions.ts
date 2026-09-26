@@ -50,14 +50,6 @@ const pencils = [
     "Красный карандаш",
   ),
 ];
-const upperBoard = [
-  area("flag", 0.19, 0.15, 0.12, 0.18, "Флажок"),
-  area("star", 0.64, 0.16, 0.14, 0.15, "Звёздочка"),
-];
-const lowerBoard = [
-  area("house", 0.13, 0.37, 0.15, 0.16, "Домик"),
-  area("tree", 0.57, 0.33, 0.12, 0.23, "Ёлочка"),
-];
 const maps: Record<
   string,
   { targets: Hotspot[]; expected: string[]; prompt: string }
@@ -81,26 +73,6 @@ const maps: Record<
     targets: pencils,
     expected: ["red"],
     prompt: "Нажми на короткий карандаш.",
-  },
-  "p006-block02": {
-    targets: upperBoard,
-    expected: ["flag"],
-    prompt: "Нажми на рисунок вверху слева на доске.",
-  },
-  "p006-block03": {
-    targets: upperBoard,
-    expected: ["star"],
-    prompt: "Нажми на рисунок вверху справа на доске.",
-  },
-  "p006-block04": {
-    targets: lowerBoard,
-    expected: ["house"],
-    prompt: "Нажми на рисунок внизу слева на доске.",
-  },
-  "p006-block05": {
-    targets: lowerBoard,
-    expected: ["tree"],
-    prompt: "Нажми на рисунок внизу справа на доске.",
   },
   "p007-block02": {
     targets: [
@@ -146,17 +118,61 @@ for (const [id, n, rect] of [
     prompt: `Найди цифру ${n} на монете. Нажми на неё.`,
   };
 }
-for (const [id, index, n] of [
-  ["p007-block07", 1, 1],
-  ["p008-block08", 2, 2],
-  ["p010-block06", 1, 3],
-] as const) {
-  maps[id] = {
-    targets: [],
-    expected: [`card-${index}`],
-    prompt: `Найди цифру ${n}. Нажми на карточку с цифрой.`,
-  };
-}
+// These source rows introduce one quantity in different representations.
+// They are not a quiz in which only the printed numeral is correct.
+const numberMeanings: Record<
+  string,
+  {
+    number: number;
+    page: string;
+    cards: [string, string][];
+    conclusion: string;
+  }
+> = {
+  "p007-block07": {
+    number: 1,
+    page: "p007",
+    cards: [
+      ["one_mushroom", "Один гриб"],
+      ["one_squirrel", "Одна белка"],
+      ["one_hedgehog", "Один ёж"],
+      ["domino_1", "Одна точка"],
+      ["one_green_dot", "Один кружок"],
+      ["digit_1_print", "Цифра 1"],
+    ],
+    conclusion:
+      "Гриб, белка, ёж, точка и кружок — разные. Но на каждом рисунке их по одному. Это число один. Его записывают цифрой 1.",
+  },
+  "p008-block08": {
+    number: 2,
+    page: "p008",
+    cards: [
+      ["two_skates", "Два конька"],
+      ["two_skis", "Две лыжи"],
+      ["bicycle_two_wheels", "Два колеса"],
+      ["domino_2", "Две точки"],
+      ["two_green_dots", "Два кружка"],
+      ["abacus_2", "Два жетона"],
+      ["digit_2_print", "Цифра 2"],
+    ],
+    conclusion:
+      "Два конька, две лыжи, два колеса. Точек и кружков тоже по два. Предметы разные, а количество одинаковое. Это число два. Его записывают цифрой 2.",
+  },
+  "p010-block06": {
+    number: 3,
+    page: "p010",
+    cards: [
+      ["boys_fishing", "Три мальчика"],
+      ["three_fish", "Три рыбы"],
+      ["three_strawberries", "Три красные ягоды"],
+      ["domino_3", "Три точки"],
+      ["three_green_dots", "Три кружка"],
+      ["digit_3_print", "Цифра 3"],
+    ],
+    conclusion:
+      "Три мальчика, три рыбы, три красные ягоды. Точек и кружков тоже по три. Предметы разные, а количество одинаковое. Это число три. Его записывают цифрой 3.",
+  },
+};
 const counts: Record<string, { label: string; rects: number[][] }> = {
   "p007-block03": { label: "гриб", rects: [[0.21, 0.17, 0.53, 0.65]] },
   "p007-block04": { label: "белку", rects: [[0.21, 0.08, 0.53, 0.74]] },
@@ -262,15 +278,102 @@ maps["p008-block03"] = {
   expected: ["ski1", "ski2"],
   prompt: "Нажми на каждую лыжу.",
 };
+maps["p008-block01"] = {
+  targets: [
+    polygon(
+      "chair-left",
+      [
+        [0.23, 0.34],
+        [0.29, 0.35],
+        [0.31, 0.61],
+        [0.39, 0.65],
+        [0.4, 0.72],
+        [0.38, 0.88],
+        [0.34, 0.86],
+        [0.36, 0.74],
+        [0.29, 0.74],
+        [0.25, 0.84],
+        [0.235, 0.835],
+        [0.25, 0.66],
+      ],
+      "Левый стул",
+    ),
+    polygon(
+      "chair-right",
+      [
+        [0.77, 0.36],
+        [0.795, 0.36],
+        [0.75, 0.64],
+        [0.78, 0.85],
+        [0.76, 0.85],
+        [0.73, 0.72],
+        [0.65, 0.7],
+        [0.63, 0.82],
+        [0.61, 0.81],
+        [0.63, 0.65],
+        [0.74, 0.61],
+      ],
+      "Правый стул",
+    ),
+    area("window-left", 0.414, 0.065, 0.235, 0.37, "Левое окно"),
+    area("window-right", 0.75, 0.05, 0.225, 0.42, "Правое окно"),
+    polygon(
+      "frame-top",
+      [
+        [0.09, 0],
+        [0.23, 0],
+        [0.18, 0.24],
+        [0.055, 0.2],
+      ],
+      "Верхняя рамка",
+    ),
+    {
+      ...area("frame-bottom", 0.09, 0.27, 0.07, 0.16, "Нижняя рамка"),
+      ellipse: true,
+    },
+  ],
+  expected: [
+    "chair-left",
+    "chair-right",
+    "window-left",
+    "window-right",
+    "frame-top",
+    "frame-bottom",
+  ],
+  prompt: "Найди и нажми оба стула, оба окна и обе рамки на стене.",
+};
 export function childInteraction(block: Block): Block {
+  const meaning = numberMeanings[block.id];
+  if (meaning) {
+    const targets = meaning.cards.map(([, label], i) =>
+      area(`representation-${i}`, 0, 0, 1, 1, label, i),
+    );
+    return {
+      id: block.id,
+      title: block.title,
+      kind: "picture",
+      images: meaning.cards.map(([image]) => `${meaning.page}_${image}`),
+      sourceText: block.kind === "read" ? block.body : block.sourceText,
+      prompt:
+        "Рассмотри рисунки. Что у них общего? Нажимай на каждый рисунок и сравнивай количество.",
+      targets,
+      expected: targets.map((t) => t.id),
+      quantityMeaning: {
+        number: meaning.number,
+        conclusion: meaning.conclusion,
+      },
+      adaptation: true,
+      hint: meaning.conclusion,
+    };
+  }
   if (block.kind === "draw")
     return {
       ...block,
       trace: tracePlans[block.id],
       prompt: block.guide
         ? `Обведи цифру ${block.guide} по пунктиру.`
-        : `Повтори рисунок по пунктиру. Начинай с яркой точки.`,
-      hint: "Смотри на яркую точку: это начало линии. Проведи по пунктиру до конца. Если не получилось, попробуй ещё раз.",
+        : block.prompt,
+      hint: "Для открытой линии яркая точка показывает начало. Замкнутую фигуру начинай где удобно. Проведи по пунктиру до конца. Если не получилось, попробуй ещё раз.",
     };
   const map = maps[block.id];
   if (!map) return block;

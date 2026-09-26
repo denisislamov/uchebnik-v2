@@ -38,20 +38,31 @@ export function courseCorrect(block: Block, answer?: Answer): boolean {
     return Number(r.score0) >= 100 || Number(r.score1) >= 100;
   if (block.kind === "recipe") {
     if (
-      ![
-        "яблоки",
-        "книги",
-        "карандаши",
-        "метры",
-        "рубли",
-        "литры",
-        "килограммы",
-      ].includes(r.story)
+      !(
+        block.unit
+          ? [block.unit]
+          : [
+              "яблоки",
+              "книги",
+              "карандаши",
+              "метры",
+              "рубли",
+              "литры",
+              "килограммы",
+            ]
+      ).includes(r.story)
     )
       return false;
     if (block.formula === "a*b/c" && Number(r.a) * Number(r.b) > block.max)
       return false;
     const names = [...new Set(block.formula.match(/[abc]/g) ?? [])];
+    if (
+      block.excludedInputs &&
+      Object.entries(block.excludedInputs).every(
+        ([key, value]) => numeric(r[key]) === value,
+      )
+    )
+      return false;
     if (
       !names.every(
         (k) =>
@@ -64,7 +75,7 @@ export function courseCorrect(block: Block, answer?: Answer): boolean {
     const result = calculate(block.formula.replace(/[abc]/g, (k) => r[k]));
     return (
       result !== undefined &&
-      result >= 0 &&
+      result >= (block.minResult ?? 0) &&
       result <= block.max &&
       numeric(r.result) === result
     );
@@ -97,21 +108,47 @@ export function courseCorrect(block: Block, answer?: Answer): boolean {
       return (
         ok &&
         (!block.story ||
-          [
-            "яблоки",
-            "книги",
-            "карандаши",
-            "метры",
-            "рубли",
-            "литры",
-            "килограммы",
-          ].includes(r[`${i}story`]))
+          (storySubjects.includes(r[`${i}story`]) &&
+            r[`${i}question`] ===
+              composeStory(rule.operator, r[`${i}story`]).question))
       );
     });
   }
   if (block.kind === "activity") {
     const a = block.activity;
     return a.targets.every((target, i) => {
+      if (a.mode === "coins" && a.exchange) {
+        const coins = (r[`${i}coins`] ?? "")
+          .split(",")
+          .filter(Boolean)
+          .map(Number);
+        return (
+          coins.length > 1 &&
+          coins.every(
+            (n) =>
+              Number.isInteger(n) &&
+              n > 0 &&
+              n < target &&
+              (a.denominations ?? [1, 2, 3, 5, 10, 15, 20]).includes(n),
+          ) &&
+          coins.reduce((x, y) => x + y, 0) === target &&
+          numeric(r[String(i)]) === target
+        );
+      }
+      if (a.slots) {
+        const indices = (r[`${i}slots`] || "")
+          .split(",")
+          .filter(Boolean)
+          .map(Number);
+        return (
+          numeric(r[String(i)]) === target &&
+          indices.length === a.slots.length &&
+          new Set(indices).size === a.slots.length &&
+          indices.every(
+            (v) => Number.isInteger(v) && v >= 0 && v < a.slots!.length,
+          )
+        );
+      }
       if (a.mode === "groups") {
         const amounts = Array.from(
           { length: a.groups ?? 2 },
@@ -130,7 +167,11 @@ export function courseCorrect(block: Block, answer?: Answer): boolean {
           y !== undefined &&
           x > 0 &&
           y > 0 &&
-          x + y === target
+          x + y === target &&
+          (!a.fixedParts || (x === a.fixedParts[0] && y === a.fixedParts[1])) &&
+          (!a.differentFrom ||
+            x !== a.differentFrom[0] ||
+            y !== a.differentFrom[1])
         );
       }
       if (a.mode === "place")
@@ -144,3 +185,4 @@ export function courseCorrect(block: Block, answer?: Answer): boolean {
   }
   return false;
 }
+import { composeStory, storySubjects } from "./composeStory.ts";

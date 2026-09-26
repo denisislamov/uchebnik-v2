@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-18",
+  "passed": true,
+  "engine": "Chromium",
+  "viewports": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "passed": true,
+      "families": 161,
+      "steps": 900,
+      "issues": [],
+      "errors": [],
+      "offscreenSteps": []
+    },
+    {
+      "viewport": {
+        "width": 800,
+        "height": 375
+      },
+      "passed": true,
+      "families": 161,
+      "steps": 900,
+      "issues": [],
+      "errors": [],
+      "offscreenSteps": []
+    }
+  ],
+  "limitations": [
+    "Physical phones, Safari and native builds were not tested."
+  ]
+}

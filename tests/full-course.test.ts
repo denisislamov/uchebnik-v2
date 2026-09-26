@@ -4,6 +4,7 @@ import { allBlocks, pages } from "../src/content/book.ts";
 import { calculate } from "../src/lib/arithmetic.ts";
 import { isCorrect, isDone, parseProgress } from "../src/lib/assessment.ts";
 import { compositionCorrect } from "../src/lib/courseAssessment.ts";
+import { composeStory } from "../src/lib/composeStory.ts";
 import { matchesTrace } from "../src/lib/tracing.ts";
 import type { Answer } from "../src/content/types.ts";
 const numbered = (n: number) => allBlocks.find((b) => b.exerciseNumber === n)!;
@@ -23,6 +24,7 @@ test("full inventory: every numbered exercise and all continuations are reachabl
     "read",
     "number",
     "choice",
+    "location",
     "counters",
     "draw",
     "picture",
@@ -33,10 +35,18 @@ test("full inventory: every numbered exercise and all continuations are reachabl
     "recipe",
     "relation",
     "targetGame",
+    "practical",
+    "story",
+    "numberGame",
   ];
   for (const b of allBlocks) assert.ok(allowed.includes(b.kind), b.id);
-  for (const n of [331, 489, 887])
+  for (const n of [331, 887])
     assert.equal(allBlocks.filter((b) => b.exerciseNumber === n).length, 2);
+  assert.equal(
+    allBlocks.filter((b) => b.exerciseNumber === 489).length,
+    1,
+    "a continued story must not be solved twice",
+  );
 });
 test("arithmetic parser validates precedence and rejects code, incomplete syntax and fractional results", () => {
   for (const [s, n] of [
@@ -132,6 +142,10 @@ test("every open example set has a valid solution and accepts distinct alternati
             responses[`${i}b`] = String(v);
             responses[`${i}c`] = String(z);
             responses[`${i}story`] = "яблоки";
+            responses[`${i}question`] = composeStory(
+              rule.operator,
+              "яблоки",
+            ).question;
             used.add(key);
             found = true;
           }
@@ -147,17 +161,24 @@ test("manipulative activities require the complete arrangement, not an adult fla
     const r: Record<string, string> = {};
     const a = b.activity;
     a.targets.forEach((n, i) => {
-      if (a.mode === "groups")
+      if (a.slots) {
+        r[String(i)] = String(n);
+        r[`${i}slots`] = a.slots.map((_, j) => j).join(",");
+      } else if (a.mode === "groups")
         for (let g = 0; g < (a.groups ?? 2); g++)
           r[`${i}g${g}`] = String(n / (a.groups ?? 2));
       else if (a.mode === "place") {
         r[`${i}tens`] = String(Math.floor(n / 10));
         r[`${i}ones`] = String(n % 10);
       } else if (a.mode === "composition") {
-        r[`${i}left`] = "1";
-        r[`${i}right`] = String(n - 1);
+        r[`${i}left`] = String(a.fixedParts?.[0] ?? 1);
+        r[`${i}right`] = String(a.fixedParts?.[1] ?? n - 1);
       } else if (a.mode === "sequence") r[`${i}visited`] = "yes";
-      else r[String(i)] = String(n);
+      else {
+        r[String(i)] = String(n);
+        if (a.mode === "coins" && a.exchange)
+          r[`${i}coins`] = Array.from({ length: n }, () => 1).join(",");
+      }
     });
     assert.ok(isDone(b, { responses: r, checked: true }), b.id);
     assert.equal(isDone(b, { reviewed: true }), false, b.id);

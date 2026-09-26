@@ -1,0 +1,244 @@
+{
+  "status": "passed",
+  "startedAt": "2026-09-26T07:55:30.409Z",
+  "mouse": [
+    {
+      "width": 390,
+      "cellPx": 44
+    },
+    {
+      "width": 390,
+      "arrowBounds": [
+        {
+          "x": 236.72000122070312,
+          "y": 229.5,
+          "width": 6.160003662109375,
+          "height": 14
+        },
+        {
+          "x": 285.1199951171875,
+          "y": 229.5,
+          "width": 6.160003662109375,
+          "height": 14
+        }
+      ],
+      "before": {
+        "x": -77,
+        "y": 548.65625,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 74,
+        "scrollClient": 374,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": -77,
+        "y": 548.65625,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 74,
+        "scrollClient": 374,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "after": {
+        "x": -77,
+        "y": 548.65625,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 74,
+        "scrollClient": 374,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryBefore": {
+        "x": -77,
+        "y": 221.65625,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 401,
+        "scrollClient": 374,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryDuring": {
+        "x": -77,
+        "y": 221.65625,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 401,
+        "scrollClient": 374,
+        "overflow": "hidden",
+        "gutter": "stable"
+      }
+    },
+    {
+      "width": 760,
+      "cellPx": 53.5
+    },
+    {
+      "width": 760,
+      "arrowBounds": [
+        {
+          "x": 288.4949951171875,
+          "y": 280.5625,
+          "width": 6.160003662109375,
+          "height": 14
+        },
+        {
+          "x": 347.3450012207031,
+          "y": 280.5625,
+          "width": 6.160003662109375,
+          "height": 14
+        }
+      ],
+      "before": {
+        "x": 64,
+        "y": 471.921875,
+        "width": 642,
+        "height": 428,
+        "scrollTop": 228,
+        "scrollClient": 744,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": 64,
+        "y": 471.921875,
+        "width": 642,
+        "height": 428,
+        "scrollTop": 228,
+        "scrollClient": 744,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "after": {
+        "x": 64,
+        "y": 471.921875,
+        "width": 642,
+        "height": 428,
+        "scrollTop": 228,
+        "scrollClient": 744,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryBefore": {
+        "x": 64,
+        "y": 159.921875,
+        "width": 642,
+        "height": 428,
+        "scrollTop": 540,
+        "scrollClient": 744,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "retryDuring": {
+        "x": 64,
+        "y": 159.921875,
+        "width": 642,
+        "height": 428,
+        "scrollTop": 540,
+        "scrollClient": 744,
+        "overflow": "hidden",
+        "gutter": "stable"
+      }
+    }
+  ],
+  "outlines": [
+    {
+      "id": "p003-block06",
+      "width": 390,
+      "acceptedStrokes": 1
+    },
+    {
+      "id": "p003-block06",
+      "width": 1280,
+      "acceptedStrokes": 1
+    },
+    {
+      "id": "p007-block09",
+      "width": 390,
+      "acceptedStrokes": 1
+    },
+    {
+      "id": "p007-block09",
+      "width": 1280,
+      "acceptedStrokes": 1
+    },
+    {
+      "id": "p008-block14",
+      "width": 390,
+      "acceptedStrokes": 1
+    },
+    {
+      "id": "p008-block14",
+      "width": 1280,
+      "acceptedStrokes": 1
+    }
+  ],
+  "touch": [
+    {
+      "width": 390,
+      "direction": "down",
+      "before": {
+        "x": -69,
+        "y": 165.59375,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 462,
+        "scrollClient": 390,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": -69,
+        "y": 165.59375,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 462,
+        "scrollClient": 390,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "acceptedStrokes": 1
+    },
+    {
+      "width": 390,
+      "direction": "up",
+      "before": {
+        "x": -69,
+        "y": 165.59375,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 462,
+        "scrollClient": 390,
+        "overflow": "auto",
+        "gutter": "stable"
+      },
+      "during": {
+        "x": -69,
+        "y": 165.59375,
+        "width": 528,
+        "height": 352,
+        "scrollTop": 462,
+        "scrollClient": 390,
+        "overflow": "hidden",
+        "gutter": "stable"
+      },
+      "acceptedStrokes": 1
+    }
+  ],
+  "screenshots": [
+    "docs/drawing-guidance-390.png",
+    "docs/drawing-guidance-760.png",
+    "docs/drawing-guidance-p003-block06-390.png",
+    "docs/drawing-guidance-p003-block06-1280.png",
+    "docs/drawing-guidance-p007-block09-390.png",
+    "docs/drawing-guidance-p007-block09-1280.png",
+    "docs/drawing-guidance-p008-block14-390.png",
+    "docs/drawing-guidance-p008-block14-1280.png"
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-26T07:55:49.205Z"
+}

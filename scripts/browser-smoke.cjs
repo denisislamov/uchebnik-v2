@@ -40,7 +40,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       if (await button(`Открыть страницу ${n}`).count())
         await button(`Открыть страницу ${n}`).click();
       else {
-        await button("← Все страницы").click();
+        await button("На главную").click();
         await p
           .getByRole("textbox", {
             name: "Найти страницу или задание",
@@ -88,9 +88,20 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await button("Цифра 3 на монете").click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     await open(7, 6);
-    await button("Карточка 1").click();
-    await p.getByText("Пока не совпало.", { exact: false }).waitFor();
-    await button("Карточка 2").click();
+    for (const label of [
+      "Один гриб",
+      "Одна белка",
+      "Один ёж",
+      "Одна точка",
+      "Один кружок",
+      "Цифра 1",
+    ]) {
+      await button(label).click();
+      assert.equal(
+        await p.getByText("Пока не совпало.", { exact: false }).count(),
+        0,
+      );
+    }
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     await open(10, 2);
     await button("рыбу 1").click();
@@ -158,11 +169,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await stroke(digit.points);
     await p.getByText("Все элементы получились!", { exact: true }).waitFor();
     await open(6, 1);
-    await button("Звёздочка").click();
+    await button("Вверху").click();
+    await button("Справа").click();
     await p.getByText("Пока не совпало.", { exact: false }).waitFor();
-    await button("Флажок").click();
+    await button("Слева").click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
-    for (const page of pages.slice(0, 10)) {
+    for (const page of pages.slice(0, 10).filter((p) => p.number !== 2)) {
       for (let i = 0; i < page.blocks.length; i++) {
         await open(page.number, i);
         assert.ok(
@@ -252,7 +264,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             "trace persistence and undo",
             "digit 1 tracing",
             "spatial picture choice",
-            "all 82 blocks render",
+            "all 81 visible initial blocks render; title page excluded",
             "mobile real touch region",
             "mobile touch trace",
             "square notebook cells",

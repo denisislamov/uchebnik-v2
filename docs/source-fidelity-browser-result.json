@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-26T07:43:08.110Z",
+  "baseURL": "http://127.0.0.1:8094",
+  "checks": [
+    "p009 original story visible",
+    "p025 original digits and pigeons stories",
+    "placement 3+1, touch, reload, earlier edit revokes completion",
+    "600: two drawn rows required; 2 rejected, 14 accepted",
+    "547: 4 coins rejected as value; 12 kopecks accepted",
+    "324: child chooses second count, then draws 5 and 4",
+    "207: digit cards dragged to make 14 and 19",
+    "515: both source questions required before number-only answer can pass",
+    "782: all 40 cm and cut mark reachable through automatic scrolling on mobile viewport",
+    "875: both garden dimensions required; metres accepted and rubles rejected",
+    "278: original context retained and source numbers must change",
+    "65: complete apple story and matching question required",
+    "199: hidden 2, not total 6; a second game is required",
+    "208: every digit is read and matched to its name",
+    "660: touch placement in two rows of six and four rows of three without wrapping",
+    "591: all three pictured problems required, reload and dependent edits preserved"
+  ],
+  "errors": [],
+  "physicalPhone": "NOT RUN"
+}

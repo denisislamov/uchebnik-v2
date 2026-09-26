@@ -1,11 +1,27 @@
-import React, { useRef, useState } from "react";
-import { View, Text, Pressable, Platform } from "react-native";
+import { useGestureCoach } from "./GestureCoach";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  Platform,
+  ScrollView,
+  useWindowDimensions,
+} from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
 import type { Stroke, Point, TracePlan } from "../content/types";
-import { traceProgress, matchesTrace } from "../lib/tracing";
-import { traceDirections } from "../lib/traceDirections";
+import {
+  traceProgress,
+  matchesTrace,
+  isClosedTrace,
+  drawingColor,
+  DRAWING_COLORS,
+} from "../lib/tracing";
+import { traceDirections, traceArrowGeometry } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
-import { Button, ProgressBar } from "./Controls";
+import { Button, ProgressBar, RetryNote } from "./Controls";
+import { padCellSize, targetSpanCells } from "../lib/padLayout";
+import { useTaskSize } from "./taskSize";
 export function DrawingPad({
   strokes,
   onChange,
@@ -22,19 +38,106 @@ export function DrawingPad({
     progress && !progress.done
       ? trace!.stages[progress.stage][progress.index]
       : undefined;
-  const [width, setWidth] = useState(360),
+  const [containerWidth, setContainerWidth] = useState(360),
     [draft, setDraft] = useState<Stroke | null>(null),
     [error, setError] = useState(""),
-    [chosenColor, setChosenColor] = useState<string | null>(null);
+    [chosenColor, setChosenColor] = useState<string | null>(null),
+    [drawingNow, setDrawingNow] = useState(false);
   const active = useRef<Stroke | null>(null);
   const columns = trace?.columns ?? 12,
     rows = trace?.rows ?? 8;
+  // On a narrow screen the sheet grows past the container and scrolls sideways
+  // instead of shrinking its cells below a fingertip; the widest target of the
+  // plan still has to fit on screen.
+  const widestTarget = trace
+    ? Math.max(
+        0,
+        ...trace.stages.flat().map((t) => targetSpanCells(t.points, columns)),
+      )
+    : 0;
+  const { compact, short } = useTaskSize();
+  // On a laptop the sheet takes what is left of the window under it, keeping
+  // room for the hint and «Дальше»; a phone scrolls and keeps fingertip cells.
+  const windowHeight = useWindowDimensions().height;
+  const sheetBox = useRef<View>(null),
+    [sheetTop, setSheetTop] = useState<number | null>(null);
+  const width =
+      padCellSize(
+        containerWidth,
+        columns,
+        widestTarget,
+        short && sheetTop !== null
+          ? {
+              height: windowHeight - sheetTop - 150,
+              rows,
+              // Smaller cells only for a mouse or trackpad, never for a finger.
+              minCell: finePointer() ? 28 : 44,
+            }
+          : undefined,
+      ) * columns,
+    scrollable = width > containerWidth + 0.5;
   const height = (width * rows) / columns,
-    color = chosenColor ?? target?.color ?? "#232d2b";
-  const arrows = target ? traceDirections(target, { columns, rows }) : [];
+    color = chosenColor ?? target?.color ?? "#111111";
+  const scrollRef = useRef<ScrollView>(null);
+  const targetCenter = target
+    ? target.points.reduce((s, p) => s + p.x, 0) / target.points.length
+    : null;
+  useEffect(() => {
+    if (!scrollable || targetCenter === null) return;
+    scrollRef.current?.scrollTo({
+      x: Math.max(
+        0,
+        Math.min(
+          width - containerWidth,
+          targetCenter * width - containerWidth / 2,
+        ),
+      ),
+      // A short glide, not a jump: the child sees where the next line is.
+      animated: true,
+    });
+  }, [scrollable, targetCenter, width, containerWidth]);
+  const closed = target ? isClosedTrace(target, { columns, rows }) : false;
+  const fieldRef = useRef<View>(null);
+  useGestureCoach(target?.dot ? "dot" : "trace", [
+    {
+      ref: fieldRef,
+      surface: trace
+        ? {
+            kind: "trace",
+            columns,
+            rows,
+            targets: trace.stages[progress?.stage ?? 0],
+          }
+        : undefined,
+      motion: target
+        ? {
+            kind: target.dot ? "tap" : "trace",
+            points: target.points,
+            color: target.color,
+          }
+        : undefined,
+      text: target?.dot
+        ? "Поставь палец в маленький кружок и сразу подними. Получится точка."
+        : closed
+          ? "Обведи фигуру пальцем по пунктиру. Начни в любом месте и вернись к началу."
+          : target?.bidirectional
+            ? "Веди палец по пунктиру. Две синие стрелки показывают: можно начать с любого конца."
+            : target
+              ? "Начни с яркой точки. Не отрывая палец, веди по пунктиру в сторону синей стрелки. Стрелка показывает направление движения."
+              : progress?.done
+                ? "Все линии уже обведены. Можно перейти дальше или отменить штрих и попробовать ещё раз."
+                : "Рисуй пальцем на этом листе. Чтобы закончить линию, подними палец.",
+    },
+  ]);
+  const arrows = target
+    ? traceDirections(target, { columns, rows }, trace!.stages[progress!.stage])
+    : [];
   const cellSize = width / columns;
-  const arrowSize = Math.max(5, Math.min(11, cellSize * 0.28));
-  const directionColor = "#2563a6";
+  const directionColor = "#1565c0";
+  const setDrawing = (v: boolean) => {
+    setDrawingNow(v);
+    onDrawing(v);
+  };
   const coords = (e: any): Point => ({
     x: Math.max(0, Math.min(1, e.nativeEvent.locationX / width)),
     y: Math.max(0, Math.min(1, e.nativeEvent.locationY / height)),
@@ -46,7 +149,7 @@ export function DrawingPad({
   function finish() {
     const stroke = active.current;
     active.current = null;
-    onDrawing(false);
+    setDrawing(false);
     if (!stroke) return;
     if (!target || matchesTrace(stroke, target, trace)) {
       onChange([...(progress?.accepted ?? strokes), stroke]);
@@ -55,11 +158,15 @@ export function DrawingPad({
       setChosenColor(null);
     } else {
       setError(
-        stroke.color !== target.color
+        drawingColor(stroke.color) !== drawingColor(target.color)
           ? "Выбери цвет, как у пунктира."
           : target.dot
             ? "Поставь маленькую точку в кружке."
-            : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синих стрелок.",
+            : closed
+              ? "Обведи весь контур и вернись к месту начала."
+              : target.bidirectional
+                ? "Проведи всю линию по пунктиру. Можно начать с любого конца."
+                : "Попробуй ещё раз: начни с яркой точки и веди по пунктиру в сторону синей стрелки.",
       );
     }
   }
@@ -71,21 +178,55 @@ export function DrawingPad({
     : strokes;
   return (
     <View style={{ gap: 12 }}>
+      {progress && strokes.length > progress.accepted.length && (
+        <Text
+          accessibilityRole="alert"
+          style={{ fontFamily: f.regular, color: c.red }}
+        >
+          Образец обновлён. Этот рисунок нужно выполнить заново; остальные
+          ответы сохранены.
+        </Text>
+      )}
       {progress && (
         <View style={{ gap: 8 }}>
-          <Text
-            accessibilityLiveRegion="polite"
-            style={{ fontFamily: f.bold, color: c.green, fontSize: 17 }}
+          {/* Two lines kept even for a short name: the sheet below stays put. */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-start",
+              gap: 12,
+              minHeight: compact ? 44 : undefined,
+            }}
           >
-            {progress.done
-              ? "Все элементы получились!"
-              : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
-          </Text>
+            <Text
+              accessibilityLiveRegion="polite"
+              numberOfLines={2}
+              style={{
+                flex: 1,
+                fontFamily: f.bold,
+                color: c.pen,
+                fontSize: 17,
+                lineHeight: 22,
+              }}
+            >
+              {progress.done
+                ? "Все элементы получились!"
+                : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
+            </Text>
+            {trace!.stages.length > 1 && !progress.done && (
+              <Text
+                style={{
+                  fontFamily: f.regular,
+                  color: c.muted,
+                  fontSize: 13,
+                  lineHeight: 22,
+                }}
+              >
+                лист {progress.stage + 1} из {trace!.stages.length}
+              </Text>
+            )}
+          </View>
           <ProgressBar value={progress.completed / progress.total} />
-          <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
-            Лист {progress.stage + 1} из {trace!.stages.length} · начинай с
-            яркой точки
-          </Text>
         </View>
       )}
       <View
@@ -96,11 +237,11 @@ export function DrawingPad({
           flexWrap: "wrap",
         }}
       >
-        {["#23594e", "#ce6548", "#232d2b"].map((v, i) => (
+        {DRAWING_COLORS.map((v, i) => (
           <Pressable
             key={v}
             accessibilityRole="button"
-            accessibilityLabel={`Цвет: ${["зелёный", "красный", "чёрный"][i]}`}
+            accessibilityLabel={`Цвет: ${["чёрный", "красный", "синий"][i]}`}
             accessibilityState={{ selected: color === v }}
             onPress={() => setChosenColor(v)}
             style={{
@@ -109,7 +250,7 @@ export function DrawingPad({
               borderRadius: 22,
               backgroundColor: v,
               borderWidth: 4,
-              borderColor: color === v ? "#b7cfb5" : c.card,
+              borderColor: color === v ? "#2b4ba8" : c.card,
             }}
           />
         ))}
@@ -128,10 +269,194 @@ export function DrawingPad({
           Отменить штрих
         </Button>
       </View>
+      <View
+        ref={sheetBox}
+        onLayout={(e) => {
+          setContainerWidth(e.nativeEvent.layout.width);
+          sheetBox.current?.measureInWindow((_x, y) =>
+            setSheetTop((old) =>
+              old !== null && Math.abs(old - y) < 4 ? old : y,
+            ),
+          );
+        }}
+        style={{ width: "100%" }}
+      >
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          scrollEnabled={scrollable && !drawingNow}
+          showsHorizontalScrollIndicator={scrollable}
+          canCancelContentTouches={false}
+          contentContainerStyle={{
+            width: Math.max(width, containerWidth),
+            justifyContent: "center",
+          }}
+          style={{ width: "100%" }}
+        >
+          <View
+            ref={fieldRef}
+            accessibilityLabel="Поле для рисования"
+            style={[
+              {
+                width,
+                height,
+                borderWidth: 1,
+                borderColor: "#94b8b5",
+                borderRadius: 4,
+                overflow: "hidden",
+                backgroundColor: "#fffef9",
+              },
+              Platform.OS === "web"
+                ? ({ touchAction: "none" } as any)
+                : undefined,
+            ]}
+            onStartShouldSetResponder={() =>
+              (progress?.completed ?? strokes.length) < 100 && !progress?.done
+            }
+            onMoveShouldSetResponder={() =>
+              (progress?.completed ?? strokes.length) < 100 && !progress?.done
+            }
+            onResponderGrant={(e) => {
+              setDrawing(true);
+              // Keep feedback in place while drawing: removing it can clamp the
+              // parent scroll position and move the notebook under the finger.
+              const p = coords(e);
+              active.current = {
+                color,
+                points: [p, { x: Math.min(1, p.x + 0.001), y: p.y }],
+                cellPx: cellSize,
+              };
+              setDraft(active.current);
+            }}
+            onResponderMove={(e) => {
+              if (!active.current || active.current.points.length >= 1000)
+                return;
+              active.current = {
+                ...active.current,
+                points: [...active.current.points, coords(e)],
+              };
+              setDraft(active.current);
+            }}
+            onResponderRelease={finish}
+            onResponderTerminate={() => {
+              active.current = null;
+              setDraft(null);
+              setDrawing(false);
+            }}
+            onResponderTerminationRequest={() => false}
+          >
+            <View pointerEvents="none">
+              <Svg width={width} height={height}>
+                {Array.from({ length: columns + 1 }, (_, i) => (
+                  <Line
+                    key={`v${i}`}
+                    x1={(i * width) / columns}
+                    y1={0}
+                    x2={(i * width) / columns}
+                    y2={height}
+                    stroke="#b9c8de"
+                    strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
+                  />
+                ))}
+                {Array.from({ length: rows + 1 }, (_, i) => (
+                  <Line
+                    key={`h${i}`}
+                    x1={0}
+                    y1={(i * height) / rows}
+                    x2={width}
+                    y2={(i * height) / rows}
+                    stroke="#b9c8de"
+                    strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
+                  />
+                ))}
+                {trace &&
+                  progress &&
+                  trace.stages[progress.stage].map((t, i) =>
+                    i < progress.index ? null : t.dot ? (
+                      <Circle
+                        key={i}
+                        cx={t.points[0].x * width}
+                        cy={t.points[0].y * height}
+                        r={i === progress.index ? 6 : 4}
+                        stroke={t.color}
+                        fill="none"
+                        strokeDasharray="2 2"
+                        opacity={i === progress.index ? 1 : 0.3}
+                      />
+                    ) : (
+                      <Path
+                        key={i}
+                        d={d(t.points)}
+                        stroke={t.color}
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        opacity={i === progress.index ? 0.65 : 0.2}
+                        fill="none"
+                      />
+                    ),
+                  )}
+                {target && !target.dot && !closed && (
+                  <>
+                    <Circle
+                      cx={target.points.at(-1)!.x * width}
+                      cy={target.points.at(-1)!.y * height}
+                      r={4}
+                      fill={target.bidirectional ? target.color : c.paper}
+                      stroke={target.color}
+                    />
+                    <Circle
+                      cx={target.points[0].x * width}
+                      cy={target.points[0].y * height}
+                      r={5}
+                      fill={target.color}
+                    />
+                  </>
+                )}
+                {[...visible, ...(draft ? [draft] : [])].map((s, i) => (
+                  <Path
+                    key={i}
+                    d={d(s.points)}
+                    stroke={
+                      error && !active.current && i === visible.length
+                        ? c.retry
+                        : drawingColor(s.color)
+                    }
+                    strokeWidth={3}
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ))}
+                {(!closed && !active.current ? arrows : []).map((arrow, i) => {
+                  const { tip, tail, left, right } = traceArrowGeometry(
+                    arrow,
+                    cellSize,
+                  );
+                  const path = `M ${tail.x} ${tail.y} L ${tip.x} ${tip.y} M ${left.x} ${left.y} L ${tip.x} ${tip.y} L ${right.x} ${right.y}`;
+                  return (
+                    <Path
+                      key={`direction-${i}`}
+                      testID="drawing-direction-arrow"
+                      d={path}
+                      stroke={directionColor}
+                      strokeWidth={1.5}
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  );
+                })}
+              </Svg>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+      {/* Everything that changes from line to line sits under the sheet:
+          above it, a hint growing by a line pushed the sheet under the finger. */}
       {target && (
         <View
           testID="drawing-direction-hint"
-          style={{ padding: 12, borderRadius: 10, backgroundColor: "#edf4fc" }}
+          style={{ padding: 12, borderRadius: 4, backgroundColor: "#e8eef9" }}
         >
           <Text
             style={{
@@ -143,183 +468,24 @@ export function DrawingPad({
           >
             {target.dot
               ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
-              : "Синие стрелки показывают, куда вести палец. Начни с яркой точки и двигайся по пунктиру в сторону стрелок. Сами стрелки обводить не нужно."}
+              : closed
+                ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
+                : target.bidirectional
+                  ? /ствол/i.test(target.label)
+                    ? "Веди ствол по пунктиру вверх или вниз."
+                    : "Начни с любого конца. Веди по пунктиру."
+                  : "Начни с яркой точки. Веди по пунктиру в сторону синей стрелки."}
           </Text>
         </View>
       )}
-      <View
-        accessibilityLabel="Поле для рисования"
-        onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-        style={[
-          {
-            height,
-            borderWidth: 1,
-            borderColor: "#94b8b5",
-            borderRadius: 10,
-            overflow: "hidden",
-            backgroundColor: "#fffef9",
-          },
-          Platform.OS === "web" ? ({ touchAction: "none" } as any) : undefined,
-        ]}
-        onStartShouldSetResponder={() =>
-          (progress?.completed ?? strokes.length) < 100 && !progress?.done
-        }
-        onMoveShouldSetResponder={() =>
-          (progress?.completed ?? strokes.length) < 100 && !progress?.done
-        }
-        onResponderGrant={(e) => {
-          onDrawing(true);
-          setError("");
-          const p = coords(e);
-          active.current = {
-            color,
-            points: [p, { x: Math.min(1, p.x + 0.001), y: p.y }],
-          };
-          setDraft(active.current);
-        }}
-        onResponderMove={(e) => {
-          if (!active.current || active.current.points.length >= 1000) return;
-          active.current = {
-            ...active.current,
-            points: [...active.current.points, coords(e)],
-          };
-          setDraft(active.current);
-        }}
-        onResponderRelease={finish}
-        onResponderTerminate={() => {
-          active.current = null;
-          setDraft(null);
-          onDrawing(false);
-        }}
-        onResponderTerminationRequest={() => false}
-      >
-        <View pointerEvents="none">
-          <Svg width={width} height={height}>
-            {Array.from({ length: columns + 1 }, (_, i) => (
-              <Line
-                key={`v${i}`}
-                x1={(i * width) / columns}
-                y1={0}
-                x2={(i * width) / columns}
-                y2={height}
-                stroke="#8abfbe"
-                strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
-              />
-            ))}
-            {Array.from({ length: rows + 1 }, (_, i) => (
-              <Line
-                key={`h${i}`}
-                x1={0}
-                y1={(i * height) / rows}
-                x2={width}
-                y2={(i * height) / rows}
-                stroke="#8abfbe"
-                strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
-              />
-            ))}
-            {trace &&
-              progress &&
-              trace.stages[progress.stage].map((t, i) =>
-                i < progress.index ? null : t.dot ? (
-                  <Circle
-                    key={i}
-                    cx={t.points[0].x * width}
-                    cy={t.points[0].y * height}
-                    r={i === progress.index ? 6 : 4}
-                    stroke={t.color}
-                    fill="none"
-                    strokeDasharray="2 2"
-                    opacity={i === progress.index ? 1 : 0.3}
-                  />
-                ) : (
-                  <Path
-                    key={i}
-                    d={d(t.points)}
-                    stroke={t.color}
-                    strokeWidth={2}
-                    strokeDasharray="5 5"
-                    opacity={i === progress.index ? 0.65 : 0.2}
-                    fill="none"
-                  />
-                ),
-              )}
-            {target && !target.dot && (
-              <>
-                <Circle
-                  cx={target.points.at(-1)!.x * width}
-                  cy={target.points.at(-1)!.y * height}
-                  r={4}
-                  fill={c.paper}
-                  stroke={target.color}
-                />
-                <Circle
-                  cx={target.points[0].x * width}
-                  cy={target.points[0].y * height}
-                  r={5}
-                  fill={target.color}
-                />
-              </>
-            )}
-            {[...visible, ...(draft ? [draft] : [])].map((s, i) => (
-              <Path
-                key={i}
-                d={d(s.points)}
-                stroke={error && i === visible.length ? c.orange : s.color}
-                strokeWidth={3}
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            ))}
-            {arrows.map(({ point, direction }, i) => {
-              const x = point.x * cellSize,
-                y = point.y * cellSize;
-              const backX = x - direction.x * arrowSize;
-              const backY = y - direction.y * arrowSize;
-              const wingX = -direction.y * arrowSize * 0.65;
-              const wingY = direction.x * arrowSize * 0.65;
-              const path = `M ${backX + wingX} ${backY + wingY} L ${x} ${y} L ${backX - wingX} ${backY - wingY}`;
-              return (
-                <React.Fragment key={`direction-${i}`}>
-                  <Path
-                    d={path}
-                    stroke="#fffef9"
-                    strokeWidth={4}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    testID="drawing-direction-arrow"
-                    d={path}
-                    stroke={directionColor}
-                    strokeWidth={2}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </React.Fragment>
-              );
-            })}
-          </Svg>
-        </View>
-      </View>
-      {error !== "" && (
-        <Text
-          accessibilityRole="alert"
-          style={{
-            fontFamily: f.bold,
-            color: c.orange,
-            fontSize: 15,
-            lineHeight: 22,
-          }}
-        >
-          {error}
-        </Text>
-      )}
-      <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 13 }}>
-        Клетки одинаковые по ширине и высоте. Пунктир подсказывает путь.
-      </Text>
+      {error !== "" && <RetryNote>{error}</RetryNote>}
     </View>
+  );
+}
+function finePointer() {
+  return (
+    Platform.OS === "web" &&
+    typeof window !== "undefined" &&
+    !!window.matchMedia?.("(pointer: fine)").matches
   );
 }

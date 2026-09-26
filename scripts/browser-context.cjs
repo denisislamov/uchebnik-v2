@@ -1,7 +1,8 @@
 /** All browser requests must stay on the isolated test server, including mobile tabs. */
 const baseURL = process.env.BASE_URL || "http://127.0.0.1:8081";
 async function newTestContext(browser, options) {
-  const context = await browser.newContext(options);
+  // Coaching opens only from its button, so no tutorial history is seeded here.
+  const context = await browser.newContext(options ?? {});
   const origin = new URL(baseURL).origin;
   await context.route(/^https?:\/\//, (route) => {
     if (new URL(route.request().url()).origin !== origin) {

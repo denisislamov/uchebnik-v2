@@ -1,5 +1,10 @@
+import { locationCorrect } from "./location.ts";
 import { courseCorrect } from "./courseAssessment.ts";
-import { traceProgress } from "./tracing.ts";
+import { practicalCorrect } from "./practical.ts";
+import { storyCorrect } from "./storyAssessment.ts";
+import { numberGameCorrect } from "./numberGame.ts";
+import { revision2Steps } from "../content/legacyStepIds.ts";
+import { traceProgress, drawingColor, DRAWING_COLORS } from "./tracing.ts";
 import type { Answer, Block, BookPage, Progress } from "../content/types.ts";
 export const edgeKey = (a: number, b: number) =>
   [a, b].sort((x, y) => x - y).join("-");
@@ -8,6 +13,10 @@ export function hasInk(answer?: Answer): boolean {
 }
 export function isCorrect(block: Block, answer?: Answer): boolean {
   if (!answer) return false;
+  if (block.kind === "location") return locationCorrect(block, answer);
+  if (block.kind === "practical") return practicalCorrect(block, answer);
+  if (block.kind === "story") return storyCorrect(block, answer);
+  if (block.kind === "numberGame") return numberGameCorrect(block, answer);
   if (
     [
       "work",
@@ -61,12 +70,20 @@ export const isDone = (block: Block, answer?: Answer) =>
     block.kind === "draw" ||
     (block.kind === "counters" && block.expected === undefined) ||
     answer?.checked === true);
+/** «Дальше» opens only after the step is solved; reading and free practice are finished by pressing it. */
+export const canAdvance = (block: Block, answer?: Answer) =>
+  block.kind === "read" ||
+  (block.kind === "counters" &&
+    block.expected === undefined &&
+    Number(answer?.value) > 0) ||
+  isDone(block, answer);
 export const pageCompleted = (
   page: BookPage,
   answers: Record<string, Answer>,
 ) => page.blocks.every((b) => isDone(b, answers[b.id]));
 export const emptyProgress = (): Progress => ({
   version: 1,
+  contentRevision: 3,
   page: 1,
   block: 0,
   answers: {},
@@ -131,7 +148,7 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
           .filter(
             (s: any) =>
               s &&
-              ["#23594e", "#ce6548", "#232d2b"].includes(s.color) &&
+              DRAWING_COLORS.includes(drawingColor(s.color)) &&
               Array.isArray(s.points),
           )
           .map((s: any) => ({
@@ -149,19 +166,133 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
                   v.y <= 1,
               ),
           }));
+      if (
+        a.practical &&
+        typeof a.practical === "object" &&
+        !Array.isArray(a.practical)
+      ) {
+        answer.practical = {};
+        for (const [stepId, value] of Object.entries(a.practical).slice(
+          0,
+          40,
+        ) as [string, any][]) {
+          if (
+            !/^[a-zA-Z0-9_-]{1,40}$/.test(stepId) ||
+            !value ||
+            typeof value !== "object"
+          )
+            continue;
+          const state: NonNullable<Answer["practical"]>[string] = {
+            confirmed: value.confirmed === true,
+          };
+          if (
+            value.choices &&
+            typeof value.choices === "object" &&
+            !Array.isArray(value.choices)
+          )
+            state.choices = Object.fromEntries(
+              Object.entries(value.choices).filter(
+                ([key, n]) =>
+                  /^(count|length)\d+$/.test(key) &&
+                  Number.isInteger(n) &&
+                  Number(n) > 0 &&
+                  Number(n) <= 100,
+              ),
+            ) as Record<string, number>;
+          if (
+            Array.isArray(value.counts) &&
+            value.counts.length <= 100 &&
+            value.counts.every(
+              (n: unknown) =>
+                Number.isInteger(n) && Number(n) >= -1 && Number(n) <= 100,
+            )
+          )
+            state.counts = value.counts;
+          if (
+            Array.isArray(value.edges) &&
+            value.edges.length <= 500 &&
+            value.edges.every(
+              (e: unknown) => typeof e === "string" && /^\d+-\d+$/.test(e),
+            )
+          )
+            state.edges = value.edges;
+          if (Array.isArray(value.strokes))
+            state.strokes = value.strokes
+              .slice(0, 200)
+              .filter(
+                (s: any) =>
+                  s &&
+                  DRAWING_COLORS.includes(drawingColor(s.color)) &&
+                  Array.isArray(s.points),
+              )
+              .map((s: any) => ({
+                color: s.color,
+                points: s.points
+                  .slice(0, 1000)
+                  .filter(
+                    (p: any) =>
+                      p &&
+                      Number.isFinite(p.x) &&
+                      Number.isFinite(p.y) &&
+                      p.x >= 0 &&
+                      p.x <= 1 &&
+                      p.y >= 0 &&
+                      p.y <= 1,
+                  ),
+              }));
+          answer.practical[stepId] = state;
+        }
+      }
       answers[id] = answer;
     }
     const page =
       Number.isInteger(p.page) && p.page >= 1 && p.page <= pages.length
         ? p.page
         : 1;
+    let requestedBlock = p.block;
+    if (!p.contentRevision || p.contentRevision < 2) {
+      const removedIntro = [
+        11, 12, 14, 16, 17, 18, 19, 20, 21, 22, 24, 26, 28, 29,
+      ];
+      if (
+        Number.isInteger(requestedBlock) &&
+        removedIntro.includes(page) &&
+        !(page === 11 && requestedBlock >= 6)
+      )
+        requestedBlock = Math.max(0, requestedBlock - 1);
+      const children = answers["p011-lesson01"];
+      if (children?.responses?.q4)
+        children.responses = {
+          ...children.responses,
+          q2: children.responses.q4,
+        };
+    }
+    if (
+      p.contentRevision !== 3 &&
+      Number.isInteger(requestedBlock) &&
+      requestedBlock >= 0 &&
+      requestedBlock < (revision2Steps[page]?.length ?? 0)
+    ) {
+      const previous = revision2Steps[page]?.[requestedBlock];
+      const current = pages[page - 1].blocks.findIndex(
+        (b) => b.id === previous,
+      );
+      if (current >= 0) requestedBlock = current;
+      else {
+        const following = revision2Steps[page]?.slice(requestedBlock + 1) ?? [];
+        const next = following
+          .map((id) => pages[page - 1].blocks.findIndex((b) => b.id === id))
+          .find((i) => i >= 0);
+        requestedBlock = next ?? 0;
+      }
+    }
     const block =
-      Number.isInteger(p.block) &&
-      p.block >= 0 &&
-      p.block < pages[page - 1].blocks.length
-        ? p.block
+      Number.isInteger(requestedBlock) &&
+      requestedBlock >= 0 &&
+      requestedBlock < pages[page - 1].blocks.length
+        ? requestedBlock
         : 0;
-    return { version: 1, page, block, answers };
+    return { version: 1, contentRevision: 3, page, block, answers };
   } catch {
     return fallback;
   }
