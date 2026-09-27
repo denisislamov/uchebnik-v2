@@ -101,12 +101,13 @@ export function CounterBoard({
   const count = slots ? occupied.length : Math.max(0, Math.min(max, value));
   const rowMode = layout === "row" && !slots;
   // A laptop window is low: the empty field starts two rows high and grows.
-  const { fit } = useTaskSize();
+  const { fit, measured } = useTaskSize();
   const geometry = counterBoardLayout(
     width,
     count,
     rowMode ? "row" : "groups",
-    fit ? 132 : 190,
+    // …and takes the room a big window leaves free.
+    fit ? Math.min(420, 132 + Math.max(0, measured)) : 190,
   );
   const boardWidth = geometry.width;
   const fieldHeight = slots ? 190 : geometry.fieldHeight;

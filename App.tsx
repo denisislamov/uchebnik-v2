@@ -35,6 +35,7 @@ import { NotebookPaper } from "./src/components/NotebookPaper";
 import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
+import { TaskFitExtra } from "./src/components/taskSize";
 // Both guards are build-time constants: production removes this entire component.
 const DebugSourcePanel =
   __DEV__ && process.env.EXPO_PUBLIC_SOURCE_DEBUG === "1"
@@ -206,6 +207,45 @@ function Main() {
   const page = pages[progress.page - 1],
     block = page.blocks[progress.block],
     answer = progress.answers[block.id] ?? {};
+  // Off a phone the task is fitted to the window: right after a step opens,
+  // the room left under «Дальше» (or the overflow) is measured and handed to
+  // the picture or the sheet. Then the size is frozen, so nothing moves while
+  // the child answers.
+  const [paneHeight, setPaneHeight] = useState(0);
+  const fitKey = `${home}|${block.id}|${windowWidth}x${windowHeight}|${paneHeight}`;
+  const [fit, setFit] = useState({ key: "", extra: 0 });
+  const lessonMain = useRef<View>(null);
+  useEffect(() => {
+    setFit({ key: fitKey, extra: 0 });
+    if (compact || home || !paneHeight) return;
+    // A few looks during the first second (pictures load, the sheet sizes
+    // itself), then the size stays as it is.
+    const timers = [150, 400, 750, 1100].map((ms) =>
+      setTimeout(
+        () =>
+          lessonMain.current?.measureInWindow((_x, y, _w, h) => {
+            const bottom = y + h + lastScroll.current;
+            const slack = paneHeight - bottom - 16;
+            if (Math.abs(slack) < 6) return;
+            setFit((f) =>
+              f.key !== fitKey
+                ? f
+                : {
+                    ...f,
+                    extra: Math.max(
+                      -600,
+                      Math.min(900, Math.round(f.extra + slack)),
+                    ),
+                  },
+            );
+          }),
+        ms,
+      ),
+    );
+    return () => timers.forEach(clearTimeout);
+  }, [fitKey]);
+  const fitExtra = fit.key === fitKey ? fit.extra : 0;
+
   const finished = lessonPages.filter((p) =>
     pageCompleted(p, progress.answers),
   ).length;
@@ -353,6 +393,7 @@ function Main() {
               : undefined,
           ]}
           ref={scroll}
+          onLayout={(e) => setPaneHeight(e.nativeEvent.layout.height)}
           scrollEnabled={!drawing}
           scrollEventThrottle={16}
           onScroll={(e) => {
@@ -613,7 +654,7 @@ function Main() {
                   </View>
                 </View>
               )}
-              <View style={s.lessonMain}>
+              <View ref={lessonMain} style={s.lessonMain}>
                 {/* One row: the arrow home, the page's name, the original. The
                     app header stays on the contents page; here it only
                     repeated «Арифметика» and took a line. */}
@@ -720,34 +761,36 @@ function Main() {
                   testID="exercise-card"
                   style={[s.exerciseCard, short && { paddingTop: 0 }]}
                 >
-                  <Exercise
-                    key={block.id}
-                    block={block}
-                    answer={answer}
-                    onAnswer={updateAnswer}
-                    onDrawing={setDrawing}
-                    onCoachActiveChange={onCoachActiveChange}
-                    revealCoachTarget={(target) =>
-                      new Promise<void>((resolve) => {
-                        const container = scroll.current?.getInnerViewNode();
-                        if (!container) {
-                          resolve();
-                          return;
-                        }
-                        target.measureLayout(
-                          container,
-                          (_x, y) => {
-                            scroll.current?.scrollTo({
-                              y: Math.max(0, y - 100),
-                              animated: false,
-                            });
-                            setTimeout(resolve, 160);
-                          },
-                          resolve,
-                        );
-                      })
-                    }
-                  />
+                  <TaskFitExtra.Provider value={fitExtra}>
+                    <Exercise
+                      key={block.id}
+                      block={block}
+                      answer={answer}
+                      onAnswer={updateAnswer}
+                      onDrawing={setDrawing}
+                      onCoachActiveChange={onCoachActiveChange}
+                      revealCoachTarget={(target) =>
+                        new Promise<void>((resolve) => {
+                          const container = scroll.current?.getInnerViewNode();
+                          if (!container) {
+                            resolve();
+                            return;
+                          }
+                          target.measureLayout(
+                            container,
+                            (_x, y) => {
+                              scroll.current?.scrollTo({
+                                y: Math.max(0, y - 100),
+                                animated: false,
+                              });
+                              setTimeout(resolve, 160);
+                            },
+                            resolve,
+                          );
+                        })
+                      }
+                    />
+                  </TaskFitExtra.Provider>
                 </View>
                 <View style={[s.navigation, short && { marginTop: 12 }]}>
                   <Button
@@ -772,9 +815,6 @@ function Main() {
                     «Дальше» откроется, когда задание получится.
                   </Text>
                 )}
-                <Text style={s.saveNote}>
-                  Ответы и рисунки сохраняются на этом устройстве.
-                </Text>
               </View>
             </View>
           )}
@@ -1161,7 +1201,9 @@ const s = StyleSheet.create({
   },
   lessonLayout: {
     width: "100%",
-    maxWidth: 1440,
+    // A big screen gives the task more width, so its picture can use the
+    // window's height instead of leaving it empty under «Дальше».
+    maxWidth: 1800,
     alignSelf: "center",
     padding: 38,
     paddingTop: 26,
@@ -1204,7 +1246,7 @@ const s = StyleSheet.create({
     lineHeight: 20,
     color: c.ink,
   },
-  lessonMain: { flex: 1, minWidth: 0, maxWidth: 1000 },
+  lessonMain: { flex: 1, minWidth: 0, maxWidth: 1360 },
   lessonTop: {
     flexDirection: "row",
     alignItems: "center",
@@ -1279,13 +1321,6 @@ const s = StyleSheet.create({
     lineHeight: 20,
     textAlign: "right",
     marginTop: 10,
-  },
-  saveNote: {
-    fontFamily: f.regular,
-    color: c.muted,
-    fontSize: 12,
-    textAlign: "center",
-    marginTop: 22,
   },
   modalHeader: {
     padding: 20,

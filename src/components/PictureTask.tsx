@@ -83,7 +83,7 @@ function Picture({
         ref={frame}
         style={{
           width: "100%",
-          maxWidth: Math.min(960, (size.target * a.width) / a.height),
+          maxWidth: (size.target * a.width) / a.height,
           alignSelf: "center",
         }}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}

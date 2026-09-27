@@ -55,7 +55,7 @@ export function DrawingPad({
         ...trace.stages.flat().map((t) => targetSpanCells(t.points, columns)),
       )
     : 0;
-  const { compact, fit } = useTaskSize();
+  const { compact, fit, measured } = useTaskSize();
   // On a laptop the sheet takes what is left of the window under it, keeping
   // room for the hint and «Дальше»; a phone scrolls and keeps fingertip cells.
   const windowHeight = useWindowDimensions().height;
@@ -68,7 +68,7 @@ export function DrawingPad({
         widestTarget,
         fit && sheetTop !== null
           ? {
-              height: windowHeight - sheetTop - 150,
+              height: windowHeight - sheetTop - 150 + measured,
               rows,
               // Smaller cells only for a mouse or trackpad, never for a finger.
               minCell: finePointer() ? 28 : 44,

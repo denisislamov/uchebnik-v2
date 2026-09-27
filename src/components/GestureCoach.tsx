@@ -204,7 +204,8 @@ export function GestureCoachProvider({
     mobileWeb && landscape && !sideCard
       ? width - 24
       : Platform.OS === "web" && width >= 1000
-        ? 360
+        ? // Narrow enough to stand in the column beside a full-width picture.
+          320
         : 480,
   );
   const mobileCardLimit = sideCard

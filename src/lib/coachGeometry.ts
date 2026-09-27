@@ -107,6 +107,19 @@ export function coachCardPosition(
   const top = vy + 12,
     bottom = Math.max(top, vy + viewport.height - card.height - 12);
   const center = vx + (viewport.width - card.width) / 2;
+  // Beside the focus: a task fitted to the window leaves no band above or
+  // below its picture, but the column next to it is free.
+  const beside = focus
+    ? [focus.x - card.width - 12, focus.x + focus.width + 12]
+        .filter((x) => x >= left && x <= right)
+        .map((x) => ({
+          x,
+          y: Math.min(
+            bottom,
+            Math.max(top, focus.y + (focus.height - card.height) / 2),
+          ),
+        }))
+    : [];
   const candidates = [
     { x: center, y: bottom },
     { x: left, y: bottom },
@@ -114,6 +127,7 @@ export function coachCardPosition(
     { x: center, y: top },
     { x: left, y: top },
     { x: right, y: top },
+    ...beside,
   ];
   const overlap = ({ x, y }: Point) =>
     !focus

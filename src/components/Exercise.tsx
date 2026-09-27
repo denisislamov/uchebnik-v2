@@ -58,9 +58,9 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   const beside =
     size.wide &&
     size.fit &&
-    // Not for a picture that is the answer, a page to read, or composing
-    // and question lists: their field must keep one width from step to step.
-    !["picture", "read", "activity", "work"].includes(block.kind) &&
+    // Only where the work itself is a big field; a row of answers or a
+    // question list reads better under a full-width picture.
+    ["draw", "counters", "shape"].includes(block.kind) &&
     block.images.length > 0;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
@@ -121,7 +121,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         <View
           ref={imagesRef}
           collapsable={false}
-          style={[{ gap: 14 }, beside && { flex: 5, minWidth: 0 }]}
+          style={[{ gap: 14 }, beside && { flex: 4, minWidth: 0 }]}
         >
           {block.kind === "picture" && (
             <PictureTask
@@ -171,7 +171,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         <View
           ref={answerRef}
           collapsable={false}
-          style={[{ gap: 22 }, beside && { flex: 6, minWidth: 0 }]}
+          style={[{ gap: 22 }, beside && { flex: 7, minWidth: 0 }]}
         >
           {block.kind === "location" && (
             <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
