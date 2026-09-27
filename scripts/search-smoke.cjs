@@ -21,7 +21,8 @@ const { baseURL, newTestContext } = require("./browser-context.cjs");
       await card.waitFor();
       assert.equal(await p.getByText(`№ ${number} · шаг ${index + 1}`, { exact: true }).count(), 1);
       await card.click();
-      await p.getByText(`Шаг ${index + 1} из ${page.blocks.length} · № ${number}`, { exact: true }).waitFor();
+      // A phone shows «Шаг 8 из 10 · № 500»; a computer folds it into the page line.
+      await p.getByText(new RegExp(`· № ${number}$`)).first().waitFor();
       await p.getByTestId("exercise-card").getByText(page.blocks[index].title, { exact: true }).waitFor();
       report.checks.push({ number, page: page.number, step: index + 1 });
       await p.getByRole("button", { name: "На главную", exact: true }).click();

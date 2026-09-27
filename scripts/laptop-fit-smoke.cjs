@@ -1,4 +1,4 @@
-/** On a laptop-height window every task opens with «Дальше» in view: no scrolling to reach the answer or the next step. */
+/** On any computer window every task opens with «Дальше» in view: no scrolling to reach the answer or the next step. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
@@ -10,8 +10,15 @@ const PAGES = (process.env.FIT_PAGES || "3,4,5,6,7,8,9,10,11,12").split(",").map
   const browser = await chromium.launch({ headless: true });
   const report = { passed: false, checked: 0, overflow: [], errors: [] };
   try {
-    // A MacBook Air browser with the bookmarks bar and the Dock left visible.
-    for (const viewport of [{ width: 1440, height: 760 }]) {
+    // Every computer window, not one threshold: a MacBook Air with the
+    // bookmarks bar and the Dock, a MacBook Pro, a scaled-up MacBook screen
+    // (the size a child actually reported) and a large monitor.
+    for (const viewport of [
+      { width: 1440, height: 760 },
+      { width: 1512, height: 860 },
+      { width: 1960, height: 1100 },
+      { width: 1920, height: 1200 },
+    ]) {
       const ctx = await newTestContext(browser, { viewport });
       const p = await ctx.newPage();
       p.on("pageerror", (e) => report.errors.push(e.message));

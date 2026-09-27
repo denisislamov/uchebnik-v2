@@ -21,7 +21,7 @@ import { traceDirections, traceArrowGeometry } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
 import { Button, ProgressBar, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
-import { useTaskSize } from "./taskSize";
+import { finePointer, useTaskSize } from "./taskSize";
 export function DrawingPad({
   strokes,
   onChange,
@@ -55,7 +55,7 @@ export function DrawingPad({
         ...trace.stages.flat().map((t) => targetSpanCells(t.points, columns)),
       )
     : 0;
-  const { compact, short } = useTaskSize();
+  const { compact, fit } = useTaskSize();
   // On a laptop the sheet takes what is left of the window under it, keeping
   // room for the hint and «Дальше»; a phone scrolls and keeps fingertip cells.
   const windowHeight = useWindowDimensions().height;
@@ -66,7 +66,7 @@ export function DrawingPad({
         containerWidth,
         columns,
         widestTarget,
-        short && sheetTop !== null
+        fit && sheetTop !== null
           ? {
               height: windowHeight - sheetTop - 150,
               rows,
@@ -518,13 +518,6 @@ export function DrawingPad({
       )}
       {error !== "" && <RetryNote>{error}</RetryNote>}
     </View>
-  );
-}
-function finePointer() {
-  return (
-    Platform.OS === "web" &&
-    typeof window !== "undefined" &&
-    !!window.matchMedia?.("(pointer: fine)").matches
   );
 }
 /** The nearest ancestor that scrolls vertically: the lesson's scroll pane. */

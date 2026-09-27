@@ -19,26 +19,26 @@
         "width": 768,
         "height": 1024
       },
-      "homeArrow": 32,
+      "homeArrow": 12,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 464
+      "imageHeight": 553.734375
     },
     {
       "viewport": {
         "width": 1280,
         "height": 900
       },
-      "homeArrow": 32,
+      "homeArrow": 12,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 339.765625
+      "imageHeight": 430
     },
     {
       "phoneSheet": [

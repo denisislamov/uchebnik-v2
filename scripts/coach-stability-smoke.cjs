@@ -140,9 +140,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       );
     }
     // An offscreen target must be revealed only after an explicit child action.
-    // A tall window keeps the stacked layout, long enough to scroll the target away.
+    // A low window: the task no longer fits, so the target can scroll away.
     const ctx = await newTestContext(browser, {
-      viewport: { width: 1280, height: 1000 },
+      viewport: { width: 1280, height: 520 },
     });
     const p = await ctx.newPage();
     const { pages } = await import("../src/content/book.ts");
@@ -176,7 +176,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p
       .getByTestId("lesson-scroll-pane")
       .evaluate((e) => (e.scrollTop = e.scrollHeight));
-    await p.setViewportSize({ width: 1281, height: 1000 });
+    await p.setViewportSize({ width: 1281, height: 520 });
     await p.clock.runFor(400);
     await p.getByTestId("coach-offscreen-help").waitFor();
     const pane = p.getByTestId("lesson-scroll-pane");

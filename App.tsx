@@ -145,8 +145,10 @@ function Main() {
   const width = comparison && sideBySide ? windowWidth * 0.52 : windowWidth;
   const wide = width >= 1000,
     compact = width < 600,
-    // Laptop-height window: same rule as useTaskSize, the header folds down.
-    short = !compact && windowHeight < 900;
+    // Same rule as useTaskSize: off a phone the lesson fits the window and
+    // its header folds; only a tall window gets the larger title.
+    short = !compact,
+    tall = wide && windowHeight >= 1000;
   useEffect(() => {
     let mounted = true;
     readProgress()
@@ -629,6 +631,7 @@ function Main() {
                     style={[
                       s.lessonTitle,
                       (compact || short) && { fontSize: 28, lineHeight: 33 },
+                      tall && { fontSize: 36, lineHeight: 42 },
                     ]}
                   >
                     {page.title}

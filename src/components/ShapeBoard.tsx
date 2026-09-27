@@ -38,7 +38,7 @@ export function ShapeBoard({
   const [rotation, setRotation] = useState<Record<number, number>>({});
   // On a wide, low window the stick waits to the right of the shape instead
   // of under it: the board is half as tall and stays on screen.
-  const landscape = useTaskSize().short && width >= 420;
+  const landscape = useTaskSize().fit && width >= 420;
   const scale = landscape
     ? Math.min(240, width * 0.5 - 24)
     : Math.min(width - 32, 240);

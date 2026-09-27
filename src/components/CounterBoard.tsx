@@ -1,5 +1,5 @@
 import { useGestureCoach } from "./GestureCoach";
-import { useTaskSize } from "./taskSize";
+import { finePointer, useTaskSize } from "./taskSize";
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, Platform, ScrollView } from "react-native";
 import type { Point } from "../content/types";
@@ -101,12 +101,12 @@ export function CounterBoard({
   const count = slots ? occupied.length : Math.max(0, Math.min(max, value));
   const rowMode = layout === "row" && !slots;
   // A laptop window is low: the empty field starts two rows high and grows.
-  const { short } = useTaskSize();
+  const { fit } = useTaskSize();
   const geometry = counterBoardLayout(
     width,
     count,
     rowMode ? "row" : "groups",
-    short ? 132 : 190,
+    fit ? 132 : 190,
   );
   const boardWidth = geometry.width;
   const fieldHeight = slots ? 190 : geometry.fieldHeight;
@@ -401,7 +401,7 @@ export function CounterBoard({
               : "кружок")}{" "}
         внизу и перенеси на поле.
       </Text>
-      {!short && (
+      {!(fit && finePointer()) && (
         <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 14 }}>
           Не отпускай палец, пока несёшь предмет. Лишний предмет верни вниз.
         </Text>

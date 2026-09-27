@@ -60,7 +60,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     const r = await picture.boundingBox();
     for (const [x, y] of [
       [0.26, 0.4],
-      [0.78, 0.43],
+      // The right chair's seat: its thin back borders the window's area.
+      [0.69, 0.67],
       [0.53, 0.14],
       [0.88, 0.2],
       [0.14, 0.12],

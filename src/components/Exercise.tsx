@@ -57,9 +57,10 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   // instead of above it, so both fit under the lesson header.
   const beside =
     size.wide &&
-    size.short &&
-    block.kind !== "picture" &&
-    block.kind !== "read" &&
+    size.fit &&
+    // Not for a picture that is the answer, a page to read, or composing
+    // and question lists: their field must keep one width from step to step.
+    !["picture", "read", "activity", "work"].includes(block.kind) &&
     block.images.length > 0;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
@@ -72,7 +73,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       ? Array.isArray(answer.value) && answer.value.length > 0
       : answer.value !== undefined && answer.value !== "";
   return (
-    <View style={{ gap: size.short ? 10 : size.compact ? 14 : 22 }}>
+    <View style={{ gap: size.fit ? 10 : 14 }}>
       {size.compact && <CoachButton onPress={showTaskCoach} />}
       {/* On wider screens the button sits beside the heading: a row of its own
           pushed the task a whole line down. */}
@@ -85,10 +86,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Text
               testID="block-title"
-              style={[
-                s.title,
-                size.wide && !size.short && { fontSize: 30, lineHeight: 36 },
-              ]}
+              style={[s.title, size.tall && { fontSize: 30, lineHeight: 36 }]}
             >
               {block.title}
             </Text>
@@ -105,10 +103,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           {block.kind !== "read" && !promptRepeatsTitle(block) && (
             <Text
               testID="block-prompt"
-              style={[
-                s.prompt,
-                size.wide && !size.short && { fontSize: 24, lineHeight: 34 },
-              ]}
+              style={[s.prompt, size.tall && { fontSize: 24, lineHeight: 34 }]}
             >
               {block.prompt}
             </Text>
@@ -120,7 +115,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         style={
           beside
             ? { flexDirection: "row", alignItems: "flex-start", gap: 28 }
-            : { gap: size.compact || size.short ? 14 : 22 }
+            : { gap: 14 }
         }
       >
         <View
