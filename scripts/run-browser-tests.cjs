@@ -70,6 +70,7 @@ async function run(file) {
           "scripts/source-feedback-smoke.cjs",
           "scripts/onboarding-all-views.cjs",
           "scripts/drawing-guidance-smoke.cjs",
+          "scripts/drawing-follow-smoke.cjs",
           "scripts/search-smoke.cjs",
           "scripts/status-smoke.cjs",
           "scripts/layout-smoke.cjs",

@@ -98,6 +98,44 @@ export function DrawingPad({
   }, [scrollable, targetCenter, width, containerWidth]);
   const closed = target ? isClosedTrace(target, { columns, rows }) : false;
   const fieldRef = useRef<View>(null);
+  // The same glide up or down: a sheet taller than the window brings the next
+  // line into view instead of leaving it under the fold or above the screen.
+  const targetTop = target ? Math.min(...target.points.map((p) => p.y)) : null,
+    targetBottom = target ? Math.max(...target.points.map((p) => p.y)) : null;
+  useEffect(() => {
+    if (Platform.OS !== "web" || targetTop === null || targetBottom === null)
+      return;
+    // After the sideways glide and after the lesson resets its scroll on a new step.
+    const timer = setTimeout(() => {
+      const field = fieldRef.current as unknown as HTMLElement | null;
+      const pane = field && verticalScrollPane(field);
+      if (!field || !pane) return;
+      const box = field.getBoundingClientRect(),
+        view = pane.getBoundingClientRect();
+      // Room for the stroke's start dot and a finger around the line.
+      const pad = Math.max(56, (height / rows) * 1.2);
+      const top = box.top + targetTop * height - pad,
+        bottom = box.top + targetBottom * height + pad;
+      const shift =
+        top < view.top
+          ? top - view.top
+          : bottom > view.bottom
+            ? // Never push the line's start above the screen to show its end.
+              Math.min(bottom - view.bottom, top - view.top)
+            : 0;
+      if (Math.abs(shift) > 1)
+        pane.scrollBy({ top: shift, behavior: "smooth" });
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [
+    targetTop,
+    targetBottom,
+    height,
+    rows,
+    // Every new line, even one on the same row as the last.
+    progress?.stage,
+    progress?.index,
+  ]);
   useGestureCoach(target?.dot ? "dot" : "trace", [
     {
       ref: fieldRef,
@@ -488,4 +526,14 @@ function finePointer() {
     typeof window !== "undefined" &&
     !!window.matchMedia?.("(pointer: fine)").matches
   );
+}
+/** The nearest ancestor that scrolls vertically: the lesson's scroll pane. */
+function verticalScrollPane(node: HTMLElement): HTMLElement | null {
+  for (let el = node.parentElement; el; el = el.parentElement)
+    if (
+      el.scrollHeight > el.clientHeight + 1 &&
+      /auto|scroll/.test(getComputedStyle(el).overflowY)
+    )
+      return el;
+  return null;
 }
