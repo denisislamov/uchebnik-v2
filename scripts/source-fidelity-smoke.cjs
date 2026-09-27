@@ -102,7 +102,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       assert.ok(
         b.x + point.x * b.width >= 0 &&
           b.x + point.x * b.width <= page.viewportSize().width,
-        "stroke must remain reachable inside the viewport",
+        `stroke must remain reachable inside the viewport ${JSON.stringify({ b, point, vw: page.viewportSize().width })}`,
       );
     await page.mouse.move(
       b.x + points[0].x * b.width,

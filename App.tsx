@@ -271,6 +271,60 @@ function Main() {
       ? p.blocks.findIndex((b) => b.exerciseNumber === queryNumber)
       : -1;
   const advance = canAdvance(block, answer);
+  // Once the child has done the task, glide just far enough to show the next
+  // button — «Проверить…» while it waits for a check, «Дальше» once solved —
+  // as the drawing sheet glides to its next line. A step that was already
+  // solved when it opened stays where it is.
+  const exerciseCard = useRef<View>(null),
+    navigation = useRef<View>(null);
+  const glide = useRef({
+    step: "",
+    solvedOnOpen: false,
+    answer: answer,
+    shown: "",
+  });
+  if (glide.current.step !== `${progress.page}:${block.id}`)
+    glide.current = {
+      step: `${progress.page}:${block.id}`,
+      solvedOnOpen: advance,
+      answer,
+      shown: "",
+    };
+  useEffect(() => {
+    const g = glide.current;
+    if (Platform.OS !== "web" || home || drawing || g.solvedOnOpen) return;
+    // Only after the child's own work on this step, never on opening it.
+    if (answer === g.answer) return;
+    const timer = setTimeout(() => {
+      const card = exerciseCard.current as unknown as HTMLElement | null;
+      // A drawing sheet leads the child line by line itself; its check button
+      // waits until the whole step is solved.
+      const sheet = card?.querySelector('[aria-label="Поле для рисования"]');
+      const check =
+        advance || sheet
+          ? null
+          : ([...(card?.querySelectorAll('[role="button"]') ?? [])].find(
+              (b) =>
+                /^Проверить/.test((b as HTMLElement).innerText.trim()) &&
+                b.getAttribute("aria-disabled") !== "true",
+            ) as HTMLElement | undefined);
+      const kind = advance ? "next" : check ? "check" : "";
+      // Each button once per step: a later answer does not pull the page again.
+      if (!kind || g.shown.includes(kind)) return;
+      const target = advance
+        ? (navigation.current as unknown as HTMLElement | null)
+        : check;
+      const pane = target && verticalScrollPane(target);
+      if (!target || !pane) return;
+      g.shown += kind;
+      const box = target.getBoundingClientRect(),
+        view = pane.getBoundingClientRect();
+      // Down only, and never past the top of the task.
+      const shift = box.bottom + 24 - view.bottom;
+      if (shift > 1) pane.scrollBy({ top: shift, behavior: "smooth" });
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [answer, advance, drawing, home]);
   function next() {
     if (!advance) return;
     setProgress((p) => {
@@ -758,6 +812,7 @@ function Main() {
                   ))}
                 </ScrollView>
                 <View
+                  ref={exerciseCard}
                   testID="exercise-card"
                   style={[s.exerciseCard, short && { paddingTop: 0 }]}
                 >
@@ -792,7 +847,10 @@ function Main() {
                     />
                   </TaskFitExtra.Provider>
                 </View>
-                <View style={[s.navigation, short && { marginTop: 12 }]}>
+                <View
+                  ref={navigation}
+                  style={[s.navigation, short && { marginTop: 12 }]}
+                >
                   <Button
                     secondary
                     disabled={
@@ -1367,3 +1425,13 @@ const s = StyleSheet.create({
     gap: 10,
   },
 });
+/** The nearest ancestor that scrolls vertically: the lesson's scroll pane. */
+function verticalScrollPane(node: HTMLElement): HTMLElement | null {
+  for (let el = node.parentElement; el; el = el.parentElement)
+    if (
+      el.scrollHeight > el.clientHeight + 1 &&
+      /auto|scroll/.test(getComputedStyle(el).overflowY)
+    )
+      return el;
+  return null;
+}

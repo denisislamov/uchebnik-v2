@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "solved": {
+        "before": 192,
+        "after": 414
+      }
+    },
+    {
+      "reopened": 0
+    }
+  ],
+  "errors": []
+}
