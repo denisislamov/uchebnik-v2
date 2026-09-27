@@ -3,7 +3,7 @@ import { courseCorrect } from "./courseAssessment.ts";
 import { practicalCorrect } from "./practical.ts";
 import { storyCorrect } from "./storyAssessment.ts";
 import { numberGameCorrect } from "./numberGame.ts";
-import { revision2Steps } from "../content/legacyStepIds.ts";
+import { revision2Steps, revision3Steps } from "../content/legacyStepIds.ts";
 import { traceProgress, drawingColor, DRAWING_COLORS } from "./tracing.ts";
 import type { Answer, Block, BookPage, Progress } from "../content/types.ts";
 export const edgeKey = (a: number, b: number) =>
@@ -81,9 +81,11 @@ export const pageCompleted = (
   page: BookPage,
   answers: Record<string, Answer>,
 ) => page.blocks.every((b) => isDone(b, answers[b.id]));
+/** Bumped whenever steps are added, removed or reordered on a page. */
+export const CONTENT_REVISION = 4;
 export const emptyProgress = (): Progress => ({
   version: 1,
-  contentRevision: 3,
+  contentRevision: CONTENT_REVISION,
   page: 1,
   block: 0,
   answers: {},
@@ -267,19 +269,27 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
           q2: children.responses.q4,
         };
     }
+    // A saved step index points into the steps of the revision it was saved
+    // with; find the same step (or the next surviving one) by its ID.
+    const saved =
+      p.contentRevision === CONTENT_REVISION
+        ? undefined
+        : p.contentRevision === 3
+          ? revision3Steps[page]
+          : revision2Steps[page];
     if (
-      p.contentRevision !== 3 &&
+      saved &&
       Number.isInteger(requestedBlock) &&
       requestedBlock >= 0 &&
-      requestedBlock < (revision2Steps[page]?.length ?? 0)
+      requestedBlock < saved.length
     ) {
-      const previous = revision2Steps[page]?.[requestedBlock];
+      const previous = saved[requestedBlock];
       const current = pages[page - 1].blocks.findIndex(
         (b) => b.id === previous,
       );
       if (current >= 0) requestedBlock = current;
       else {
-        const following = revision2Steps[page]?.slice(requestedBlock + 1) ?? [];
+        const following = saved.slice(requestedBlock + 1);
         const next = following
           .map((id) => pages[page - 1].blocks.findIndex((b) => b.id === id))
           .find((i) => i >= 0);
@@ -292,7 +302,13 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
       requestedBlock < pages[page - 1].blocks.length
         ? requestedBlock
         : 0;
-    return { version: 1, contentRevision: 3, page, block, answers };
+    return {
+      version: 1,
+      contentRevision: CONTENT_REVISION,
+      page,
+      block,
+      answers,
+    };
   } catch {
     return fallback;
   }

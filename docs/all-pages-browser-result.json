@@ -705,6 +705,11 @@
           "passed": true
         },
         {
+          "id": "p018-cherries",
+          "kind": "activity",
+          "passed": true
+        },
+        {
           "id": "p018-lesson03",
           "kind": "draw",
           "passed": true
@@ -791,6 +796,16 @@
       "blocks": [
         {
           "id": "p020-lesson01",
+          "kind": "read",
+          "passed": true
+        },
+        {
+          "id": "p020-gave-one",
+          "kind": "read",
+          "passed": true
+        },
+        {
+          "id": "p020-picked-one",
           "kind": "read",
           "passed": true
         }
@@ -1170,16 +1185,6 @@
           "passed": true
         },
         {
-          "id": "p030-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p030-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p030-source04",
           "kind": "work",
           "passed": true
@@ -1235,11 +1240,6 @@
           "passed": true
         },
         {
-          "id": "p031-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p031-source05",
           "kind": "work",
           "passed": true
@@ -1262,11 +1262,6 @@
         {
           "id": "p031-source11",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p031-source12",
-          "kind": "read",
           "passed": true
         }
       ]
@@ -1342,11 +1337,6 @@
         {
           "id": "p033-source04",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p033-source05",
-          "kind": "read",
           "passed": true
         },
         {
@@ -1455,11 +1445,6 @@
           "passed": true
         },
         {
-          "id": "p035-source14",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p035-source16",
           "kind": "work",
           "passed": true
@@ -1477,11 +1462,6 @@
         {
           "id": "p036-source02",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p036-source03",
-          "kind": "read",
           "passed": true
         },
         {
@@ -1575,21 +1555,6 @@
           "passed": true
         },
         {
-          "id": "p038-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p038-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p038-source04",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p038-source05",
           "kind": "work",
           "passed": true
@@ -1602,21 +1567,6 @@
         {
           "id": "p038-source07",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p038-source08",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p038-source09",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p038-source10",
-          "kind": "read",
           "passed": true
         },
         {
@@ -1685,7 +1635,7 @@
       "page": 40,
       "blocks": [
         {
-          "id": "p040-source01",
+          "id": "p040-source05",
           "kind": "read",
           "passed": true
         },
@@ -1702,36 +1652,6 @@
         {
           "id": "p040-source04",
           "kind": "practical",
-          "passed": true
-        },
-        {
-          "id": "p040-source05",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p040-source06",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p040-source07",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p040-source08",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p040-source09",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p040-source10",
-          "kind": "read",
           "passed": true
         },
         {
@@ -1759,6 +1679,11 @@
     {
       "page": 41,
       "blocks": [
+        {
+          "id": "p041-source09",
+          "kind": "read",
+          "passed": true
+        },
         {
           "id": "p041-source01",
           "kind": "compose",
@@ -1798,21 +1723,6 @@
           "id": "p041-source08",
           "kind": "practical",
           "passed": true
-        },
-        {
-          "id": "p041-source09",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p041-source10",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p041-source11",
-          "kind": "read",
-          "passed": true
         }
       ]
     },
@@ -1820,23 +1730,13 @@
       "page": 42,
       "blocks": [
         {
-          "id": "p042-source01",
-          "kind": "work",
-          "passed": true
-        },
-        {
           "id": "p042-source02",
           "kind": "read",
           "passed": true
         },
         {
-          "id": "p042-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p042-source04",
-          "kind": "read",
+          "id": "p042-source01",
+          "kind": "work",
           "passed": true
         },
         {
@@ -1890,6 +1790,11 @@
       "page": 43,
       "blocks": [
         {
+          "id": "p043-source07",
+          "kind": "read",
+          "passed": true
+        },
+        {
           "id": "p043-source01",
           "kind": "work",
           "passed": true
@@ -1917,51 +1822,6 @@
         {
           "id": "p043-source06",
           "kind": "practical",
-          "passed": true
-        },
-        {
-          "id": "p043-source07",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source08",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source09",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source10",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source11",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source12",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source13",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source14",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p043-source15",
-          "kind": "read",
           "passed": true
         }
       ]
@@ -2080,6 +1940,11 @@
       "page": 46,
       "blocks": [
         {
+          "id": "p046-source06",
+          "kind": "read",
+          "passed": true
+        },
+        {
           "id": "p046-source01",
           "kind": "work",
           "passed": true
@@ -2102,46 +1967,6 @@
         {
           "id": "p046-source05",
           "kind": "practical",
-          "passed": true
-        },
-        {
-          "id": "p046-source06",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source07",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source08",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source09",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source10",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source11",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source12",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p046-source13",
-          "kind": "read",
           "passed": true
         },
         {
@@ -2280,36 +2105,6 @@
           "passed": true
         },
         {
-          "id": "p049-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p049-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p049-source04",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p049-source05",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p049-source06",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p049-source07",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p049-source08",
           "kind": "work",
           "passed": true
@@ -2340,18 +2135,13 @@
       "page": 50,
       "blocks": [
         {
-          "id": "p050-source01",
-          "kind": "work",
-          "passed": true
-        },
-        {
           "id": "p050-source02",
           "kind": "read",
           "passed": true
         },
         {
-          "id": "p050-source03",
-          "kind": "read",
+          "id": "p050-source01",
+          "kind": "work",
           "passed": true
         },
         {
@@ -2390,7 +2180,7 @@
       "page": 51,
       "blocks": [
         {
-          "id": "p051-source01",
+          "id": "p051-source04",
           "kind": "read",
           "passed": true
         },
@@ -2402,26 +2192,6 @@
         {
           "id": "p051-source03",
           "kind": "practical",
-          "passed": true
-        },
-        {
-          "id": "p051-source04",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p051-source05",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p051-source06",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p051-source07",
-          "kind": "read",
           "passed": true
         },
         {
@@ -2465,17 +2235,7 @@
       "page": 52,
       "blocks": [
         {
-          "id": "p052-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p052-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p052-source03",
           "kind": "read",
           "passed": true
         },
@@ -2520,11 +2280,6 @@
           "passed": true
         },
         {
-          "id": "p053-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p053-source03",
           "kind": "read",
           "passed": true
@@ -2550,17 +2305,7 @@
       "page": 54,
       "blocks": [
         {
-          "id": "p054-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p054-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p054-source03",
           "kind": "read",
           "passed": true
         },
@@ -2770,23 +2515,8 @@
           "passed": true
         },
         {
-          "id": "p059-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p059-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p059-source03",
           "kind": "practical",
-          "passed": true
-        },
-        {
-          "id": "p059-source04",
-          "kind": "read",
           "passed": true
         },
         {
@@ -2885,6 +2615,11 @@
       "page": 62,
       "blocks": [
         {
+          "id": "p062-source05",
+          "kind": "read",
+          "passed": true
+        },
+        {
           "id": "p062-source01",
           "kind": "work",
           "passed": true
@@ -2897,21 +2632,6 @@
         {
           "id": "p062-source03",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p062-source04",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p062-source05",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p062-source06",
-          "kind": "read",
           "passed": true
         },
         {
@@ -3550,11 +3270,6 @@
       "page": 74,
       "blocks": [
         {
-          "id": "p074-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p074-source02",
           "kind": "practical",
           "passed": true
@@ -3775,23 +3490,13 @@
       "page": 78,
       "blocks": [
         {
-          "id": "p078-source01",
-          "kind": "work",
-          "passed": true
-        },
-        {
           "id": "p078-source02",
           "kind": "read",
           "passed": true
         },
         {
-          "id": "p078-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p078-source04",
-          "kind": "read",
+          "id": "p078-source01",
+          "kind": "work",
           "passed": true
         },
         {
@@ -4215,6 +3920,11 @@
       "page": 86,
       "blocks": [
         {
+          "id": "p086-source06",
+          "kind": "read",
+          "passed": true
+        },
+        {
           "id": "p086-source01",
           "kind": "work",
           "passed": true
@@ -4237,11 +3947,6 @@
         {
           "id": "p086-source05",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p086-source06",
-          "kind": "read",
           "passed": true
         },
         {
@@ -4605,11 +4310,6 @@
           "passed": true
         },
         {
-          "id": "p093-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p093-source04",
           "kind": "activity",
           "passed": true
@@ -4794,16 +4494,6 @@
     {
       "page": 97,
       "blocks": [
-        {
-          "id": "p097-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p097-source02",
-          "kind": "read",
-          "passed": true
-        },
         {
           "id": "p097-source03",
           "kind": "activity",
@@ -5375,11 +5065,6 @@
           "passed": true
         },
         {
-          "id": "p108-source05",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p108-source06",
           "kind": "story",
           "passed": true
@@ -5405,18 +5090,13 @@
       "page": 109,
       "blocks": [
         {
-          "id": "p109-source01",
+          "id": "p109-source03",
           "kind": "read",
           "passed": true
         },
         {
           "id": "p109-source02",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p109-source03",
-          "kind": "read",
           "passed": true
         },
         {
@@ -5455,22 +5135,12 @@
       "page": 110,
       "blocks": [
         {
-          "id": "p110-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p110-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p110-source03",
           "kind": "read",
           "passed": true
         },
         {
-          "id": "p110-source04",
+          "id": "p110-source01",
           "kind": "read",
           "passed": true
         },
@@ -5580,16 +5250,6 @@
       "page": 113,
       "blocks": [
         {
-          "id": "p113-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p113-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p113-source03",
           "kind": "work",
           "passed": true
@@ -5680,6 +5340,11 @@
       "page": 115,
       "blocks": [
         {
+          "id": "p115-source06",
+          "kind": "read",
+          "passed": true
+        },
+        {
           "id": "p115-source01",
           "kind": "work",
           "passed": true
@@ -5705,11 +5370,6 @@
           "passed": true
         },
         {
-          "id": "p115-source06",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p115-source07",
           "kind": "practical",
           "passed": true
@@ -5725,6 +5385,11 @@
       "page": 116,
       "blocks": [
         {
+          "id": "p116-source03",
+          "kind": "read",
+          "passed": true
+        },
+        {
           "id": "p116-source01",
           "kind": "work",
           "passed": true
@@ -5732,11 +5397,6 @@
         {
           "id": "p116-source02",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p116-source03",
-          "kind": "read",
           "passed": true
         },
         {
@@ -6005,11 +5665,6 @@
       "page": 121,
       "blocks": [
         {
-          "id": "p121-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p121-source02",
           "kind": "work",
           "passed": true
@@ -6070,18 +5725,13 @@
       "page": 122,
       "blocks": [
         {
-          "id": "p122-source01",
+          "id": "p122-source03",
           "kind": "read",
           "passed": true
         },
         {
           "id": "p122-source02",
           "kind": "work",
-          "passed": true
-        },
-        {
-          "id": "p122-source03",
-          "kind": "read",
           "passed": true
         },
         {
@@ -6250,16 +5900,6 @@
       "page": 126,
       "blocks": [
         {
-          "id": "p126-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p126-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p126-source04",
           "kind": "work",
           "passed": true
@@ -6317,11 +5957,6 @@
         {
           "id": "p127-source05",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p127-source06",
-          "kind": "read",
           "passed": true
         },
         {
@@ -6425,11 +6060,6 @@
           "passed": true
         },
         {
-          "id": "p129-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
           "id": "p129-source04",
           "kind": "activity",
           "passed": true
@@ -6501,11 +6131,6 @@
       "blocks": [
         {
           "id": "p130-source-art",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p130-source01",
           "kind": "read",
           "passed": true
         },
@@ -6760,13 +6385,13 @@
       "page": 134,
       "blocks": [
         {
-          "id": "p134-source01",
-          "kind": "work",
+          "id": "p134-source02",
+          "kind": "read",
           "passed": true
         },
         {
-          "id": "p134-source02",
-          "kind": "read",
+          "id": "p134-source01",
+          "kind": "work",
           "passed": true
         },
         {
@@ -6787,11 +6412,6 @@
         {
           "id": "p134-source06",
           "kind": "activity",
-          "passed": true
-        },
-        {
-          "id": "p134-source07",
-          "kind": "read",
           "passed": true
         },
         {
@@ -6944,11 +6564,6 @@
     {
       "page": 137,
       "blocks": [
-        {
-          "id": "p137-source01",
-          "kind": "read",
-          "passed": true
-        },
         {
           "id": "p137-source02",
           "kind": "work",
@@ -7301,21 +6916,6 @@
       "blocks": [
         {
           "id": "p143-source01",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p143-source02",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p143-source03",
-          "kind": "read",
-          "passed": true
-        },
-        {
-          "id": "p143-source04",
           "kind": "read",
           "passed": true
         }

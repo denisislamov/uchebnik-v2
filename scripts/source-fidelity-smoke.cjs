@@ -33,7 +33,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           KEY,
           JSON.stringify({
             version: 1,
-            contentRevision: 3,
+            contentRevision: 4,
             page: n,
             block: index,
             answers: {},
@@ -89,12 +89,22 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     const sheet = page.getByTestId("practical-sheet");
     if (await sheet.count()) await sheet.scrollIntoViewIfNeeded();
     else await pad.scrollIntoViewIfNeeded();
-    // The sheet glides to the next line; measure it once it has stopped.
+    // The sheet glides to the next line and refits when a note appears under
+    // it; measure it once neither its place nor its size changes.
+    // A refit can come in two moves a few hundred milliseconds apart, so the
+    // sheet must hold still for half a second.
     let b = await pad.boundingBox();
-    for (let k = 0; k < 20; k++) {
+    for (let k = 0, still = 0; k < 60 && still < 8; k++) {
       await page.waitForTimeout(60);
       const next = await pad.boundingBox();
-      if (next && b && Math.abs(next.x - b.x) < 0.5) break;
+      still =
+        next &&
+        b &&
+        ["x", "y", "width", "height"].every(
+          (key) => Math.abs(next[key] - b[key]) < 0.5,
+        )
+          ? still + 1
+          : 0;
       b = next;
     }
     assert.ok(b);

@@ -29,7 +29,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           KEY,
           JSON.stringify({
             version: 1,
-            contentRevision: 3,
+            contentRevision: 4,
             page: n,
             block: index,
             answers: {},
@@ -118,10 +118,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           exact: true,
         })
         .waitFor();
-    // Same reusable board must work for sticks and two independently checked groups.
+    // Same reusable board must work for sticks and circles. The beetle and the
+    // cherries were one two-group board; since review 2 each is its own step.
     for (const [id, amounts] of [
       ["p004-block05", [5]],
-      ["p018-lesson02", [6, 6]],
+      ["p018-lesson02", [6]],
+      ["p018-cherries", [6]],
     ]) {
       await open(id);
       for (let g = 0; g < amounts.length; g++) {

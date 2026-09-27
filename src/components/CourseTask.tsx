@@ -11,6 +11,34 @@ import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button, RetryNote } from "./Controls";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
+// An arithmetic frame such as «4 + □ =», not a worded question.
+const isExpression = (label: string) => /^[\d\s+−\-×·:÷□()]+=\s*$/.test(label);
+// A long column of + and − examples with nothing to lean on: a number row to
+// count along. Only for addition and subtraction within 20.
+function numberLine(fields: { label: string }[]) {
+  if (fields.length < 6 || !fields.every((f) => isExpression(f.label)))
+    return undefined;
+  if (fields.some((f) => /[×·:÷]/.test(f.label))) return undefined;
+  const top = Math.max(
+    ...fields.flatMap((f) => (f.label.match(/\d+/g) ?? []).map(Number)),
+  );
+  return top <= 10 ? 10 : top <= 20 ? 20 : undefined;
+}
+function NumberLine({ max }: { max: number }) {
+  return (
+    <View
+      testID="number-line"
+      accessibilityLabel={`Числовой ряд от 0 до ${max}`}
+      style={s.numberLine}
+    >
+      {Array.from({ length: max + 1 }, (_, n) => (
+        <View key={n} style={s.numberCell}>
+          <Text style={s.numberText}>{n}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
 const tokenStyle = {
   width: 30,
   height: 30,
@@ -276,20 +304,43 @@ export function CourseTask({
             onDrawing={onDrawing}
           />
         )}
+      {block.kind === "work" && numberLine(block.fields) && (
+        <NumberLine max={numberLine(block.fields)!} />
+      )}
       {block.kind === "work" &&
         block.fields.map((field, i) => (
-          <View key={field.id} style={s.card}>
-            <TextWithBlanks style={s.label} text={`${i + 1}. ${field.label}`} />
-            {field.options
-              ? chips(field.id, field.options, spokenBlanks(field.label))
-              : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
-            {answer.checked &&
-              (r[field.id]?.trim() === field.expected ? (
-                <Text style={s.feedback}>✓ Верно</Text>
-              ) : (
-                <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
-              ))}
-          </View>
+          <React.Fragment key={field.id}>
+            {/* The second part of a two-part problem starts right here, not
+              in the prompt above, so each condition sits over its question. */}
+            {field.context && (
+              <TextWithBlanks
+                testID="field-context"
+                style={s.context}
+                text={field.context}
+              />
+            )}
+            <View style={s.card}>
+              {/* «1. 1 + 1 =» reads as part of the example; a bare expression
+                goes without its number, which the screen reader still gets. */}
+              <TextWithBlanks
+                style={s.label}
+                text={
+                  isExpression(field.label)
+                    ? field.label
+                    : `${i + 1}. ${field.label}`
+                }
+              />
+              {field.options
+                ? chips(field.id, field.options, spokenBlanks(field.label))
+                : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
+              {answer.checked &&
+                (r[field.id]?.trim() === field.expected ? (
+                  <Text style={s.feedback}>✓ Верно</Text>
+                ) : (
+                  <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
+                ))}
+            </View>
+          </React.Fragment>
         ))}
       {block.kind === "compose" &&
         block.rules.map((rule, i) => (
@@ -783,9 +834,29 @@ const s = StyleSheet.create({
   chipDone: { backgroundColor: c.pen, borderColor: c.pen },
   row: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
   card: { padding: 16, borderRadius: 6, backgroundColor: "#f1efe9", gap: 12 },
+  numberLine: { flexDirection: "row", flexWrap: "wrap" },
+  numberCell: {
+    width: 34,
+    height: 38,
+    borderWidth: 1,
+    borderColor: c.line,
+    marginLeft: -1,
+    marginTop: -1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: c.white,
+  },
+  numberText: { fontFamily: f.bold, fontSize: 18, color: c.pen },
   label: { fontFamily: f.bold, fontSize: 19, color: c.ink },
   text: { fontFamily: f.bold, fontSize: 20, color: c.pen },
   note: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.ink },
+  context: {
+    fontFamily: f.regular,
+    fontSize: 20,
+    lineHeight: 29,
+    color: c.ink,
+    marginTop: 10,
+  },
   input: {
     backgroundColor: c.white,
     borderWidth: 2,

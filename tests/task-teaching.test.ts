@@ -12,7 +12,8 @@ const get = (id: string) => {
 const teaching = (id: string) => taskTeaching(get(id));
 
 test("every runtime block has an explicit, useful semantic lesson", () => {
-  assert.ok(allBlocks.length >= 1300);
+  // Page-description steps were folded into one «Рассмотри картинки» per page (review 2).
+  assert.ok(allBlocks.length >= 1200);
   const families = new Map<string, string>();
   for (const block of allBlocks) {
     const plan = taskTeaching(block);

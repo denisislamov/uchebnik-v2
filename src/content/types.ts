@@ -32,6 +32,8 @@ export type WorkField = {
   label: string;
   expected: string;
   options?: string[];
+  /** Condition of the next part of a two-part problem, printed just above this question. */
+  context?: string;
 };
 export type ComposeRule = {
   operator: string;

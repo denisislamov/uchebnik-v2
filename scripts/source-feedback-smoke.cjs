@@ -23,7 +23,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           KEY,
           JSON.stringify({
             version: 1,
-            contentRevision: 3,
+            contentRevision: 4,
             page: n,
             block: index,
             answers: {},

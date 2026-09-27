@@ -12,7 +12,7 @@ export const colors = {
   wash: "#e8eef9", // голубая заливка полей и выделений
   washWarm: "#f1efe9", // серая заливка заметок
   line: "#a9b6cc", // линейка и рамки
-  grid: "#d9e2ef", // клетка
+  grid: "#ebeff5", // клетка фона: бледная, чтобы не рябила на ретине
   margin: "#e9a3a3", // поля
   cover: "#cfdceb", // обложка
   white: "#ffffff",

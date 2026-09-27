@@ -147,6 +147,31 @@ for n,metadata in SIMILAR.items(): OV[n].update(metadata)
 from number_game_tasks import NUMBER_GAMES
 OV.update(NUMBER_GAMES)
 
+ASK=re.compile(r'\s*\(?(?:Поставить|Поставьте|Поставь) вопрос и (?:решить|решите|реши) задачу\.\)?')
+def twoParts(blk):
+ # Testers read «… У Иры было 8 камешков» as more of the first problem. The second condition now sits
+ # right above its own question, and «поставь вопрос» becomes its own line instead of trailing the text.
+ if blk.get('kind')!='work':return blk
+ fs=blk['fields'];choice=any(f.get('options') for f in fs)
+ def tidy(t):
+  t=re.sub(r'\s*/\s*',' ',t) if ' / ' in t else t
+  return ASK.sub('\n\nВыбери вопрос и реши задачу.' if choice else '\n\nПоставь вопрос и реши задачу.',t).strip()
+ parts=[x.strip(' \n/') for x in re.split(r'(?:\n|/)\s*…\s*',blk['prompt'])]
+ plain=[f for f in fs if not f.get('options')];options=[f for f in fs if f.get('options')]
+ if len(parts)==2 and all(parts) and len(plain)==2:
+  # A question choice names its problem («Для первой задачи…»); unnamed ones ask about the second.
+  first=[f for f in options if re.search('перв',f['label'])];options=[f for f in options if f not in first]
+  second=options+[plain[1]]
+  second[0]=dict(second[0],context=tidy(parts[1]))
+  return dict(blk,prompt=tidy(parts[0]),fields=first+[plain[0]]+second)
+ return dict(blk,prompt=tidy(blk['prompt']))
+def pageTitle(topic):
+ # A page title is the topic in a few words; the source topic lists every exercise on the page
+ # («… (кролики 3 + 1, морковки 4 + 1), схемы с кружками»). Keep the first clause without brackets.
+ t=re.sub(r'\s*\([^()]*\)?','',topic.split(':')[0]).strip(' .')
+ for sep in [';',', ',' с опорой',' со схем',' и начало',' на основе']:
+  if len(t)>45 and sep in t:t=t.split(sep)[0].strip(' .')
+ return t[:1].upper()+t[1:]
 out=[];unresolved=[]
 seen_continuations=set()
 for page in source:
@@ -185,8 +210,8 @@ for page in source:
   # A column of expressions is the whole source text; the fields carry the expressions, the prompt says what to do.
   if n and data.get('kind')=='work' and bareExamples(t) and 'prompt' not in data:base['prompt']='Реши примеры и запиши ответы.'
   if n:base['title']=heading(b,data)
-  blocks.append(dict(base,**data))
- out.append(dict(id=f'page-{p:03}',number=p,title=page['topic'].split(':')[0][:80],subtitle=('Первый десяток' if p<59 else 'Второй десяток' if p<126 else 'Первая сотня'),hero=f'page_{p:03}',sourceDoc=f'textbook/page_docs/arithmetic_grade1_pchelko_1959_p{p:03}.md',blocks=blocks))
+  blocks.append(twoParts(dict(base,**data)))
+ out.append(dict(id=f'page-{p:03}',number=p,title=pageTitle(page['topic']),subtitle=('Первый десяток' if p<59 else 'Второй десяток' if p<126 else 'Первая сотня'),hero=f'page_{p:03}',sourceDoc=f'textbook/page_docs/arithmetic_grade1_pchelko_1959_p{p:03}.md',blocks=blocks))
 if unresolved:(ROOT/'scripts/content/unresolved.json').write_text(json.dumps(unresolved,ensure_ascii=False,indent=2)+'\n')
 print('Unresolved',len(unresolved),[b['number'] for b in unresolved])
 
@@ -198,6 +223,65 @@ for page in out:
  missing=[a['id'] for a in assets if a['page']==page['number'] and a['id'] not in used]
  if missing:page['blocks'].insert(0,dict(id=f"p{page['number']:03}-source-art",kind='read',title='Рисунки страницы',prompt='Рассмотри',body='Рассмотри рисунки. Затем переходи к заданиям.',images=missing))
  if not page['blocks']:page['blocks']=[dict(id=f"p{page['number']:03}-original",kind='read',title=page['title'],prompt='Рассмотри страницу',body='Оригинальная страница учебника.',images=[page['hero']])]
+# Testers read the page-description blocks («Заголовки», «Блок 6. Домино 6 + 1», «Рисунки страницы») as
+# steps that ask nothing. On pages from 30 on they are folded: headings go, a mid-page heading marks a new
+# topic, pictures meet in one opening step, and only rules and worked samples stay as steps of their own.
+LAYOUT=r'жирн|курсив|разрядк|по центру|рамк|крупно|прописн|шрифт|без ответов|в одну строку|над чертой|черта|подчёрк'
+def plainBody(t):
+ t=re.sub(r'\s*\((?:[^()]*?(?:'+LAYOUT+r')[^()]*)\)','',t)
+ t=re.sub(r'[;,]?\s*под чертой\s*','\n',t)
+ t=re.sub(r'^.*?(?=(?:Ряд|Столбик) 1:)','',t,flags=re.S)
+ t=re.sub(r'(?:Ряд|Столбик) \d+:\s*','',t).replace(' | ','\n')
+ t=re.sub(r'^\s*(?:В рамке|в рамке, три столбца|справа от рисунка)\s*:\s*','',t,flags=re.M)
+ return '\n'.join(x.strip() for x in t.splitlines() if x.strip()).strip()
+def plainTitle(t):
+ t=re.sub(r'^Блок \d+\.\s*|^Ненумерованная\s+','',t)
+ t=re.sub(r'\s*\((?:в рамке)\)|[«»]','',t).replace(' в рамке','').strip(' .')
+ return t[:1].upper()+t[1:]
+def noTypeNotes(t):
+ # «(дороже жирным)», «(см курсивом)», «Внизу слева сигнатура 6.» describe the print, not the task.
+ t=re.sub(r'\s*\((?:[^()]*?(?:жирн|курсив|набран|шрифт|подчёркнут)[^()]*)\)','',t)
+ t=re.sub(r'\s*Внизу слева сигнатура[^.]*\.+','',t)
+ return t.strip()
+def serviceKind(b):
+ t=plainTitle(b['title'])
+ if re.search(r'^(?:Заголов|Подзаголов|Колонтитул|Часть|выходные)',t,re.I):return 'heading'
+ body=b.get('body','')
+ if re.search(r'Правило|Образец|Таблиц|Запис|Соотношение',t) and not re.search(r'^Заголовок|Рисунок|Под ним|связки',body):return 'rule'
+ return 'picture'
+def headingText(b):
+ t=plainBody(b.get('body',''))
+ t=re.sub(r'^(?:Подзаголовок|Заголовок)\s*:?\s*','',t).split('\n')[0].strip(' .«»')
+ return t[:1].upper()+t[1:].lower() if t.isupper() else t
+for page in out:
+ if page['number']<30 or page['number']==143:continue
+ look=None;kept=[];numbered=False
+ for b in page['blocks']:
+  if b['kind']!='read' or b.get('exerciseNumber'):
+   numbered=numbered or bool(b.get('exerciseNumber'));kept.append(b);continue
+  kind='picture' if b['id'].endswith('-source-art') else serviceKind(b)
+  if kind=='heading':
+   topic=headingText(b)
+   # A heading after the first task starts a new topic on the same page; say so instead of dropping it.
+   if numbered and topic and len(topic)>3:kept.append(dict(b,title=f'Новая тема: {topic}',body='Дальше задания на новую тему.',prompt='Рассмотри'))
+   elif b['images']:look=look or dict(b);look['images']=list(dict.fromkeys(look['images']+b['images']))
+   continue
+  if kind=='rule':kept.append(dict(b,title=plainTitle(b['title']),body=plainBody(b.get('body',''))));continue
+  if look is None:look=dict(b,id=b['id'],title='Рассмотри картинки',prompt='Рассмотри',body='Рассмотри картинки. Потом переходи к заданиям.',images=list(b['images']))
+  else:look['images']=list(dict.fromkeys(look['images']+b['images']))
+ if look and look['images']:kept.insert(0,dict(look,title='Рассмотри картинки',body='Рассмотри картинки. Потом переходи к заданиям.'))
+ # «Блок 8.» numbers the description, not anything the child sees.
+ page['blocks']=[dict(b,title=re.sub(r'^Блок \d+\.\s*','',b['title']),**({'prompt':noTypeNotes(b['prompt'])} if 'prompt' in b else {})) for b in kept]
+# The table of contents is one page to read, not four steps of «Блок N».
+toc=out[143-11]
+parts=[b for b in toc['blocks'] if re.search('Часть',b['title'])]
+lines=[]
+for b in parts:
+ rows=[x.strip() for x in b['body'].splitlines() if x.strip() and x.strip()!='Стр.']
+ lines.append(rows[0].strip(' .').capitalize())
+ lines+=['   '+re.sub(r'\s*(?:\.\s*){2,}\s*(\d+)$',r' — стр. \1',re.sub(r'\s*\(в книге[^)]*\)','',x)) for x in rows[1:]]
+ lines.append('')
+toc['blocks']=[dict(toc['blocks'][0],title='Оглавление',prompt='Рассмотри',body='\n'.join(lines).strip(),images=[])]
 if unresolved:raise SystemExit('Unresolved exercise mappings')
 # Parts that the original combines with a numbered calculation are additional actions.
 extras={104:[dict(id='p104-compose561',kind='recipe',title='Своя задача к № 561',prompt='Выбери числа для похожей задачи про примеры в столбиках.',formula='a*b+c',max=20,images=[])],105:[dict(id='p105-count571',kind='activity',title='Считай по пять',prompt='Считай по пять до двадцати.',activity=dict(mode='sequence',targets=[5,10,15,20]),images=[])],142:[dict(id='p142-play892',kind='targetGame',title='Сыграй сам',prompt='Игроки ходят по очереди. Нажимай на круг: 10, 20 или 30 очков. Кто первым наберёт 100?',images=[])]}
@@ -207,7 +291,7 @@ for p,blocks in extras.items():
   if block['id']=='p104-compose561': block.update(SIMILAR_561)
  out[p-11]['blocks'].extend(blocks)
 # Attach necessary visual givens to the task itself, including legacy pages.
-imageMap={30:['p034_five_buttons'],149:['p050_saucer_cup_prices'],360:['p078_soap_2_rub','p078_toothbrush_3_rub','p078_bandage_1_rub'],591:['p108_spoon_6_rubles','p108_fork_4_rubles','p108_knife_3_rubles'],711:['p124_three_books_brace_6_rub'],712:['p124_three_books_6_rub_each'],892:['p142_target_circles_10_20_30']}
+imageMap={10:['p031_birds_branch_6_1'],11:['p031_swallows_wire_7'],30:['p034_five_buttons'],149:['p050_saucer_cup_prices'],360:['p078_soap_2_rub','p078_toothbrush_3_rub','p078_bandage_1_rub'],591:['p108_spoon_6_rubles','p108_fork_4_rubles','p108_knife_3_rubles'],711:['p124_three_books_brace_6_rub'],712:['p124_three_books_6_rub_each'],892:['p142_target_circles_10_20_30']}
 for page in out:
  for b in page['blocks']:
   n=b.get('exerciseNumber')

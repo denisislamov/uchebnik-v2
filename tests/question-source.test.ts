@@ -71,7 +71,15 @@ for (const [n, numbers, questions] of sourceCases) {
       choices.map((f) => f.expected),
       questions,
     );
-    assert.deepEqual(block.fields.slice(0, choices.length), choices);
+    // In a two-part problem the choice sits with its own part; it still comes
+    // before the numeric answer of that part.
+    for (const field of choices)
+      assert.ok(
+        block.fields
+          .slice(block.fields.indexOf(field) + 1)
+          .some((f) => !f.id.startsWith("question")),
+        `${n}: a question is chosen before its calculation`,
+      );
     for (const field of choices) {
       assert.ok(field.options && field.options.length >= 3);
       assert.equal(new Set(field.options).size, field.options.length);

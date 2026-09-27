@@ -32,7 +32,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             KEY,
             JSON.stringify({
               version: 1,
-              contentRevision: 3,
+              contentRevision: 4,
               page: n,
               block: index,
               answers: {},
@@ -171,7 +171,22 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     ];
     for (const target of targets) {
       await field.scrollIntoViewIfNeeded();
+      // The sheet glides to the next line and refits under a new note; draw
+      // only once it has held still for half a second.
       box = await field.boundingBox();
+      for (let k = 0, still = 0; k < 60 && still < 8; k++) {
+        await p.waitForTimeout(60);
+        const next = await field.boundingBox();
+        still =
+          next &&
+          box &&
+          ["x", "y", "width", "height"].every(
+            (key) => Math.abs(next[key] - box[key]) < 0.5,
+          )
+            ? still + 1
+            : 0;
+        box = next;
+      }
       const points = target.points;
       await p.mouse.move(
         box.x + points[0].x * box.width,

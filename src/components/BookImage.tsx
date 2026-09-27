@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
-import { Image, View, Text } from "react-native";
+import { Image, View } from "react-native";
 import { assets } from "../content/assets";
 export function BookImage({
   id,
@@ -33,7 +33,8 @@ export function BookImage({
           gap: 8,
         }}
       >
-        <Text style={{ color: "#2563a6" }}>Посчитай жетоны</Text>
+        {/* No caption: «Посчитай жетоны» read as a task of its own next to
+            the real one. The card is a picture, the task says what to count. */}
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {Array.from({ length: n }, (_, i) => (
             <View

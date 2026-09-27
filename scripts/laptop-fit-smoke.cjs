@@ -28,7 +28,7 @@ const PAGES = (process.env.FIT_PAGES || "3,4,5,6,7,8,9,10,11,12").split(",").map
           // Question lists and picture galleries are read by scrolling on any screen.
           const b = page.blocks[i];
           if (["work", "activity"].includes(b.kind) || b.images.length > 2) continue;
-          await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 3, page: n, block: i, answers: {} })), { KEY, n: page.number, i });
+          await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 4, page: n, block: i, answers: {} })), { KEY, n: page.number, i });
           await p.goto(baseURL);
           await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
           const next = p.getByRole("button", { name: /^(Дальше|К страницам) →$/ });

@@ -115,7 +115,9 @@ test("completed addition and subtraction models are reading, not extra answers",
 });
 test("counting and cell outlining keep the relevant pictures and do not disclose counts", () => {
   for (const [id, images] of [
-    ["p018-lesson02", ["p018_beetle", "p018_cherries_branch"]],
+    // The beetle and the cherries are two steps now, each with its own picture.
+    ["p018-lesson02", ["p018_beetle"]],
+    ["p018-cherries", ["p018_cherries_branch"]],
     ["p022-lesson02", ["p022_seven_walnuts", "p022_seven_apples"]],
     ["p024-lesson02", ["p024_eight_currants"]],
   ] as const) {

@@ -33,7 +33,7 @@ test("one cue follows each open line; closed figures do not need direction cues"
     ],
   ] as [number, number][][]) {
     const arrows = traceDirections(target([a, b]), grid);
-    assert.equal(arrows.length, 1);
+    assert.equal(arrows.length, 2);
     for (const arrow of arrows) {
       assert.ok(
         arrow.direction.x * (b[0] - a[0]) + arrow.direction.y * (b[1] - a[1]) >
@@ -53,7 +53,7 @@ test("one cue follows each open line; closed figures do not need direction cues"
   );
   assert.deepEqual(arrows, []);
 });
-test("every open textbook trace has at most two finite cues, including curves and digits", () => {
+test("every open textbook trace has two finite cues, including curves and digits", () => {
   for (const block of allBlocks) {
     if (block.kind !== "draw" || !block.trace) continue;
     for (const t of block.trace.stages.flat()) {
@@ -64,7 +64,7 @@ test("every open textbook trace has at most two finite cues, including curves an
       );
       if (t.dot || isClosedTrace(t, block.trace)) assert.deepEqual(arrows, []);
       else {
-        assert.equal(arrows.length, t.bidirectional ? 2 : 1, block.id);
+        assert.equal(arrows.length, 2, block.id);
         for (const a of arrows)
           assert.ok(
             [a.point.x, a.point.y, a.direction.x, a.direction.y].every(

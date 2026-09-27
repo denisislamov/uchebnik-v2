@@ -17,6 +17,7 @@ import { promptRepeatsTitle } from "../lib/blockText";
 import { BookImage } from "./BookImage";
 import { useTaskSize } from "./taskSize";
 import { Button, RetryNote } from "./Controls";
+import { TextWithBlanks } from "./Blank";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { PracticalTask } from "./PracticalTask";
@@ -60,7 +61,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
     size.fit &&
     // Only where the work itself is a big field; a row of answers or a
     // question list reads better under a full-width picture.
-    ["draw", "counters", "shape"].includes(block.kind) &&
+    ["draw", "counters", "shape", "practical"].includes(block.kind) &&
     block.images.length > 0;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
@@ -101,12 +102,15 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
             )}
           </View>
           {block.kind !== "read" && !promptRepeatsTitle(block) && (
-            <Text
+            // A gap in the prompt («1, □, □, 4») is a field, not the glyph.
+            <TextWithBlanks
               testID="block-prompt"
-              style={[s.prompt, size.tall && { fontSize: 24, lineHeight: 34 }]}
-            >
-              {block.prompt}
-            </Text>
+              style={StyleSheet.flatten([
+                s.prompt,
+                size.tall && { fontSize: 24, lineHeight: 34 },
+              ])}
+              text={block.prompt}
+            />
           )}
         </View>
         {!size.compact && <CoachButton onPress={showTaskCoach} />}
@@ -167,6 +171,14 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                 ))}
             </View>
           )}
+          {/* The note is about the picture, so it stays with the picture
+              instead of under the answer. */}
+          {review && (
+            <Text style={s.hint}>
+              Мешки стоят близко друг к другу. Положи палочки для тех мешков,
+              которые видишь, и нажми «Дальше».
+            </Text>
+          )}
         </View>
         <View
           ref={answerRef}
@@ -205,6 +217,9 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
               onAnswer={onAnswer}
               onDrawing={onDrawing}
             />
+          )}
+          {block.kind === "number" && (
+            <Text style={s.instruction}>Выбери верное число ниже.</Text>
           )}
           {block.kind === "number" && (
             <View style={s.options}>
@@ -297,12 +312,6 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
               value={Array.isArray(answer.value) ? answer.value : []}
               onChange={(value) => update({ value })}
             />
-          )}
-          {review && (
-            <Text style={s.hint}>
-              Мешки стоят близко друг к другу. Положи палочки для тех мешков,
-              которые видишь, и нажми «Дальше».
-            </Text>
           )}
           {!review && (block.kind === "counters" || block.kind === "shape") && (
             <Button
@@ -462,4 +471,10 @@ const s = StyleSheet.create({
     lineHeight: 32,
   },
   hint: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.muted },
+  instruction: {
+    fontFamily: f.regular,
+    fontSize: 18,
+    lineHeight: 26,
+    color: c.ink,
+  },
 });

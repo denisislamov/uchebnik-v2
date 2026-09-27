@@ -92,7 +92,7 @@ async function settle(page) {
           KEY,
           JSON.stringify({
             version: 1,
-            contentRevision: 3,
+            contentRevision: 4,
             page: number,
             block: index,
             answers: {},
@@ -300,8 +300,8 @@ async function settle(page) {
           const arrows = page.getByTestId("drawing-direction-arrow");
           assert.equal(
             await arrows.count(),
-            1,
-            `${id} shows a single direction cue`,
+            2,
+            `${id} shows a pair of direction cues`,
           );
           const screenshot = `docs/drawing-guidance-${id}-${width}.png`;
           await pad.screenshot({ path: screenshot });

@@ -17,7 +17,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       const p = await ctx.newPage();
       p.on("pageerror", (e) => report.errors.push(e.message));
       await p.goto(baseURL + "/metadata.json");
-      await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 3, page: n, block: i, answers: {} })), { KEY, n: page.number, i: page.blocks.indexOf(block) });
+      await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 4, page: n, block: i, answers: {} })), { KEY, n: page.number, i: page.blocks.indexOf(block) });
       await p.goto(baseURL);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
       const check = p.getByRole("button", { name: "Проверить", exact: true });

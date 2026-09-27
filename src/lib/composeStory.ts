@@ -33,9 +33,15 @@ export function composeStory(
           ? `В каждой группе — ${a}. Число одинаковых групп: ${right || "□"}.`
           : `${a} разделили поровну. Число равных частей: ${right || "□"}.`;
   const question = `Сколько ${forms[2]} ${operator === "+" ? "стало" : operator === "−" ? "осталось" : operator === "×" ? "всего" : "в каждой части"}?`;
+  // The right question must not always be first, or the choice is guessed by
+  // position. The offset depends only on the story, so it stays put on re-render.
+  const options = [question, "Какого цвета предметы?", "Когда это произошло?"];
+  const offset =
+    [...(subject + operator)].reduce((n, ch) => n + ch.charCodeAt(0), 0) %
+    options.length;
   return {
     condition,
     question,
-    options: [question, "Какого цвета предметы?", "Когда это произошло?"],
+    options: [...options.slice(offset), ...options.slice(0, offset)],
   };
 }

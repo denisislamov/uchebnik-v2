@@ -4,7 +4,7 @@ import { isClosedTrace } from "./tracing.ts";
 
 type TraceArrow = { point: Point; direction: Point };
 
-/** One cue beside the current trace keeps the notebook and child's ink visible. */
+/** Two small cues beside the current trace keep the notebook and child's ink visible. */
 export function traceDirections(
   target: TraceTarget,
   grid: { columns: number; rows: number },
@@ -97,14 +97,34 @@ export function traceDirections(
         );
       }),
     );
+  const room = (arrows: TraceArrow[]) => Math.min(...arrows.map(clearance));
+  if (!target.bidirectional) {
+    // Testers asked for two arrows: one cue was easy to miss next to the
+    // dotted line. Two points along the path, each on its roomier side.
+    const roomier = (fraction: number) =>
+      [1, -1]
+        .map((side) => beside(at(fraction), side))
+        .reduce((a, b) => (clearance(b) > clearance(a) + 1e-6 ? b : a));
+    let pair = [roomier(0.25), roomier(0.75)];
+    for (const [a, b] of [
+      [0.2, 0.6],
+      [0.4, 0.8],
+      [0.15, 0.5],
+      [0.5, 0.85],
+      [0.1, 0.9],
+      [0.3, 0.7],
+    ]) {
+      const candidate = [roomier(a), roomier(b)];
+      if (room(candidate) > room(pair) + 1e-6) pair = candidate;
+    }
+    return pair;
+  }
   const candidatesAt = (fraction: number, side: number) => {
     const forward = beside(at(fraction), side);
-    if (!target.bidirectional) return [forward];
     const backward = beside(at(fraction), -side);
     backward.direction = { x: -backward.direction.x, y: -backward.direction.y };
     return [forward, backward];
   };
-  const room = (arrows: TraceArrow[]) => Math.min(...arrows.map(clearance));
   let best = candidatesAt(0.5, 1);
   for (const fraction of [0.5, 0.25, 0.75, 0.125, 0.875]) {
     for (const side of [1, -1]) {

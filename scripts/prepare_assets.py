@@ -4,10 +4,23 @@ from pathlib import Path
 from PIL import Image
 root=Path(__file__).resolve().parents[1]
 assets=[a for a in json.loads((root/'textbook/data/assets.json').read_text())]
+# Someone's pencil in the scanned copy: green numbers written over the nuts give
+# the answer away. Only the app copy is cleaned; the source scan stays as it was.
+PENCIL_MARKS={'p015_nuts_columns_1_5'}
+def without_pencil(im):
+    import cv2, numpy as np
+    bgr=cv2.cvtColor(np.array(im),cv2.COLOR_RGB2BGR).astype(int)
+    b,r=bgr[:,:,0],bgr[:,:,2]
+    # Paper and nuts are warm; the pencil is much cooler than the paper.
+    mask=(((r-b)<50-18)&(r>90)).astype(np.uint8)*255
+    mask=cv2.dilate(mask,np.ones((3,3),np.uint8),iterations=3)
+    clean=cv2.inpaint(bgr.astype(np.uint8),mask,6,cv2.INPAINT_TELEA)
+    return Image.fromarray(cv2.cvtColor(clean,cv2.COLOR_BGR2RGB))
 entries=[]
 for a in assets:
     out=root/'assets/book'/f"{a['id']}.jpg"
     im=Image.open(root/'textbook'/a['path']).convert('RGB')
+    if a['id'] in PENCIL_MARKS: im=without_pencil(im)
     im.thumbnail((1100,1100)); im.save(out,quality=92,optimize=True)
     entries.append(f"  '{a['id']}': {{ source: require('../../assets/book/{out.name}'), width: {im.width}, height: {im.height}, alt: {json.dumps(a['description'],ensure_ascii=False)} }},")
 for p in range(1,145):

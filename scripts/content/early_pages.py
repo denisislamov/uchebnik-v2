@@ -29,8 +29,8 @@ def build(assets, calc):
   act(p,f'Как ещё можно разложить {n} {names}?','composition',[n],token=token,differentFrom=parts,partColors=colors)
  def more(p,n):
   first=f'{n-1} {"палочки" if n-1 in [2,3,4] else "палочек"}'
-  prompt=f'Положи {first} и ещё 1 палочку. Сколько стало палочек?'
-  return add(p,'practical',prompt,steps=[dict(id='first',instruction=f'Положи {first}.',mode='place',token='stick',counts=[n-1]),dict(id='more',instruction='Положи ещё 1 палочку.',mode='place',token='stick',counts=[n],carryFrom='first')],fields=[dict(id='q1',label='Сколько стало палочек?',expected=str(n))])
+  # Both actions in one sentence above the steps read as a single muddled task.
+  return add(p,'practical',f'{first.capitalize()} и ещё одна','Сделай по порядку два шага. Потом ответь, сколько стало палочек.',steps=[dict(id='first',instruction=f'Положи {first}.',mode='place',token='stick',counts=[n-1]),dict(id='more',instruction='Положи ещё 1 палочку.',mode='place',token='stick',counts=[n],carryFrom='first')],fields=[dict(id='q1',label='Сколько стало палочек?',expected=str(n))])
  def example(p,title,body,images=None):return add(p,'read',title,images=images,body=body)
  def examples(p,es,images=None):return example(p,'Рассмотри образцы', '\n'.join(f'{e} = {calc(e)}' for e in es),images)
  def coins(p,n):act(p,f'Набери {n} копеек','coins',[n],denominations=[v for v in [1,2,3,5,10] if v<=n],unit='копеек')
@@ -50,19 +50,20 @@ def build(assets, calc):
  act(11,'Сделай 2 шага вперёд.','sequence',[1,2])
  work(11,'Два набора мячей',[('В первой группе слева',2),('В первой группе справа',1),('Всего в первой группе',3),('Во второй группе слева',1),('Во второй группе справа',2),('Всего во второй группе',3)],['balls_left_2_and_1','balls_right_1_and_2'])
  walk=act(11,'Сделай 3 шага вперёд.','sequence',[1,2,3]);pages[11].remove(walk);walk['id']='p011-walk-three';pages[11].insert(5,walk)
- draw(11,'Обведи стороны клеток','cells:1,2h,3h,3v,2v,1',['writing_strip_squares_rects'])['id']='p011-lesson07'
+ lines=draw(11,'Линии по клеткам','cells:1,2h,3h,3v,2v,1',['writing_strip_squares_rects']);lines['id']='p011-lesson07';lines['prompt']='Проведи линии по клеткам, отрывая палец в конце каждой.'
  work(12,'Число четыре',[('Сколько детей?',4),('Жетонов на карточке',4),('Точек на карточке',4)],['children_woodwork_table','abacus_4','domino_4'])
  digit(12,4,'digit_4_sample');shape(12,'Сложи квадрат из четырёх палочек',['square'],'sticks_square')
- more(12,4);add(12,'practical','Ножки мебели','Покажи столько палочек, сколько ножек у стола, у стула.',steps=[dict(id='table',instruction='Покажи столько палочек, сколько ножек у стола.',mode='place',token='stick',counts=[4]),dict(id='chair',instruction='Покажи столько палочек, сколько ножек у стула.',mode='place',token='stick',counts=[4])],fields=[])
+ more(12,4);add(12,'practical','Ножки мебели','Сколько ножек у стола и у табуретки на картинке?',images=['children_woodwork_table'],steps=[dict(id='table',instruction='Покажи столько палочек, сколько ножек у стола.',mode='place',token='stick',counts=[4]),dict(id='chair',instruction='Покажи столько палочек, сколько ножек у табуретки.',mode='place',token='stick',counts=[4])],fields=[])
  fruit(12,4,'flag','flags_draw_sample')
- work(13,'Птички на ветке',[('Сидело на ветке',4),('Одна улетела. Сколько осталось?',3)],['birds_four_on_branch','birds_one_flies_away'])
+ seq_prompt='Смотри на картинки по порядку: сначала левая, потом правая.'
+ work(13,'Птички на ветке',[('Сидело на ветке',4),('Одна улетела. Сколько осталось?',3)],['birds_four_on_branch','birds_one_flies_away'])['prompt']=seq_prompt
  work(13,'Сосчитай',[('Ног у козочки',4),('Всего колёс у машины, включая другую сторону',4),('Крыльев у бабочки',4)],['goat','truck','butterfly'])
  split(13,4,['squares_2_2'])
  work(13,'Сливы в рамках',[(f'Рамка {i+1}: {side}',v) for i,pair in enumerate([(3,1),(2,2),(1,3)]) for side,v in zip(['слева','справа','всего'],[*pair,4])],['plums_frame_1','plums_frame_2','plums_frame_3'])
  work(13,'Запиши цифрами',[('Колёс у автомобиля',4),('Ног у коровы',4),('Ног у петуха',2),('Ног у собаки',4)])
  work(14,'Найди число пять',[('Всего мальчиков',5),('Мальчиков в очереди',4),('Звёзд',5),('Лепестков у цветка',5)],['boys_queue','five_stars','apple_blossom'])
  digit(14,5,'digit_5_sample');more(14,5);act(14,'Палочек столько, сколько концов у звезды','place',[5],['star_outline']);fruit(14,5,'apple','apples_draw')
- work(15,'Девочка и ромашки',[('Росло ромашек',5),('Одна сорвана. Сколько осталось?',4)],['girl_daisies_1','girl_daisies_2'])
+ work(15,'Девочка и ромашки',[('Росло ромашек',5),('Одна сорвана. Сколько осталось?',4)],['girl_daisies_1','girl_daisies_2'])['prompt']=seq_prompt
  split(15,5,['squares_4_1']);coins(15,5)
  work(15,'Орехи в рамках',[(f'Рамка {i+1}: {side}',v) for i,pair in enumerate([(3,2),(2,3),(4,1),(1,4)]) for side,v in zip(['слева','справа','всего'],[*pair,5])],[f'nuts_frame_{i}' for i in range(1,5)])
  work(15,'Запиши цифрами',[('Пальцев на руке',5),('Лап у кошки',4),('Ног у курицы',2)])
@@ -73,14 +74,19 @@ def build(assets, calc):
  work(17,'Морковки',[('Слева',4),('Справа',1),('Всего',5)],['carrots'])
  examples(17,['1+1','2+1','3+1','4+1'],[a['id'][5:] for a in assets if a['page']==17 and ('circles_' in a['id'] or 'writing' in a['id'] or 'handwritten' in a['id'])]);sums(17,['4+1','3+1','2+1','1+1','3+1','4+1'])
  work(18,'Число шесть',[('Белых кур',5),('Тёмных кур',1),('Всего кур',6),('Ног у жука',6),('Вишен слева',3),('Вишен справа',3),('Всего вишен',6)],['girl_feeding_chickens','beetle','cherries_branch'])
- act(18,'Положи столько кружков, сколько у жука ног; сколько нарисовано на ветке вишен.','place',[6,6],['beetle','cherries_branch'],groupLabels=['Ноги жука','Вишни на ветке']);digit(18,6,'digit_6_sample')
+ legs=act(18,'Ноги жука','place',[6],['beetle'],groupLabels=['Ноги жука']);legs['prompt']='Положи столько кружков, сколько ног у жука.';legs['activity']['token']='circle'
+ cherries=act(18,'Вишни на ветке','place',[6],['cherries_branch'],groupLabels=['Вишни на ветке']);cherries['prompt']='Положи столько кружков, сколько вишен на ветке.';cherries['activity']['token']='circle';cherries['id']='p018-cherries';serial[18]-=1
+ digit(18,6,'digit_6_sample')
  shape(18,'Сложи дом из шести палочек',['house'],'sticks_house');shape(18,'Сложи два треугольника',['triangle','triangle'],'sticks_two_triangles')
  more(18,6);fruit(18,6,'cherry')
- work(19,'Прибавим один',[('Рыбок после добавления пятой',5),('Цветов после добавления шестого',6)],['boy_aquarium','girl_flowerpots'])
+ work(19,'Прибавим один',[('Мальчик добавил в аквариум одну рыбку. Сколько стало рыбок?',5),('Девочка поставила ещё один цветок. Сколько стало цветов?',6)],['boy_aquarium','girl_flowerpots'])
  split(19,6,['squares_4_2']);coins(19,6)
  work(19,'Домино',[(f'Костяшка {i+1}, {side}',v) for i,pair in enumerate([(5,1),(4,2),(3,3)]) for side,v in zip(['слева','справа'],pair)],['domino_5_1','domino_4_2','domino_3_3'])
- split(19,6,objects=True);work(19,'Каких чисел не хватает?',[('1, □, □, 4, □, 6: первый пропуск',2),('Второй пропуск',3),('Третий пропуск',5)]);count(19,6);sums(19,['3+1','5+1','1+1','4+1','2+1','5+1'])
- example(20,'Отнимаем один','Было 2 шарика. Один улетел, остался 1: 2 − 1 = 1.\nИз 3 предметов один отдали, осталось 2: 3 − 1 = 2.\nИз 4 помидоров один сорвали, осталось 3: 4 − 1 = 3.',[a['id'][5:] for a in assets if a['page']==20])
+ split(19,6,objects=True);gaps=work(19,'Каких чисел не хватает?',[('Какое число после 1?',2),('Какое число перед 4?',3),('Какое число между 4 и 6?',5)]);gaps['prompt']='Каких чисел не хватает в ряду 1, □, □, 4, □, 6?';count(19,6);sums(19,['3+1','5+1','1+1','4+1','2+1','5+1'])
+ # Three stories, three pictures: one step each, so it is clear which sum belongs to which picture.
+ example(20,'Шарик улетел','Было 2 шарика. Один улетел, остался 1.\n2 − 1 = 1',['girl_two_balloons','girl_balloon_flies','cards_2_minus_1'])
+ for id,title,body,images in [('p020-gave-one','Один отдали','Было 3 предмета. Один отдали, осталось 2.\n3 − 1 = 2',['boys_giving_object','cards_3_minus_1']),('p020-picked-one','Помидор сорвали','Было 4 помидора. Один сорвали, осталось 3.\n4 − 1 = 3',['girl_picking_tomato','cards_4_minus_1'])]:
+  example(20,title,body,images)['id']=id;serial[20]-=1
  example(21,'Белка и шишки','Было 5 шишек. Белка взяла одну. Осталось 4 шишки: 5 − 1 = 4.',['five_cones','squirrel_takes_cone','cards_5_minus_1'])
  examples(21,['2−1','3−1','4−1','5−1','6−1'],[a['id'][5:] for a in assets if a['page']==21 and ('circles_' in a['id'] or 'writing' in a['id'] or 'handwritten' in a['id'])]);sums(21,['5−1','3−1','6−1','4−1','2−1','5−1','6−1','4−1','3−1'])
  work(22,'Число семь',[('Всего деревьев',7),('Орехов',7),('Яблок',7)],['children_planting_seven_trees','seven_walnuts','seven_apples'])
@@ -94,7 +100,7 @@ def build(assets, calc):
   work(p,'Реши задачи',[('Сеня вырезал 8 кружков, а потом ещё 1 кружок. Сколько всего кружков вырезал Сеня?',9),('9 мальчиков играли в жмурки. Один мальчик вышел из игры. Сколько мальчиков продолжало игру?',8)] if p==27 else [('Костя научился писать 7 цифр, а потом ещё 1 цифру. Сколько всего цифр он научился писать?',8),('У Юры было 8 голубей. 1 голубь улетел. Сколько голубей осталось у Юры?',7)])
   split(p,n);work(p,'Части на домино',[(f'{a} + □ = {n}',n-a) for a in range(n-1,(n-1)//2,-1)],[f'domino_{n}_{a}_{n-a}' for a in range(n-1,(n-1)//2,-1)]);split(p,n,objects=True);coins(p,n);count(p,n)
   sums(p,['5+1','6+1','7+1','8−1','7−1','6−1','5−1','4−1','4+1'] if p==25 else ['4+1','6+1','8+1','9−1','8−1','7−1','5−1','5+1','4−1'])
- work(26,'Число девять',[('Пионеров',9),('Роз',9),('Связок флажков',3),('Флажков в связке',3),('Всего флажков',9)],['pioneers_marching','roses_vase','flags_9']);digit(26,9,'digit_9_sample');shape(26,'Три треугольника',['triangle']*3,'sticks_triangles');more(26,9);fruit(26,9,'tree');work(26,'Каких чисел не хватает?',[('1, 2, □, 4, 5, 6, □, 8, □: первый пропуск',3),('Второй пропуск',7),('Третий пропуск',9)])
+ work(26,'Число девять',[('Пионеров',9),('Роз',9),('Связок флажков',3),('Флажков в связке',3),('Всего флажков',9)],['pioneers_marching','roses_vase','flags_9']);digit(26,9,'digit_9_sample');shape(26,'Три треугольника',['triangle']*3,'sticks_triangles');more(26,9);fruit(26,9,'tree');gaps=work(26,'Каких чисел не хватает?',[('Какое число после 2?',3),('Какое число между 6 и 8?',7),('Какое число после 8?',9)]);gaps['prompt']='Каких чисел не хватает в ряду 1, 2, □, 4, 5, 6, □, 8, □?'
  work(28,'Число десять',[('Детей делают зарядку',9),('Всего людей с инструктором',10)],['kids_gymnastics']);shape(28,'Звезда из десяти палочек',['star'],'sticks_star');digit(28,10,'digit_10_sample');work(28,'Грибы и карандаши',[('Лена нарисовала 9 маленьких грибов и 1 большой гриб. Сколько всего грибов нарисовала Лена?',10),('В коробке было 10 цветных карандашей. Мальчик взял 1 карандаш. Сколько карандашей осталось в коробке?',9)]);fruit(28,10,'mushroom');work(28,'Каких чисел не хватает?',[(label,v) for label,v in zip(['1, 2, □, 4, □, 6, □, 8, □, 10: первый пропуск','Второй пропуск','Третий пропуск','Четвёртый пропуск'],[3,5,7,9])])
  work(29,'Игрушечный поезд',[('9 вагонов и ещё один. Сколько всего?',10)],['boy_toy_train']);split(29,10,['squares_green_red']);work(29,'Состав десяти',[(f'{a} + □ = 10',10-a) for a in [9,8,7,6,5]],['bars_10_all']);split(29,10,objects=True);coins(29,10);count(29,10)
  # Attach source illustrations to the corresponding activity, never a catch-all opening lesson.
@@ -107,7 +113,8 @@ def build(assets, calc):
    elif re.search(r'^digit_|^abacus_|^domino_|^dots_|green_dots|green_circles|^circles_[56]$|^coin_',suffix):
     dest=next((b for b in blocks if b.get('plan','').startswith('digit:')),blocks[0])
    elif 'number_' in suffix:dest=next((b for b in blocks if 'не хватает' in b['title']),next((b for b in blocks if b.get('activity',{}).get('mode')=='sequence'),blocks[0]))
-   elif 'bar_' in suffix:dest=next((b for b in blocks if b.get('activity',{}).get('mode')=='composition'),blocks[0])
+   # Split bars belong to the «Состав» worksheet; on «Разложи так: 5 и 5» five extra pictures buried the one that matters.
+   elif 'bar_' in suffix:dest=next((b for b in blocks if b['title'].startswith('Состав')),next((b for b in blocks if b.get('activity',{}).get('mode')=='composition'),blocks[0]))
    else:
     # Completed sums are explanations. Keep them visible with their exercise.
     matches=[b for b in blocks if b['kind']=='work']

@@ -19,13 +19,16 @@ export function PracticalPreview({
   if (step.mode === "draw") {
     const { columns, rows } = practicalTrace(step, state);
     const width = columns * 40,
-      height = rows * 40;
+      height = rows * 40,
+      shown = columns > 16 ? width : Math.min(width, availableWidth);
     content = (
       <ScrollView horizontal showsHorizontalScrollIndicator>
+        {/* An explicit height: inside a horizontal ScrollView on web an
+            aspect ratio alone left the preview zero pixels high. */}
         <View
           style={{
-            width: columns > 16 ? width : Math.min(width, availableWidth),
-            aspectRatio: columns / rows,
+            width: shown,
+            height: (shown * rows) / columns,
           }}
         >
           <Svg
@@ -152,10 +155,15 @@ export function PracticalPreview({
             const value = step.groupValues?.[group] ?? step.tokenValue ?? 1;
             return (
               <View key={group} style={{ gap: 8 }}>
-                <Text style={{ fontFamily: f.bold, color: c.ink }}>
-                  {step.groupLabels?.[group] ??
-                    `${/ряд/.test(step.instruction) ? "Ряд" : "Группа"} ${group + 1}`}
-                </Text>
+                {/* A lone «Группа 1» only adds a word to read; name groups
+                    when there is more than one to tell apart. */}
+                {(step.groupLabels?.[group] ||
+                  (state.counts ?? []).length > 1) && (
+                  <Text style={{ fontFamily: f.bold, color: c.ink }}>
+                    {step.groupLabels?.[group] ??
+                      `${/ряд/.test(step.instruction) ? "Ряд" : "Группа"} ${group + 1}`}
+                  </Text>
+                )}
                 <View style={{ flexDirection: "row", gap: 8, minHeight: 44 }}>
                   {Array.from(
                     { length: Math.max(0, Math.floor(count)) },
@@ -212,7 +220,6 @@ export function PracticalPreview({
       onLayout={(event) => setAvailableWidth(event.nativeEvent.layout.width)}
       style={{ gap: 8 }}
     >
-      <Text style={{ fontFamily: f.bold, color: c.ink }}>Твоя работа</Text>
       {content}
     </View>
   );

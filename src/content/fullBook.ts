@@ -102,7 +102,7 @@ function cells(spec: string): TracePlan {
           .join("|");
         if (edges.has(key)) continue;
         edges.add(key);
-        targets.push(path(points, "Обведи сторону клетки"));
+        targets.push(path(points, "Проведи линию и оторви палец"));
       }
     }
     stages.push(targets);

@@ -331,6 +331,13 @@ const practicalSteps: Record<string, TaskTeachingStep[]> = {
   ],
 };
 
+function howToPlace(token?: string) {
+  return token === "circle"
+    ? "Бери по одному кружку внизу и переноси на поле. Считай каждый."
+    : token === "square"
+      ? "Бери по одному квадратику внизу и переноси на поле. Считай каждый."
+      : "Бери по одной палочке внизу и переноси на поле. Считай каждую.";
+}
 /** Every Block variant has an explicit route; adding a kind fails the exhaustive check. */
 export function taskTeaching(block: Block): TaskTeaching {
   const plan = buildTaskTeaching(block);
@@ -363,10 +370,12 @@ export function taskTeaching(block: Block): TaskTeaching {
     return {
       ...plan,
       steps: [
+        // Repeating «Положи 1 палочку» only echoes the page; the hint says how.
         ...block.steps.map((s) =>
           step(
             s.instruction +
-              (s.carryFrom ? " Предметы предыдущего шага уже на месте." : ""),
+              (s.carryFrom ? " Предметы предыдущего шага уже на месте." : "") +
+              (s.mode === "place" ? ` ${howToPlace(s.token)}` : ""),
             "answer",
           ),
         ),
@@ -428,7 +437,7 @@ function buildTaskTeaching(block: Block): TaskTeaching {
         step("Рассмотри рисунок. Прочитай текст вместе со взрослым.", "images"),
         step(
           "Можно обсудить увиденное со взрослым. Когда разберёшься, нажми «Дальше».",
-          "check",
+          "images",
         ),
       );
     case "location":
@@ -448,13 +457,14 @@ function buildTaskTeaching(block: Block): TaskTeaching {
           ? "number.quantity-symbol"
           : "number.count-picture",
         "Считаем по одному",
+        // The rule comes before the counting, not in the middle of it.
         step(
-          "Найди на рисунке именно те предметы, о которых спрашивают.",
+          "Найди на рисунке именно те предметы, о которых спрашивают. Считай каждый предмет один раз.",
           "images",
         ),
         ...Array.from({ length: block.expected }, (_, i) =>
           step(
-            `${i === 0 ? "Начинаем" : "Следующий предмет"}: ${i + 1}.${i === block.expected - 1 ? " Последнее число говорит, сколько всего." : " Считай каждый предмет один раз."}`,
+            `${i === 0 ? "Начинаем" : "Следующий предмет"}: ${i + 1}.${i === block.expected - 1 ? " Последнее число говорит, сколько всего." : ""}`,
             "images",
             example("count", [block.expected], String(i + 1), i),
           ),
@@ -621,14 +631,15 @@ function buildTaskTeaching(block: Block): TaskTeaching {
             : labeled
               ? "Сначала нарисуй нужное количество предметов. Затем подпиши число под ними."
               : "Посмотри на образец: какие линии, фигуры и цвета в нём повторяются?",
-          "instruction",
+          // Point at the sample itself, not at the sentence about it.
+          "images",
         ),
         step(
           closed && !numeral
             ? "Замкнутую фигуру обведи по контуру и вернись к началу."
             : bidirectional && !numeral
               ? "Линию с метками на обоих концах можно начать с любого конца. Остальные линии веди от начальной метки по стрелке."
-              : "Веди по пунктиру от начальной метки к концу. Стрелка показывает направление.",
+              : "Веди по пунктиру от начальной метки к концу. Стрелки показывают направление.",
         ),
         ...(hasDot
           ? [
