@@ -352,9 +352,9 @@ export function CounterBoard({
           height: fieldHeight,
           backgroundColor: c.wash,
           borderRadius: 6,
-          borderWidth: 2,
+          borderWidth: 1.5,
           borderStyle: "dashed",
-          borderColor: "#2b4ba8",
+          borderColor: c.lip,
         }}
       />
       {slots?.map((_, i) => (

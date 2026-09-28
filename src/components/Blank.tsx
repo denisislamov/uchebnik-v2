@@ -40,13 +40,13 @@ export function BlankBox({ size = 28 }: { size?: number }) {
 const s = StyleSheet.create({
   gap: {
     textDecorationLine: "underline",
-    textDecorationColor: c.pen,
+    textDecorationColor: c.lip,
     backgroundColor: c.wash,
   },
   box: {
     borderWidth: 1.5,
     borderStyle: "dashed",
-    borderColor: c.pen,
+    borderColor: c.lip,
     borderRadius: 4,
     backgroundColor: c.card,
   },

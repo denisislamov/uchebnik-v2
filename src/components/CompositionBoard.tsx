@@ -265,9 +265,9 @@ export function CompositionBoard({
               height: 148,
               borderRadius: 6,
               backgroundColor: c.wash,
-              borderWidth: 2,
+              borderWidth: 1.5,
               borderStyle: "dashed",
-              borderColor: "#2b4ba8",
+              borderColor: c.lip,
             }}
           />
           {Array.from({ length: total }, (_, i) => (

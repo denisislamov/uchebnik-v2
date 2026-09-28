@@ -72,8 +72,16 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await open("p006-block07");
     const pad = p.getByLabel("Поле для рисования", { exact: true });
     await pad.scrollIntoViewIfNeeded();
+    // The sheet is fitted to the window after the step opens: draw on it
+    // once it holds still.
+    let box = await pad.boundingBox();
+    for (let k = 0, still = 0; k < 40 && still < 5; k++) {
+      await p.waitForTimeout(100);
+      const now = await pad.boundingBox();
+      still = JSON.stringify(now) === JSON.stringify(box) ? still + 1 : 0;
+      box = now;
+    }
     await pad.screenshot({ path: "docs/source-hook-before.png" });
-    const box = await pad.boundingBox();
     const block = allBlocks.find((b) => b.id === "p006-block07");
     // Follow the first active hook, including the inner curl.
     const target = block.trace.stages[0][0];

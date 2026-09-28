@@ -34,9 +34,9 @@ function MeaningCard({
         testID={`meaning-${target.id}`}
         style={{
           borderWidth: 2,
-          borderColor: selected ? c.pen : "#a9b6cc",
+          borderColor: selected ? c.pen : c.line,
           borderRadius: 6,
-          backgroundColor: selected ? "#e8eef9" : c.paper,
+          backgroundColor: c.card,
           padding: 12,
           gap: 12,
         }}

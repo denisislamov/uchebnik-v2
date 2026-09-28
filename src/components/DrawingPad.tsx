@@ -252,23 +252,19 @@ export function DrawingPad({
     </View>
   );
   const guideBelow = (
-    <>
-      {/* Everything that changes from line to line sits under the sheet:
-            above it, a hint growing by a line pushed the sheet under the finger. */}
-      {target && (
-        <View
-          testID="drawing-direction-hint"
-          style={{
-            marginTop: CELL,
-            padding: CELL / 2,
-            borderRadius: 4,
-            backgroundColor: "#e8eef9",
-          }}
-        >
+    // Everything that changes from line to line sits under the sheet: above
+    // it, a hint growing by a line pushed the sheet under the finger. It is
+    // one place two rows high: a «try again» note takes the hint's place, so
+    // neither moves the sheet while the child draws.
+    <View style={{ marginTop: CELL, minHeight: CELL * 2 }}>
+      {target && error === "" && (
+        // Written on the sheet in plain words, not a blue panel: the arrows
+        // on the sheet already carry the colour.
+        <View testID="drawing-direction-hint">
           <Text
             style={{
-              fontFamily: f.bold,
-              color: directionColor,
+              fontFamily: f.regular,
+              color: c.ink,
               fontSize: 15,
               lineHeight: CELL,
             }}
@@ -285,12 +281,8 @@ export function DrawingPad({
           </Text>
         </View>
       )}
-      {error !== "" && (
-        <View style={{ marginTop: CELL }}>
-          <RetryNote>{error}</RetryNote>
-        </View>
-      )}
-    </>
+      {error !== "" && <RetryNote>{error}</RetryNote>}
+    </View>
   );
   // Beside a sample on a laptop the name and the hint go under the sample,
   // and the sheet takes their rows.

@@ -31,8 +31,8 @@ export const sheet = StyleSheet.create({
   /** The box for a number: four cells by two. */
   answer: {
     backgroundColor: c.white,
-    borderWidth: 2,
-    borderColor: c.pen,
+    borderWidth: 1.5,
+    borderColor: c.lip,
     borderRadius: 4,
     width: CELL * 4,
     height: CELL * 2,

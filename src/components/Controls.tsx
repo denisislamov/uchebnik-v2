@@ -9,7 +9,6 @@ import {
 import Svg, { Path } from "react-native-svg";
 import { colors as c, fonts as f } from "../theme";
 import { CELL, upToCells } from "../lib/grid";
-import { HandFrame } from "./HandDrawn";
 /** `done`: the action already succeeded — flat, no pen lip, not pressable, still fully legible. */
 export function Button({
   children,
@@ -34,9 +33,12 @@ export function Button({
   // narrows would otherwise keep the old width and stick out of it.
   const words = typeof children === "string" ? children : "";
   const [fit, setFit] = useState({ words, width: 0 });
+  // A primary button that cannot be pressed yet is not a pale blue block
+  // but a quiet one: the blue appears when there is something to do.
+  const quiet = secondary || (disabled && !done);
   const box: ViewStyle = StyleSheet.flatten([
     s.button,
-    secondary && s.secondary,
+    quiet && s.secondary,
     small && s.small,
     done && s.done,
   ]);
@@ -52,12 +54,12 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         s.button,
-        secondary && s.secondary,
+        quiet && s.secondary,
         small && s.small,
         done && s.done,
         fit.words === words && fit.width > 0 && { minWidth: fit.width },
         disabled && !done && { opacity: 0.45 },
-        pressed && !done && (secondary ? s.secondaryPressed : s.pressed),
+        pressed && !done && (quiet ? s.secondaryPressed : s.pressed),
       ]}
     >
       <Text
@@ -66,7 +68,7 @@ export function Button({
           if (fit.words !== words || Math.abs(width - fit.width) > 0.5)
             setFit({ words, width });
         }}
-        style={[s.label, secondary && s.secondaryLabel, done && s.doneLabel]}
+        style={[s.label, quiet && s.secondaryLabel, done && s.doneLabel]}
       >
         {children}
       </Text>
@@ -98,7 +100,7 @@ export function CellPressable({
 }
 /**
  * «Попробуй ещё раз»: не красная отметка учителя, а заметка карандашом —
- * своя краска, пунктирная рамка и круглый значок со стрелкой по кругу, чтобы
+ * своя краска и круглый значок со стрелкой по кругу (без рамки и заливки), чтобы
  * «не получилось» нельзя было спутать с галочкой «верно».
  */
 export function RetryNote({
@@ -115,7 +117,6 @@ export function RetryNote({
       accessibilityLiveRegion="polite"
       style={s.retry}
     >
-      <HandFrame seed="retry" color={c.retry} dashed />
       <View style={s.retryBadge}>
         <Svg width={18} height={18} viewBox="0 0 24 24">
           <Path
@@ -190,30 +191,32 @@ const s = StyleSheet.create({
     justifyContent: "center",
   },
   pressed: { backgroundColor: c.penDark },
+  // A quiet button: a pencil outline, black words. Blue is kept for the one
+  // thing to do next, so a row of buttons does not shout.
   secondary: {
     backgroundColor: c.card,
-    borderWidth: 1.5,
-    borderColor: c.pen,
-    borderBottomWidth: 3,
-    borderBottomColor: c.pen,
-    paddingTop: 10,
-    paddingBottom: 9.5,
+    borderWidth: 1,
+    borderColor: c.line,
+    borderBottomWidth: 2,
+    borderBottomColor: c.lip,
+    paddingTop: 11,
+    paddingBottom: 10,
   },
   secondaryPressed: { backgroundColor: c.wash },
   // As high as any button — a finger needs the same room — but narrower.
   small: { paddingHorizontal: 14 },
   done: {
     backgroundColor: c.wash,
-    borderWidth: 1.5,
-    borderColor: c.pen,
-    borderBottomWidth: 1.5,
-    borderBottomColor: c.pen,
-    paddingTop: 10.5,
-    paddingBottom: 10.5,
+    borderWidth: 1,
+    borderColor: c.line,
+    borderBottomWidth: 1,
+    borderBottomColor: c.line,
+    paddingTop: 11,
+    paddingBottom: 11,
   },
   label: { fontFamily: f.bold, color: c.white, fontSize: 17, lineHeight: CELL },
-  secondaryLabel: { color: c.pen },
-  doneLabel: { color: c.pen },
+  secondaryLabel: { color: c.ink },
+  doneLabel: { color: c.ink },
   // A note in pencil, two cells high.
   retry: {
     flexDirection: "row",

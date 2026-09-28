@@ -34,7 +34,6 @@ import { colors as c, fonts as f } from "./src/theme";
 import {
   Button,
   Cells,
-  ProgressBar,
   CellPressable,
 } from "./src/components/Controls";
 import { NotebookPaper } from "./src/components/NotebookPaper";
@@ -432,7 +431,6 @@ function Main() {
         { paddingLeft: paperOrigin, paddingRight: compact ? left : CELL },
       ]}
     >
-      <NotebookPaper origin={paperOrigin} />
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="На главную"
@@ -456,7 +454,6 @@ function Main() {
   return (
     <SafeAreaView style={s.safe} edges={["top", "bottom", "left", "right"]}>
       <StatusBar style="dark" />
-      {wide && home && header}
       {storageError !== "" && (
         <View accessibilityRole="alert" style={s.storageError}>
           <Text style={{ color: c.red, fontFamily: f.regular, flex: 1 }}>
@@ -498,7 +495,7 @@ function Main() {
         >
           {/* The page's ruling is drawn first: the header and all text lie on it. */}
           <NotebookPaper margin={!compact} origin={paperOrigin} />
-          {!wide && home && header}
+          {home && header}
           {home ? (
             <View
               onLayout={measureSheet}
@@ -584,7 +581,6 @@ function Main() {
                     {finished} из {lessonPages.length} пройдено
                   </Text>
                 </View>
-                <ProgressBar value={finished / lessonPages.length} />
                 <View style={{ gap: CELL, marginVertical: CELL }}>
                   <View style={s.chips}>
                     {[
@@ -721,12 +717,7 @@ function Main() {
                         }}
                         key={p.id}
                         onPress={() => selectPage(p.number)}
-                        style={[
-                          s.sideItem,
-                          page.number === p.number && {
-                            backgroundColor: c.wash,
-                          },
-                        ]}
+                        style={s.sideItem}
                       >
                         <Text
                           style={[
@@ -738,12 +729,18 @@ function Main() {
                             ? "✓"
                             : String(p.number)}
                         </Text>
-                        <Text style={s.sideTitle}>{p.title}</Text>
+                        <Text
+                          style={[
+                            s.sideTitle,
+                            page.number === p.number && { color: c.pen },
+                          ]}
+                        >
+                          {p.title}
+                        </Text>
                       </Pressable>
                     ))}
+                  {/* A word in pencil, not a framed card: nothing to press. */}
                   <View style={s.sideNote}>
-                    <HandFrame seed="side-note" color={c.line} />
-                    <Text style={s.sideNoteTitle}>Понемногу каждый день</Text>
                     <Text style={s.sideNoteText}>
                       Можно остановиться на любом шаге. Мы запомним, где ты
                       закончил.
@@ -810,10 +807,6 @@ function Main() {
                     <Text style={s.stepText}>{pageDone} выполнено</Text>
                   </View>
                 )}
-                {/* On a phone the step squares already show progress; the bar only took height. */}
-                {!compact && !short && (
-                  <ProgressBar value={pageDone / page.blocks.length} />
-                )}
                 <ScrollView
                   horizontal
                   style={{ flexGrow: 0 }}
@@ -837,7 +830,8 @@ function Main() {
                         style={[
                           s.stepDotText,
                           isDone(b, progress.answers[b.id]) && s.stepDoneText,
-                          i === progress.block && { color: c.white },
+                          i === progress.block &&
+                            !isDone(b, progress.answers[b.id]) && { color: c.pen },
                         ]}
                       >
                         {isDone(b, progress.answers[b.id]) ? "✓" : i + 1}
@@ -1097,8 +1091,6 @@ const s = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderBottomWidth: 1.5,
-    borderColor: c.line,
     gap: 12,
   },
   brand: {
@@ -1132,10 +1124,9 @@ const s = StyleSheet.create({
     paddingBottom: 42,
     paddingTop: cells(2),
   },
+  // The cover lies on the sheet itself: no coloured panel around it.
   cover: {
     backgroundColor: c.cover,
-    borderRadius: 4,
-    padding: CELL,
     marginBottom: cells(2),
   },
   coverText: { flex: 1, alignSelf: "stretch", justifyContent: "center" },
@@ -1219,7 +1210,7 @@ const s = StyleSheet.create({
     height: cells(2),
     paddingHorizontal: 4,
     borderBottomWidth: 1.5,
-    borderColor: c.pen,
+    borderColor: c.line,
     fontFamily: f.regular,
     fontSize: 20,
     color: c.ink,
@@ -1334,17 +1325,12 @@ const s = StyleSheet.create({
     lineHeight: CELL,
     flex: 1,
   },
-  sideNote: {
-    marginTop: cells(2),
-    paddingVertical: CELL / 2,
-    paddingHorizontal: 16,
-  },
-  sideNoteTitle: { fontFamily: f.hand, color: c.pen, ...written(22, 1, true) },
+  sideNote: { marginTop: cells(2), paddingHorizontal: 11 },
   sideNoteText: {
     fontFamily: f.regular,
     fontSize: 13,
     lineHeight: CELL,
-    color: c.ink,
+    color: c.muted,
   },
   lessonMain: { minWidth: 0, maxWidth: "100%" },
   lessonTop: {
@@ -1415,11 +1401,13 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  stepDone: { borderColor: c.red },
-  stepActive: { backgroundColor: c.pen, borderColor: c.pen },
+  // The current step is outlined in pen, not filled: one blue square in a
+  // row of pencil ones is enough to find it.
+  stepDone: {},
+  stepActive: { borderColor: c.pen, borderWidth: 2 },
   stepDotText: {
     fontFamily: f.bold,
-    color: c.pen,
+    color: c.muted,
     fontSize: 16,
     lineHeight: CELL,
   },

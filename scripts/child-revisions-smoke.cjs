@@ -96,7 +96,15 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       if (reverse) points.reverse();
       const pad = p.getByLabel("Поле для рисования", { exact: true });
       await pad.scrollIntoViewIfNeeded();
-      const box = await pad.boundingBox();
+      // The sheet is fitted to the window after the step opens: draw on it
+      // once it holds still.
+      let box = await pad.boundingBox();
+      for (let k = 0, still = 0; k < 40 && still < 5; k++) {
+        await p.waitForTimeout(100);
+        const now = await pad.boundingBox();
+        still = JSON.stringify(now) === JSON.stringify(box) ? still + 1 : 0;
+        box = now;
+      }
       assert.equal(await p.getByTestId("drawing-direction-arrow").count(), 0);
       await p.mouse.move(
         box.x + points[0].x * box.width,

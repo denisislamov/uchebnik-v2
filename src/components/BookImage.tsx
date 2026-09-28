@@ -3,6 +3,7 @@ import { useCoachAnchor } from "./GestureCoach";
 import { Image, View } from "react-native";
 import { assets } from "../content/assets";
 import { CELL } from "../lib/grid";
+import { colors as c } from "../theme";
 const inRows = (height: number) => {
   const step = height < CELL * 4 ? CELL / 2 : CELL;
   return Math.max(step, Math.floor((height + 0.5) / step) * step);
@@ -32,7 +33,9 @@ export function BookImage({
           alignSelf: "center",
           padding: 16,
           borderRadius: 6,
-          backgroundColor: "#e8eef9",
+          backgroundColor: c.card,
+          borderWidth: 1,
+          borderColor: c.line,
           maxWidth: 360,
           width: "100%",
           gap: 8,
@@ -49,7 +52,7 @@ export function BookImage({
                 height: 40,
                 borderRadius: 4,
                 borderWidth: 1,
-                borderColor: "#aac5e1",
+                borderColor: c.line,
                 alignItems: "center",
                 justifyContent: "center",
                 marginLeft: i === n - 1 && n > 1 ? 18 : 0,

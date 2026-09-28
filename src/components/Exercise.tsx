@@ -16,7 +16,7 @@ import { isCorrect, isDone, hasInk } from "../lib/assessment";
 import { promptRepeatsTitle } from "../lib/blockText";
 import { BookImage } from "./BookImage";
 import { assets } from "../content/assets";
-import { finePointer, useTaskSize } from "./taskSize";
+import { useTaskSize } from "./taskSize";
 import { Button, RetryNote } from "./Controls";
 import { TextWithBlanks } from "./Blank";
 import { HandFrame, Rows } from "./HandDrawn";
@@ -59,9 +59,11 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   // the picture and the place to answer within one view.
   const size = useTaskSize();
   const [rowWidth, setRowWidth] = useState(0);
-  // What the work hands to the sample's column (see Aside), and its height.
+  // What the work hands to the sample's column (see Aside). Its rows are
+  // reckoned, not measured: a hint or a «try again» note that grows by a
+  // line must not resize the sample, and with it the sheet under the pen.
   const [asideNode, setAsideNode] = useState<React.ReactNode>(null);
-  const [asideHeight, setAsideHeight] = useState(0);
+  const asideRows = asideNode ? CELL * 6 : 0;
   const single = block.images.filter((id) => id !== "p011_balls_row_3_groups");
   const asset = single.length === 1 ? assets[single[0]] : undefined;
   // Only where the work itself is a big field; a row of answers or a
@@ -84,16 +86,12 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   // wider column is a low strip over empty paper: on a tall window it goes
   // above the work, a few rows high; a low one has no rows to spare, so it
   // stays at the side and the work's words fill the paper under it.
-  const sideHeight = Math.max(
-    CELL * 3,
-    size.beside - (asideNode ? asideHeight + CELL : 0),
-  );
-  // Under a finger a drawing keeps the width it had: a narrower column
-  // would give the sheet cells too small for it, or a sideways scroll. A
-  // board, or a drawing done with a mouse, leaves the sample half the row.
+  const sideHeight = Math.max(CELL * 3, size.beside - asideRows);
+  // A drawing keeps the width it had: the sheet grows with its column, and a
+  // narrower one left rows of empty paper under a smaller sheet. A board
+  // needs less, and leaves the sample half the row.
   const widest = wholeCells(
-    ((rowWidth - CELL) * (block.kind === "draw" && !finePointer() ? 4 : 5.5)) /
-      11,
+    ((rowWidth - CELL) * (block.kind === "draw" ? 4 : 5.5)) / 11,
   );
   const needed = upToCells(across(sideHeight));
   const sideWidth = Math.max(CELL * 6, Math.min(needed, widest));
@@ -112,10 +110,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
     ? lines > 1
       ? Math.max(
           CELL * 3,
-          (size.beside -
-            (asideNode ? asideHeight + CELL : 0) -
-            (lines - 1) * CELL) /
-            lines,
+          (size.beside - asideRows - (lines - 1) * CELL) / lines,
         )
       : sideHeight
     : field && single.length
@@ -298,15 +293,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
               </Text>
             )}
             {beside && asideNode && (
-              <View
-                testID="sample-aside"
-                onLayout={(e) => {
-                  const h = e.nativeEvent.layout.height;
-                  if (Math.abs(h - asideHeight) >= CELL / 2) setAsideHeight(h);
-                }}
-              >
-                {asideNode}
-              </View>
+              <View testID="sample-aside">{asideNode}</View>
             )}
           </View>
           <View
