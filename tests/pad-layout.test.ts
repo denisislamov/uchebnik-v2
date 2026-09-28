@@ -40,3 +40,13 @@ test("a short wide window caps the sheet height down to a pointer-sized cell", (
     1000 / 12,
   );
 });
+test("with a pointer a narrow column keeps the whole sheet instead of scrolling", () => {
+  assert.equal(
+    padCellSize(360, 12, 2, { height: 480, rows: 8, minCell: 28 }),
+    30,
+  );
+  assert.equal(
+    padCellSize(360, 12, 2, { height: 480, rows: 8, minCell: 44 }),
+    44,
+  );
+});

@@ -21,7 +21,12 @@ export function padCellSize(
       : MIN_CELL_PX;
   const cell = Math.max(fromContainer, Math.min(MIN_CELL_PX, fitWidest));
   if (!fit) return cell;
-  return Math.min(cell, Math.max(fit.minCell, fit.height / fit.rows));
+  const capped = Math.min(cell, Math.max(fit.minCell, fit.height / fit.rows));
+  // A pointer needs no fingertip cells: the sheet fits its column instead of
+  // scrolling sideways.
+  return fit.minCell < MIN_CELL_PX
+    ? Math.max(fit.minCell, Math.min(capped, fromContainer))
+    : capped;
 }
 /** Horizontal extent of a target, in cells. */
 export function targetSpanCells(

@@ -24,6 +24,7 @@ import { Button, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
 import { finePointer, useTaskSize } from "./taskSize";
 import { Rows } from "./HandDrawn";
+import { useAside, useHasAside } from "./Aside";
 import { CELL, wholeCells } from "../lib/grid";
 export function DrawingPad({
   strokes,
@@ -62,6 +63,9 @@ export function DrawingPad({
   // On a laptop the sheet takes what is left of the window under it, keeping
   // room for the hint and «Дальше»; a phone scrolls and keeps fingertip cells.
   const windowHeight = useWindowDimensions().height;
+  // The hint under the sheet has gone beside it: its rows are the sheet's.
+  const besideSample = useHasAside(),
+    below = besideSample ? 114 : 210;
   const sheetBox = useRef<View>(null),
     [sheetTop, setSheetTop] = useState<number | null>(null);
   const width =
@@ -74,7 +78,7 @@ export function DrawingPad({
               // Under the sheet: the rest of its last row, an empty row,
               // the hint, an empty row, «Дальше» and the line under it.
               // Whole rows, so the sheet fills them and none is wasted.
-              height: wholeCells(windowHeight - sheetTop - 210 + measured),
+              height: wholeCells(windowHeight - sheetTop - below + measured),
               rows,
               // Smaller cells only for a mouse or trackpad, never for a finger.
               minCell: finePointer() ? 28 : 44,
@@ -224,10 +228,16 @@ export function DrawingPad({
   const name = progress && (
     // Two rows are kept on a phone even for a short name: the sheet below
     // must not move when the next line has a longer one.
-    <View style={[s.nameRow, { height: compact ? CELL * 2 : CELL }]}>
+    // Under a sample nothing moves the sheet, and the name may wrap.
+    <View
+      style={[
+        s.nameRow,
+        !besideSample && { height: compact ? CELL * 2 : CELL },
+      ]}
+    >
       <Text
         accessibilityLiveRegion="polite"
-        numberOfLines={compact ? 2 : 1}
+        numberOfLines={besideSample ? undefined : compact ? 2 : 1}
         style={s.name}
       >
         {progress.done
@@ -240,6 +250,63 @@ export function DrawingPad({
         </Text>
       )}
     </View>
+  );
+  const guideBelow = (
+    <>
+      {/* Everything that changes from line to line sits under the sheet:
+            above it, a hint growing by a line pushed the sheet under the finger. */}
+      {target && (
+        <View
+          testID="drawing-direction-hint"
+          style={{
+            marginTop: CELL,
+            padding: CELL / 2,
+            borderRadius: 4,
+            backgroundColor: "#e8eef9",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: f.bold,
+              color: directionColor,
+              fontSize: 15,
+              lineHeight: CELL,
+            }}
+          >
+            {target.dot
+              ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
+              : closed
+                ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
+                : target.bidirectional
+                  ? /ствол/i.test(target.label)
+                    ? "Веди ствол по пунктиру вверх или вниз."
+                    : "Начни с любого конца. Веди по пунктиру."
+                  : "Начни с яркой точки. Веди по пунктиру туда, куда смотрят синие стрелки."}
+          </Text>
+        </View>
+      )}
+      {error !== "" && (
+        <View style={{ marginTop: CELL }}>
+          <RetryNote>{error}</RetryNote>
+        </View>
+      )}
+    </>
+  );
+  // Beside a sample on a laptop the name and the hint go under the sample,
+  // and the sheet takes their rows.
+  const aside = useAside(
+    <>
+      {name}
+      {guideBelow}
+    </>,
+    [
+      progress?.completed,
+      progress?.stage,
+      progress?.done,
+      target?.label,
+      closed,
+      error,
+    ].join("|"),
   );
   return (
     <View>
@@ -255,7 +322,7 @@ export function DrawingPad({
       {/* What to draw, then the pencils with the button that takes a
           stroke back, then the sheet. The count «1 из 23» says how far along
           the child is; a bar for the same only drew a stray line. */}
-      {name}
+      {!aside && name}
       <View style={s.tools}>
         {DRAWING_COLORS.map((v, i) => (
           <Pressable
@@ -479,43 +546,7 @@ export function DrawingPad({
           </ScrollView>
         </View>
       </Rows>
-      {/* Everything that changes from line to line sits under the sheet:
-          above it, a hint growing by a line pushed the sheet under the finger. */}
-      {target && (
-        <View
-          testID="drawing-direction-hint"
-          style={{
-            marginTop: CELL,
-            padding: CELL / 2,
-            borderRadius: 4,
-            backgroundColor: "#e8eef9",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: f.bold,
-              color: directionColor,
-              fontSize: 15,
-              lineHeight: CELL,
-            }}
-          >
-            {target.dot
-              ? "Коснись кружка, чтобы поставить точку. Вести пальцем не нужно."
-              : closed
-                ? "Начни в любом месте контура. Обведи фигуру целиком и вернись к началу. Можно вести в любую сторону."
-                : target.bidirectional
-                  ? /ствол/i.test(target.label)
-                    ? "Веди ствол по пунктиру вверх или вниз."
-                    : "Начни с любого конца. Веди по пунктиру."
-                  : "Начни с яркой точки. Веди по пунктиру туда, куда смотрят синие стрелки."}
-          </Text>
-        </View>
-      )}
-      {error !== "" && (
-        <View style={{ marginTop: CELL }}>
-          <RetryNote>{error}</RetryNote>
-        </View>
-      )}
+      {!aside && guideBelow}
     </View>
   );
 }

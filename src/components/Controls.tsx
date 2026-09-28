@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Pressable, Text, StyleSheet, View } from "react-native";
+import {
+  Pressable,
+  Text,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { colors as c, fonts as f } from "../theme";
 import { CELL, upToCells } from "../lib/grid";
@@ -23,16 +29,21 @@ export function Button({
   small?: boolean;
 }) {
   // A button is two cells high and a whole number of cells wide: once its
-  // words are measured, it is widened to the next line of the sheet.
+  // words are measured, it is widened to the next line of the sheet. The
+  // words, not the button: a button stretched across a column that later
+  // narrows would otherwise keep the old width and stick out of it.
   const words = typeof children === "string" ? children : "";
   const [fit, setFit] = useState({ words, width: 0 });
+  const box: ViewStyle = StyleSheet.flatten([
+    s.button,
+    secondary && s.secondary,
+    small && s.small,
+    done && s.done,
+  ]);
+  const sides =
+    2 * Number(box.paddingHorizontal ?? 0) + 2 * Number(box.borderWidth ?? 0);
   return (
     <Pressable
-      onLayout={(e) => {
-        const width = upToCells(e.nativeEvent.layout.width);
-        if (fit.words !== words || Math.abs(width - fit.width) > 0.5)
-          setFit({ words, width });
-      }}
       testID={done ? "button-done" : undefined}
       accessibilityRole="button"
       accessibilityLabel={label}
@@ -50,6 +61,11 @@ export function Button({
       ]}
     >
       <Text
+        onLayout={(e) => {
+          const width = upToCells(e.nativeEvent.layout.width + sides);
+          if (fit.words !== words || Math.abs(width - fit.width) > 0.5)
+            setFit({ words, width });
+        }}
         style={[s.label, secondary && s.secondaryLabel, done && s.doneLabel]}
       >
         {children}

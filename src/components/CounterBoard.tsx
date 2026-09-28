@@ -6,6 +6,7 @@ import type { Point } from "../content/types";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
+import { useAside, useHasAside } from "./Aside";
 import { CELL } from "../lib/grid";
 import { sheet } from "./sheet";
 import { counterBoardLayout, counterSupplyCenter } from "../lib/counterLayout";
@@ -105,6 +106,7 @@ export function CounterBoard({
   const rowMode = layout === "row" && !slots;
   // A laptop window is low: the empty field starts two rows high and grows.
   const { fit, measured } = useTaskSize();
+  const asideOpen = useHasAside();
   const geometry = counterBoardLayout(
     width,
     count,
@@ -115,7 +117,9 @@ export function CounterBoard({
     // It grows no taller than a few rows: a tall empty field only looked
     // like a hole in the page.
     // It starts two rows lower, to pay for the air around the board.
-    fit ? Math.min(225, 81 + Math.max(0, measured)) : 190,
+    fit
+      ? Math.min(225, 81 + (asideOpen ? CELL * 2 : 0) + Math.max(0, measured))
+      : 190,
   );
   const boardWidth = geometry.width;
   const fieldHeight = slots ? 190 : geometry.fieldHeight;
@@ -400,10 +404,9 @@ export function CounterBoard({
       {count < (slots?.length ?? max) && item(-1)}
     </View>
   );
-  return (
-    // Rows of the sheet: what to do, an empty row, the board in whole rows,
-    // the count with the button.
-    <View testID="counter-board">
+  // Beside a sample the words go under it, and the field takes their rows.
+  const words = (
+    <>
       <Text
         style={{
           fontFamily: f.bold,
@@ -441,7 +444,15 @@ export function CounterBoard({
           вправо.
         </Text>
       )}
-      <Rows style={{ marginTop: CELL }} object>
+    </>
+  );
+  const aside = useAside(words, [objectLabel, token, rowMode, fit].join("|"));
+  return (
+    // Rows of the sheet: what to do, an empty row, the board in whole rows,
+    // the count with the button.
+    <View testID="counter-board">
+      {!aside && words}
+      <Rows style={{ marginTop: aside ? 0 : CELL }} object>
         <View onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
           {rowMode ? (
             <ScrollView
