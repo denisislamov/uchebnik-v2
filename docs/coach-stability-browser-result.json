@@ -9,21 +9,21 @@
       "opened": {
         "before": {
           "scroll": 0,
-          "height": 900,
+          "height": 820,
           "width": 1425,
-          "x": 336,
-          "y": 216,
-          "w": 1056,
-          "h": 518.03125
+          "x": 166.5,
+          "y": 168,
+          "w": 795,
+          "h": 390
         },
         "after": {
           "scroll": 0,
-          "height": 900,
+          "height": 820,
           "width": 1425,
-          "x": 336,
-          "y": 216,
-          "w": 1056,
-          "h": 518.03125
+          "x": 166.5,
+          "y": 168,
+          "w": 795,
+          "h": 390
         }
       },
       "frames": 81,
@@ -31,12 +31,12 @@
       "movement": 0,
       "closed": {
         "scroll": 0,
-        "height": 900,
+        "height": 820,
         "width": 1425,
-        "x": 336,
-        "y": 216,
-        "w": 1056,
-        "h": 518.03125
+        "x": 166.5,
+        "y": 168,
+        "w": 795,
+        "h": 390
       }
     },
     {
@@ -47,56 +47,56 @@
       "opened": {
         "before": {
           "scroll": 0,
-          "height": 818,
+          "height": 720,
           "width": 1265,
-          "x": 336,
-          "y": 216,
-          "w": 888,
-          "h": 435.609375
+          "x": 82.5,
+          "y": 168,
+          "w": 795,
+          "h": 390
         },
         "after": {
           "scroll": 0,
-          "height": 818,
+          "height": 720,
           "width": 1265,
-          "x": 336,
-          "y": 216,
-          "w": 888,
-          "h": 435.609375
+          "x": 82.5,
+          "y": 168,
+          "w": 795,
+          "h": 390
         }
       },
-      "frames": 82,
+      "frames": 81,
       "gaps": 0,
       "movement": 0,
       "closed": {
         "scroll": 0,
-        "height": 818,
+        "height": 720,
         "width": 1265,
-        "x": 336,
-        "y": 216,
-        "w": 888,
-        "h": 435.609375
+        "x": 82.5,
+        "y": 168,
+        "w": 795,
+        "h": 390
       }
     }
   ],
   "errors": [],
   "explicitReveal": {
     "before": {
-      "top": 250,
-      "height": 770
+      "top": 160,
+      "height": 600
     },
     "after": {
-      "top": 120,
-      "height": 770
+      "top": 72,
+      "height": 600
     },
     "answersUnchanged": true
   },
   "scrollRestore": {
-    "before": 502,
+    "before": 268,
     "during": [
       0,
       0,
-      448
+      268
     ],
-    "after": 502
+    "after": 268
   }
 }

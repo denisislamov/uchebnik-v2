@@ -88,38 +88,36 @@ export function PracticalTask({
       {block.steps
         .slice(0, current < 0 ? undefined : current)
         .map((previous, i) => (
-          <View
-            key={previous.id}
-            style={{
-              backgroundColor: c.wash,
-              padding: CELL / 2,
-              borderRadius: 4,
-            }}
-          >
-            <Text style={[sheet.count, { color: c.pen }]}>
-              ✓ {i + 1}. {previous.instruction}
+          // What has been done stays on the sheet as it was written: a line
+          // with the teacher's tick, what was laid out, and a way back to it.
+          <View key={previous.id} testID="practical-done">
+            <Text style={sheet.count}>
+              <Text style={{ color: c.red }}>✓</Text> {i + 1}.{" "}
+              {previous.instruction}
             </Text>
-            <Rows style={{ marginBottom: CELL / 2 }} object>
+            <Rows object>
               <PracticalPreview
                 step={previous}
                 state={answer.practical?.[previous.id] ?? {}}
               />
             </Rows>
-            <Button
-              small
-              secondary
-              onPress={() => {
-                setMessage("");
-                onAnswer(
-                  updatePractical(block, answer, previous.id, {
-                    ...answer.practical?.[previous.id],
-                    confirmed: false,
-                  }),
-                );
-              }}
-            >
-              Изменить действие {i + 1}
-            </Button>
+            <View style={{ alignSelf: "flex-start", marginTop: CELL / 2 }}>
+              <Button
+                small
+                secondary
+                onPress={() => {
+                  setMessage("");
+                  onAnswer(
+                    updatePractical(block, answer, previous.id, {
+                      ...answer.practical?.[previous.id],
+                      confirmed: false,
+                    }),
+                  );
+                }}
+              >
+                Изменить действие {i + 1}
+              </Button>
+            </View>
           </View>
         ))}
       {step && (

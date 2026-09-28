@@ -1,6 +1,6 @@
 import { useGestureCoach } from "./GestureCoach";
 import React, { useRef, useState } from "react";
-import { View, Text, Platform } from "react-native";
+import { View, Text, Platform, Pressable } from "react-native";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
@@ -56,6 +56,8 @@ export function DigitCards({
           },
         ],
   );
+  // The card that was pressed and waits for its frame.
+  const [picked, setPicked] = useState<number | null>(null);
   const [width, setWidth] = useState(320),
     [draft, setDraft] = useState<{
       digit: number;
@@ -104,6 +106,14 @@ export function DigitCards({
     if (!a) return;
     const x = a.x + e.nativeEvent.pageX - a.pageX,
       y = a.y + e.nativeEvent.pageY - a.pageY;
+    // A press without carrying takes the card in hand: the next press, on
+    // a frame, puts it there.
+    if (Math.hypot(x - a.x, y - a.y) < 10) {
+      setPicked((old) => (old === a.digit ? null : a.digit));
+      cancel();
+      return;
+    }
+    setPicked(null);
     const index = [0, 1].find(
       (i) =>
         Math.abs(x - (width / 2 + (i - 0.5) * 76)) < 40 &&
@@ -153,34 +163,63 @@ export function DigitCards({
   return (
     <View style={{ gap: 24 }}>
       <Text style={{ lineHeight: 24, fontFamily: f.bold, color: c.ink }}>
-        Возьми карточки с цифрами и перенеси в рамки. Слева — десятки, справа —
-        единицы.
+        Клади карточки в рамки: слева — десятки, справа — единицы.
       </Text>
       <Rows object>
         <View
           ref={boardRef}
           testID="digit-cards"
           onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-          style={{ height: 275, borderRadius: 6, backgroundColor: c.paper }}
+          // Ten cards in two rows stand close enough to be seen at once.
+          style={{
+            height: 275,
+            maxWidth: 480,
+            borderRadius: 6,
+            backgroundColor: c.paper,
+          }}
         >
           {[0, 1].map((i) => (
-            <View
+            <Pressable
               key={i}
               ref={i === nextCard?.index ? fieldRef : undefined}
               testID={`digit-slot-${i}`}
-              style={{
-                position: "absolute",
-                left: width / 2 + (i - 0.5) * 76 - 30,
-                top: 15,
-                width: 60,
-                height: 60,
-                borderWidth: 2,
-                borderStyle: "dashed",
-                borderColor: c.pen,
-                borderRadius: 4,
-                alignItems: "center",
-                justifyContent: "center",
+              accessibilityRole="button"
+              accessibilityLabel={
+                value[i] >= 0
+                  ? `Рамка ${i + 1}: карточка ${value[i]}`
+                  : `Рамка ${i + 1}: пусто`
+              }
+              // A press on a frame puts the card in hand into it; with no
+              // card in hand it gives the frame's own card back.
+              onPress={() => {
+                if (picked === null && value[i] < 0) return;
+                const next = [...value];
+                next[i] = picked ?? -1;
+                onChange(next);
+                setPicked(null);
               }}
+              style={[
+                {
+                  position: "absolute",
+                  left: width / 2 + (i - 0.5) * 76 - 30,
+                  top: 15,
+                  width: 60,
+                  height: 60,
+                  borderWidth: 2,
+                  borderStyle: "dashed",
+                  borderColor: c.pen,
+                  borderRadius: 4,
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+                // While a card is carried or in hand the frames show where
+                // it goes.
+                (!!draft || picked !== null) && {
+                  borderStyle: "solid",
+                  borderWidth: 3,
+                  backgroundColor: c.wash,
+                },
+              ]}
             >
               <Text
                 style={{
@@ -192,7 +231,7 @@ export function DigitCards({
               >
                 {value[i] >= 0 ? value[i] : ""}
               </Text>
-            </View>
+            </Pressable>
           ))}
           {Array.from({ length: 10 }, (_, digit) => (
             <View
@@ -209,10 +248,22 @@ export function DigitCards({
                   top: 136 + Math.floor(digit / 5) * 65,
                   width: 48,
                   height: 48,
-                  borderRadius: 4,
-                  backgroundColor: c.wash,
+                  // A card that can be taken looks like one: a box with a lip.
+                  borderRadius: 6,
+                  borderWidth: 1,
+                  borderColor: c.line,
+                  borderBottomWidth: 2,
+                  borderBottomColor: c.lip,
+                  backgroundColor: c.card,
                   alignItems: "center",
                   justifyContent: "center",
+                },
+                // In hand after a press: a pen frame around the card.
+                picked === digit && {
+                  borderWidth: 3,
+                  borderBottomWidth: 3,
+                  borderColor: c.pen,
+                  borderBottomColor: c.pen,
                 },
                 Platform.OS === "web"
                   ? ({ touchAction: "none", cursor: "grab" } as any)

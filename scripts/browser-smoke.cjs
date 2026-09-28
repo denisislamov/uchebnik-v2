@@ -1,4 +1,4 @@
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, openStep } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -37,9 +37,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       ).answers[id];
     };
     const open = async (n, index) => {
-      if (await button(`Открыть страницу ${n}`).count())
-        await button(`Открыть страницу ${n}`).click();
-      else {
+      // Another page is opened from the contents: a lesson shows its own task only.
+      assert.equal(await button(`Открыть страницу ${n}`).count(), 0);
+      {
         await button("На главную").click();
         await p
           .getByRole("textbox", {
@@ -54,9 +54,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           })
           .click();
       }
-      await button(
+      await openStep(
+        p,
         `Шаг ${index + 1}: ${pages[n - 1].blocks[index].title}`,
-      ).click();
+      );
       await images();
     };
     await p.goto(baseURL);
@@ -193,18 +194,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await m
       .getByRole("button", { name: "Начать заниматься  →", exact: true })
       .click();
-    await m
-      .getByRole("button", { name: "Шаг 2: Большой мяч", exact: true })
-      .click();
+    await openStep(m, "Шаг 2: Большой мяч");
     await m.getByRole("button", { name: "Левый мяч", exact: true }).tap();
     await m.getByText("✓ Верно!", { exact: false }).waitFor();
     await m.screenshot({
       path: "docs/child-picture-mobile.png",
       fullPage: true,
     });
-    await m
-      .getByRole("button", { name: "Шаг 6: Чёрточка и точка", exact: true })
-      .click();
+    await openStep(m, "Шаг 6: Чёрточка и точка");
     const mp = m.getByLabel("Поле для рисования", { exact: true });
     await mp.scrollIntoViewIfNeeded();
     const r = await mp.boundingBox();

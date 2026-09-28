@@ -4,6 +4,8 @@ import { Image, View } from "react-native";
 import { assets } from "../content/assets";
 import { CELL } from "../lib/grid";
 import { colors as c } from "../theme";
+/** How many times its own size a scan from the book may be shown. */
+export const MAX_SCALE = 3;
 const inRows = (height: number) => {
   const step = height < CELL * 4 ? CELL / 2 : CELL;
   return Math.max(step, Math.floor((height + 0.5) / step) * step);
@@ -76,6 +78,8 @@ export function BookImage({
   }
   const a = assets[id];
   if (!a) return null;
+  // A scan is enlarged no more than three times: beyond that it is a blur.
+  maxHeight = Math.min(maxHeight, a.height * MAX_SCALE);
   return (
     <View
       ref={frame}

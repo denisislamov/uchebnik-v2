@@ -1,7 +1,7 @@
 import { useGestureCoach } from "./GestureCoach";
-import { finePointer, useTaskSize } from "./taskSize";
+import { useTaskSize } from "./taskSize";
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, Platform, ScrollView } from "react-native";
+import { View, Text, Platform, Pressable, ScrollView } from "react-native";
 import type { Point } from "../content/types";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
@@ -11,6 +11,19 @@ import { CELL } from "../lib/grid";
 import { sheet } from "./sheet";
 import { counterBoardLayout, counterSupplyCenter } from "../lib/counterLayout";
 import { nextCounterSlot } from "../lib/coachTargets";
+import { StyleSheet } from "react-native";
+/** A finger that moved less than this pressed; one that moved more carried. */
+const TAP_SLOP = 10;
+const s = StyleSheet.create({
+  accepting: { borderStyle: "solid", borderColor: c.pen, borderWidth: 2.5 },
+  acceptingText: {
+    fontFamily: f.bold,
+    color: c.pen,
+    fontSize: 15,
+    lineHeight: CELL,
+    marginBottom: 4,
+  },
+});
 export function CounterBoard({
   value,
   onChange,
@@ -61,7 +74,7 @@ export function CounterBoard({
           {
             ref: sourceRef,
             surface: { kind: "token", token: token },
-            text: `Здесь можно взять ${object}. Прижми пальцем и держи.`,
+            text: `Здесь можно взять ${object}. Нажми на предмет, а потом на поле — он ляжет туда.`,
             motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
           },
           {
@@ -76,7 +89,7 @@ export function CounterBoard({
               surfaceToPoint: nextSlot,
               token,
             },
-            text: "Не отпуская палец, перенеси предмет на это поле. Затем отпусти. Повтори столько раз, сколько нужно в задании.",
+            text: "Можно и перенести предмет пальцем: веди его на поле и отпусти. Повтори столько раз, сколько нужно в задании.",
           },
         ],
   );
@@ -85,6 +98,8 @@ export function CounterBoard({
       null,
     ),
     [message, setMessage] = useState(""),
+    // What was pressed and waits for its place: −1 is the object in the box.
+    [picked, setPicked] = useState<number | null>(null),
     [rowScrollX, setRowScrollX] = useState(0);
   const rowScroll = useRef<ScrollView>(null);
   const active = useRef<{
@@ -178,6 +193,17 @@ export function CounterBoard({
     if (!a) return;
     const x = a.x + e.nativeEvent.pageX - a.pageX,
       y = a.y + e.nativeEvent.pageY - a.pageY;
+    // A press without carrying takes the object in hand: the next press,
+    // on the field or on the box, puts it there. A small hand need not hold
+    // and carry. By itself the press moves nothing, so children may count
+    // what lies on the field by touching it.
+    if (Math.hypot(x - a.x, y - a.y) < TAP_SLOP) {
+      setPicked((old) => (old === a.index ? null : a.index));
+      setMessage("");
+      cancel();
+      return;
+    }
+    setPicked(null);
     if (a.index < 0) {
       if (
         x >= 0 &&
@@ -200,13 +226,13 @@ export function CounterBoard({
             Math.hypot(center(match).x - x, center(match).y - y) <= 36
           ) {
             placed([...occupied, match]);
-            setMessage("Предмет на месте!");
+            setMessage("");
           } else setMessage("Поднеси предмет к свободному пунктиру.");
         } else {
           onChange(count + 1);
-          setMessage("Предмет на месте!");
+          setMessage("");
         }
-      } else setMessage("Перетащи предмет на поле вверху.");
+      } else setMessage("Отпусти предмет над полем вверху.");
     } else if (
       x >= 0 &&
       x <= boardWidth &&
@@ -214,7 +240,7 @@ export function CounterBoard({
       y <= supplyTop + 105
     ) {
       remove(a.index);
-      setMessage("Предмет вернулся на место.");
+      setMessage("");
     }
     cancel();
   }
@@ -253,6 +279,46 @@ export function CounterBoard({
       },
     };
   }
+  // Carried far enough to be a drag, not a press.
+  const carrying =
+    !!drag &&
+    Math.hypot(drag.x - center(drag.index).x, drag.y - center(drag.index).y) >=
+      TAP_SLOP;
+  const room = count < (slots?.length ?? max);
+  const toField = (carrying && drag!.index < 0) || (picked === -1 && room),
+    toBox =
+      (carrying && drag!.index >= 0) ||
+      (picked !== null && picked >= 0 && indices.includes(picked));
+  /** The picked object is put on the field where it was pressed. */
+  function putOnField(e: any) {
+    if (picked !== -1 || !room) return;
+    if (slots) {
+      const x = e.nativeEvent.locationX ?? 0,
+        y = e.nativeEvent.locationY ?? 0;
+      const free = slots
+        .map((_, i) => i)
+        .filter((i) => !occupied.includes(i))
+        .sort(
+          (a, b) =>
+            Math.hypot(center(a).x - x, center(a).y - y) -
+            Math.hypot(center(b).x - x, center(b).y - y),
+        )[0];
+      if (free === undefined) return;
+      placed([...occupied, free]);
+      // The next one is in hand at once, while there is room for it.
+      if (occupied.length + 1 >= slots.length) setPicked(null);
+    } else {
+      onChange(count + 1);
+      if (count + 1 >= max) setPicked(null);
+    }
+    setMessage("");
+  }
+  function putInBox() {
+    if (picked === null || picked < 0) return;
+    remove(picked);
+    setPicked(null);
+    setMessage("");
+  }
   const item = (index: number) => {
     const pos = drag?.index === index ? drag : center(index);
     return (
@@ -269,14 +335,30 @@ export function CounterBoard({
         style={[
           {
             position: "absolute",
-            left: pos.x - 24,
-            top: pos.y - 24,
-            width: 48,
-            height: 48,
+            // The one in the box is what is pressed most: a larger target.
+            left: pos.x - (index < 0 ? 36 : 24),
+            top: pos.y - (index < 0 ? 36 : 24),
+            width: index < 0 ? 72 : 48,
+            height: index < 0 ? 72 : 48,
             alignItems: "center",
             justifyContent: "center",
             zIndex: drag?.index === index ? 2 : 1,
           },
+          // In hand after a press: a pen ring around it.
+          picked === index &&
+            !drag && {
+              borderWidth: 3,
+              borderColor: c.pen,
+              borderRadius: 12,
+            },
+          // Carried, it is lifted off the sheet: larger, with a shadow.
+          drag?.index === index &&
+            carrying && {
+              transform: [{ scale: 1.2 }],
+              ...(Platform.OS === "web"
+                ? ({ filter: "drop-shadow(0 3px 3px #1f243355)" } as any)
+                : undefined),
+            },
           Platform.OS === "web"
             ? ({ touchAction: "none", cursor: "grab" } as any)
             : undefined,
@@ -348,15 +430,54 @@ export function CounterBoard({
         ref={fieldRef}
         testID="token-dropzone"
         pointerEvents="none"
-        style={{
-          height: fieldHeight,
-          backgroundColor: c.wash,
-          borderRadius: 6,
-          borderWidth: 1.5,
-          borderStyle: "dashed",
-          borderColor: c.lip,
-        }}
-      />
+        style={[
+          {
+            height: fieldHeight,
+            backgroundColor: c.wash,
+            borderRadius: 6,
+            borderWidth: 1.5,
+            borderStyle: "dashed",
+            borderColor: c.lip,
+            alignItems: "center",
+            justifyContent: "flex-end",
+          },
+          // Where the carried object may be put down: a pen line and a word.
+          toField && s.accepting,
+        ]}
+      >
+        {toField && <Text style={s.acceptingText}>Клади сюда</Text>}
+      </View>
+      {/* With an object in hand the field and the box hear a press. */}
+      {picked === -1 && room && (
+        <Pressable
+          testID="token-dropzone-press"
+          accessibilityRole="button"
+          accessibilityLabel="Положить на поле"
+          onPress={putOnField}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: fieldHeight,
+          }}
+        />
+      )}
+      {picked !== null && picked >= 0 && (
+        <Pressable
+          testID="token-supply-press"
+          accessibilityRole="button"
+          accessibilityLabel="Вернуть в коробку"
+          onPress={putInBox}
+          style={{
+            position: "absolute",
+            top: supplyTop,
+            left: 0,
+            right: 0,
+            height: 105,
+          }}
+        />
+      )}
       {slots?.map((_, i) => (
         <View
           key={i}
@@ -377,14 +498,19 @@ export function CounterBoard({
       <View
         testID="token-supply"
         pointerEvents="none"
-        style={{
-          position: "absolute",
-          top: supplyTop,
-          width: "100%",
-          height: 105,
-          backgroundColor: c.washWarm,
-          borderRadius: 6,
-        }}
+        style={[
+          {
+            position: "absolute",
+            top: supplyTop,
+            width: "100%",
+            height: 105,
+            backgroundColor: c.washWarm,
+            borderRadius: 6,
+            borderWidth: 1.5,
+            borderColor: "transparent",
+          },
+          toBox && s.accepting,
+        ]}
       >
         <Text
           style={{
@@ -397,7 +523,7 @@ export function CounterBoard({
             lineHeight: CELL,
           }}
         >
-          Бери здесь
+          {toBox ? "Верни сюда" : "Бери здесь"}
         </Text>
       </View>
       {indices.map(item)}
@@ -405,48 +531,21 @@ export function CounterBoard({
     </View>
   );
   // Beside a sample the words go under it, and the field takes their rows.
+  // One short line: how to carry and how to press is shown by «Как это
+  // сделать?», not written over every board.
   const words = (
-    <>
-      <Text
-        style={{
-          fontFamily: f.bold,
-          color: c.ink,
-          fontSize: 16,
-          lineHeight: 24,
-        }}
-      >
-        Возьми{" "}
-        {objectLabel ??
-          (token === "stick"
-            ? "палочку"
-            : token === "square"
-              ? "квадратик"
-              : "кружок")}{" "}
-        внизу и перенеси на поле.
-      </Text>
-      {!(fit && finePointer()) && (
-        <Text
-          style={{
-            fontFamily: f.regular,
-            color: c.muted,
-            fontSize: 14,
-            lineHeight: 24,
-          }}
-        >
-          Не отпускай палец, пока несёшь предмет. Лишний предмет верни вниз.
-        </Text>
-      )}
-      {rowMode && (
-        <Text
-          style={{ fontFamily: f.regular, color: c.muted, lineHeight: CELL }}
-        >
-          Все предметы остаются в одном ряду. Длинный ряд можно листать влево и
-          вправо.
-        </Text>
-      )}
-    </>
+    <Text
+      style={{
+        fontFamily: f.regular,
+        color: c.ink,
+        fontSize: 16,
+        lineHeight: 24,
+      }}
+    >
+      Бери {object} внизу и клади на поле.
+    </Text>
   );
-  const aside = useAside(words, [objectLabel, token, rowMode, fit].join("|"));
+  const aside = useAside(words, [objectLabel, token].join("|"));
   return (
     // Rows of the sheet: what to do, an empty row, the board in whole rows,
     // the count with the button.

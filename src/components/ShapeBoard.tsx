@@ -1,6 +1,6 @@
 import { useGestureCoach } from "./GestureCoach";
 import React, { useState, useRef } from "react";
-import { View, Text, Platform } from "react-native";
+import { View, Text, Platform, Pressable } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import type { Block } from "../content/types";
 import { edgeKey } from "../lib/assessment";
@@ -24,14 +24,15 @@ export function ShapeBoard({
 }) {
   const boardRef = useRef<View>(null),
     targetRef = useRef<View>(null);
-  const rotateRef = useRef<View>(null);
   const sourceRef = useRef<View>(null),
     fieldRef = useRef<View>(null);
   const [width, setWidth] = useState(400),
     [drag, setDrag] = useState<{ index: number; x: number; y: number } | null>(
       null,
     ),
-    [message, setMessage] = useState("");
+    [message, setMessage] = useState(""),
+    // The stick was pressed and waits for its dashed line.
+    [picked, setPicked] = useState(false);
   const active = useRef<{
     index: number;
     pageX: number;
@@ -39,7 +40,6 @@ export function ShapeBoard({
     x: number;
     y: number;
   } | null>(null);
-  const [rotation, setRotation] = useState<Record<number, number>>({});
   // On a wide, low window the stick waits to the right of the shape instead
   // of under it: the board is half as tall and stays on screen.
   const { fit, measured } = useTaskSize();
@@ -47,8 +47,7 @@ export function ShapeBoard({
   // Beside a sample the words go under it, and the board takes their rows.
   const caption = (
     <Text style={{ fontFamily: f.regular, color: c.muted, lineHeight: CELL }}>
-      Возьми палочку {landscape ? "справа" : "внизу"} и положи на пунктир. Чтобы
-      повернуть палочку, нажми «Повернуть».
+      Бери палочку {landscape ? "справа" : "внизу"} и клади на пунктир.
     </Text>
   );
   const aside = useAside(caption, String(landscape));
@@ -78,30 +77,15 @@ export function ShapeBoard({
     };
   });
   const available = edges.filter((t) => !value.includes(t.key)).slice(0, 1);
-  const turns = available[0]
-    ? ((180 - ((rotation[available[0].index] ?? 0) % 180)) % 180) / 45
-    : 0;
   useGestureCoach(
     "sticks",
     !available.length
       ? [{ ref: boardRef, text: "Все палочки уже на месте. Проверь фигуру." }]
       : [
-          ...(turns
-            ? [
-                {
-                  ref: rotateRef,
-                  text: `Перед переносом нажми «Повернуть» ${turns} ${turns === 1 ? "раз" : "раза"}, чтобы палочка совпала с наклоном пунктира. Затем перенеси её, как показано дальше.`,
-                  motion: {
-                    kind: "tap" as const,
-                    points: [{ x: 0.5, y: 0.5 }],
-                  },
-                },
-              ]
-            : []),
           {
             ref: sourceRef,
             surface: { kind: "token", token: "stick" },
-            text: "Возьми палочку внизу: прижми её пальцем и держи.",
+            text: "Возьми палочку: нажми на неё, а потом на пунктир — она ляжет туда.",
             motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
           },
           {
@@ -133,7 +117,7 @@ export function ShapeBoard({
               tokenLength: available[0]?.length,
               angle: available[0] ? available[0].angle : 0,
             },
-            text: "Не отпуская палец, положи палочку на подходящую линию. Если нужно, нажми «Повернуть».",
+            text: "Можно и перенести палочку пальцем: веди её к пунктиру и отпусти. Она сама ляжет ровно.",
           },
         ],
   );
@@ -215,23 +199,32 @@ export function ShapeBoard({
     if (!current) return;
     const x = current.x + e.nativeEvent.pageX - current.pageX,
       y = current.y + e.nativeEvent.pageY - current.pageY;
-    const source = edges[current.index],
-      angle = source.angle + (rotation[current.index] ?? 0);
-    const match = edges.find(
-      (t) =>
-        !value.includes(t.key) &&
-        Math.hypot(t.x - x, t.y - y) < 36 &&
-        Math.abs(t.length - source.length) <
-          Math.max(12, source.length * 0.15) &&
-        Math.abs(((((angle - t.angle) % 180) + 270) % 180) - 90) < 22,
-    );
+    const source = edges[current.index];
+    // A press without carrying takes the stick in hand: the next press,
+    // on the dashed lines, lays it on the nearest of them.
+    if (Math.hypot(x - current.x, y - current.y) < 10) {
+      setPicked((old) => !old);
+      setMessage("");
+      setDrag(null);
+      return;
+    }
+    setPicked(false);
+    // Put down near a dashed line of its length, the stick turns and lies
+    // along it by itself: the nearest line within reach takes it.
+    const match = edges
+      .filter(
+        (t) =>
+          !value.includes(t.key) &&
+          Math.abs(t.length - source.length) <
+            Math.max(12, source.length * 0.15),
+      )
+      .map((t) => ({ t, far: Math.hypot(t.x - x, t.y - y) }))
+      .filter(({ far }) => far < 48)
+      .sort((a, b) => a.far - b.far)[0]?.t;
     if (match) {
       onChange([...value, match.key]);
-      setMessage("Палочка на месте!");
-    } else
-      setMessage(
-        "Поднеси середину палочки к пунктиру. Если нужно, поверни палочку.",
-      );
+      setMessage("");
+    } else setMessage("Поднеси середину палочки к пунктиру.");
     setDrag(null);
   }
   return (
@@ -275,7 +268,11 @@ export function ShapeBoard({
                     x2={b.x}
                     y2={b.y}
                     stroke={value.includes(t.key) ? "#bb8052" : "#2b4ba8"}
-                    strokeWidth={value.includes(t.key) ? 9 : 3}
+                    // While a stick is carried the lines that wait for it
+                    // are drawn bolder.
+                    strokeWidth={
+                      value.includes(t.key) ? 9 : drag || picked ? 5 : 3
+                    }
                     strokeDasharray={value.includes(t.key) ? undefined : "6 5"}
                     strokeLinecap="round"
                   />
@@ -298,6 +295,43 @@ export function ShapeBoard({
               />
             ))}
           </View>
+          {/* With the stick in hand the lines hear a press. */}
+          {picked && !!available.length && (
+            <Pressable
+              testID="stick-field-press"
+              accessibilityRole="button"
+              accessibilityLabel="Положить палочку на пунктир"
+              onPress={(e) => {
+                const x = e.nativeEvent.locationX ?? 0,
+                  y = e.nativeEvent.locationY ?? 0;
+                const source = available[0];
+                const nearest = edges
+                  .filter(
+                    (t) =>
+                      !value.includes(t.key) &&
+                      Math.abs(t.length - source.length) <
+                        Math.max(12, source.length * 0.15),
+                  )
+                  .sort(
+                    (a, b) =>
+                      Math.hypot(a.x - x, a.y - y) -
+                      Math.hypot(b.x - x, b.y - y),
+                  )[0];
+                if (!nearest) return;
+                onChange([...value, nearest.key]);
+                setMessage("");
+                // The next stick is in hand at once, while lines wait for it.
+                if (value.length + 1 >= edges.length) setPicked(false);
+              }}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: landscape ? width * 0.6 : width,
+                height: fieldHeight,
+              }}
+            />
+          )}
           {available.map((t) => {
             const position = drag?.index === t.index ? drag : tray(t.index);
             return (
@@ -312,15 +346,23 @@ export function ShapeBoard({
                     {
                       position: "absolute",
                       left: position.x - t.length / 2,
-                      top: position.y - 22,
+                      top: position.y - 28,
                       width: t.length,
-                      height: 44,
+                      height: 56,
                       justifyContent: "center",
                       transform: [
-                        { rotate: `${t.angle + (rotation[t.index] ?? 0)}deg` },
+                        { rotate: `${t.angle}deg` },
+                        { scale: drag?.index === t.index ? 1.08 : 1 },
                       ],
                       zIndex: drag?.index === t.index ? 10 : 1,
                     },
+                    // In hand after a press: a pen ring around it.
+                    picked &&
+                      !drag && {
+                        borderWidth: 3,
+                        borderColor: c.pen,
+                        borderRadius: 12,
+                      },
                     Platform.OS === "web"
                       ? ({ touchAction: "none", cursor: "grab" } as any)
                       : undefined,
@@ -342,31 +384,13 @@ export function ShapeBoard({
           })}
         </View>
       </Rows>
-      {/* Rotate, count and undo share one row: under the board they took three. */}
-      <View style={[sheet.controls, { justifyContent: "flex-start" }]}>
-        {available.map((t) => (
-          <View key={t.key} ref={rotateRef} collapsable={false}>
-            <Button
-              small
-              secondary
-              label={`Повернуть палочку ${t.index + 1}`}
-              onPress={() =>
-                setRotation((r) => ({
-                  ...r,
-                  [t.index]: (r[t.index] ?? 0) + 45,
-                }))
-              }
-            >
-              ↻ Повернуть
-            </Button>
-          </View>
-        ))}
+      {/* The count and undo share one row. */}
+      <View style={sheet.controls}>
         <Text
           style={{
             fontFamily: f.bold,
-            color: c.pen,
+            color: c.ink,
             lineHeight: CELL,
-            flexGrow: 1,
           }}
         >
           Палочек: {value.length} из {edges.length}

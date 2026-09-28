@@ -7,6 +7,11 @@ export function mobileCoachLayout(
   viewport: CoachRect,
   cardSize: { width: number; height: number },
   scroll: { top: number; max: number },
+  /**
+   * Where the lesson itself is seen. The card may lie over what stands under
+   * the lesson («Назад», «Дальше»); the gesture it explains may not.
+   */
+  seen: CoachRect = viewport,
 ) {
   const gap = 12;
   const bottom = viewport.y + viewport.height;
@@ -63,7 +68,9 @@ export function mobileCoachLayout(
           },
         ];
   const layouts = candidates.map(({ card, space }) => {
-    space.height = Math.max(1, space.height);
+    const floor = Math.min(space.y + space.height, seen.y + seen.height - gap);
+    space.y = Math.max(space.y, seen.y + gap);
+    space.height = Math.max(1, floor - space.y);
     const delta =
       focus.height > space.height
         ? focus.y - space.y

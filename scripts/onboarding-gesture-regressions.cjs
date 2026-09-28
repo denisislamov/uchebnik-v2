@@ -329,25 +329,49 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         );
         await button("Закрыть подсказку").click();
         assert.deepEqual(await answers(), before);
-        await button("Повернуть палочку 1").click();
-        await button("Как это сделать?").click();
-        await advanceUntil(async () =>
-          /Повернуть.*3 раза/.test(
-            await p.getByTestId("coach-instruction").innerText(),
-          ),
+        // A stick lies along its dashed line by itself: nothing has to be turned, and no
+        // button offers to turn it.
+        assert.equal(
+          await p.getByRole("button", { name: /^Повернуть/ }).count(),
+          0,
+          "no button turns the stick",
         );
-        const instruction = await p
-          .getByTestId("coach-instruction")
-          .innerText();
-        assert.match(instruction, /Повернуть.*3 раза/);
-        await button("Закрыть подсказку").click();
+        await button("Как это сделать?").click();
+        await p.getByTestId("coach-instruction").waitFor();
+        const seen = [];
+        for (let k = 0; k < 12; k++) {
+          const instruction = await p
+            .getByTestId("coach-instruction")
+            .innerText();
+          seen.push(instruction);
+          const last = await button("Попробую сам").count();
+          const action = last ? button("Попробую сам") : button("Дальше");
+          await action.waitFor();
+          await p.waitForFunction(
+            (name) =>
+              [...document.querySelectorAll('[role="button"]')].some(
+                (b) =>
+                  b.textContent === name &&
+                  b.getAttribute("aria-disabled") !== "true",
+              ),
+            last ? "Попробую сам" : "Дальше",
+            { timeout: 15000 },
+          );
+          await action.click();
+          if (last) break;
+          await p.waitForTimeout(250);
+        }
+        assert.ok(
+          seen.every((text) => !/Повернуть|поверни/i.test(text)),
+          "the explanation does not ask to turn the stick",
+        );
         assert.deepEqual(await answers(), before);
         return {
           geometry,
           lineLength: length,
           lineAngle: angle,
           ghostAngle,
-          rotationRecovery: instruction,
+          turning: "none",
           demonstrationMutatedAnswers: false,
         };
       },

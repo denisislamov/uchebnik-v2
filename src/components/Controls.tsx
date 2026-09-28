@@ -18,6 +18,9 @@ export function Button({
   done = false,
   label,
   small = false,
+  tall = false,
+  dense = false,
+  testID,
 }: {
   children: React.ReactNode;
   onPress: () => void;
@@ -26,6 +29,11 @@ export function Button({
   done?: boolean;
   label?: string;
   small?: boolean;
+  /** Navigation under the sheet: a larger target for a finger. */
+  tall?: boolean;
+  /** Smaller letters, where a phone's row has to hold the button and more. */
+  dense?: boolean;
+  testID?: string;
 }) {
   // A button is two cells high and a whole number of cells wide: once its
   // words are measured, it is widened to the next line of the sheet. The
@@ -40,13 +48,14 @@ export function Button({
     s.button,
     quiet && s.secondary,
     small && s.small,
+    tall && s.tall,
     done && s.done,
   ]);
   const sides =
     2 * Number(box.paddingHorizontal ?? 0) + 2 * Number(box.borderWidth ?? 0);
   return (
     <Pressable
-      testID={done ? "button-done" : undefined}
+      testID={testID ?? (done ? "button-done" : undefined)}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ disabled: disabled || done }}
@@ -56,6 +65,7 @@ export function Button({
         s.button,
         quiet && s.secondary,
         small && s.small,
+        tall && s.tall,
         done && s.done,
         fit.words === words && fit.width > 0 && { minWidth: fit.width },
         disabled && !done && { opacity: 0.45 },
@@ -68,7 +78,12 @@ export function Button({
           if (fit.words !== words || Math.abs(width - fit.width) > 0.5)
             setFit({ words, width });
         }}
-        style={[s.label, quiet && s.secondaryLabel, done && s.doneLabel]}
+        style={[
+          s.label,
+          dense && s.denseLabel,
+          quiet && s.secondaryLabel,
+          done && s.doneLabel,
+        ]}
       >
         {children}
       </Text>
@@ -187,6 +202,9 @@ const s = StyleSheet.create({
     paddingTop: 11,
     paddingBottom: 10,
     minHeight: CELL * 2,
+    // Across a phone, but not across a monitor: a button a metre wide does
+    // not read as one.
+    maxWidth: CELL * 16,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -205,6 +223,8 @@ const s = StyleSheet.create({
   secondaryPressed: { backgroundColor: c.wash },
   // As high as any button — a finger needs the same room — but narrower.
   small: { paddingHorizontal: 14 },
+  // Under the sheet, not on it: sized for a finger rather than by the cells.
+  tall: { minHeight: 64, paddingHorizontal: CELL },
   done: {
     backgroundColor: c.wash,
     borderWidth: 1,
@@ -215,6 +235,7 @@ const s = StyleSheet.create({
     paddingBottom: 11,
   },
   label: { fontFamily: f.bold, color: c.white, fontSize: 17, lineHeight: CELL },
+  denseLabel: { fontSize: 15 },
   secondaryLabel: { color: c.ink },
   doneLabel: { color: c.ink },
   // A note in pencil, two cells high.

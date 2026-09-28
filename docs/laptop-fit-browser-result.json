@@ -2,5 +2,6 @@
   "passed": true,
   "checked": 300,
   "overflow": [],
-  "errors": []
+  "errors": [],
+  "slowest": 519
 }

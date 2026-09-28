@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
+import { useSheetWindow } from "../lib/settledWindow";
 const clamp = (v: number, min: number, max: number) =>
   Math.round(Math.min(max, Math.max(min, v)));
 /**
@@ -16,7 +17,7 @@ const clamp = (v: number, min: number, max: number) =>
  */
 export const TaskFitExtra = createContext(0);
 export function useTaskSize() {
-  const { width, height } = useWindowDimensions();
+  const { width, height } = useSheetWindow();
   const measured = useContext(TaskFitExtra);
   const compact = width < 600,
     wide = width >= 1000,

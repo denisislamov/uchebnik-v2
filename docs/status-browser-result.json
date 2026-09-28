@@ -8,7 +8,7 @@
       },
       "lipBefore": "3px",
       "doneMark": true,
-      "nextHeight": 48
+      "nextHeight": 64
     },
     {
       "viewport": {
@@ -17,7 +17,7 @@
       },
       "lipBefore": "3px",
       "doneMark": true,
-      "nextHeight": 48
+      "nextHeight": 64
     }
   ],
   "errors": []

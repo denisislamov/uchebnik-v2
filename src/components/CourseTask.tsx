@@ -11,7 +11,6 @@ import {
   TextInput,
   Pressable,
   StyleSheet,
-  useWindowDimensions,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
@@ -20,12 +19,14 @@ import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button, CellPressable, RetryNote } from "./Controls";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
-import { HandFrame, Pasted, Rows } from "./HandDrawn";
+import { HandFrame, Rows } from "./HandDrawn";
 import { CELL, cells, written } from "../lib/grid";
+import { useSheetWindow } from "../lib/settledWindow";
 /**
- * A card is a white sheet pasted onto the page: the ruling is not seen under
- * it, so its parts are spaced evenly rather than by rows. A small button
- * keeps its own width instead of stretching across the card.
+ * A part of a task — one number to lay out, one example to make up — is
+ * written on the sheet itself, as in the book: no frame and no white card
+ * around it. Its lines and boards follow one another a row apart; a small
+ * button keeps its own width instead of stretching across the sheet.
  */
 /** Children one by one, with what stands in fragments taken out of them. */
 const parts = (children: React.ReactNode): React.ReactNode[] =>
@@ -36,21 +37,14 @@ const parts = (children: React.ReactNode): React.ReactNode[] =>
       : [child],
   );
 function Card({
-  style,
   children,
 }: {
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }) {
-  const items = parts(children);
   return (
-    <Pasted
-      style={style}
-      frame={items.filter(
-        (child) => React.isValidElement(child) && child.type === HandFrame,
-      )}
-    >
-      {items
+    <View testID="task-part" style={s.part}>
+      {parts(children)
         .filter(
           (child) => !(React.isValidElement(child) && child.type === HandFrame),
         )
@@ -61,11 +55,18 @@ function Card({
             <View key={child.key ?? i} style={{ alignSelf: "flex-start" }}>
               {child}
             </View>
-          ) : (
+          ) : React.isValidElement(child) &&
+            (child.type === Text || child.type === TextWithBlanks) ? (
             child
+          ) : (
+            // A board, a row of counters or a box with its name takes whole
+            // rows, so the line written under it stands on the ruling.
+            <Rows key={(React.isValidElement(child) && child.key) || i}>
+              {child}
+            </Rows>
           ),
         )}
-    </Pasted>
+    </View>
   );
 }
 // An arithmetic frame such as «4 + □ =», not a worded question.
@@ -81,7 +82,61 @@ function numberLine(fields: { label: string }[]) {
   );
   return top <= 10 ? 10 : top <= 20 ? 20 : undefined;
 }
+type WorkField = { label: string; id: string; context?: string };
+/**
+ * Fields as they are laid out: examples that follow one another stand in
+ * columns, a worded question takes the width of the sheet.
+ */
+function workGroups<F extends WorkField & { options?: string[] }>(fields: F[]) {
+  const groups: {
+    examples: boolean;
+    labelCells: number;
+    fields: { field: F; index: number }[];
+  }[] = [];
+  fields.forEach((field, index) => {
+    const example =
+      isExpression(field.label) && !field.options && !field.context;
+    const last = groups.at(-1);
+    if (last && last.examples && example) last.fields.push({ field, index });
+    else
+      groups.push({
+        examples: example,
+        labelCells: 0,
+        fields: [{ field, index }],
+      });
+  });
+  // A lone example is a question like any other.
+  for (const group of groups) {
+    if (group.examples && group.fields.length < 2) group.examples = false;
+    // A digit or a sign takes about half a cell, a gap a quarter; a blank
+    // is drawn three gaps wide.
+    const widest = Math.max(
+      ...group.fields.map(({ field }) =>
+        [...field.label.trim()].reduce(
+          (w, ch) => w + (ch === " " ? 6 : ch === "□" ? 22 : 12.5),
+          0,
+        ),
+      ),
+    );
+    group.labelCells = Math.max(3, Math.ceil((widest + 14) / CELL));
+  }
+  return groups;
+}
+/** «Ещё раз» beside a box too narrow for the words: the sign of the note alone. */
+function RetryMark() {
+  return (
+    <View
+      testID="retry-mark"
+      accessibilityLabel="Попробуй ещё раз"
+      style={s.retryMark}
+    >
+      <Text style={s.retryMarkText}>↻</Text>
+    </View>
+  );
+}
 function NumberLine({ max }: { max: number }) {
+  // On a phone the row from 0 to 10 stays one row.
+  const narrow = useSheetWindow().width < 600;
   return (
     <View
       testID="number-line"
@@ -91,7 +146,7 @@ function NumberLine({ max }: { max: number }) {
       style={s.numberLine}
     >
       {Array.from({ length: max + 1 }, (_, n) => (
-        <View key={n} style={s.numberCell}>
+        <View key={n} style={[s.numberCell, narrow && { width: 32 }]}>
           <Text style={s.numberText}>{n}</Text>
         </View>
       ))}
@@ -117,7 +172,7 @@ export function CourseTask({
   onDrawing: (value: boolean) => void;
 }) {
   const card = s.card;
-  const narrow = useWindowDimensions().width < 600;
+  const narrow = useSheetWindow().width < 600;
   // Follows what stands above it in a card after an empty row.
   const below = { marginTop: CELL };
   const r = answer.responses ?? {};
@@ -137,7 +192,7 @@ export function CourseTask({
     />
   );
   const chips = (key: string, values: (number | string)[], label: string) => (
-    <View style={s.row}>
+    <View style={[s.row, s.chips]}>
       {values.map((v) => (
         <CellPressable
           key={v}
@@ -147,7 +202,13 @@ export function CourseTask({
           style={[s.chip, r[key] === String(v) && s.selected]}
           onPress={() => set(key, String(v))}
         >
-          <Text style={[s.text, r[key] === String(v) && { color: c.white }]}>
+          <Text
+            style={[
+              s.text,
+              s.chipText,
+              r[key] === String(v) && { color: c.white },
+            ]}
+          >
             {v}
           </Text>
         </CellPressable>
@@ -382,49 +443,89 @@ export function CourseTask({
         <NumberLine max={numberLine(block.fields)!} />
       )}
       {block.kind === "work" &&
-        block.fields.map((field, i) => (
-          <React.Fragment key={field.id}>
-            {/* The second part of a two-part problem starts right here, not
-              in the prompt above, so each condition sits over its question. */}
-            {field.context && (
-              <TextWithBlanks
-                testID="field-context"
-                style={s.context}
-                text={field.context}
-              />
-            )}
-            <Card style={card}>
-              <HandFrame seed={`card-${field.id}`} />
-              {/* «1. 1 + 1 =» reads as part of the example; a bare expression
-                goes without its number, which the screen reader still gets. */}
-              {/* The box stands half a cell under its question, so the words
-                  do not sit on it; the teacher's mark stands beside the box. */}
-              <View style={{ gap: CELL / 2 }}>
-                <TextWithBlanks
-                  style={s.label}
-                  text={
-                    isExpression(field.label)
-                      ? field.label
-                      : `${i + 1}. ${field.label}`
-                  }
-                />
-                <View style={s.row}>
-                  {field.options
-                    ? chips(field.id, field.options, spokenBlanks(field.label))
-                    : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
-                  {answer.checked &&
-                    (r[field.id]?.trim() === field.expected ? (
-                      <Text style={s.feedback}>✓ Верно</Text>
-                    ) : (
-                      <View style={{ flexGrow: 1, flexBasis: cells(8) }}>
-                        <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
-                      </View>
-                    ))}
+        workGroups(block.fields).map((group) =>
+          group.examples ? (
+            // Examples stand in columns, as in the book: the sign «=» of
+            // each is followed by its box, and the boxes are one under
+            // another.
+            <View
+              key={group.fields[0].field.id}
+              testID="work-examples"
+              style={s.examples}
+            >
+              {group.fields.map(({ field, index }) => (
+                <View key={field.id} style={s.example}>
+                  <View style={{ width: cells(group.labelCells) }}>
+                    <TextWithBlanks
+                      style={StyleSheet.flatten([s.label, s.exampleLabel])}
+                      text={field.label}
+                    />
+                  </View>
+                  {input(
+                    field.id,
+                    spokenBlanks(`${index + 1}. ${field.label}`),
+                  )}
+                  <View style={[s.exampleMark, narrow && { width: CELL }]}>
+                    {answer.checked &&
+                      (r[field.id]?.trim() === field.expected ? (
+                        <Text accessibilityLabel="Верно" style={s.feedback}>
+                          ✓
+                        </Text>
+                      ) : (
+                        <RetryMark />
+                      ))}
+                  </View>
                 </View>
-              </View>
-            </Card>
-          </React.Fragment>
-        ))}
+              ))}
+            </View>
+          ) : (
+            group.fields.map(({ field, index }) => (
+              <React.Fragment key={field.id}>
+                {/* The second part of a two-part problem starts right here, not
+              in the prompt above, so each condition sits over its question. */}
+                {field.context && (
+                  <TextWithBlanks
+                    testID="field-context"
+                    style={s.context}
+                    text={field.context}
+                  />
+                )}
+                {/* A question is written on the sheet, its box half a cell
+                  under it; the teacher's mark stands beside the box. */}
+                <View testID="work-question" style={{ gap: CELL / 2 }}>
+                  <TextWithBlanks
+                    style={s.label}
+                    text={
+                      isExpression(field.label)
+                        ? field.label
+                        : `${index + 1}. ${field.label}`
+                    }
+                  />
+                  <View style={s.row}>
+                    {field.options
+                      ? chips(
+                          field.id,
+                          field.options,
+                          spokenBlanks(field.label),
+                        )
+                      : input(
+                          field.id,
+                          spokenBlanks(`${index + 1}. ${field.label}`),
+                        )}
+                    {answer.checked &&
+                      (r[field.id]?.trim() === field.expected ? (
+                        <Text style={s.feedback}>✓ Верно</Text>
+                      ) : (
+                        <View style={{ flexGrow: 1, flexBasis: cells(8) }}>
+                          <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
+                        </View>
+                      ))}
+                  </View>
+                </View>
+              </React.Fragment>
+            ))
+          ),
+        )}
       {block.kind === "compose" &&
         block.rules.map((rule, i) => (
           <Card key={i} style={card}>
@@ -663,29 +764,40 @@ export function CourseTask({
                       const k = `${i}g${g}`,
                         count = Number(r[k]) || 0;
                       return (
-                        <CellPressable
-                          key={g}
-                          style={[s.group, { minWidth: cells(4) }]}
-                          accessibilityRole="button"
-                          accessibilityLabel={`Группа ${g + 1}, предметов ${count}`}
-                          onPress={() => {
-                            const total = Array.from(
-                              { length: a.groups ?? 2 },
-                              (_, j) => Number(r[`${i}g${j}`]) || 0,
-                            ).reduce((x, y) => x + y, 0);
-                            if (total < target) set(k, String(count + 1));
-                          }}
-                          onLongPress={() =>
-                            set(k, String(Math.max(0, count - 1)))
-                          }
-                        >
-                          <Text style={s.note}>Группа {g + 1}</Text>
-                          <View style={s.row}>
-                            {Array.from({ length: count }, (_, j) => (
-                              <View key={j} style={tokenStyle} />
-                            ))}
-                          </View>
-                        </CellPressable>
+                        // A press adds one; the button under the group takes
+                        // one away. Nothing is asked of a long press.
+                        <View key={g} style={{ gap: CELL / 2 }}>
+                          <CellPressable
+                            style={[s.group, { minWidth: cells(4) }]}
+                            accessibilityRole="button"
+                            accessibilityLabel={`Группа ${g + 1}, предметов ${count}`}
+                            onPress={() => {
+                              const total = Array.from(
+                                { length: a.groups ?? 2 },
+                                (_, j) => Number(r[`${i}g${j}`]) || 0,
+                              ).reduce((x, y) => x + y, 0);
+                              if (total < target) set(k, String(count + 1));
+                            }}
+                          >
+                            <Text style={s.note}>Группа {g + 1}</Text>
+                            <View style={s.row}>
+                              {Array.from({ length: count }, (_, j) => (
+                                <View key={j} style={tokenStyle} />
+                              ))}
+                            </View>
+                          </CellPressable>
+                          <Button
+                            small
+                            secondary
+                            disabled={count === 0}
+                            label={`Группа ${g + 1}: убрать один`}
+                            onPress={() =>
+                              set(k, String(Math.max(0, count - 1)))
+                            }
+                          >
+                            − 1
+                          </Button>
+                        </View>
                       );
                     })}
                   </View>
@@ -923,6 +1035,10 @@ export function CourseTask({
 }
 const s = StyleSheet.create({
   chipDone: { backgroundColor: c.pen, borderColor: c.pen },
+  part: { gap: CELL },
+  // Chips take the width they are given and no more: a long one is wrapped.
+  chips: { flexShrink: 1, minWidth: 0, maxWidth: "100%" },
+  chipText: { textAlign: "center" },
   // Things in a row stand half a cell apart, rows of them a cell apart.
   row: {
     flexDirection: "row",
@@ -974,6 +1090,36 @@ const s = StyleSheet.create({
     color: c.pen,
   },
   label: { fontFamily: f.bold, fontSize: 19, lineHeight: CELL, color: c.ink },
+  // Columns of examples a cell apart, rows of them too.
+  examples: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    columnGap: CELL,
+    rowGap: CELL,
+  },
+  example: { flexDirection: "row", alignItems: "center" },
+  exampleLabel: { textAlign: "right", paddingRight: CELL / 2 },
+  // The teacher's mark has two cells after the box.
+  exampleMark: {
+    width: cells(2),
+    height: cells(2),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  retryMark: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: c.retry,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  retryMarkText: {
+    color: c.white,
+    fontFamily: f.bold,
+    fontSize: 17,
+    lineHeight: CELL,
+  },
   text: { fontFamily: f.bold, fontSize: 20, lineHeight: CELL, color: c.pen },
   note: { fontFamily: f.regular, fontSize: 16, lineHeight: CELL, color: c.ink },
   context: {
@@ -1009,10 +1155,14 @@ const s = StyleSheet.create({
     paddingHorizontal: 12,
     minWidth: cells(2),
     minHeight: cells(2),
+    // A long answer takes a second line instead of running off the sheet.
+    maxWidth: "100%",
     borderWidth: 1,
     borderColor: c.line,
     borderRadius: 6,
     alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: c.card,
   },
   selected: { backgroundColor: c.pen },
   feedback: { fontFamily: f.hand, color: c.red, ...written(22, 1, true) },

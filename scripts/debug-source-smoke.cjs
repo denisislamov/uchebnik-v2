@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
+const { openStep } = require("./browser-context.cjs");
 (async () => {
   const browser = await chromium.launch({
     headless: true,
@@ -30,7 +31,7 @@ const { chromium } = require("playwright");
     await panel
       .getByRole("img", { name: "Оригинал страницы 3", exact: true })
       .waitFor();
-    await btn("Шаг 6: Чёрточка и точка").click();
+    await openStep(p, "Шаг 6: Чёрточка и точка");
     await panel.getByText("Чёрточка и точка", { exact: true }).waitFor();
     await p.screenshot({ path: "docs/debug-source-view.png", fullPage: true });
     const img = panel.getByRole("img", {

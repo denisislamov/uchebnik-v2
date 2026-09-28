@@ -1,4 +1,8 @@
-/** On any computer window every task opens with «Дальше» in view: no scrolling to reach the answer or the next step. */
+/**
+ * On any computer window a task opens whole: from its name to its last line it stands between the top of
+ * the window and the navigation under the sheet, so nothing has to be scrolled to reach the answer.
+ * «Дальше» itself stands under the sheet and is always in view.
+ */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
@@ -33,17 +37,25 @@ const PAGES = (process.env.FIT_PAGES || "3,4,5,6,7,8,9,10,11,12").split(",").map
           await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
           const next = p.getByRole("button", { name: /^(Дальше|К страницам) →$/ });
           await next.waitFor();
-          await p.waitForTimeout(150);
+          // A step is fitted to the window before it is shown: it is looked at as the child first sees it.
+          const opened = Date.now();
+          await p.waitForFunction(() => getComputedStyle(document.querySelector('[data-testid="exercise-body"]')).opacity === "1", null, { timeout: 3000 });
+          report.slowest = Math.max(report.slowest ?? 0, Date.now() - opened);
           const box = await next.boundingBox();
+          const task = await p.getByTestId("exercise-card").boundingBox();
+          const nav = await p.getByTestId("lesson-nav").boundingBox();
           report.checked++;
           if (!box || box.y + box.height > viewport.height + 1)
-            report.overflow.push({ viewport: `${viewport.width}x${viewport.height}`, page: page.number, block: i, kind: page.blocks[i].kind, by: box ? Math.round(box.y + box.height - viewport.height) : null });
+            report.overflow.push({ viewport: `${viewport.width}x${viewport.height}`, page: page.number, block: i, kind: page.blocks[i].kind, next: box ? Math.round(box.y + box.height - viewport.height) : null });
+          else if (!task || !nav || task.y < 0 || task.y + task.height > nav.y + 1)
+            report.overflow.push({ viewport: `${viewport.width}x${viewport.height}`, page: page.number, block: i, kind: page.blocks[i].kind, by: task && nav ? Math.round(task.y + task.height - nav.y) : null });
         }
       }
       await ctx.close();
     }
     assert.deepEqual(report.errors, []);
-    assert.deepEqual(report.overflow, [], `«Дальше» below the fold on ${report.overflow.length} tasks`);
+    assert.ok(report.slowest < 1200, `a step took ${report.slowest} ms to be shown`);
+    assert.deepEqual(report.overflow.slice(0, 20), [], `${report.overflow.length} tasks do not fit between the top of the window and the navigation`);
     report.passed = true;
   } finally {
     fs.writeFileSync("docs/laptop-fit-browser-result.json", JSON.stringify(report, null, 2) + "\n");

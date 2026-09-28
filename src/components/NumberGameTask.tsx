@@ -93,7 +93,9 @@ export function NumberGameTask({
         .slice(0, current < 0 ? undefined : current)
         .map((previous) => (
           <View key={previous.id} style={s.completed}>
-            <Text style={s.instruction}>✓ {previous.label}</Text>
+            <Text style={s.instruction}>
+              <Text style={{ color: c.red }}>✓</Text> {previous.label}
+            </Text>
             <Text style={s.equation}>
               {previous.visible} + {responses[previous.id]} = {previous.total}
             </Text>
@@ -165,7 +167,11 @@ export function NumberGameTask({
           Сначала разгадай и открой карточки в обеих загадках.
         </RetryNote>
       )}
-      <Button onPress={check}>Проверить</Button>
+      {/* One thing to do at a time: while a card waits to be opened, the
+          check of the whole task is a quiet button. */}
+      <Button secondary={!!round} onPress={check}>
+        Проверить
+      </Button>
     </View>
   );
 }
@@ -179,12 +185,8 @@ const s = StyleSheet.create({
     backgroundColor: c.card,
     gap: 16,
   },
-  completed: {
-    padding: 24,
-    borderRadius: 6,
-    backgroundColor: c.wash,
-    gap: 12,
-  },
+  // What has been solved stays on the sheet as it was written.
+  completed: { gap: 12 },
   instruction: {
     color: c.ink,
     fontFamily: f.bold,

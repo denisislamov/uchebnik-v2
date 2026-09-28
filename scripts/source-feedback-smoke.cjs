@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages, allBlocks } = await import("../src/content/book.ts");
@@ -35,6 +35,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p
       .getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ })
       .click();
+    await stepShown(p);
   }
   try {
     await open("p005-block02");
@@ -53,18 +54,14 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await button("Проверить ответ").click();
     assert.equal(
       await p
-        .getByText("✓ Верно! Можно переходить к следующему шагу.", {
-          exact: true,
-        })
+        .getByText(/^✓ Верно! /)
         .count(),
       0,
     );
     await put();
     await button("Проверить ответ").click();
     await p
-      .getByText("✓ Верно! Можно переходить к следующему шагу.", {
-        exact: true,
-      })
+      .getByText(/^✓ Верно! /)
       .waitFor();
     report.checks.push(
       "six cucumbers rejected, seven accepted after actual drags",

@@ -3,12 +3,21 @@
   "checks": [
     {
       "solved": {
-        "before": 232,
-        "after": 392
+        "before": {
+          "y": 497,
+          "inView": true
+        },
+        "after": {
+          "y": 497,
+          "inView": true
+        }
       }
     },
     {
       "reopened": 0
+    },
+    {
+      "questions": 0
     }
   ],
   "errors": []

@@ -25,8 +25,10 @@ export function LocationTask({
   const verticalWrong = !!answer.responses?.vertical && stage === "vertical";
   // Two options share the row, each a whole number of cells wide.
   const [measureRow, column] = useColumns(2);
-  const choices = (axis: LocationAxis) => (
-    <View onLayout={measureRow} style={s.options}>
+  const asked = block.verticalPrompt.trim() === block.prompt.trim();
+  // A row is left empty between a question and its answers.
+  const choices = (axis: LocationAxis, under = true) => (
+    <View onLayout={measureRow} style={[s.options, under && { marginTop: 24 }]}>
       {locationOptions[axis].map((value) => {
         const selected = answer.responses?.[axis] === value;
         return (
@@ -39,9 +41,10 @@ export function LocationTask({
             onPress={() =>
               onAnswer(selectLocationAnswer(block, answer, axis, value))
             }
-            style={[
+            style={({ pressed }) => [
               s.option,
               !!column && { flexGrow: 0, flexBasis: column },
+              pressed && s.pressed,
               selected && s.selected,
             ]}
           >
@@ -56,9 +59,9 @@ export function LocationTask({
   return (
     <View testID="location-task" style={s.task}>
       <View style={s.question}>
-        <Text style={s.step}>1. Вверху или внизу?</Text>
-        <Text style={s.prompt}>{block.verticalPrompt}</Text>
-        {choices("vertical")}
+        {/* The task over the picture asks this already: it is not said twice. */}
+        {!asked && <Text style={s.prompt}>{block.verticalPrompt}</Text>}
+        {choices("vertical", !asked)}
         {verticalWrong && (
           <View style={s.note}>
             <RetryNote>
@@ -69,7 +72,6 @@ export function LocationTask({
       </View>
       {stage !== "vertical" && (
         <View testID="location-horizontal-question" style={s.question}>
-          <Text style={s.step}>2. Слева или справа?</Text>
           <Text style={s.prompt}>{block.horizontalPrompt}</Text>
           {choices("horizontal")}
         </View>
@@ -81,10 +83,9 @@ export function LocationTask({
 const s = StyleSheet.create({
   task: { gap: 24 },
   question: {},
-  step: { fontFamily: f.bold, color: c.muted, fontSize: 16, lineHeight: 24 },
   prompt: { fontFamily: f.bold, color: c.ink, fontSize: 20, lineHeight: 24 },
   // Two options share the row, a cell apart; each is three cells high.
-  options: { flexDirection: "row", flexWrap: "wrap", gap: 24, marginTop: 24 },
+  options: { flexDirection: "row", flexWrap: "wrap", gap: 24 },
   option: {
     minHeight: 72,
     minWidth: 120,
@@ -95,12 +96,20 @@ const s = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: c.wash,
-    borderWidth: 2,
-    borderColor: c.wash,
+    // An answer looks like the other answers: a white box with a lip.
+    backgroundColor: c.card,
+    borderWidth: 1.5,
+    borderColor: c.line,
+    borderBottomWidth: 3,
+    borderBottomColor: c.lip,
   },
   note: { marginTop: 24 },
-  selected: { backgroundColor: c.pen, borderColor: c.pen },
+  pressed: { backgroundColor: c.wash },
+  selected: {
+    backgroundColor: c.pen,
+    borderColor: c.penDark,
+    borderBottomColor: c.penDark,
+  },
   optionText: {
     fontFamily: f.heavy,
     fontSize: 22,

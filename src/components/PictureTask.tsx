@@ -10,6 +10,7 @@ import { useTaskSize } from "./taskSize";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
 import { NumberMeaning } from "./NumberMeaning";
+import { MAX_SCALE } from "./BookImage";
 function Picture({
   id,
   targets,
@@ -84,7 +85,9 @@ function Picture({
         ref={frame}
         style={{
           width: "100%",
-          maxWidth: (size.target * a.width) / a.height,
+          // A scan is enlarged no more than three times.
+          maxWidth:
+            (Math.min(size.target, a.height * MAX_SCALE) * a.width) / a.height,
           alignSelf: "center",
         }}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}

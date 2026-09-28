@@ -1,0 +1,180 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": {
+        "home": {
+          "x": 7,
+          "y": 24,
+          "width": 48,
+          "height": 48
+        },
+        "steps": {
+          "x": 79,
+          "y": 24,
+          "width": 96,
+          "height": 48
+        },
+        "help": {
+          "x": 199,
+          "y": 24,
+          "width": 168,
+          "height": 48
+        },
+        "back": {
+          "x": 7,
+          "y": 773,
+          "width": 144,
+          "height": 64
+        },
+        "next": {
+          "x": 223,
+          "y": 773,
+          "width": 144,
+          "height": 64
+        }
+      },
+      "answer": {
+        "x": 7,
+        "y": 504,
+        "width": 72,
+        "height": 72
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageEnd": 7
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "adultGate": "тридцать два"
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "frame": {
+        "home": {
+          "x": 48,
+          "y": 24,
+          "width": 48,
+          "height": 48
+        },
+        "steps": {
+          "x": 432,
+          "y": 24,
+          "width": 120,
+          "height": 48
+        },
+        "help": {
+          "x": 576,
+          "y": 24,
+          "width": 192,
+          "height": 48
+        },
+        "back": {
+          "x": 48,
+          "y": 1109,
+          "width": 144,
+          "height": 64
+        },
+        "next": {
+          "x": 624,
+          "y": 1109,
+          "width": 144,
+          "height": 64
+        }
+      },
+      "answer": {
+        "x": 48,
+        "y": 792,
+        "width": 72,
+        "height": 72
+      }
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "pageEnd": 7
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "adultGate": "сорок два"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "frame": {
+        "home": {
+          "x": 48,
+          "y": 24,
+          "width": 48,
+          "height": 48
+        },
+        "steps": {
+          "x": 576,
+          "y": 24,
+          "width": 120,
+          "height": 48
+        },
+        "help": {
+          "x": 720,
+          "y": 24,
+          "width": 192,
+          "height": 48
+        },
+        "back": {
+          "x": 48,
+          "y": 729,
+          "width": 144,
+          "height": 64
+        },
+        "next": {
+          "x": 768,
+          "y": 729,
+          "width": 144,
+          "height": 64
+        }
+      },
+      "answer": {
+        "x": 48,
+        "y": 528,
+        "width": 72,
+        "height": 72
+      }
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "pageEnd": 7
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "adultGate": "семьдесят девять"
+    }
+  ],
+  "errors": []
+}

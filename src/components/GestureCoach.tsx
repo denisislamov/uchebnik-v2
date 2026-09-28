@@ -118,10 +118,16 @@ export function useGestureCoach(
   return () => context?.replay(id);
 }
 /** The single way into coaching for a task; every block shows exactly one. */
-export function CoachButton({ onPress }: { onPress: () => void }) {
+export function CoachButton({
+  onPress,
+  dense,
+}: {
+  onPress: () => void;
+  dense?: boolean;
+}) {
   return (
     <View style={{ alignSelf: "flex-start" }}>
-      <Button secondary small onPress={onPress}>
+      <Button secondary small dense={dense} onPress={onPress}>
         Как это сделать?
       </Button>
     </View>
@@ -457,7 +463,9 @@ export function GestureCoachProvider({
         if (mobileWeb) {
           const pane = webScrollPane(target);
           const bounds = pane?.getBoundingClientRect();
-          const viewport = bounds
+          // The lesson is seen in its pane; the card may also lie over the
+          // navigation under it, down to the edge of the window.
+          const seen = bounds
             ? {
                 x: Math.max(0, bounds.x),
                 y: Math.max(0, bounds.y),
@@ -465,6 +473,7 @@ export function GestureCoachProvider({
                 height: Math.min(height, bounds.bottom) - Math.max(0, bounds.y),
               }
             : { x: 0, y: 0, width, height };
+          const viewport = { ...seen, height: height - seen.y };
           // Protect the whole target and every point of a drag, including the
           // source token outside the destination board.
           // A composite board may span the entire page. With no separate
@@ -501,6 +510,7 @@ export function GestureCoachProvider({
               top: pane?.scrollTop ?? 0,
               max: pane ? pane.scrollHeight - pane.clientHeight : 0,
             },
+            seen,
           );
           if (pane && (layout.fits || !active.targets[step].surface)) {
             const before = pane.scrollTop;
@@ -590,7 +600,10 @@ export function GestureCoachProvider({
       ? mobileLayout.card
       : coachCardPosition(
           baseRect,
-          targetViewport ?? { x: 0, y: 0, width, height },
+          // The card may lie over the navigation under the lesson.
+          targetViewport
+            ? { ...targetViewport, height: height - targetViewport.y }
+            : { x: 0, y: 0, width, height },
           { width: cardWidth, height: cardBox },
         );
   const viewport =

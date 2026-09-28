@@ -85,7 +85,17 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await open("p007-block06");
     const board = p.getByTestId("counter-board");
     await board.waitFor();
+    // A press takes the object in hand and moves nothing by itself; the next press, on the
+    // field, puts it there: nothing has to be carried.
     await board.getByTestId("token-source").click();
+    await board.getByText("На поле: 0", { exact: true }).waitFor();
+    await board.getByTestId("token-dropzone-press").click();
+    await board.getByText("На поле: 1", { exact: true }).waitFor();
+    // A press on an object that lies on the field leaves it there: children count by touching.
+    await board.getByTestId("token-0").click();
+    await board.getByText("На поле: 1", { exact: true }).waitFor();
+    // In hand, it goes back with a press on the box.
+    await board.getByTestId("token-supply-press").click({ position: { x: 30, y: 60 } });
     await board.getByText("На поле: 0", { exact: true }).waitFor();
     await drag(
       board.getByTestId("token-source"),
@@ -94,9 +104,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await board.getByText("На поле: 1", { exact: true }).waitFor();
     await button("Проверить ответ").click();
     await p
-      .getByText("✓ Верно! Можно переходить к следующему шагу.", {
-        exact: true,
-      })
+      .getByText(/^✓ Верно! /)
       .waitFor();
     await drag(board.getByTestId("token-0"), board.getByTestId("token-supply"));
     await board.getByText("На поле: 0", { exact: true }).waitFor();
@@ -114,9 +122,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p.setViewportSize({ width: 1440, height: 1100 });
     const success = () =>
       p
-        .getByText("✓ Верно! Можно переходить к следующему шагу.", {
-          exact: true,
-        })
+        .getByText(/^✓ Верно! /)
         .waitFor();
     // Same reusable board must work for sticks and circles. The beetle and the
     // cherries were one two-group board; since review 2 each is its own step.

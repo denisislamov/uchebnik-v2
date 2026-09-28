@@ -1,4 +1,4 @@
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, openStep } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -44,12 +44,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
       const row = { page: page.number, blocks: [] };
       report.pages.push(row);
       for (const [i, b] of page.blocks.entries()) {
-        await p
-          .getByRole("button", {
-            name: `Шаг ${i + 1}: ${b.title}`,
-            exact: true,
-          })
-          .click();
+        await openStep(p, `Шаг ${i + 1}: ${b.title}`);
         await p.getByText(b.title, { exact: true }).last().waitFor();
         assert.equal(
           await p

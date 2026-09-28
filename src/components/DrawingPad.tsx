@@ -7,7 +7,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  useWindowDimensions,
 } from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
 import type { Stroke, Point, TracePlan } from "../content/types";
@@ -23,6 +22,7 @@ import { colors as c, fonts as f } from "../theme";
 import { Button, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
 import { finePointer, useTaskSize } from "./taskSize";
+import { useSheetWindow } from "../lib/settledWindow";
 import { Rows } from "./HandDrawn";
 import { useAside, useHasAside } from "./Aside";
 import { CELL, wholeCells } from "../lib/grid";
@@ -62,7 +62,7 @@ export function DrawingPad({
   const { compact, fit, measured } = useTaskSize();
   // On a laptop the sheet takes what is left of the window under it, keeping
   // room for the hint and «Дальше»; a phone scrolls and keeps fingertip cells.
-  const windowHeight = useWindowDimensions().height;
+  const windowHeight = useSheetWindow().height;
   // The hint under the sheet has gone beside it: its rows are the sheet's.
   const besideSample = useHasAside(),
     below = besideSample ? 114 : 210;

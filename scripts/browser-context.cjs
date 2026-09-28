@@ -15,4 +15,24 @@ async function newTestContext(browser, options) {
   });
   return context;
 }
-module.exports = { baseURL, newTestContext };
+/**
+ * The steps of a page are listed behind «Шаг 3 из 8» over the task, not on the task's screen:
+ * open the list and press the step.
+ */
+async function openStep(page, name) {
+  await page.getByRole("button", { name: /^Шаги страницы/ }).click();
+  await page.getByRole("button", { name, exact: true }).click();
+}
+/**
+ * Off a phone a step is fitted to the window before it is shown, and comes in a moment after it is
+ * opened. Wait for it as a child does: what is measured or carried before that is not yet in its place.
+ */
+async function stepShown(page) {
+  await page.getByTestId("exercise-body").waitFor();
+  await page.waitForFunction(
+    () => getComputedStyle(document.querySelector('[data-testid="exercise-body"]')).opacity === "1",
+    null,
+    { timeout: 5000 },
+  );
+}
+module.exports = { baseURL, newTestContext, openStep, stepShown };

@@ -10,7 +10,7 @@
  * by the box, not by the rows. Things lying on the sheet — a board with counters, a drawing, a picture —
  * place their own parts; only the rows they take are counted. Hand-drawn strokes may stray, the boxes
  * they outline may not: a pixel is the tolerance. Words beside a button in the same row stand in the
- * middle of the button's height, on a half line.
+ * middle of the button's height, on a half line; so do the words of an example beside the box for its answer.
  *
  * On the grid is not enough: nothing may touch and nothing may gape.
  *  - clearance: a line of text keeps at least 6 px from a button, a box for an answer, a picture or a
@@ -100,7 +100,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             const besideButton =
               text &&
               [...(el.parentElement?.parentElement?.children ?? []), ...(el.parentElement?.children ?? [])].some(
-                (sib) => sib !== el && !sib.contains(el) && (sib.matches('[role="button"]') || sib.querySelector?.(':scope > [role="button"]')),
+                (sib) => sib !== el && !sib.contains(el) && (sib.matches('[role="button"], input') || sib.querySelector?.(':scope > [role="button"], :scope > input')),
               );
             const name = (el.innerText || el.getAttribute("aria-label") || el.tagName).slice(0, 30).replace(/\n/g, " ");
             // A heading is moved down to its line; its row is where it would stand unmoved.

@@ -6,7 +6,7 @@
         "width": 390,
         "height": 844
       },
-      "homeArrow": 4,
+      "homeArrow": 24,
       "dvh": {
         "supported": true,
         "html": "100dvh",
@@ -19,7 +19,7 @@
         "width": 768,
         "height": 1024
       },
-      "homeArrow": 4,
+      "homeArrow": 24,
       "dvh": {
         "supported": true,
         "html": "100dvh",
@@ -32,7 +32,7 @@
         "width": 1280,
         "height": 900
       },
-      "homeArrow": 4,
+      "homeArrow": 24,
       "dvh": {
         "supported": true,
         "html": "100dvh",
@@ -42,8 +42,8 @@
     },
     {
       "phoneSheet": [
-        493,
-        493
+        408,
+        408
       ]
     }
   ],

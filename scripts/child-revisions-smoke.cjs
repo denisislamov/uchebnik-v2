@@ -1,6 +1,10 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const {
+  baseURL,
+  newTestContext,
+  stepShown,
+} = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages, allBlocks } = await import("../src/content/book.ts");
@@ -27,7 +31,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     assert.equal(await btn("Страница 2. О нашей книге").count(), 0);
     await btn("Страница 1. Здравствуй, арифметика!").waitFor();
     await btn("Начать заниматься  →").click();
-    await p.getByText("Больше или меньше?", { exact: true }).last().waitFor();
+    await p.getByTestId("lesson-line").getByText("Страница 3 · Больше или меньше?", { exact: true }).waitFor();
     assert.equal(await btn("Открыть страницу 2").count(), 0);
     const open = async (b) => {
       const page = pages.find((p) => p.blocks.includes(b)),
@@ -50,6 +54,8 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL);
       await btn("Продолжить занятие  →").click();
       await p.getByText(b.title, { exact: true }).last().waitFor();
+      // What is measured on the step is measured once the step is shown.
+      await stepShown(p);
     };
     await open(pages[7].blocks[0]);
     const picture = btn("Рисунок задания");

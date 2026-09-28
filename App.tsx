@@ -10,7 +10,6 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
   type LayoutChangeEvent,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -31,11 +30,7 @@ import {
 } from "./src/lib/assessment";
 import { readProgress, saveProgress } from "./src/lib/storage";
 import { colors as c, fonts as f } from "./src/theme";
-import {
-  Button,
-  Cells,
-  CellPressable,
-} from "./src/components/Controls";
+import { Button } from "./src/components/Controls";
 import { NotebookPaper } from "./src/components/NotebookPaper";
 import { HandFrame, Rows } from "./src/components/HandDrawn";
 import { CELL, cells, wholeCells, written } from "./src/lib/grid";
@@ -43,6 +38,18 @@ import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra } from "./src/components/taskSize";
+import { SettledWindow, useSettledWindowSource } from "./src/lib/settledWindow";
+import { scrollbarGutter } from "./src/lib/scrollbar";
+import { fitLook, startFit } from "./src/lib/fit";
+import { AdultGate } from "./src/components/AdultGate";
+import {
+  LessonNav,
+  LessonTop,
+  PageDone,
+  StepList,
+} from "./src/components/Lesson";
+/** A step not answered yet: one object, so an unanswered step reads as unchanged. */
+const NO_ANSWER: Answer = {};
 // Both guards are build-time constants: production removes this entire component.
 const DebugSourcePanel =
   __DEV__ && process.env.EXPO_PUBLIC_SOURCE_DEBUG === "1"
@@ -127,12 +134,19 @@ function Main() {
     [home, setHome] = useState(true),
     [original, setOriginal] = useState(false),
     [parent, setParent] = useState(false),
+    // The adults' part opens after a question a child does not answer.
+    [adult, setAdult] = useState(false),
     [confirmReset, setConfirmReset] = useState(false),
     [drawing, setDrawing] = useState(false),
     [storageError, setStorageError] = useState(""),
     [zoom, setZoom] = useState(false),
     [catalogSection, setCatalogSection] = useState(0),
-    [search, setSearch] = useState("");
+    [search, setSearch] = useState(""),
+    // The list of the page's steps, the end of a page, and the word said
+    // when «Дальше» is pressed too early.
+    [stepsOpen, setStepsOpen] = useState(false),
+    [pageEnd, setPageEnd] = useState(false),
+    [lockNote, setLockNote] = useState(false);
   const scroll = useRef<ScrollView>(null),
     saveRevision = useRef(0);
   // Coaching may scroll the lesson to its target; the child returns to where they were.
@@ -147,33 +161,58 @@ function Main() {
     }
   }, []);
   const [readAttempt, setReadAttempt] = useState(0);
-  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  // The window once it stands still: while it is dragged to a new size the
+  // sheet keeps the old one and is laid out anew once.
+  const held = useSettledWindowSource();
+  const { width: windowWidth, height: windowHeight } = held;
   const comparison = !!DebugSourcePanel && !home;
   const sideBySide = windowWidth >= 900;
   const width = comparison && sideBySide ? windowWidth * 0.52 : windowWidth;
   const wide = width >= 1000,
-    compact = width < 600,
-    // Same rule as useTaskSize: off a phone the lesson fits the window and
-    // its header folds; only a tall window gets the larger title.
-    short = !compact,
-    tall = wide && windowHeight >= 1000;
+    compact = width < 600;
   // The sheet is ruled from the left edge of the writing, and the writing is
   // a whole number of cells wide: what is measured in cells lies on the lines
-  // at any window width. Until the sheet is measured the window stands in.
-  const [sheet, setSheet] = useState({ x: 0, width: 0 });
-  const sheetWidth = sheet.width || width;
+  // at any window width. The sheet's width is reckoned from the window's, so
+  // a window of a new size is laid out at once; measured, it would follow a
+  // frame later. The measure only corrects what the reckoning cannot know.
+  const paneWidth = Math.floor(width) - scrollbarGutter();
+  const limit = home ? 1180 : 1800;
+  const sheetKey = `${home}|${width}`;
+  const [measured, setMeasured] = useState({ key: "", x: 0, width: 0 });
+  const sheet =
+    measured.key === sheetKey
+      ? measured
+      : {
+          x: Math.max(0, (paneWidth - limit) / 2),
+          width: Math.min(paneWidth, limit),
+        };
+  const sheetWidth = sheet.width;
   const measureSheet = (e: LayoutChangeEvent) => {
     const { x, width: w } = e.nativeEvent.layout;
-    if (Math.abs(x - sheet.x) > 0.5 || Math.abs(w - sheet.width) > 0.5)
-      setSheet({ x, width: w });
+    if (
+      measured.key !== sheetKey ||
+      Math.abs(x - measured.x) > 0.5 ||
+      Math.abs(w - measured.width) > 0.5
+    )
+      setMeasured({ key: sheetKey, x, width: w });
   };
   // A phone keeps a quarter of a cell at each side at least; wider screens
   // have a margin of two cells on the left, as a notebook has, and at least
-  // one on the right.
-  const sideColumn = wide ? cells(10) + cells(2) : 0;
+  // one on the right. On a computer a lesson leaves thirteen cells more on
+  // the right: the help's card stands there, beside the task and not over
+  // it. A task is at most 57 cells wide.
+  const room = sheetWidth - cells(2) - CELL;
   const writing = compact
     ? wholeCells(sheetWidth - CELL / 2)
-    : wholeCells(sheetWidth - cells(2) - CELL - (home ? 0 : sideColumn));
+    : home
+      ? wholeCells(room)
+      : Math.min(
+          cells(57),
+          Math.max(
+            wholeCells(room - cells(13)),
+            Math.min(wholeCells(room), cells(33)),
+          ),
+        );
   const left = compact ? Math.floor((sheetWidth - writing) / 2) : cells(2);
   const paperOrigin = sheet.x + left;
   // Cards of the contents stand a cell apart, in whole cells.
@@ -230,52 +269,81 @@ function Main() {
     ])
       if (element) element.style.height = "100dvh";
   }, []);
+  // Paper shows beside the sheet while the window is wider than it was.
+  useEffect(() => {
+    if (Platform.OS === "web" && typeof document !== "undefined")
+      document.body.style.backgroundColor = c.paper;
+  }, []);
   useEffect(() => {
     scroll.current?.scrollTo({ y: 0, animated: false });
     lastScroll.current = 0;
     setDrawing(false);
-  }, [progress.page, progress.block, home]);
+    setLockNote(false);
+    setStepsOpen(false);
+  }, [progress.page, progress.block, home, pageEnd]);
+  useEffect(() => setPageEnd(false), [progress.page, progress.block, home]);
+  // The way to the adults' part is asked for every time it is opened.
+  useEffect(() => {
+    if (!parent) setAdult(false);
+  }, [parent]);
+  useEffect(() => {
+    if (!lockNote) return;
+    const timer = setTimeout(() => setLockNote(false), 4000);
+    return () => clearTimeout(timer);
+  }, [lockNote]);
   const page = pages[progress.page - 1],
     block = page.blocks[progress.block],
-    answer = progress.answers[block.id] ?? {};
+    answer = progress.answers[block.id] ?? NO_ANSWER;
   // Off a phone the task is fitted to the window: right after a step opens,
-  // the room left under «Дальше» (or the overflow) is measured and handed to
+  // the room left under the task (or the overflow) is measured and handed to
   // the picture or the sheet. Then the size is frozen, so nothing moves while
   // the child answers.
   const [paneHeight, setPaneHeight] = useState(0);
-  const fitKey = `${home}|${block.id}|${windowWidth}x${windowHeight}|${paneHeight}`;
+  // What was handed over belongs to the step: a window of another size keeps
+  // it (the formulas follow the window's height themselves) and is measured
+  // again, so the task does not fall back to its first size and grow anew.
+  const fitKey = `${home}|${pageEnd}|${block.id}`;
   const [fit, setFit] = useState({ key: "", extra: 0 });
+  // While a step that has just been opened is being fitted it is not shown:
+  // the child sees it at its size, not growing and shrinking into it.
+  const [shown, setShown] = useState("");
+  useEffect(() => {
+    const timer = setTimeout(() => setShown(fitKey), 450);
+    return () => clearTimeout(timer);
+  }, [fitKey]);
   const lessonMain = useRef<View>(null);
   useEffect(() => {
-    setFit({ key: fitKey, extra: 0 });
-    if (compact || home || !paneHeight) return;
-    // A few looks during the first second (pictures load, the sheet sizes
-    // itself), then the size stays as it is.
-    const timers = [150, 400, 750, 1100].map((ms) =>
-      setTimeout(
-        () =>
-          lessonMain.current?.measureInWindow((_x, y, _w, h) => {
-            const bottom = y + h + lastScroll.current;
-            const slack = paneHeight - bottom - 16;
-            // The task is laid out in rows of the sheet, so room is handed
-            // over a row at a time: less than a row of it stays under
-            // «Дальше», and an overflow takes a whole row back.
-            if (slack > -6 && slack < CELL) return;
-            const rows = Math.floor(slack / CELL) * CELL;
-            setFit((f) =>
-              f.key !== fitKey
-                ? f
-                : {
-                    ...f,
-                    extra: Math.max(-600, Math.min(900, f.extra + rows)),
-                  },
-            );
-          }),
-        ms,
-      ),
-    );
-    return () => timers.forEach(clearTimeout);
-  }, [fitKey]);
+    setFit((f) => (f.key === fitKey ? f : { key: fitKey, extra: 0 }));
+    if (compact || home || pageEnd) setShown(fitKey);
+    if (compact || home || pageEnd || !paneHeight) return;
+    // The task is looked at right after it is laid out and again once
+    // pictures have loaded; each look goes on, a few frames apart, until the
+    // task fits (see fitLook). Then the size stays as it is.
+    let alive = true,
+      state = startFit(fit.key === fitKey ? fit.extra : 0);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const look = (more: number) =>
+      lessonMain.current?.measureInWindow((_x, y, _w, h) => {
+        if (!alive) return;
+        const next = fitLook(
+          state,
+          y + h + lastScroll.current,
+          paneHeight,
+          more,
+        );
+        if (next.fit.extra !== state.extra)
+          setFit({ key: fitKey, extra: next.fit.extra });
+        state = next.fit;
+        if (next.show) setShown(fitKey);
+        if (next.again) timers.push(setTimeout(() => look(more - 1), 40));
+      });
+    for (const ms of [30, 400, 1100])
+      timers.push(setTimeout(() => look(8), ms));
+    return () => {
+      alive = false;
+      timers.forEach(clearTimeout);
+    };
+  }, [fitKey, windowWidth, windowHeight, paneHeight]);
   const fitExtra = fit.key === fitKey ? fit.extra : 0;
 
   const finished = lessonPages.filter((p) =>
@@ -302,16 +370,15 @@ function Main() {
     byExercise
       ? p.blocks.findIndex((b) => b.exerciseNumber === queryNumber)
       : -1;
-  const pageLine =
-    `Страница ${page.number} · ${page.subtitle}` +
-    (short && block.exerciseNumber ? ` · № ${block.exerciseNumber}` : "");
+  const pageLine = `Страница ${page.number} · ${page.title}`,
+    stepLine = `Шаг ${progress.block + 1} из ${page.blocks.length}`;
   const advance = canAdvance(block, answer);
-  // Once the child has done the task, glide just far enough to show the next
-  // button — «Проверить…» while it waits for a check, «Дальше» once solved —
-  // as the drawing sheet glides to its next line. A step that was already
-  // solved when it opened stays where it is.
-  const exerciseCard = useRef<View>(null),
-    navigation = useRef<View>(null);
+  // «Дальше» stands under the sheet and is always in view. «Проверить…» is
+  // part of the task: once the child has answered, the page glides just far
+  // enough to show it, as the drawing sheet glides to its next line. A step
+  // that was already solved when it opened stays where it is, and so does
+  // one that has only been opened.
+  const exerciseCard = useRef<View>(null);
   const glide = useRef({
     step: "",
     solvedOnOpen: false,
@@ -343,16 +410,12 @@ function Main() {
                 /^Проверить/.test((b as HTMLElement).innerText.trim()) &&
                 b.getAttribute("aria-disabled") !== "true",
             ) as HTMLElement | undefined);
-      const kind = advance ? "next" : check ? "check" : "";
-      // Each button once per step: a later answer does not pull the page again.
-      if (!kind || g.shown.includes(kind)) return;
-      const target = advance
-        ? (navigation.current as unknown as HTMLElement | null)
-        : check;
-      const pane = target && verticalScrollPane(target);
-      if (!target || !pane) return;
-      g.shown += kind;
-      const box = target.getBoundingClientRect(),
+      // Once per step: a later answer does not pull the page again.
+      if (!check || g.shown) return;
+      const pane = verticalScrollPane(check);
+      if (!pane) return;
+      g.shown = "check";
+      const box = check.getBoundingClientRect(),
         view = pane.getBoundingClientRect();
       // Down only, and never past the top of the task.
       const shift = box.bottom + 24 - view.bottom;
@@ -360,33 +423,53 @@ function Main() {
     }, 350);
     return () => clearTimeout(timer);
   }, [answer, advance, drawing, home]);
+  // A lesson page ends with a word about it; the book's other pages lead
+  // back to the contents.
+  const lastStep = progress.block === page.blocks.length - 1,
+    lessonPage = progress.page >= 3 && progress.page < 142;
+  function review(p: Progress) {
+    const current = pages[p.page - 1].blocks[p.block];
+    return current.kind === "read" ||
+      (current.kind === "counters" &&
+        current.expected === undefined &&
+        Number(p.answers[current.id]?.value) > 0)
+      ? {
+          ...p.answers,
+          [current.id]: { ...p.answers[current.id], reviewed: true },
+        }
+      : p.answers;
+  }
   function next() {
-    if (!advance) return;
-    setProgress((p) => {
-      const current = pages[p.page - 1].blocks[p.block];
-      const answers =
-        current.kind === "read" ||
-        (current.kind === "counters" &&
-          current.expected === undefined &&
-          Number(p.answers[current.id]?.value) > 0)
-          ? {
-              ...p.answers,
-              [current.id]: { ...p.answers[current.id], reviewed: true },
-            }
-          : p.answers;
-      return p.block < pages[p.page - 1].blocks.length - 1
-        ? { ...p, answers, block: p.block + 1 }
-        : p.page >= 3 && p.page < 142
-          ? { ...p, answers, page: p.page + 1, block: 0 }
-          : { ...p, answers, page: 3, block: 0 };
-    });
-    if (
-      !(progress.page >= 3 && progress.page < 142) &&
-      progress.block === page.blocks.length - 1
-    )
-      setHome(true);
+    if (!pageEnd && !advance) {
+      setLockNote(true);
+      return;
+    }
+    if (pageEnd) {
+      setProgress((p) => ({ ...p, page: p.page + 1, block: 0 }));
+      return;
+    }
+    if (lastStep && lessonPage) {
+      setProgress((p) => ({ ...p, answers: review(p) }));
+      setPageEnd(true);
+      return;
+    }
+    setProgress((p) =>
+      p.block < pages[p.page - 1].blocks.length - 1
+        ? { ...p, answers: review(p), block: p.block + 1 }
+        : { ...p, answers: review(p), page: 3, block: 0 },
+    );
+    if (lastStep) setHome(true);
+  }
+  /** «Закончить» at the end of a page: the next lesson starts on the next page. */
+  function finish() {
+    setProgress((p) => ({ ...p, page: p.page + 1, block: 0 }));
+    setHome(true);
   }
   function previous() {
+    if (pageEnd) {
+      setPageEnd(false);
+      return;
+    }
     setProgress((p) =>
       p.block > 0
         ? { ...p, block: p.block - 1 }
@@ -452,600 +535,548 @@ function Main() {
     </View>
   );
   return (
-    <SafeAreaView style={s.safe} edges={["top", "bottom", "left", "right"]}>
-      <StatusBar style="dark" />
-      {storageError !== "" && (
-        <View accessibilityRole="alert" style={s.storageError}>
-          <Text style={{ color: c.red, fontFamily: f.regular, flex: 1 }}>
-            {storageError}
-          </Text>
-          <Button
-            small
-            secondary
-            onPress={() => setProgress((p) => ({ ...p }))}
-          >
-            Повторить
-          </Button>
-        </View>
-      )}
-      <View
-        style={{
-          flex: 1,
-          minHeight: 0,
-          flexDirection: comparison && sideBySide ? "row" : "column",
-        }}
+    <SettledWindow.Provider value={held}>
+      <SafeAreaView
+        // In a browser the sheet is as large as the window was when it last
+        // stood still: nothing on it moves while the window is dragged.
+        style={
+          Platform.OS === "web"
+            ? [s.sheet, { width: windowWidth, height: windowHeight }]
+            : s.safe
+        }
+        edges={["top", "bottom", "left", "right"]}
       >
-        <ScrollView
-          testID="lesson-scroll-pane"
-          style={[
-            { flex: comparison ? 0.52 : 1, minWidth: 0 },
-            // Keep notebook width fixed when drawing temporarily hides scrolling.
-            Platform.OS === "web"
-              ? ({ scrollbarGutter: "stable" } as any)
-              : undefined,
-          ]}
-          ref={scroll}
-          onLayout={(e) => setPaneHeight(e.nativeEvent.layout.height)}
-          scrollEnabled={!drawing}
-          scrollEventThrottle={16}
-          onScroll={(e) => {
-            lastScroll.current = e.nativeEvent.contentOffset.y;
-          }}
-          contentContainerStyle={s.scroll}
-        >
-          {/* The page's ruling is drawn first: the header and all text lie on it. */}
-          <NotebookPaper margin={!compact} origin={paperOrigin} />
-          {home && header}
-          {home ? (
-            <View
-              onLayout={measureSheet}
-              style={[
-                s.home,
-                { paddingLeft: left },
-                compact && { paddingRight: left, paddingTop: CELL },
-              ]}
+        <StatusBar style="dark" />
+        {storageError !== "" && (
+          <View accessibilityRole="alert" style={s.storageError}>
+            <Text style={{ color: c.red, fontFamily: f.regular, flex: 1 }}>
+              {storageError}
+            </Text>
+            <Button
+              small
+              secondary
+              onPress={() => setProgress((p) => ({ ...p }))}
             >
-              <View style={{ width: writing, maxWidth: "100%" }}>
-                <Rows
-                  style={s.cover}
-                  contentStyle={[
-                    s.coverContent,
-                    !wide && { flexDirection: "column" },
-                  ]}
-                >
-                  <View style={[s.coverText, wide && { paddingRight: CELL }]}>
-                    <View style={s.label}>
-                      <View style={s.labelInner}>
-                        <Text style={s.labelTitle}>Тетрадь</Text>
-                        <Text style={s.labelHand}>по арифметике</Text>
-                        <Text style={s.labelLine}>ученика 1 класса</Text>
-                        <View style={s.labelRule} />
-                        <Text style={s.labelNote}>
-                          по учебнику А. С. Пчёлко и Г. Б. Поляка, 1959
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={{ alignSelf: "flex-start", marginTop: CELL }}>
-                      <Button
-                        onPress={() =>
-                          stepsDone || progress.page > 1
-                            ? setHome(false)
-                            : selectPage(3)
-                        }
-                      >
-                        {stepsDone || progress.page > 1
-                          ? "Продолжить занятие  →"
-                          : "Начать заниматься  →"}
-                      </Button>
-                    </View>
-                    <Text style={s.coverFoot}>
-                      Считаем рыбок, сравниваем мячи и рисуем первые цифры.
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      s.coverArt,
-                      !wide && {
-                        width: "100%",
-                        maxWidth: 520,
-                        alignSelf: "center",
-                      },
-                    ]}
-                  >
-                    <BookImage id="p010_boys_fishing" maxHeight={320} />
-                  </View>
-                </Rows>
-                <View>
-                  <Text style={s.eyebrow}>Вне занятий · материалы книги</Text>
-                  <View style={s.chips}>
-                    {extraPages.map((p) => (
-                      <Button
-                        key={p.id}
-                        small
-                        secondary
-                        label={`Страница ${p.number}. ${p.title}`}
-                        onPress={() => selectPage(p.number)}
-                      >
-                        {p.number === 1
-                          ? "Здравствуй, арифметика! · Обложка"
-                          : p.number === 143
-                            ? "Оглавление книги"
-                            : "Выходные данные"}
-                      </Button>
-                    ))}
-                  </View>
-                </View>
-                <View style={s.pathHeading}>
-                  <Text style={s.sectionTitle}>Оглавление</Text>
-                  <Text style={s.progressText}>
-                    {finished} из {lessonPages.length} пройдено
-                  </Text>
-                </View>
-                <View style={{ gap: CELL, marginVertical: CELL }}>
-                  <View style={s.chips}>
-                    {[
-                      "Знакомство с числами",
-                      "Первый десяток",
-                      "Второй десяток",
-                      "Умножение и деление",
-                      "Первая сотня",
-                    ].map((title, i) => (
-                      <Button
-                        key={title}
-                        small
-                        secondary={catalogSection !== i}
-                        onPress={() => {
-                          setCatalogSection(i);
-                          setSearch("");
-                        }}
-                      >
-                        {title}
-                      </Button>
-                    ))}
-                  </View>
-                  <TextInput
-                    accessibilityLabel="Найти страницу или задание"
-                    placeholder="Страница 80 · задание № 500"
-                    value={search}
-                    onChangeText={setSearch}
-                    placeholderTextColor={c.muted}
-                    style={s.search}
-                  />
-                </View>
-                <View style={s.pageGrid}>
-                  {lessonPages
-                    .filter((p) => {
-                      if (search.trim()) {
-                        const n = Number(search.replace(/[^0-9]/g, ""));
-                        return search.includes("№")
-                          ? p.blocks.some((b) => b.exerciseNumber === n)
-                          : p.number === n ||
-                              p.title
-                                .toLowerCase()
-                                .includes(search.toLowerCase());
-                      }
-                      const bounds = [
-                        [1, 29],
-                        [30, 58],
-                        [59, 96],
-                        [97, 125],
-                        [126, 142],
-                        [143, 144],
-                      ][catalogSection];
-                      return p.number >= bounds[0] && p.number <= bounds[1];
-                    })
-                    .map((p) => {
-                      const done = pageCompleted(p, progress.answers),
-                        count = p.blocks.filter((b) =>
-                          isDone(b, progress.answers[b.id]),
-                        ).length;
-                      return (
-                        <Pressable
-                          key={p.id}
-                          accessibilityRole="button"
-                          accessibilityLabel={`Страница ${p.number}. ${p.title}`}
-                          onPress={() =>
-                            selectPage(
-                              p.number,
-                              foundStep(p) >= 0 ? foundStep(p) : undefined,
-                            )
-                          }
-                          style={({ pressed }) => [
-                            s.pageCard,
-                            { width: cardWidth },
-                            pressed && { opacity: 0.8 },
-                          ]}
-                        >
-                          <HandFrame seed={p.id} />
-                          <View style={s.cardTop}>
-                            <Text style={s.pageNumber}>стр. {p.number}</Text>
-                            <Text style={[s.pageStatus, done && s.pageDone]}>
-                              {foundStep(p) >= 0
-                                ? `№ ${queryNumber} · шаг ${foundStep(p) + 1}`
-                                : done
-                                  ? "✓"
-                                  : p.number < 3
-                                    ? "знакомство"
-                                    : `${p.blocks.length} шагов`}
-                            </Text>
-                          </View>
-                          <View style={s.cardArt}>
-                            <BookImage id={p.hero} maxHeight={108} />
-                          </View>
-                          <Text style={s.cardTitle}>{p.title}</Text>
-                          <Text style={s.cardSubtitle}>{p.subtitle}</Text>
-                          <View style={{ marginTop: "auto", paddingTop: 12 }}>
-                            <Cells total={p.blocks.length} done={count} />
-                          </View>
-                        </Pressable>
-                      );
-                    })}
-                </View>
-                <View style={s.homeFooter}>
-                  <Text style={s.footerText}>
-                    А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого
-                    класса
-                  </Text>
-                  <Text style={s.footerText}>
-                    Тестовая версия{"\n"}Страницы PDF 1–144
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ) : (
-            <View
-              onLayout={measureSheet}
-              style={[
-                s.lessonLayout,
-                { paddingLeft: left },
-                compact && { paddingRight: left },
-              ]}
-            >
-              {wide && (
-                <View style={s.sidebar}>
-                  <Text style={[s.eyebrow, s.sideHeading]}>
-                    Соседние страницы
-                  </Text>
-                  {lessonPages
-                    .filter((p) => Math.abs(p.number - page.number) <= 4)
-                    .map((p) => (
-                      <Pressable
-                        accessibilityRole="button"
-                        accessibilityLabel={`Открыть страницу ${p.number}`}
-                        accessibilityState={{
-                          selected: page.number === p.number,
-                        }}
-                        key={p.id}
-                        onPress={() => selectPage(p.number)}
-                        style={s.sideItem}
-                      >
-                        <Text
-                          style={[
-                            s.sideNumber,
-                            page.number === p.number && { color: c.pen },
-                          ]}
-                        >
-                          {pageCompleted(p, progress.answers)
-                            ? "✓"
-                            : String(p.number)}
-                        </Text>
-                        <Text
-                          style={[
-                            s.sideTitle,
-                            page.number === p.number && { color: c.pen },
-                          ]}
-                        >
-                          {p.title}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  {/* A word in pencil, not a framed card: nothing to press. */}
-                  <View style={s.sideNote}>
-                    <Text style={s.sideNoteText}>
-                      Можно остановиться на любом шаге. Мы запомним, где ты
-                      закончил.
-                    </Text>
-                  </View>
-                </View>
-              )}
-              <View
-                ref={lessonMain}
-                style={[s.lessonMain, { width: Math.min(writing, cells(57)) }]}
-              >
-                {/* One row: the arrow home, the page's name, the original. The
-                    app header stays on the contents page; here it only
-                    repeated «Арифметика» and took a line. */}
-                {/* Two rows of cells: the arrow home, the page's name written
-                    on the lower line with its number after it, the original. */}
-                <View style={s.lessonTop}>
-                  <Pressable
-                    accessibilityRole="button"
-                    accessibilityLabel="На главную"
-                    onPress={() => setHome(true)}
-                    hitSlop={8}
-                    style={s.backButton}
-                  >
-                    <BackArrow />
-                  </Pressable>
-                  <View style={[s.lessonName, compact && { paddingTop: CELL }]}>
-                    <Text
-                      style={[
-                        s.lessonTitle,
-                        tall && written(38, 2, true),
-                        // On a phone a long name takes two lines: a row
-                        // each, under the empty row at the top.
-                        compact && s.lessonTitleCompact,
-                      ]}
-                    >
-                      {page.title}
-                    </Text>
-                    {!compact && (
-                      <Text style={s.lessonSubtitle}>{pageLine}</Text>
-                    )}
-                  </View>
-                  <CellPressable
-                    accessibilityRole="button"
-                    onPress={() => {
-                      setOriginal(true);
-                      setZoom(false);
-                    }}
-                  >
-                    <Text style={s.sourceLink}>Оригинал ↗</Text>
-                  </CellPressable>
-                </View>
-                {/* On a phone the name takes the whole row; its number goes under it. */}
-                {compact && <Text style={s.lessonSubtitleRow}>{pageLine}</Text>}
-                {/* On a laptop screen the step squares carry the count, as on a phone. */}
-                {!short && (
-                  <View style={s.stepHeading}>
-                    <Text style={s.stepText}>
-                      Шаг {progress.block + 1} из {page.blocks.length}
-                      {block.exerciseNumber
-                        ? ` · № ${block.exerciseNumber}`
-                        : ""}
-                    </Text>
-                    <Text style={s.stepText}>{pageDone} выполнено</Text>
-                  </View>
-                )}
-                <ScrollView
-                  horizontal
-                  style={{ flexGrow: 0 }}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={s.stepDots}
-                >
-                  {page.blocks.map((b, i) => (
-                    <Pressable
-                      key={b.id}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Шаг ${i + 1}: ${b.title}`}
-                      accessibilityState={{ selected: i === progress.block }}
-                      onPress={() => setProgress((p) => ({ ...p, block: i }))}
-                      style={[
-                        s.stepDot,
-                        isDone(b, progress.answers[b.id]) && s.stepDone,
-                        i === progress.block && s.stepActive,
-                      ]}
-                    >
-                      <Text
-                        style={[
-                          s.stepDotText,
-                          isDone(b, progress.answers[b.id]) && s.stepDoneText,
-                          i === progress.block &&
-                            !isDone(b, progress.answers[b.id]) && { color: c.pen },
-                        ]}
-                      >
-                        {isDone(b, progress.answers[b.id]) ? "✓" : i + 1}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </ScrollView>
-                <View
-                  ref={exerciseCard}
-                  testID="exercise-card"
-                  style={s.exerciseCard}
-                >
-                  <TaskFitExtra.Provider value={fitExtra}>
-                    <Exercise
-                      key={block.id}
-                      block={block}
-                      answer={answer}
-                      onAnswer={updateAnswer}
-                      onDrawing={setDrawing}
-                      onCoachActiveChange={onCoachActiveChange}
-                      revealCoachTarget={(target) =>
-                        new Promise<void>((resolve) => {
-                          const container = scroll.current?.getInnerViewNode();
-                          if (!container) {
-                            resolve();
-                            return;
-                          }
-                          target.measureLayout(
-                            container,
-                            (_x, y) => {
-                              scroll.current?.scrollTo({
-                                y: Math.max(0, y - 100),
-                                animated: false,
-                              });
-                              setTimeout(resolve, 160);
-                            },
-                            resolve,
-                          );
-                        })
-                      }
-                    />
-                  </TaskFitExtra.Provider>
-                </View>
-                <View ref={navigation} style={s.navigation}>
-                  <Button
-                    secondary
-                    disabled={
-                      progress.block === 0 &&
-                      (progress.page <= 3 || progress.page > 142)
-                    }
-                    onPress={previous}
-                  >
-                    ← Назад
-                  </Button>
-                  <Button disabled={!advance} onPress={next}>
-                    {!(progress.page >= 3 && progress.page < 142) &&
-                    progress.block === page.blocks.length - 1
-                      ? "К страницам →"
-                      : "Дальше →"}
-                  </Button>
-                </View>
-                {!advance && (
-                  <Text testID="next-locked-note" style={s.lockNote}>
-                    «Дальше» откроется, когда задание получится.
-                  </Text>
-                )}
-              </View>
-            </View>
-          )}
-        </ScrollView>
-        {comparison && DebugSourcePanel && (
-          <View style={{ flex: 0.48, minWidth: 0, minHeight: 0 }}>
-            <DebugSourcePanel
-              key={page.number}
-              pageNumber={page.number}
-              title={block.title}
-            />
+              Повторить
+            </Button>
           </View>
         )}
-      </View>
-      <Modal
-        visible={original}
-        animationType="slide"
-        onRequestClose={() => setOriginal(false)}
-      >
-        <SafeAreaView style={s.safe}>
-          <View style={s.modalHeader}>
-            <Text style={s.modalTitle}>Оригинал · страница {page.number}</Text>
-            <Button small secondary onPress={() => setOriginal(false)}>
-              Закрыть
-            </Button>
-          </View>
-          <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}>
-            <Button small secondary onPress={() => setZoom(!zoom)}>
-              {zoom ? "Уместить страницу" : "Увеличить ×2"}
-            </Button>
-          </View>
-          <ScrollView
-            maximumZoomScale={3}
-            minimumZoomScale={1}
-            contentContainerStyle={{ alignItems: "center", padding: 16 }}
+        <View
+          style={{
+            flex: 1,
+            minHeight: 0,
+            flexDirection: comparison && sideBySide ? "row" : "column",
+          }}
+        >
+          <View
+            style={{ flex: comparison ? 0.52 : 1, minWidth: 0, minHeight: 0 }}
           >
             <ScrollView
-              horizontal
-              contentContainerStyle={{
-                width: zoom ? Math.max(width * 1.7, 1000) : width - 32,
+              testID="lesson-scroll-pane"
+              style={[
+                { flex: 1, minWidth: 0 },
+                // Keep notebook width fixed when drawing temporarily hides scrolling.
+                Platform.OS === "web"
+                  ? ({ scrollbarGutter: "stable" } as any)
+                  : undefined,
+              ]}
+              ref={scroll}
+              onLayout={(e) => setPaneHeight(e.nativeEvent.layout.height)}
+              scrollEnabled={!drawing}
+              scrollEventThrottle={16}
+              onScroll={(e) => {
+                lastScroll.current = e.nativeEvent.contentOffset.y;
               }}
+              contentContainerStyle={s.scroll}
             >
-              <BookImage
-                id={`page_${String(page.number).padStart(3, "0")}`}
-                maxHeight={zoom ? 2600 : 1600}
-              />
-            </ScrollView>
-          </ScrollView>
-        </SafeAreaView>
-      </Modal>
-      <Modal
-        visible={parent}
-        transparent
-        animationType="fade"
-        onRequestClose={() => {
-          setParent(false);
-          setConfirmReset(false);
-        }}
-      >
-        <View style={s.modalShade}>
-          <View style={s.parentPanel}>
-            <ScrollView contentContainerStyle={{ gap: 20, padding: 28 }}>
-              <Text style={s.modalTitle}>Учимся вместе</Text>
-              <Text style={s.parentBody}>
-                Это тестовая версия полного учебника: 144 страницы и задания до
-                числа 100. Начать можно с любой страницы.
-              </Text>
-              <Text style={s.parentBody}>
-                Нажатия на рисунки, числа и фигуры проверяются автоматически.
-                Прописи проверяются по форме и положению линии на клетчатом
-                поле. Это проверка обведения образца, а не распознавание
-                свободного рисунка.
-              </Text>
-              <Text style={s.parentBody}>
-                Мешки на странице 5 перекрываются. В этом задании нет строгой
-                числовой оценки. Это свободная тренировка выкладывания палочек;
-                переход не означает проверку количества.
-              </Text>
-              <Text style={s.parentBody}>
-                Пропущенные шаги остаются незавершёнными. Прогресс хранится
-                только на этом устройстве; аккаунта и синхронизации нет.
-              </Text>
-              <Text style={s.parentBody}>
-                Озвучивание временно отключено: кнопки «Слушать» нет, пока не
-                выбран голос диктора. Читайте задания вместе.
-              </Text>
-              <Text style={s.parentBody}>
-                Выполнено {stepsDone} из {allBlocks.length} шагов.
-              </Text>
-              {confirmReset ? (
+              {/* The page's ruling is drawn first: the header and all text lie on it. */}
+              <NotebookPaper margin={!compact} origin={paperOrigin} />
+              {home && header}
+              {home ? (
                 <View
-                  style={{
-                    gap: 12,
-                    backgroundColor: c.washWarm,
-                    padding: 16,
-                    borderRadius: 12,
-                  }}
+                  onLayout={measureSheet}
+                  style={[
+                    s.home,
+                    { paddingLeft: left },
+                    compact && { paddingRight: left, paddingTop: CELL },
+                  ]}
                 >
-                  <Text style={s.parentBody}>
-                    Удалить все ответы и рисунки этой тестовой версии? Это
-                    действие нельзя отменить.
-                  </Text>
-                  <Button
-                    onPress={() => {
-                      setProgress(emptyProgress());
-                      setConfirmReset(false);
-                      setParent(false);
-                      setHome(true);
-                    }}
-                  >
-                    Да, удалить прогресс
-                  </Button>
-                  <Button secondary onPress={() => setConfirmReset(false)}>
-                    Отмена
-                  </Button>
+                  <View style={{ width: writing, maxWidth: "100%" }}>
+                    <Rows
+                      style={s.cover}
+                      contentStyle={[
+                        s.coverContent,
+                        !wide && { flexDirection: "column" },
+                      ]}
+                    >
+                      <View
+                        style={[s.coverText, wide && { paddingRight: CELL }]}
+                      >
+                        <View style={s.label}>
+                          <View style={s.labelInner}>
+                            <Text style={s.labelTitle}>Тетрадь</Text>
+                            <Text style={s.labelHand}>по арифметике</Text>
+                            <Text style={s.labelLine}>ученика 1 класса</Text>
+                            <View style={s.labelRule} />
+                            <Text style={s.labelNote}>
+                              по учебнику А. С. Пчёлко и Г. Б. Поляка, 1959
+                            </Text>
+                          </View>
+                        </View>
+                        <View
+                          style={{ alignSelf: "flex-start", marginTop: CELL }}
+                        >
+                          <Button
+                            onPress={() =>
+                              stepsDone || progress.page > 1
+                                ? setHome(false)
+                                : selectPage(3)
+                            }
+                          >
+                            {stepsDone || progress.page > 1
+                              ? "Продолжить занятие  →"
+                              : "Начать заниматься  →"}
+                          </Button>
+                        </View>
+                        <Text style={s.coverFoot}>
+                          Считаем рыбок, сравниваем мячи и рисуем первые цифры.
+                        </Text>
+                      </View>
+                      <View
+                        style={[
+                          s.coverArt,
+                          !wide && {
+                            width: "100%",
+                            maxWidth: 520,
+                            alignSelf: "center",
+                          },
+                        ]}
+                      >
+                        <BookImage id="p010_boys_fishing" maxHeight={320} />
+                      </View>
+                    </Rows>
+                    <View style={s.pathHeading}>
+                      <Text style={s.sectionTitle}>Оглавление</Text>
+                      <Text style={s.progressText}>
+                        {finished} из {lessonPages.length} пройдено
+                      </Text>
+                    </View>
+                    <View style={{ gap: CELL, marginVertical: CELL }}>
+                      <View style={s.chips}>
+                        {[
+                          "Знакомство с числами",
+                          "Первый десяток",
+                          "Второй десяток",
+                          "Умножение и деление",
+                          "Первая сотня",
+                        ].map((title, i) => (
+                          <Button
+                            key={title}
+                            small
+                            secondary={catalogSection !== i}
+                            onPress={() => {
+                              setCatalogSection(i);
+                              setSearch("");
+                            }}
+                          >
+                            {title}
+                          </Button>
+                        ))}
+                      </View>
+                      <TextInput
+                        accessibilityLabel="Найти страницу или задание"
+                        placeholder="Страница 80 · задание № 500"
+                        value={search}
+                        onChangeText={setSearch}
+                        placeholderTextColor={c.muted}
+                        style={s.search}
+                      />
+                    </View>
+                    <View style={s.pageGrid}>
+                      {lessonPages
+                        .filter((p) => {
+                          if (search.trim()) {
+                            const n = Number(search.replace(/[^0-9]/g, ""));
+                            return search.includes("№")
+                              ? p.blocks.some((b) => b.exerciseNumber === n)
+                              : p.number === n ||
+                                  p.title
+                                    .toLowerCase()
+                                    .includes(search.toLowerCase());
+                          }
+                          const bounds = [
+                            [1, 29],
+                            [30, 58],
+                            [59, 96],
+                            [97, 125],
+                            [126, 142],
+                            [143, 144],
+                          ][catalogSection];
+                          return p.number >= bounds[0] && p.number <= bounds[1];
+                        })
+                        .map((p) => {
+                          const done = pageCompleted(p, progress.answers),
+                            count = p.blocks.filter((b) =>
+                              isDone(b, progress.answers[b.id]),
+                            ).length;
+                          return (
+                            <Pressable
+                              key={p.id}
+                              accessibilityRole="button"
+                              accessibilityLabel={`Страница ${p.number}. ${p.title}`}
+                              onPress={() =>
+                                selectPage(
+                                  p.number,
+                                  foundStep(p) >= 0 ? foundStep(p) : undefined,
+                                )
+                              }
+                              style={({ pressed }) => [
+                                s.pageCard,
+                                { width: cardWidth },
+                                pressed && { opacity: 0.8 },
+                              ]}
+                            >
+                              <HandFrame seed={p.id} />
+                              <View style={s.cardTop}>
+                                <Text style={s.pageNumber}>
+                                  стр. {p.number}
+                                </Text>
+                                <Text
+                                  style={[s.pageStatus, done && s.pageDone]}
+                                >
+                                  {foundStep(p) >= 0
+                                    ? `№ ${queryNumber} · шаг ${foundStep(p) + 1}`
+                                    : done
+                                      ? "✓"
+                                      : p.number < 3
+                                        ? "знакомство"
+                                        : count > 0
+                                          ? `${count} из ${p.blocks.length}`
+                                          : ""}
+                                </Text>
+                              </View>
+                              <View style={s.cardArt}>
+                                <BookImage id={p.hero} maxHeight={108} />
+                              </View>
+                              <Text style={s.cardTitle}>{p.title}</Text>
+                              <Text style={s.cardSubtitle}>{p.subtitle}</Text>
+                            </Pressable>
+                          );
+                        })}
+                    </View>
+                    {/* The book's pages outside the lessons: after the
+                        lessons, where they do not stand in the child's way. */}
+                    <View style={{ marginTop: cells(2) }}>
+                      <Text style={s.eyebrow}>
+                        Вне занятий · материалы книги
+                      </Text>
+                      <View style={s.chips}>
+                        {extraPages.map((p) => (
+                          <Button
+                            key={p.id}
+                            small
+                            secondary
+                            label={`Страница ${p.number}. ${p.title}`}
+                            onPress={() => selectPage(p.number)}
+                          >
+                            {p.number === 1
+                              ? "Здравствуй, арифметика! · Обложка"
+                              : p.number === 143
+                                ? "Оглавление книги"
+                                : "Выходные данные"}
+                          </Button>
+                        ))}
+                      </View>
+                    </View>
+                    <View style={s.homeFooter}>
+                      <Text style={s.footerText}>
+                        А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого
+                        класса
+                      </Text>
+                      <Text style={s.footerText}>
+                        Тестовая версия{"\n"}Страницы PDF 1–144
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               ) : (
-                <Button secondary onPress={() => setConfirmReset(true)}>
-                  Начать заново…
-                </Button>
+                <View
+                  onLayout={measureSheet}
+                  style={[
+                    s.lessonLayout,
+                    { paddingLeft: left },
+                    compact && { paddingRight: left },
+                  ]}
+                >
+                  <View
+                    ref={lessonMain}
+                    style={[s.lessonMain, { width: writing }]}
+                  >
+                    {pageEnd ? (
+                      <View testID="exercise-card">
+                        <LessonTop
+                          compact={compact}
+                          width={writing}
+                          line={pageLine}
+                          step={stepLine}
+                          onHome={() => setHome(true)}
+                          onSteps={() => setStepsOpen(true)}
+                          help={null}
+                        />
+                        <PageDone
+                          number={page.number}
+                          title={page.title}
+                          done={pageDone}
+                          total={page.blocks.length}
+                          onFinish={finish}
+                        />
+                      </View>
+                    ) : (
+                      <View
+                        ref={exerciseCard}
+                        testID="exercise-card"
+                        style={s.exerciseCard}
+                      >
+                        <TaskFitExtra.Provider value={fitExtra}>
+                          <Exercise
+                            key={block.id}
+                            block={block}
+                            answer={answer}
+                            onAnswer={updateAnswer}
+                            onDrawing={setDrawing}
+                            onCoachActiveChange={onCoachActiveChange}
+                            veiled={shown !== fitKey}
+                            header={(help) => (
+                              <LessonTop
+                                compact={compact}
+                                width={writing}
+                                line={pageLine}
+                                step={stepLine}
+                                onHome={() => setHome(true)}
+                                onSteps={() => setStepsOpen(true)}
+                                help={help}
+                              />
+                            )}
+                            revealCoachTarget={(target) =>
+                              new Promise<void>((resolve) => {
+                                const container =
+                                  scroll.current?.getInnerViewNode();
+                                if (!container) {
+                                  resolve();
+                                  return;
+                                }
+                                target.measureLayout(
+                                  container,
+                                  (_x, y) => {
+                                    scroll.current?.scrollTo({
+                                      y: Math.max(0, y - 100),
+                                      animated: false,
+                                    });
+                                    setTimeout(resolve, 160);
+                                  },
+                                  resolve,
+                                );
+                              })
+                            }
+                          />
+                        </TaskFitExtra.Provider>
+                      </View>
+                    )}
+                  </View>
+                </View>
               )}
-              <Button
-                onPress={() => {
-                  setParent(false);
-                  setConfirmReset(false);
+            </ScrollView>
+            {!home && (
+              <LessonNav
+                left={paperOrigin}
+                width={writing}
+                back={{
+                  disabled:
+                    !pageEnd &&
+                    progress.block === 0 &&
+                    (progress.page <= 3 || progress.page > 142),
+                  onPress: previous,
+                }}
+                next={{
+                  label: pageEnd
+                    ? "Продолжить →"
+                    : lastStep && !lessonPage
+                      ? "К страницам →"
+                      : "Дальше →",
+                  locked: !pageEnd && !advance,
+                  onPress: next,
+                }}
+                note={lockNote ? "Сначала сделай задание" : ""}
+              />
+            )}
+          </View>
+          {comparison && DebugSourcePanel && (
+            <View style={{ flex: 0.48, minWidth: 0, minHeight: 0 }}>
+              <DebugSourcePanel
+                key={page.number}
+                pageNumber={page.number}
+                title={block.title}
+              />
+            </View>
+          )}
+        </View>
+        <StepList
+          visible={stepsOpen}
+          title={page.title}
+          subtitle={`Страница ${page.number} · ${page.subtitle}`}
+          steps={page.blocks.map((b) => ({
+            id: b.id,
+            title: b.title,
+            done: isDone(b, progress.answers[b.id]),
+          }))}
+          current={pageEnd ? -1 : progress.block}
+          onPick={(i) => {
+            setStepsOpen(false);
+            setPageEnd(false);
+            setProgress((p) => ({ ...p, block: i }));
+          }}
+          onOriginal={() => {
+            setStepsOpen(false);
+            setOriginal(true);
+            setZoom(false);
+          }}
+          onClose={() => setStepsOpen(false)}
+        />
+        <Modal
+          visible={original}
+          animationType="slide"
+          onRequestClose={() => setOriginal(false)}
+        >
+          <SafeAreaView style={s.safe}>
+            <View style={s.modalHeader}>
+              <Text style={s.modalTitle}>
+                Оригинал · страница {page.number}
+              </Text>
+              <Button small secondary onPress={() => setOriginal(false)}>
+                Закрыть
+              </Button>
+            </View>
+            <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}>
+              <Button small secondary onPress={() => setZoom(!zoom)}>
+                {zoom ? "Уместить страницу" : "Увеличить ×2"}
+              </Button>
+            </View>
+            <ScrollView
+              maximumZoomScale={3}
+              minimumZoomScale={1}
+              contentContainerStyle={{ alignItems: "center", padding: 16 }}
+            >
+              <ScrollView
+                horizontal
+                contentContainerStyle={{
+                  width: zoom ? Math.max(width * 1.7, 1000) : width - 32,
                 }}
               >
-                Вернуться к учебнику
-              </Button>
+                <BookImage
+                  id={`page_${String(page.number).padStart(3, "0")}`}
+                  maxHeight={zoom ? 2600 : 1600}
+                />
+              </ScrollView>
             </ScrollView>
+          </SafeAreaView>
+        </Modal>
+        <Modal
+          visible={parent}
+          transparent
+          animationType="fade"
+          onRequestClose={() => {
+            setParent(false);
+            setAdult(false);
+            setConfirmReset(false);
+          }}
+        >
+          <View style={s.modalShade}>
+            <View style={s.parentPanel}>
+              {!adult ? (
+                <ScrollView>
+                  <AdultGate
+                    onPass={() => setAdult(true)}
+                    onClose={() => setParent(false)}
+                  />
+                </ScrollView>
+              ) : (
+                <ScrollView contentContainerStyle={{ gap: 20, padding: 28 }}>
+                  <Text style={s.modalTitle}>Учимся вместе</Text>
+                  <Text style={s.parentBody}>
+                    Это тестовая версия полного учебника: 144 страницы и задания
+                    до числа 100. Начать можно с любой страницы.
+                  </Text>
+                  <Text style={s.parentBody}>
+                    Нажатия на рисунки, числа и фигуры проверяются
+                    автоматически. Прописи проверяются по форме и положению
+                    линии на клетчатом поле. Это проверка обведения образца, а
+                    не распознавание свободного рисунка.
+                  </Text>
+                  <Text style={s.parentBody}>
+                    Мешки на странице 5 перекрываются. В этом задании нет
+                    строгой числовой оценки. Это свободная тренировка
+                    выкладывания палочек; переход не означает проверку
+                    количества.
+                  </Text>
+                  <Text style={s.parentBody}>
+                    Пропущенные шаги остаются незавершёнными. Прогресс хранится
+                    только на этом устройстве; аккаунта и синхронизации нет.
+                  </Text>
+                  <Text style={s.parentBody}>
+                    Озвучивание временно отключено: кнопки «Слушать» нет, пока
+                    не выбран голос диктора. Читайте задания вместе.
+                  </Text>
+                  <Text style={s.parentBody}>
+                    Выполнено {stepsDone} из {allBlocks.length} шагов.
+                  </Text>
+                  {confirmReset ? (
+                    <View
+                      style={{
+                        gap: 12,
+                        backgroundColor: c.washWarm,
+                        padding: 16,
+                        borderRadius: 12,
+                      }}
+                    >
+                      <Text style={s.parentBody}>
+                        Удалить все ответы и рисунки этой тестовой версии? Это
+                        действие нельзя отменить.
+                      </Text>
+                      <Button
+                        onPress={() => {
+                          setProgress(emptyProgress());
+                          setConfirmReset(false);
+                          setParent(false);
+                          setHome(true);
+                        }}
+                      >
+                        Да, удалить прогресс
+                      </Button>
+                      <Button secondary onPress={() => setConfirmReset(false)}>
+                        Отмена
+                      </Button>
+                    </View>
+                  ) : (
+                    <Button secondary onPress={() => setConfirmReset(true)}>
+                      Начать заново…
+                    </Button>
+                  )}
+                  <Button
+                    onPress={() => {
+                      setParent(false);
+                      setAdult(false);
+                      setConfirmReset(false);
+                    }}
+                  >
+                    Вернуться к учебнику
+                  </Button>
+                </ScrollView>
+              )}
+            </View>
           </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
-  );
-}
-function BackArrow() {
-  return (
-    <Svg width={20} height={20} viewBox="0 0 24 24">
-      <Path
-        d="M15 5 L8 12 L15 19"
-        fill="none"
-        stroke={c.pen}
-        strokeWidth={2.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
+        </Modal>
+      </SafeAreaView>
+    </SettledWindow.Provider>
   );
 }
 function LockIcon() {
@@ -1079,6 +1110,7 @@ export default function App() {
 }
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: c.paper },
+  sheet: { flexGrow: 0, flexShrink: 0, backgroundColor: c.paper },
   loading: {
     flex: 1,
     alignItems: "center",
@@ -1282,157 +1314,21 @@ const s = StyleSheet.create({
     fontSize: 12,
     lineHeight: CELL,
   },
-  // Everything here is counted in cells of the sheet (24 px). The page's
-  // name is written on the second line from the top, so the row above it is
-  // the margin; the columns stand two cells apart.
+  // Everything here is counted in cells of the sheet (24 px): an empty row
+  // over the task, the task itself, an empty row under it.
   lessonLayout: {
     width: "100%",
     // A big screen gives the task more width, so its picture can use the
-    // window's height instead of leaving it empty under «Дальше».
+    // window's height.
     maxWidth: 1800,
     alignSelf: "center",
     paddingRight: CELL,
-    paddingBottom: 38,
-    flexDirection: "row",
-    // The columns keep their own heights: stretched to the list of pages,
-    // the lesson column handed the extra to the row of step squares.
+    paddingTop: CELL,
+    paddingBottom: CELL,
     alignItems: "flex-start",
-    gap: cells(2),
-  },
-  sidebar: { width: cells(10) },
-  // Written level with the page's name, so the list starts level with the
-  // step squares.
-  sideHeading: { ...written(14, 2) },
-  sideItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    borderRadius: 4,
-    paddingHorizontal: 11,
-    minHeight: cells(2),
-  },
-  sideNumber: {
-    fontFamily: f.regular,
-    color: c.muted,
-    fontSize: 13,
-    lineHeight: CELL,
-    width: 28,
-  },
-  sideTitle: {
-    fontFamily: f.bold,
-    color: c.ink,
-    fontSize: 14,
-    lineHeight: CELL,
-    flex: 1,
-  },
-  sideNote: { marginTop: cells(2), paddingHorizontal: 11 },
-  sideNoteText: {
-    fontFamily: f.regular,
-    fontSize: 13,
-    lineHeight: CELL,
-    color: c.muted,
   },
   lessonMain: { minWidth: 0, maxWidth: "100%" },
-  lessonTop: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-    minHeight: cells(2),
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1.5,
-    borderColor: c.line,
-    backgroundColor: c.card,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  sourceLink: {
-    fontFamily: f.bold,
-    color: c.pen,
-    textAlign: "right",
-    ...written(15, 2),
-  },
-  // The name and what follows it stand on one line.
-  lessonName: {
-    flex: 1,
-    minWidth: 0,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    columnGap: CELL / 2,
-  },
-  lessonTitle: { fontFamily: f.hand, color: c.pen, ...written(28, 2, true) },
-  lessonTitleCompact: { ...written(26, 1, true), top: 3 },
-  lessonSubtitle: {
-    fontFamily: f.regular,
-    color: c.muted,
-    ...written(14, 2),
-  },
-  lessonSubtitleRow: {
-    fontFamily: f.regular,
-    color: c.muted,
-    fontSize: 13,
-    lineHeight: CELL,
-  },
-  stepHeading: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  stepText: {
-    fontFamily: f.regular,
-    color: c.muted,
-    fontSize: 14,
-    lineHeight: CELL,
-  },
-  // The squares stand in a band of three rows, apart from the page's name
-  // above and the task below; each takes two cells and is drawn a little
-  // inside them. A small square gets a plain line: a hand-drawn one this
-  // small reads as a smudge.
-  stepDots: { gap: 8, paddingTop: 16, paddingBottom: 16 },
-  stepDot: {
-    width: 40,
-    height: 40,
-    borderRadius: 4,
-    borderWidth: 1.5,
-    borderColor: c.line,
-    backgroundColor: c.card,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  // The current step is outlined in pen, not filled: one blue square in a
-  // row of pencil ones is enough to find it.
-  stepDone: {},
-  stepActive: { borderColor: c.pen, borderWidth: 2 },
-  stepDotText: {
-    fontFamily: f.bold,
-    color: c.muted,
-    fontSize: 16,
-    lineHeight: CELL,
-  },
-  stepDoneText: {
-    fontFamily: f.hand,
-    color: c.red,
-    fontSize: 24,
-    lineHeight: CELL,
-  },
   exerciseCard: {},
-  navigation: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: CELL,
-    marginTop: CELL,
-  },
-  // Half a cell under the button it explains.
-  lockNote: {
-    fontFamily: f.regular,
-    color: c.muted,
-    fontSize: 14,
-    lineHeight: CELL,
-    textAlign: "right",
-    marginTop: CELL / 2,
-  },
   modalHeader: {
     padding: 20,
     flexDirection: "row",
