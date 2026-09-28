@@ -5,12 +5,21 @@ import { DrawingPad } from "./DrawingPad";
 import { relationPlan } from "../lib/relationDrawing";
 import { BookImage } from "./BookImage";
 import React from "react";
-import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button, RetryNote } from "./Controls";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
+import { HandFrame } from "./HandDrawn";
+import { CELL, cells } from "../lib/grid";
 // An arithmetic frame such as «4 + □ =», not a worded question.
 const isExpression = (label: string) => /^[\d\s+−\-×·:÷□()]+=\s*$/.test(label);
 // A long column of + and − examples with nothing to lean on: a number row to
@@ -57,6 +66,9 @@ export function CourseTask({
   onAnswer: (a: Answer) => void;
   onDrawing: (value: boolean) => void;
 }) {
+  // On a phone a question needs the width: half a cell at the sides instead of one.
+  const narrow = useWindowDimensions().width < 600;
+  const card = [s.card, narrow && { paddingHorizontal: CELL / 2 }];
   const r = answer.responses ?? {};
   const set = (key: string, value: string) =>
     onAnswer({ ...answer, responses: { ...r, [key]: value }, checked: false });
@@ -118,9 +130,10 @@ export function CourseTask({
     </View>
   );
   return (
-    <View style={{ gap: 18 }}>
+    <View style={{ gap: CELL }}>
       {block.kind === "targetGame" && (
-        <View style={s.card}>
+        <View style={card}>
+          <HandFrame seed="card" />
           <Text style={s.label}>
             Игрок 1: {r.score0 || 0} · Игрок 2: {r.score1 || 0}
           </Text>
@@ -187,7 +200,8 @@ export function CourseTask({
         </View>
       )}
       {block.kind === "recipe" && (
-        <View style={s.card}>
+        <View style={card}>
+          <HandFrame seed="card" />
           <Text style={s.label}>
             {block.context
               ? "Составь похожую задачу со своими числами"
@@ -249,7 +263,8 @@ export function CourseTask({
         </View>
       )}
       {block.kind === "relation" && (
-        <View style={s.card}>
+        <View style={card}>
+          <HandFrame seed="card" />
           {["left", "right"].map((side) => (
             <View key={side}>
               <Text style={s.label}>
@@ -319,7 +334,8 @@ export function CourseTask({
                 text={field.context}
               />
             )}
-            <View style={s.card}>
+            <View style={card}>
+              <HandFrame seed={`card-${field.id}`} />
               {/* «1. 1 + 1 =» reads as part of the example; a bare expression
                 goes without its number, which the screen reader still gets. */}
               <TextWithBlanks
@@ -344,7 +360,8 @@ export function CourseTask({
         ))}
       {block.kind === "compose" &&
         block.rules.map((rule, i) => (
-          <View key={i} style={s.card}>
+          <View key={i} style={card}>
+            <HandFrame seed={`card-${i}`} />
             <Text style={s.label}>
               {block.story ? "Придумай задачу" : "Составь пример"} {i + 1}
             </Text>
@@ -465,7 +482,8 @@ export function CourseTask({
             key = String(i),
             value = Number(r[key]) || 0;
           return (
-            <View key={i} style={s.card}>
+            <View key={i} style={card}>
+              <HandFrame seed={`card-${i}`} />
               <Text style={s.label}>
                 {a.labels?.[i] ??
                   (a.measure
@@ -833,7 +851,15 @@ export function CourseTask({
 const s = StyleSheet.create({
   chipDone: { backgroundColor: c.pen, borderColor: c.pen },
   row: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
-  card: { padding: 16, borderRadius: 6, backgroundColor: "#f1efe9", gap: 12 },
+  // A question is written on the sheet and bracketed in pencil: the ruling
+  // shows through, and the box for the answer is two cells high.
+  card: {
+    paddingTop: CELL / 2,
+    paddingBottom: CELL,
+    paddingHorizontal: CELL,
+    backgroundColor: "#ffffffb3",
+    gap: CELL / 2,
+  },
   numberLine: { flexDirection: "row", flexWrap: "wrap" },
   numberCell: {
     width: 34,
@@ -847,7 +873,7 @@ const s = StyleSheet.create({
     backgroundColor: c.white,
   },
   numberText: { fontFamily: f.bold, fontSize: 18, color: c.pen },
-  label: { fontFamily: f.bold, fontSize: 19, color: c.ink },
+  label: { fontFamily: f.bold, fontSize: 19, lineHeight: CELL, color: c.ink },
   text: { fontFamily: f.bold, fontSize: 20, color: c.pen },
   note: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.ink },
   context: {
@@ -861,9 +887,9 @@ const s = StyleSheet.create({
     backgroundColor: c.white,
     borderWidth: 2,
     borderColor: c.pen,
-    borderRadius: 6,
-    width: 86,
-    minHeight: 54,
+    borderRadius: 4,
+    width: cells(4),
+    minHeight: cells(2),
     textAlign: "center",
     fontFamily: f.bold,
     fontSize: 26,

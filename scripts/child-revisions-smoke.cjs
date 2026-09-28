@@ -123,6 +123,23 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await board.scrollIntoViewIfNeeded();
       // Wait for the previous drop to return to the tray and for layout to settle.
       await p.getByTestId(`stick-${index}`).hover();
+      // The board is fitted to the window once the picture beside it has
+      // loaded; its targets move until then. Half a second of stillness.
+      let still = await p.getByTestId(`stick-target-${index}`).boundingBox();
+      for (let k = 0, n = 0; k < 60 && n < 8; k++) {
+        await p.waitForTimeout(60);
+        const next = await p
+          .getByTestId(`stick-target-${index}`)
+          .boundingBox();
+        n =
+          next &&
+          still &&
+          Math.abs(next.x - still.x) < 0.5 &&
+          Math.abs(next.y - still.y) < 0.5
+            ? n + 1
+            : 0;
+        still = next;
+      }
       const a = await p.getByTestId(`stick-${index}`).boundingBox(),
         b = await p.getByTestId(`stick-target-${index}`).boundingBox(),
         frame = await board.boundingBox();

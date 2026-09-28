@@ -11,6 +11,7 @@ import {
   TextInput,
   View,
   useWindowDimensions,
+  type LayoutChangeEvent,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -32,6 +33,8 @@ import { readProgress, saveProgress } from "./src/lib/storage";
 import { colors as c, fonts as f } from "./src/theme";
 import { Button, Cells, ProgressBar } from "./src/components/Controls";
 import { NotebookPaper } from "./src/components/NotebookPaper";
+import { HandFrame, HandRule } from "./src/components/HandDrawn";
+import { CELL, cells, wholeCells } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
@@ -150,6 +153,30 @@ function Main() {
     // its header folds; only a tall window gets the larger title.
     short = !compact,
     tall = wide && windowHeight >= 1000;
+  // The sheet is ruled from the left edge of the writing, and the writing is
+  // a whole number of cells wide: what is measured in cells lies on the lines
+  // at any window width. Until the sheet is measured the window stands in.
+  const [sheet, setSheet] = useState({ x: 0, width: 0 });
+  const sheetWidth = sheet.width || width;
+  const measureSheet = (e: LayoutChangeEvent) => {
+    const { x, width: w } = e.nativeEvent.layout;
+    if (Math.abs(x - sheet.x) > 0.5 || Math.abs(w - sheet.width) > 0.5)
+      setSheet({ x, width: w });
+  };
+  // A phone keeps a quarter of a cell at each side at least; wider screens
+  // have a margin of two cells on the left, as a notebook has, and at least
+  // one on the right.
+  const sideColumn = wide ? cells(10) + cells(2) : 0;
+  const writing = compact
+    ? wholeCells(sheetWidth - CELL / 2)
+    : wholeCells(sheetWidth - cells(2) - CELL - (home ? 0 : sideColumn));
+  const left = compact ? Math.floor((sheetWidth - writing) / 2) : cells(2);
+  const paperOrigin = sheet.x + left;
+  // Cards of the contents stand a cell apart, in whole cells.
+  const cardColumns = wide ? 5 : compact ? 1 : 2;
+  const cardWidth = wholeCells(
+    (writing - (cardColumns - 1) * CELL) / cardColumns,
+  );
   useEffect(() => {
     let mounted = true;
     readProgress()
@@ -390,8 +417,13 @@ function Main() {
   // On phones and tablets the header scrolls away with the page: pinned, it
   // only ate room that a long task needs. Wide screens keep it in place.
   const header = (
-    <View style={[s.header, compact && { paddingHorizontal: 18 }]}>
-      <NotebookPaper />
+    <View
+      style={[
+        s.header,
+        { paddingLeft: paperOrigin, paddingRight: compact ? left : CELL },
+      ]}
+    >
+      <NotebookPaper origin={paperOrigin} />
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="На главную"
@@ -456,218 +488,220 @@ function Main() {
           contentContainerStyle={s.scroll}
         >
           {/* The page's ruling is drawn first: the header and all text lie on it. */}
-          <NotebookPaper margin={!compact} />
+          <NotebookPaper margin={!compact} origin={paperOrigin} />
           {!wide && home && header}
           {home ? (
             <View
+              onLayout={measureSheet}
               style={[
                 s.home,
-                compact && {
-                  paddingHorizontal: 18,
-                  paddingLeft: 18,
-                  paddingTop: 24,
-                },
+                { paddingLeft: left },
+                compact && { paddingRight: left, paddingTop: CELL },
               ]}
             >
-              <View style={[s.cover, !wide && { flexDirection: "column" }]}>
-                <View style={[s.coverText, wide && { paddingRight: 36 }]}>
-                  <View style={s.label}>
-                    <View style={s.labelInner}>
-                      <Text style={s.labelTitle}>Тетрадь</Text>
-                      <Text style={s.labelHand}>по арифметике</Text>
-                      <Text style={s.labelLine}>ученика 1 класса</Text>
-                      <View style={s.labelRule} />
-                      <Text style={s.labelNote}>
-                        по учебнику А. С. Пчёлко и Г. Б. Поляка, 1959
-                      </Text>
+              <View style={{ width: writing, maxWidth: "100%" }}>
+                <View style={[s.cover, !wide && { flexDirection: "column" }]}>
+                  <View style={[s.coverText, wide && { paddingRight: 36 }]}>
+                    <View style={s.label}>
+                      <View style={s.labelInner}>
+                        <Text style={s.labelTitle}>Тетрадь</Text>
+                        <Text style={s.labelHand}>по арифметике</Text>
+                        <Text style={s.labelLine}>ученика 1 класса</Text>
+                        <View style={s.labelRule} />
+                        <Text style={s.labelNote}>
+                          по учебнику А. С. Пчёлко и Г. Б. Поляка, 1959
+                        </Text>
+                      </View>
                     </View>
+                    <View style={{ alignSelf: "flex-start", marginTop: 24 }}>
+                      <Button
+                        onPress={() =>
+                          stepsDone || progress.page > 1
+                            ? setHome(false)
+                            : selectPage(3)
+                        }
+                      >
+                        {stepsDone || progress.page > 1
+                          ? "Продолжить занятие  →"
+                          : "Начать заниматься  →"}
+                      </Button>
+                    </View>
+                    <Text style={s.coverFoot}>
+                      Считаем рыбок, сравниваем мячи и рисуем первые цифры.
+                    </Text>
                   </View>
-                  <View style={{ alignSelf: "flex-start", marginTop: 24 }}>
-                    <Button
-                      onPress={() =>
-                        stepsDone || progress.page > 1
-                          ? setHome(false)
-                          : selectPage(3)
-                      }
-                    >
-                      {stepsDone || progress.page > 1
-                        ? "Продолжить занятие  →"
-                        : "Начать заниматься  →"}
-                    </Button>
+                  <View
+                    style={[
+                      s.coverArt,
+                      !wide && {
+                        width: "100%",
+                        maxWidth: 520,
+                        alignSelf: "center",
+                      },
+                    ]}
+                  >
+                    <BookImage id="p010_boys_fishing" maxHeight={320} />
                   </View>
-                  <Text style={s.coverFoot}>
-                    Считаем рыбок, сравниваем мячи и рисуем первые цифры.
+                </View>
+                <View style={{ gap: 12, marginTop: 20 }}>
+                  <Text style={s.eyebrow}>Вне занятий · материалы книги</Text>
+                  <View
+                    style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
+                  >
+                    {extraPages.map((p) => (
+                      <Button
+                        key={p.id}
+                        small
+                        secondary
+                        label={`Страница ${p.number}. ${p.title}`}
+                        onPress={() => selectPage(p.number)}
+                      >
+                        {p.number === 1
+                          ? "Здравствуй, арифметика! · Обложка"
+                          : p.number === 143
+                            ? "Оглавление книги"
+                            : "Выходные данные"}
+                      </Button>
+                    ))}
+                  </View>
+                </View>
+                <View style={s.pathHeading}>
+                  <View>
+                    <Text style={s.sectionTitle}>Оглавление</Text>
+                    <HandRule seed="contents" width={cells(9)} />
+                  </View>
+                  <Text style={s.progressText}>
+                    {finished} из {lessonPages.length} пройдено
                   </Text>
                 </View>
-                <View
-                  style={[
-                    s.coverArt,
-                    !wide && {
-                      width: "100%",
-                      maxWidth: 520,
-                      alignSelf: "center",
-                    },
-                  ]}
-                >
-                  <BookImage id="p010_boys_fishing" maxHeight={320} />
-                </View>
-              </View>
-              <View style={{ gap: 12, marginTop: 20 }}>
-                <Text style={s.eyebrow}>Вне занятий · материалы книги</Text>
-                <View
-                  style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
-                >
-                  {extraPages.map((p) => (
-                    <Button
-                      key={p.id}
-                      small
-                      secondary
-                      label={`Страница ${p.number}. ${p.title}`}
-                      onPress={() => selectPage(p.number)}
-                    >
-                      {p.number === 1
-                        ? "Здравствуй, арифметика! · Обложка"
-                        : p.number === 143
-                          ? "Оглавление книги"
-                          : "Выходные данные"}
-                    </Button>
-                  ))}
-                </View>
-              </View>
-              <View style={s.pathHeading}>
-                <Text style={s.sectionTitle}>Оглавление</Text>
-                <Text style={s.progressText}>
-                  {finished} из {lessonPages.length} пройдено
-                </Text>
-              </View>
-              <ProgressBar value={finished / lessonPages.length} />
-              <View style={{ gap: 12, marginVertical: 20 }}>
-                <View
-                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
-                >
-                  {[
-                    "Знакомство с числами",
-                    "Первый десяток",
-                    "Второй десяток",
-                    "Умножение и деление",
-                    "Первая сотня",
-                  ].map((title, i) => (
-                    <Button
-                      key={title}
-                      small
-                      secondary={catalogSection !== i}
-                      onPress={() => {
-                        setCatalogSection(i);
-                        setSearch("");
-                      }}
-                    >
-                      {title}
-                    </Button>
-                  ))}
-                </View>
-                <TextInput
-                  accessibilityLabel="Найти страницу или задание"
-                  placeholder="Страница 80 · задание № 500"
-                  value={search}
-                  onChangeText={setSearch}
-                  placeholderTextColor={c.muted}
-                  style={s.search}
-                />
-              </View>
-              <View style={s.pageGrid}>
-                {lessonPages
-                  .filter((p) => {
-                    if (search.trim()) {
-                      const n = Number(search.replace(/[^0-9]/g, ""));
-                      return search.includes("№")
-                        ? p.blocks.some((b) => b.exerciseNumber === n)
-                        : p.number === n ||
-                            p.title
-                              .toLowerCase()
-                              .includes(search.toLowerCase());
-                    }
-                    const bounds = [
-                      [1, 29],
-                      [30, 58],
-                      [59, 96],
-                      [97, 125],
-                      [126, 142],
-                      [143, 144],
-                    ][catalogSection];
-                    return p.number >= bounds[0] && p.number <= bounds[1];
-                  })
-                  .map((p) => {
-                    const done = pageCompleted(p, progress.answers),
-                      count = p.blocks.filter((b) =>
-                        isDone(b, progress.answers[b.id]),
-                      ).length;
-                    return (
-                      <Pressable
-                        key={p.id}
-                        accessibilityRole="button"
-                        accessibilityLabel={`Страница ${p.number}. ${p.title}`}
-                        onPress={() =>
-                          selectPage(
-                            p.number,
-                            foundStep(p) >= 0 ? foundStep(p) : undefined,
-                          )
-                        }
-                        style={({ pressed }) => [
-                          s.pageCard,
-                          {
-                            width: wide ? "18.6%" : compact ? "100%" : "48.5%",
-                          },
-                          pressed && { opacity: 0.8 },
-                        ]}
+                <ProgressBar value={finished / lessonPages.length} />
+                <View style={{ gap: 12, marginVertical: 20 }}>
+                  <View
+                    style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
+                  >
+                    {[
+                      "Знакомство с числами",
+                      "Первый десяток",
+                      "Второй десяток",
+                      "Умножение и деление",
+                      "Первая сотня",
+                    ].map((title, i) => (
+                      <Button
+                        key={title}
+                        small
+                        secondary={catalogSection !== i}
+                        onPress={() => {
+                          setCatalogSection(i);
+                          setSearch("");
+                        }}
                       >
-                        <View style={s.cardTop}>
-                          <Text style={s.pageNumber}>стр. {p.number}</Text>
-                          <Text style={[s.pageStatus, done && s.pageDone]}>
-                            {foundStep(p) >= 0
-                              ? `№ ${queryNumber} · шаг ${foundStep(p) + 1}`
-                              : done
-                                ? "✓"
-                                : p.number < 3
-                                  ? "знакомство"
-                                  : `${p.blocks.length} шагов`}
-                          </Text>
-                        </View>
-                        <View style={s.cardArt}>
-                          <BookImage id={p.hero} maxHeight={108} />
-                        </View>
-                        <Text style={s.cardTitle}>{p.title}</Text>
-                        <Text style={s.cardSubtitle}>{p.subtitle}</Text>
-                        <View style={{ marginTop: "auto", paddingTop: 16 }}>
-                          <Cells total={p.blocks.length} done={count} />
-                        </View>
-                      </Pressable>
-                    );
-                  })}
-              </View>
-              <View style={s.homeFooter}>
-                <Text style={s.footerText}>
-                  А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого класса
-                </Text>
-                <Text style={s.footerText}>
-                  Тестовая версия{"\n"}Страницы PDF 1–144
-                </Text>
+                        {title}
+                      </Button>
+                    ))}
+                  </View>
+                  <TextInput
+                    accessibilityLabel="Найти страницу или задание"
+                    placeholder="Страница 80 · задание № 500"
+                    value={search}
+                    onChangeText={setSearch}
+                    placeholderTextColor={c.muted}
+                    style={s.search}
+                  />
+                </View>
+                <View style={s.pageGrid}>
+                  {lessonPages
+                    .filter((p) => {
+                      if (search.trim()) {
+                        const n = Number(search.replace(/[^0-9]/g, ""));
+                        return search.includes("№")
+                          ? p.blocks.some((b) => b.exerciseNumber === n)
+                          : p.number === n ||
+                              p.title
+                                .toLowerCase()
+                                .includes(search.toLowerCase());
+                      }
+                      const bounds = [
+                        [1, 29],
+                        [30, 58],
+                        [59, 96],
+                        [97, 125],
+                        [126, 142],
+                        [143, 144],
+                      ][catalogSection];
+                      return p.number >= bounds[0] && p.number <= bounds[1];
+                    })
+                    .map((p) => {
+                      const done = pageCompleted(p, progress.answers),
+                        count = p.blocks.filter((b) =>
+                          isDone(b, progress.answers[b.id]),
+                        ).length;
+                      return (
+                        <Pressable
+                          key={p.id}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Страница ${p.number}. ${p.title}`}
+                          onPress={() =>
+                            selectPage(
+                              p.number,
+                              foundStep(p) >= 0 ? foundStep(p) : undefined,
+                            )
+                          }
+                          style={({ pressed }) => [
+                            s.pageCard,
+                            { width: cardWidth },
+                            pressed && { opacity: 0.8 },
+                          ]}
+                        >
+                          <HandFrame seed={p.id} />
+                          <View style={s.cardTop}>
+                            <Text style={s.pageNumber}>стр. {p.number}</Text>
+                            <Text style={[s.pageStatus, done && s.pageDone]}>
+                              {foundStep(p) >= 0
+                                ? `№ ${queryNumber} · шаг ${foundStep(p) + 1}`
+                                : done
+                                  ? "✓"
+                                  : p.number < 3
+                                    ? "знакомство"
+                                    : `${p.blocks.length} шагов`}
+                            </Text>
+                          </View>
+                          <View style={s.cardArt}>
+                            <BookImage id={p.hero} maxHeight={108} />
+                          </View>
+                          <Text style={s.cardTitle}>{p.title}</Text>
+                          <Text style={s.cardSubtitle}>{p.subtitle}</Text>
+                          <View style={{ marginTop: "auto", paddingTop: 16 }}>
+                            <Cells total={p.blocks.length} done={count} />
+                          </View>
+                        </Pressable>
+                      );
+                    })}
+                </View>
+                <View style={s.homeFooter}>
+                  <Text style={s.footerText}>
+                    А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого
+                    класса
+                  </Text>
+                  <Text style={s.footerText}>
+                    Тестовая версия{"\n"}Страницы PDF 1–144
+                  </Text>
+                </View>
               </View>
             </View>
           ) : (
             <View
+              onLayout={measureSheet}
               style={[
                 s.lessonLayout,
-                compact && {
-                  paddingHorizontal: 14,
-                  paddingLeft: 14,
-                  paddingTop: 20,
-                },
-                short && { paddingTop: 10 },
+                { paddingLeft: left },
+                compact && { paddingRight: left },
               ]}
             >
               {wide && (
                 <View style={s.sidebar}>
-                  <Text style={s.eyebrow}>Соседние страницы</Text>
+                  <Text style={[s.eyebrow, s.sideHeading]}>
+                    Соседние страницы
+                  </Text>
                   {lessonPages
                     .filter((p) => Math.abs(p.number - page.number) <= 4)
                     .map((p) => (
@@ -700,6 +734,7 @@ function Main() {
                       </Pressable>
                     ))}
                   <View style={s.sideNote}>
+                    <HandFrame seed="side-note" color={c.line} />
                     <Text style={s.sideNoteTitle}>Понемногу каждый день</Text>
                     <Text style={s.sideNoteText}>
                       Можно остановиться на любом шаге. Мы запомним, где ты
@@ -708,11 +743,22 @@ function Main() {
                   </View>
                 </View>
               )}
-              <View ref={lessonMain} style={s.lessonMain}>
+              <View
+                ref={lessonMain}
+                style={[s.lessonMain, { width: Math.min(writing, cells(57)) }]}
+              >
                 {/* One row: the arrow home, the page's name, the original. The
                     app header stays on the contents page; here it only
                     repeated «Арифметика» and took a line. */}
-                <View style={s.lessonTop}>
+                {/* Two cells: the arrow home, the page's name with its number
+                    under it, the original. */}
+                <View
+                  style={[
+                    s.lessonTop,
+                    // On a phone the line under the name takes two rows.
+                    (tall || compact) && { minHeight: cells(3) },
+                  ]}
+                >
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel="На главную"
@@ -722,15 +768,24 @@ function Main() {
                   >
                     <BackArrow />
                   </Pressable>
-                  <Text
-                    style={[
-                      s.lessonTitle,
-                      (compact || short) && { fontSize: 28, lineHeight: 33 },
-                      tall && { fontSize: 36, lineHeight: 42 },
-                    ]}
-                  >
-                    {page.title}
-                  </Text>
+                  <View style={{ flex: 1, minWidth: 0 }}>
+                    <Text
+                      style={[
+                        s.lessonTitle,
+                        tall && { fontSize: 38, lineHeight: cells(2) },
+                      ]}
+                    >
+                      {page.title}
+                    </Text>
+                    <Text
+                      style={[s.lessonSubtitle, tall && s.lessonSubtitleTall]}
+                    >
+                      Страница {page.number} · {page.subtitle}
+                      {short && block.exerciseNumber
+                        ? ` · № ${block.exerciseNumber}`
+                        : ""}
+                    </Text>
+                  </View>
                   <Pressable
                     accessibilityRole="button"
                     onPress={() => {
@@ -741,29 +796,9 @@ function Main() {
                     <Text style={s.sourceLink}>Оригинал ↗</Text>
                   </Pressable>
                 </View>
-                <Text
-                  style={[
-                    s.lessonSubtitle,
-                    (compact || short) && {
-                      fontSize: 13,
-                      lineHeight: 18,
-                      marginTop: 2,
-                    },
-                  ]}
-                >
-                  Страница {page.number} · {page.subtitle}
-                  {short && block.exerciseNumber
-                    ? ` · № ${block.exerciseNumber}`
-                    : ""}
-                </Text>
                 {/* On a laptop screen the step squares carry the count, as on a phone. */}
                 {!short && (
-                  <View
-                    style={[
-                      s.stepHeading,
-                      compact && { marginTop: 10, marginBottom: 0 },
-                    ]}
-                  >
+                  <View style={s.stepHeading}>
                     <Text style={s.stepText}>
                       Шаг {progress.block + 1} из {page.blocks.length}
                       {block.exerciseNumber
@@ -780,11 +815,7 @@ function Main() {
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={[
-                    s.stepDots,
-                    compact && { paddingTop: 10, paddingBottom: 12 },
-                    short && { paddingTop: 8, paddingBottom: 6 },
-                  ]}
+                  contentContainerStyle={s.stepDots}
                 >
                   {page.blocks.map((b, i) => (
                     <Pressable
@@ -793,12 +824,17 @@ function Main() {
                       accessibilityLabel={`Шаг ${i + 1}: ${b.title}`}
                       accessibilityState={{ selected: i === progress.block }}
                       onPress={() => setProgress((p) => ({ ...p, block: i }))}
-                      style={[
-                        s.stepDot,
-                        i === progress.block && s.stepActive,
-                        isDone(b, progress.answers[b.id]) && s.stepDone,
-                      ]}
+                      style={[s.stepDot, i === progress.block && s.stepActive]}
                     >
+                      {/* A square outlined by hand inside its two cells. */}
+                      {i !== progress.block && (
+                        <HandFrame
+                          seed={b.id}
+                          color={
+                            isDone(b, progress.answers[b.id]) ? c.red : c.line
+                          }
+                        />
+                      )}
                       <Text
                         style={[
                           s.stepDotText,
@@ -814,7 +850,7 @@ function Main() {
                 <View
                   ref={exerciseCard}
                   testID="exercise-card"
-                  style={[s.exerciseCard, short && { paddingTop: 0 }]}
+                  style={s.exerciseCard}
                 >
                   <TaskFitExtra.Provider value={fitExtra}>
                     <Exercise
@@ -849,7 +885,7 @@ function Main() {
                 </View>
                 <View
                   ref={navigation}
-                  style={[s.navigation, short && { marginTop: 12 }]}
+                  style={[s.navigation, short && { marginTop: CELL / 2 }]}
                 >
                   <Button
                     secondary
@@ -1062,8 +1098,7 @@ const s = StyleSheet.create({
   },
   // Три клетки в высоту: линии сетки шапки и листа совпадают.
   header: {
-    height: 72,
-    paddingHorizontal: 42,
+    height: cells(3),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -1098,18 +1133,18 @@ const s = StyleSheet.create({
     width: "100%",
     maxWidth: 1180,
     alignSelf: "center",
-    padding: 42,
-    paddingLeft: 64,
-    paddingTop: 48,
+    paddingRight: CELL,
+    paddingBottom: 42,
+    paddingTop: cells(2),
   },
   cover: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 32,
+    gap: CELL,
     backgroundColor: c.cover,
-    borderRadius: 6,
-    padding: 28,
-    marginBottom: 44,
+    borderRadius: 4,
+    padding: CELL,
+    marginBottom: cells(2),
   },
   coverText: { flex: 1, alignSelf: "stretch", justifyContent: "center" },
   label: {
@@ -1204,14 +1239,17 @@ const s = StyleSheet.create({
     color: c.ink,
     maxWidth: 420,
   },
-  pageGrid: { flexDirection: "row", flexWrap: "wrap", gap: 16, marginTop: 20 },
+  pageGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: CELL,
+    marginTop: CELL,
+  },
+  // A card is a whole number of cells wide and eleven cells high.
   pageCard: {
     backgroundColor: c.card,
     padding: 14,
-    borderWidth: 1,
-    borderColor: c.line,
-    borderRadius: 6,
-    minHeight: 250,
+    minHeight: cells(11),
   },
   cardTop: {
     flexDirection: "row",
@@ -1257,26 +1295,32 @@ const s = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
   },
+  // Everything here is counted in cells of the sheet (24 px): the writing
+  // starts one cell from the top, the columns stand two cells apart.
   lessonLayout: {
     width: "100%",
     // A big screen gives the task more width, so its picture can use the
     // window's height instead of leaving it empty under «Дальше».
     maxWidth: 1800,
     alignSelf: "center",
-    padding: 38,
-    paddingTop: 26,
-    paddingLeft: 64,
+    paddingTop: CELL,
+    paddingRight: CELL,
+    paddingBottom: 38,
     flexDirection: "row",
-    gap: 55,
+    gap: cells(2),
   },
-  sidebar: { width: 235, paddingTop: 4 },
+  sidebar: { width: cells(10) },
+  // As tall as the row with the page's name, so the list starts level with
+  // the step squares.
+  sideHeading: { lineHeight: CELL, marginBottom: CELL },
   sideItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
     borderRadius: 4,
-    padding: 11,
-    marginTop: 2,
+    paddingHorizontal: 11,
+    paddingVertical: 4,
+    minHeight: cells(2),
   },
   sideNumber: {
     fontFamily: f.regular,
@@ -1286,10 +1330,9 @@ const s = StyleSheet.create({
   },
   sideTitle: { fontFamily: f.bold, color: c.ink, fontSize: 14, flex: 1 },
   sideNote: {
-    marginTop: 32,
+    marginTop: cells(2),
     padding: 16,
-    backgroundColor: c.washWarm,
-    borderRadius: 4,
+    paddingBottom: 20,
   },
   sideNoteTitle: {
     fontFamily: f.hand,
@@ -1304,11 +1347,12 @@ const s = StyleSheet.create({
     lineHeight: 20,
     color: c.ink,
   },
-  lessonMain: { flex: 1, minWidth: 0, maxWidth: 1360 },
+  lessonMain: { minWidth: 0, maxWidth: "100%" },
   lessonTop: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    minHeight: cells(2),
   },
   backButton: {
     width: 40,
@@ -1326,46 +1370,45 @@ const s = StyleSheet.create({
     fontSize: 15,
     paddingVertical: 10,
   },
+  // The name and the line under it fill the two cells of the row.
   lessonTitle: {
-    flex: 1,
-    minWidth: 0,
     fontFamily: f.hand,
     color: c.pen,
-    fontSize: 46,
-    lineHeight: 52,
+    fontSize: 28,
+    lineHeight: 30,
   },
   lessonSubtitle: {
     fontFamily: f.regular,
-    fontSize: 15,
-    lineHeight: 22,
+    fontSize: 13,
+    lineHeight: 18,
     color: c.muted,
-    marginTop: 6,
-    // Under the title, not under the arrow.
-    marginLeft: 52,
   },
+  lessonSubtitleTall: { fontSize: 15, lineHeight: CELL },
   stepHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 14,
-    marginBottom: 8,
   },
-  stepText: { fontFamily: f.regular, color: c.muted, fontSize: 14 },
-  stepDots: { gap: 8, paddingTop: 12, paddingBottom: 18 },
+  stepText: {
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 14,
+    lineHeight: CELL,
+  },
+  // A square takes two cells by two and is outlined a little inside them, so
+  // the squares stand on the lines of the sheet two cells apart.
+  stepDots: { gap: 8, paddingVertical: 4 },
   stepDot: {
     width: 40,
     height: 40,
-    borderWidth: 1.5,
-    borderColor: c.line,
     borderRadius: 4,
     backgroundColor: c.card,
     alignItems: "center",
     justifyContent: "center",
   },
-  stepActive: { backgroundColor: c.pen, borderColor: c.pen },
-  stepDone: { borderColor: c.red },
+  stepActive: { backgroundColor: c.pen },
   stepDotText: { fontFamily: f.bold, color: c.pen, fontSize: 16 },
   stepDoneText: { fontFamily: f.hand, color: c.red, fontSize: 24 },
-  exerciseCard: { paddingTop: 4 },
+  exerciseCard: {},
   navigation: {
     flexDirection: "row",
     justifyContent: "space-between",

@@ -75,6 +75,7 @@ async function run(file) {
           "scripts/status-smoke.cjs",
           "scripts/layout-smoke.cjs",
           "scripts/laptop-fit-smoke.cjs",
+          "scripts/grid-smoke.cjs",
           "scripts/next-glide-smoke.cjs",
           "scripts/all-pages-smoke.cjs",
         ])

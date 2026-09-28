@@ -18,6 +18,8 @@ import { BookImage } from "./BookImage";
 import { useTaskSize } from "./taskSize";
 import { Button, RetryNote } from "./Controls";
 import { TextWithBlanks } from "./Blank";
+import { HandFrame } from "./HandDrawn";
+import { CELL } from "../lib/grid";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { PracticalTask } from "./PracticalTask";
@@ -74,15 +76,21 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       ? Array.isArray(answer.value) && answer.value.length > 0
       : answer.value !== undefined && answer.value !== "";
   return (
-    <View style={{ gap: size.fit ? 10 : 14 }}>
-      {size.compact && <CoachButton onPress={showTaskCoach} />}
+    <View style={{ gap: size.tall ? CELL : CELL / 2 }}>
+      {size.compact && (
+        // Two and a half cells: with the gap under it the row is three cells,
+        // and the heading below starts on a line.
+        <View style={{ height: CELL * 2.5, justifyContent: "center" }}>
+          <CoachButton onPress={showTaskCoach} />
+        </View>
+      )}
       {/* On wider screens the button sits beside the heading: a row of its own
           pushed the task a whole line down. */}
       <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
         <View
           ref={instructionRef}
           collapsable={false}
-          style={{ gap: 10, flex: 1, minWidth: 0 }}
+          style={{ flex: 1, minWidth: 0 }}
         >
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Text
@@ -107,7 +115,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
               testID="block-prompt"
               style={StyleSheet.flatten([
                 s.prompt,
-                size.tall && { fontSize: 24, lineHeight: 34 },
+                size.tall && { fontSize: 24, lineHeight: 36 },
               ])}
               text={block.prompt}
             />
@@ -118,14 +126,22 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       <View
         style={
           beside
-            ? { flexDirection: "row", alignItems: "flex-start", gap: 28 }
-            : { gap: 14 }
+            ? { flexDirection: "row", alignItems: "flex-start", gap: CELL }
+            : { gap: CELL / 2 }
         }
       >
         <View
           ref={imagesRef}
           collapsable={false}
-          style={[{ gap: 14 }, beside && { flex: 4, minWidth: 0 }]}
+          style={[
+            { gap: 14 },
+            beside && { flex: 4, minWidth: 0 },
+            // Without a picture the place for it must not push the answers
+            // half a cell down.
+            block.kind !== "picture" &&
+              !block.images.length &&
+              !review && { display: "none" },
+          ]}
         >
           {block.kind === "picture" && (
             <PictureTask
@@ -146,6 +162,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                 },
               ]}
             >
+              <HandFrame seed={`${block.id}-picture`} />
               {block.images
                 .filter((id) => id !== "p011_balls_row_3_groups")
                 .map((id) => (
@@ -183,7 +200,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         <View
           ref={answerRef}
           collapsable={false}
-          style={[{ gap: 22 }, beside && { flex: 7, minWidth: 0 }]}
+          style={[{ gap: CELL }, beside && { flex: 7, minWidth: 0 }]}
         >
           {block.kind === "location" && (
             <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
@@ -239,6 +256,9 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                     }
                     style={[s.number, answer.value === n && s.selected]}
                   >
+                    {answer.value !== n && (
+                      <HandFrame seed={`${block.id}-${n}`} />
+                    )}
                     <Text
                       style={[
                         s.digit,
@@ -269,6 +289,9 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                   }
                   style={[s.option, answer.value === v && s.selected]}
                 >
+                  {answer.value !== v && (
+                    <HandFrame seed={`${block.id}-${v}`} />
+                  )}
                   <Text
                     style={[
                       s.optionIndex,
@@ -367,7 +390,9 @@ function AnswerAnchor({
   );
 }
 const s = StyleSheet.create({
-  title: { fontFamily: f.bold, fontSize: 26, lineHeight: 32, color: c.ink },
+  // Heading and task take a cell and a quarter each: with the half-cell gap
+  // under them a one-line task is three cells, and the picture starts on a line.
+  title: { fontFamily: f.bold, fontSize: 26, lineHeight: 30, color: c.ink },
   doneMark: { fontFamily: f.hand, fontSize: 32, lineHeight: 32, color: c.red },
   prompt: { fontFamily: f.regular, fontSize: 21, lineHeight: 30, color: c.ink },
   source: {
@@ -383,35 +408,35 @@ const s = StyleSheet.create({
     gap: 12,
     backgroundColor: c.card,
     padding: 12,
-    borderWidth: 1,
-    borderColor: c.line,
-    borderRadius: 6,
   },
-  options: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  // Boxes stand three cells apart and are two cells high.
+  options: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    columnGap: 8,
+    rowGap: CELL,
+  },
   number: {
-    width: 54,
-    height: 58,
-    backgroundColor: c.paper,
-    borderWidth: 1,
-    borderColor: c.line,
-    borderRadius: 6,
+    width: 64,
+    height: CELL * 2,
+    backgroundColor: c.card,
+    borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
   },
   digit: { fontFamily: f.heavy, color: c.pen, fontSize: 25 },
-  selected: { backgroundColor: c.pen, borderColor: c.pen },
+  selected: { backgroundColor: c.pen },
   option: {
-    flexBasis: 210,
+    flexBasis: CELL * 9,
     flexGrow: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    borderWidth: 1,
-    borderColor: c.line,
-    backgroundColor: c.paper,
-    padding: 17,
-    borderRadius: 6,
-    minHeight: 62,
+    backgroundColor: c.card,
+    paddingHorizontal: 17,
+    paddingVertical: 12,
+    borderRadius: 4,
+    minHeight: CELL * 3,
   },
   optionIndex: { fontFamily: f.bold, color: c.muted, fontSize: 13 },
   optionText: { fontFamily: f.bold, color: c.ink, fontSize: 17, flexShrink: 1 },
