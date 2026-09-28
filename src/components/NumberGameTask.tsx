@@ -10,7 +10,7 @@ import {
 } from "../lib/numberGame";
 import { colors as c, fonts as f } from "../theme";
 import { Button, RetryNote, CellPressable } from "./Controls";
-import { HandFrame } from "./HandDrawn";
+import { HandFrame, Pasted } from "./HandDrawn";
 
 export function NumberGameTask({
   block,
@@ -36,7 +36,7 @@ export function NumberGameTask({
           Прочитай каждое число. Выбери, как оно называется.
         </Text>
         {spec.items.map((item) => (
-          <View
+          <Pasted
             key={item.id}
             testID={`number-name-${item.value}`}
             style={s.card}
@@ -74,7 +74,7 @@ export function NumberGameTask({
                   Прочитай число ещё раз и выбери его название.
                 </RetryNote>
               ))}
-          </View>
+          </Pasted>
         ))}
         <Button onPress={check}>Проверить</Button>
       </View>
@@ -103,8 +103,11 @@ export function NumberGameTask({
           </View>
         ))}
       {round && (
-        <View testID={`hidden-card-${round.id}`} style={s.card}>
-          <HandFrame seed={round.id} />
+        <Pasted
+          testID={`hidden-card-${round.id}`}
+          style={s.card}
+          frame={<HandFrame seed={round.id} />}
+        >
           <Text style={s.instruction}>{round.label}</Text>
           <Text style={s.note}>
             К числу на открытой карточке прибавили число с закрытой карточки.
@@ -150,7 +153,7 @@ export function NumberGameTask({
             Открыть карточку
           </Button>
           {!!message && <RetryNote>{message}</RetryNote>}
-        </View>
+        </Pasted>
       )}
       {numberGameCorrect(block, answer) && (
         <Text accessibilityLiveRegion="polite" style={s.feedback}>
@@ -170,9 +173,11 @@ export function NumberGameTask({
 const s = StyleSheet.create({
   stack: { gap: 24 },
   card: {
-    padding: 24,
-    backgroundColor: "#ffffffb3",
-    gap: 24,
+    paddingTop: 18,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: c.card,
+    gap: 16,
   },
   completed: {
     padding: 24,

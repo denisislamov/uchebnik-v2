@@ -6,6 +6,7 @@ import {
   Pressable,
   Platform,
   ScrollView,
+  StyleSheet,
   useWindowDimensions,
 } from "react-native";
 import Svg, { Line, Path, Circle } from "react-native-svg";
@@ -19,7 +20,7 @@ import {
 } from "../lib/tracing";
 import { traceDirections, traceArrowGeometry } from "../lib/traceDirections";
 import { colors as c, fonts as f } from "../theme";
-import { Button, ProgressBar, RetryNote } from "./Controls";
+import { Button, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
 import { finePointer, useTaskSize } from "./taskSize";
 import { Rows } from "./HandDrawn";
@@ -220,10 +221,26 @@ export function DrawingPad({
       )
     : strokes;
   // What is written in a row stands on the lower line of its two.
-  const row = { flexDirection: "row", alignItems: "flex-end" } as const;
-  // The pencils, the name of the line and the button share a row where it is
-  // long enough for them; beside a sample, or on a phone, the name goes above.
-  const inRow = !compact && containerWidth >= CELL * 28;
+  const name = progress && (
+    // Two rows are kept on a phone even for a short name: the sheet below
+    // must not move when the next line has a longer one.
+    <View style={[s.nameRow, { height: compact ? CELL * 2 : CELL }]}>
+      <Text
+        accessibilityLiveRegion="polite"
+        numberOfLines={compact ? 2 : 1}
+        style={s.name}
+      >
+        {progress.done
+          ? "Все элементы получились!"
+          : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
+      </Text>
+      {trace!.stages.length > 1 && !progress.done && (
+        <Text style={s.sheetCount}>
+          лист {progress.stage + 1} из {trace!.stages.length}
+        </Text>
+      )}
+    </View>
+  );
   return (
     <View>
       {progress && strokes.length > progress.accepted.length && (
@@ -235,51 +252,11 @@ export function DrawingPad({
           ответы сохранены.
         </Text>
       )}
-      {/* Rows of the sheet: what to draw, how far along, the pencils. On a
-          phone the name may take two lines, and two are kept for it: the
-          sheet below stays put. Wider screens have room for the pencils and
-          the name in one row. */}
-      {progress && !inRow && (
-        <View
-          style={[
-            row,
-            {
-              alignItems: "flex-start",
-              gap: CELL,
-              height: compact ? CELL * 2 : CELL,
-            },
-          ]}
-        >
-          <Text
-            accessibilityLiveRegion="polite"
-            numberOfLines={compact ? 2 : 1}
-            style={{
-              flex: 1,
-              fontFamily: f.bold,
-              color: c.pen,
-              fontSize: 17,
-              lineHeight: CELL,
-            }}
-          >
-            {progress.done
-              ? "Все элементы получились!"
-              : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
-          </Text>
-          {trace!.stages.length > 1 && !progress.done && (
-            <Text
-              style={{
-                fontFamily: f.regular,
-                color: c.muted,
-                fontSize: 13,
-                lineHeight: CELL,
-              }}
-            >
-              лист {progress.stage + 1} из {trace!.stages.length}
-            </Text>
-          )}
-        </View>
-      )}
-      <View style={[row, { height: CELL * 2 }]}>
+      {/* What to draw, then the pencils with the button that takes a
+          stroke back, then the sheet. The count «1 из 23» says how far along
+          the child is; a bar for the same only drew a stray line. */}
+      {name}
+      <View style={s.tools}>
         {DRAWING_COLORS.map((v, i) => (
           <Pressable
             key={v}
@@ -288,58 +265,20 @@ export function DrawingPad({
             accessibilityState={{ selected: color === v }}
             onPress={() => setChosenColor(v)}
             // Two cells for the finger, the pencil's dot a little inside them.
-            style={{
-              width: CELL * 2,
-              height: CELL * 2,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            style={s.pencil}
           >
             <View
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 22,
-                backgroundColor: v,
-                borderWidth: 4,
-                borderColor: color === v ? "#2b4ba8" : c.card,
-              }}
+              style={[
+                s.pencilDot,
+                {
+                  backgroundColor: v,
+                  borderColor: color === v ? "#2b4ba8" : c.card,
+                },
+              ]}
             />
           </Pressable>
         ))}
-        {progress && inRow ? (
-          <View style={[row, { flex: 1, marginLeft: CELL, gap: CELL }]}>
-            <Text
-              accessibilityLiveRegion="polite"
-              numberOfLines={1}
-              style={{
-                flex: 1,
-                fontFamily: f.bold,
-                color: c.pen,
-                fontSize: 17,
-                lineHeight: CELL,
-              }}
-            >
-              {progress.done
-                ? "Все элементы получились!"
-                : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
-            </Text>
-            {trace!.stages.length > 1 && !progress.done && (
-              <Text
-                style={{
-                  fontFamily: f.regular,
-                  color: c.muted,
-                  fontSize: 13,
-                  lineHeight: CELL,
-                }}
-              >
-                лист {progress.stage + 1} из {trace!.stages.length}
-              </Text>
-            )}
-          </View>
-        ) : (
-          <View style={{ flex: 1 }} />
-        )}
+        <View style={{ flex: 1 }} />
         <Button
           small
           secondary
@@ -354,12 +293,6 @@ export function DrawingPad({
           Отменить штрих
         </Button>
       </View>
-      {/* The bar lies in the row that is left empty above the sheet. */}
-      {progress ? (
-        <ProgressBar value={progress.completed / progress.total} />
-      ) : (
-        <View style={{ height: CELL }} />
-      )}
       <Rows>
         <View
           ref={sheetBox}
@@ -596,3 +529,39 @@ function verticalScrollPane(node: HTMLElement): HTMLElement | null {
       return el;
   return null;
 }
+const s = StyleSheet.create({
+  // A row for the name of the line (two on a phone, where it may wrap).
+  nameRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: CELL,
+  },
+  name: {
+    flex: 1,
+    fontFamily: f.bold,
+    color: c.pen,
+    fontSize: 17,
+    lineHeight: CELL,
+  },
+  sheetCount: {
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 13,
+    lineHeight: CELL,
+  },
+  // The pencils and the button: two cells, half a cell of air above and
+  // below, so neither the name above nor the sheet below touches them.
+  tools: {
+    flexDirection: "row",
+    alignItems: "center",
+    height: CELL * 3,
+    paddingVertical: CELL / 2,
+  },
+  pencil: {
+    width: CELL * 2,
+    height: CELL * 2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pencilDot: { width: 44, height: 44, borderRadius: 22, borderWidth: 4 },
+});

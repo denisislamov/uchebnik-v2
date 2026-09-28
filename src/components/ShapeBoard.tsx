@@ -7,6 +7,7 @@ import { edgeKey } from "../lib/assessment";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
 import { CELL } from "../lib/grid";
+import { sheet } from "./sheet";
 import { Button } from "./Controls";
 import { useTaskSize } from "./taskSize";
 export function ShapeBoard({
@@ -43,7 +44,9 @@ export function ShapeBoard({
   const { fit, measured } = useTaskSize();
   const landscape = fit && width >= 420;
   const scale = landscape
-    ? Math.min(240 + Math.max(0, measured), 420, width * 0.5 - 24)
+    ? // Starts a row lower than it used to: the rows of air around the
+      // board are paid for here, and a roomy window gives it back.
+      Math.min(216 + Math.max(0, measured), 420, width * 0.5 - 24)
     : Math.min(width - 32, 240);
   const vertices = block.vertices.map((p) => ({
     x: (landscape ? width * 0.3 : width / 2) - scale / 2 + p.x * scale,
@@ -224,7 +227,8 @@ export function ShapeBoard({
         Возьми палочку {landscape ? "справа" : "внизу"} и положи на пунктир.
         Чтобы повернуть палочку, нажми «Повернуть».
       </Text>
-      <Rows object>
+      {/* A row of air between the words and the board they talk about. */}
+      <Rows object style={{ marginTop: CELL }}>
         <View
           ref={boardRef}
           testID="stick-board"
@@ -329,16 +333,7 @@ export function ShapeBoard({
         </View>
       </Rows>
       {/* Rotate, count and undo share one row: under the board they took three. */}
-      <View
-        style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          alignItems: "flex-end",
-          columnGap: CELL,
-          marginTop: CELL,
-          minHeight: CELL * 2,
-        }}
-      >
+      <View style={[sheet.controls, { justifyContent: "flex-start" }]}>
         {available.map((t) => (
           <View key={t.key} ref={rotateRef} collapsable={false}>
             <Button

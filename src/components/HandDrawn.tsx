@@ -59,7 +59,13 @@ export function HandFrame({
           style={{ position: "absolute", left: -BLEED, top: -BLEED }}
         >
           <Path
-            d={handRect(size.width, size.height, seed, stroke)}
+            // A steady hand: the line strays by a pixel and barely runs
+            // past the corner, so it reads as drawn, not as a mistake.
+            d={handRect(size.width, size.height, seed, {
+              wobble: 0.8,
+              overshoot: 1.2,
+              ...stroke,
+            })}
             stroke={color}
             strokeWidth={strokeWidth}
             strokeLinecap="round"
@@ -186,3 +192,32 @@ export const Rows = React.forwardRef<
     </View>
   );
 });
+
+/**
+ * A white card pasted onto the sheet: it takes whole rows, and the spare
+ * part of the last row is shared above and below its contents, so the
+ * margins inside stay even while the card itself stands on the lines.
+ */
+export function Pasted({
+  style,
+  frame,
+  children,
+  testID,
+}: {
+  style: StyleProp<ViewStyle>;
+  frame?: React.ReactNode;
+  children: React.ReactNode;
+  testID?: string;
+}) {
+  const { gap, rowGap, ...box } = StyleSheet.flatten(style) ?? {};
+  return (
+    <Rows
+      testID={testID}
+      style={[box, { justifyContent: "center" }]}
+      contentStyle={{ gap: rowGap ?? gap }}
+      frame={frame}
+    >
+      {children}
+    </Rows>
+  );
+}

@@ -112,7 +112,10 @@ export function CounterBoard({
     // …and takes the room a big window leaves free.
     // With the tray under it the board is eleven rows of the sheet, and
     // grows by whole rows.
-    fit ? Math.min(417, 129 + Math.max(0, measured)) : 190,
+    // It grows no taller than a few rows: a tall empty field only looked
+    // like a hole in the page.
+    // It starts two rows lower, to pay for the air around the board.
+    fit ? Math.min(225, 81 + Math.max(0, measured)) : 190,
   );
   const boardWidth = geometry.width;
   const fieldHeight = slots ? 190 : geometry.fieldHeight;

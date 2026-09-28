@@ -15,6 +15,7 @@ import { colors as c, fonts as f } from "../theme";
 import { isCorrect, isDone, hasInk } from "../lib/assessment";
 import { promptRepeatsTitle } from "../lib/blockText";
 import { BookImage } from "./BookImage";
+import { assets } from "../content/assets";
 import { useTaskSize } from "./taskSize";
 import { Button, RetryNote } from "./Controls";
 import { TextWithBlanks } from "./Blank";
@@ -66,6 +67,16 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
     // question list reads better under a full-width picture.
     ["draw", "counters", "shape", "practical"].includes(block.kind) &&
     block.images.length > 0;
+  const pictureHeight = beside
+    ? size.beside
+    : block.kind === "read"
+      ? size.read
+      : size.picture;
+  const single = block.images.filter((id) => id !== "p011_balls_row_3_groups");
+  const asset = single.length === 1 ? assets[single[0]] : undefined;
+  const pictureWidth = asset
+    ? (pictureHeight * asset.width) / asset.height
+    : undefined;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
   const update = (patch: Partial<Answer>) =>
@@ -179,7 +190,16 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           {block.kind !== "picture" && !!block.images.length && (
             <Rows
               testID="picture-frame"
-              style={s.images}
+              style={[
+                s.images,
+                // One picture: the frame hugs it instead of leaving wide
+                // white fields at its sides.
+                pictureWidth !== undefined && {
+                  maxWidth: pictureWidth + CELL,
+                  width: "100%",
+                  alignSelf: "center",
+                },
+              ]}
               frame={<HandFrame seed={`${block.id}-picture`} />}
               contentStyle={[
                 s.imagesContent,
@@ -200,16 +220,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                         : { width: "100%" }
                     }
                   >
-                    <BookImage
-                      id={id}
-                      maxHeight={
-                        beside
-                          ? size.beside
-                          : block.kind === "read"
-                            ? size.read
-                            : size.picture
-                      }
-                    />
+                    <BookImage id={id} maxHeight={pictureHeight} />
                   </View>
                 ))}
             </Rows>
@@ -304,9 +315,6 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                     }
                     style={[s.number, answer.value === n && s.selected]}
                   >
-                    {answer.value !== n && (
-                      <HandFrame seed={`${block.id}-${n}`} />
-                    )}
                     <Text
                       style={[
                         s.digit,
@@ -337,9 +345,6 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                   }
                   style={[s.option, answer.value === v && s.selected]}
                 >
-                  {answer.value !== v && (
-                    <HandFrame seed={`${block.id}-${v}`} />
-                  )}
                   <Text
                     style={[
                       s.optionIndex,
@@ -478,16 +483,20 @@ const s = StyleSheet.create({
     columnGap: CELL,
     rowGap: CELL,
   },
+  // A small box gets a plain line: drawn by hand this small it reads as a
+  // smudge.
   number: {
     width: CELL * 2,
     height: CELL * 2,
     backgroundColor: c.card,
+    borderWidth: 1.5,
+    borderColor: c.line,
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
   },
   digit: { fontFamily: f.heavy, color: c.pen, fontSize: 25, lineHeight: CELL },
-  selected: { backgroundColor: c.pen },
+  selected: { backgroundColor: c.pen, borderColor: c.pen },
   option: {
     flexBasis: CELL * 9,
     flexGrow: 1,
@@ -495,6 +504,8 @@ const s = StyleSheet.create({
     alignItems: "center",
     gap: 14,
     backgroundColor: c.card,
+    borderWidth: 1.5,
+    borderColor: c.line,
     paddingHorizontal: 17,
     paddingVertical: CELL / 2,
     borderRadius: 4,

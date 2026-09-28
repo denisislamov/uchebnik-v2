@@ -128,7 +128,7 @@ export function PracticalTask({
             {current + 1}. {step.instruction}
           </Text>
           {choiceKeys.map(({ key, label }) => (
-            <View key={key}>
+            <Rows key={key} contentStyle={{ gap: CELL / 2 }}>
               <Text style={sheet.count}>
                 {label} Сначала выбери число, затем нарисуй.
               </Text>
@@ -151,7 +151,7 @@ export function PracticalTask({
                 }}
                 style={sheet.answer}
               />
-            </View>
+            </Rows>
           ))}
           {step.mode === "place" && (
             <View

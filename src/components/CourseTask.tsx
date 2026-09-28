@@ -20,12 +20,12 @@ import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button, CellPressable, RetryNote } from "./Controls";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
-import { HandFrame, Rows } from "./HandDrawn";
+import { HandFrame, Pasted, Rows } from "./HandDrawn";
 import { CELL, cells, written } from "../lib/grid";
 /**
- * A card takes whole rows of the sheet, and so does everything in it: a row
- * of counters or a vessel is as high as it needs and is followed by the rest
- * of its last row, so the writing under it starts on a line.
+ * A card is a white sheet pasted onto the page: the ruling is not seen under
+ * it, so its parts are spaced evenly rather than by rows. A small button
+ * keeps its own width instead of stretching across the card.
  */
 /** Children one by one, with what stands in fragments taken out of them. */
 const parts = (children: React.ReactNode): React.ReactNode[] =>
@@ -42,16 +42,30 @@ function Card({
   style: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }) {
+  const items = parts(children);
   return (
-    <View style={style}>
-      {parts(children).map((child, i) =>
-        React.isValidElement(child) && child.type !== HandFrame ? (
-          <Rows key={child.key ?? i}>{child}</Rows>
-        ) : (
-          child
-        ),
+    <Pasted
+      style={style}
+      frame={items.filter(
+        (child) => React.isValidElement(child) && child.type === HandFrame,
       )}
-    </View>
+    >
+      {items
+        .filter(
+          (child) => !(React.isValidElement(child) && child.type === HandFrame),
+        )
+        .map((child, i) =>
+          React.isValidElement<{ small?: boolean }>(child) &&
+          child.type === Button &&
+          child.props.small ? (
+            <View key={child.key ?? i} style={{ alignSelf: "flex-start" }}>
+              {child}
+            </View>
+          ) : (
+            child
+          ),
+        )}
+    </Pasted>
   );
 }
 // An arithmetic frame such as «4 + □ =», not a worded question.
@@ -71,6 +85,8 @@ function NumberLine({ max }: { max: number }) {
   return (
     <View
       testID="number-line"
+      // A ruler lying on the sheet: its cells touch each other on purpose.
+      {...({ dataSet: { sheet: "object" } } as object)}
       accessibilityLabel={`Числовой ряд от 0 до ${max}`}
       style={s.numberLine}
     >
@@ -101,6 +117,7 @@ export function CourseTask({
   onDrawing: (value: boolean) => void;
 }) {
   const card = s.card;
+  const narrow = useWindowDimensions().width < 600;
   // Follows what stands above it in a card after an empty row.
   const below = { marginTop: CELL };
   const r = answer.responses ?? {};
@@ -115,7 +132,8 @@ export function CourseTask({
       keyboardType="number-pad"
       inputMode="numeric"
       maxLength={3}
-      style={s.input}
+      // On a phone a box is three cells wide: «□ + □ = □» still fits a row.
+      style={[s.input, narrow && { width: cells(3) }]}
     />
   );
   const chips = (key: string, values: (number | string)[], label: string) => (
@@ -136,8 +154,9 @@ export function CourseTask({
       ))}
     </View>
   );
+  // «− 0 +»: the number stands in the middle of the buttons' height.
   const stepper = (key: string, label: string, max: number, step = 1) => (
-    <View style={s.row}>
+    <View style={[s.row, { alignItems: "center" }]}>
       <Button
         small
         secondary
@@ -283,9 +302,9 @@ export function CourseTask({
               )}. Результат должен быть целым числом от ${block.minResult ?? 0} до ${block.max}.`}
           />
           {[...new Set(block.formula.match(/[abc]/g) ?? [])].map((k) => (
-            // The box stands under its name: beside it, it would start
-            // wherever the words end.
-            <View key={k}>
+            // The box stands half a cell under its name: beside it, it would
+            // start wherever the words end.
+            <View key={k} style={{ gap: CELL / 2 }}>
               <Text style={s.text}>
                 {block.inputLabels?.[k] ??
                   { a: "Первое число", b: "Второе число", c: "Третье число" }[
@@ -296,15 +315,17 @@ export function CourseTask({
               {input(k, block.inputLabels?.[k] ?? `Число ${k}`)}
             </View>
           ))}
-          <Text style={s.label}>Результат всей задачи</Text>
-          {input("result", "Результат всей задачи")}
+          <View style={{ gap: CELL / 2 }}>
+            <Text style={s.label}>Результат всей задачи</Text>
+            {input("result", "Результат всей задачи")}
+          </View>
         </Card>
       )}
       {block.kind === "relation" && (
         <Card style={card}>
           <HandFrame seed="card" />
           {["left", "right"].map((side) => (
-            <View key={side}>
+            <View key={side} style={{ gap: CELL / 2 }}>
               <Text style={s.label}>
                 {side === "left" ? "Первая" : "Вторая"} группа
               </Text>
@@ -376,9 +397,9 @@ export function CourseTask({
               <HandFrame seed={`card-${field.id}`} />
               {/* «1. 1 + 1 =» reads as part of the example; a bare expression
                 goes without its number, which the screen reader still gets. */}
-              {/* The question and the box under it follow one another; the
-                  teacher's mark stands beside the box and takes no row. */}
-              <View>
+              {/* The box stands half a cell under its question, so the words
+                  do not sit on it; the teacher's mark stands beside the box. */}
+              <View style={{ gap: CELL / 2 }}>
                 <TextWithBlanks
                   style={s.label}
                   text={
@@ -915,7 +936,8 @@ const s = StyleSheet.create({
   sum: {
     flexDirection: "row",
     flexWrap: "wrap",
-    alignItems: "flex-end",
+    // Signs stand in the middle of the boxes' height.
+    alignItems: "center",
     columnGap: CELL / 2,
     rowGap: CELL,
   },
@@ -923,11 +945,14 @@ const s = StyleSheet.create({
   // shows through. A row is left empty above the question and under the
   // answer; lines of the question and the two rows of the answer box follow
   // one another.
+  // Even margins inside: the words' line leaves a little air above the
+  // letters, so the top is two pixels less than the bottom.
   card: {
-    paddingVertical: CELL,
-    paddingHorizontal: CELL,
-    backgroundColor: "#ffffffb3",
-    gap: CELL,
+    paddingTop: 18,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: c.card,
+    gap: 16,
   },
   // The row of numbers is ruled like the sheet: a cell and a half by two.
   numberLine: { flexDirection: "row", flexWrap: "wrap" },

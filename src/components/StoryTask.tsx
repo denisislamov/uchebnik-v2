@@ -11,7 +11,7 @@ import {
   selectStoryVariant,
 } from "../lib/storyAssessment";
 import { Button, CellPressable } from "./Controls";
-import { HandFrame } from "./HandDrawn";
+import { HandFrame, Pasted } from "./HandDrawn";
 import { BLANK, TextWithBlanks } from "./Blank";
 import { colors as c, fonts as f } from "../theme";
 
@@ -78,8 +78,7 @@ export function StoryTask({
           Составь и реши все задачи: {block.story.variants.length}.
         </Text>
         {block.story.variants.map((v, i) => (
-          <View key={v.id} style={s.card}>
-            <HandFrame seed={v.id} />
+          <Pasted key={v.id} style={s.card} frame={<HandFrame seed={v.id} />}>
             <Text style={s.label}>
               Задача {i + 1}. {v.label}
             </Text>
@@ -102,7 +101,7 @@ export function StoryTask({
                 onAnswer({ ...answer, checked: false, responses });
               }}
             />
-          </View>
+          </Pasted>
         ))}
         <Button
           onPress={() =>
@@ -173,8 +172,7 @@ export function StoryTask({
                 : ""}
             </Text>
           )}
-          <View style={s.card}>
-            <HandFrame seed="story" />
+          <Pasted style={s.card} frame={<HandFrame seed="story" />}>
             <Text style={s.label}>Твоя задача</Text>
             <TextWithBlanks
               style={s.text}
@@ -188,7 +186,7 @@ export function StoryTask({
                 {step.question}
               </Text>
             ))}
-          </View>
+          </Pasted>
           <Text style={s.label}>Что будем считать в ответе?</Text>
           <View style={s.choices}>
             {[
@@ -203,8 +201,11 @@ export function StoryTask({
             ].map((unit) => chip("storyUnit", unit, unit))}
           </View>
           {variant.steps.map((step, i) => (
-            <View key={step.id} style={s.card}>
-              <HandFrame seed={step.id} />
+            <Pasted
+              key={step.id}
+              style={s.card}
+              frame={<HandFrame seed={step.id} />}
+            >
               <Text style={s.label}>
                 {i + 1}. {step.question}
               </Text>
@@ -229,7 +230,7 @@ export function StoryTask({
                 {input(`${step.id}Result`, `Ответ: ${step.question}`)}
                 <Text style={s.text}>{r.storyUnit ?? ""}</Text>
               </View>
-            </View>
+            </Pasted>
           ))}
           {!embedded && (
             <Button
@@ -291,7 +292,13 @@ const s = StyleSheet.create({
     alignSelf: "flex-start",
   },
   // Written on the sheet: the ruling shows through, rows follow rows.
-  card: { backgroundColor: "#ffffffb3", padding: 24, gap: 24 },
+  card: {
+    backgroundColor: c.card,
+    paddingTop: 18,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    gap: 16,
+  },
   equation: {
     flexDirection: "row",
     flexWrap: "wrap",

@@ -45,13 +45,17 @@ export const sheet = StyleSheet.create({
   /** Buttons and chips in a row stand a cell apart. */
   chips: { flexDirection: "row", flexWrap: "wrap", gap: CELL },
   /** A row with a count and a button: two cells. */
+  // A count and its button share a row of two cells, with half a cell of
+  // air above and below: the words stand in the middle of the button's
+  // height, on a line of the sheet, and nothing touches the board above.
   controls: {
     flexDirection: "row",
-    // What is written stands on the lower line of the row's two.
-    alignItems: "flex-end",
+    alignItems: "center",
     justifyContent: "space-between",
     minHeight: CELL * 2,
+    paddingVertical: CELL / 2,
     columnGap: CELL,
+    rowGap: CELL,
     // In a narrow column the button goes under the words.
     flexWrap: "wrap",
   },

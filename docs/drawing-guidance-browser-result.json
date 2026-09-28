@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "startedAt": "2026-09-28T06:11:03.667Z",
+  "startedAt": "2026-09-28T08:42:49.840Z",
   "mouse": [
     {
       "width": 390,
@@ -27,7 +27,7 @@
         "y": 549,
         "width": 528,
         "height": 352,
-        "scrollTop": 27,
+        "scrollTop": 51,
         "scrollClient": 374,
         "overflow": "auto",
         "gutter": "stable"
@@ -37,7 +37,7 @@
         "y": 549,
         "width": 528,
         "height": 352,
-        "scrollTop": 27,
+        "scrollTop": 51,
         "scrollClient": 374,
         "overflow": "hidden",
         "gutter": "stable"
@@ -47,27 +47,27 @@
         "y": 549,
         "width": 528,
         "height": 352,
-        "scrollTop": 27,
+        "scrollTop": 51,
         "scrollClient": 374,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryBefore": {
         "x": -77,
-        "y": 238,
+        "y": 226,
         "width": 528,
         "height": 352,
-        "scrollTop": 338,
+        "scrollTop": 374,
         "scrollClient": 374,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryDuring": {
         "x": -77,
-        "y": 238,
+        "y": 226,
         "width": 528,
         "height": 352,
-        "scrollTop": 338,
+        "scrollTop": 374,
         "scrollClient": 374,
         "overflow": "hidden",
         "gutter": "stable"
@@ -95,50 +95,50 @@
       ],
       "before": {
         "x": 120,
-        "y": 504,
+        "y": 549,
         "width": 528,
         "height": 352,
-        "scrollTop": 0,
+        "scrollTop": 3,
         "scrollClient": 744,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": 120,
-        "y": 504,
+        "y": 549,
         "width": 528,
         "height": 352,
-        "scrollTop": 0,
+        "scrollTop": 3,
         "scrollClient": 744,
         "overflow": "hidden",
         "gutter": "stable"
       },
       "after": {
         "x": 120,
-        "y": 504,
+        "y": 549,
         "width": 528,
         "height": 352,
-        "scrollTop": 0,
+        "scrollTop": 3,
         "scrollClient": 744,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryBefore": {
         "x": 120,
-        "y": 262,
+        "y": 250,
         "width": 528,
         "height": 352,
-        "scrollTop": 242,
+        "scrollTop": 302,
         "scrollClient": 744,
         "overflow": "auto",
         "gutter": "stable"
       },
       "retryDuring": {
         "x": 120,
-        "y": 262,
+        "y": 250,
         "width": 528,
         "height": 352,
-        "scrollTop": 242,
+        "scrollTop": 302,
         "scrollClient": 744,
         "overflow": "hidden",
         "gutter": "stable"
@@ -183,20 +183,20 @@
       "direction": "down",
       "before": {
         "x": -69,
-        "y": 182,
+        "y": 170,
         "width": 528,
         "height": 352,
-        "scrollTop": 394,
+        "scrollTop": 430,
         "scrollClient": 390,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": -69,
-        "y": 182,
+        "y": 170,
         "width": 528,
         "height": 352,
-        "scrollTop": 394,
+        "scrollTop": 430,
         "scrollClient": 390,
         "overflow": "hidden",
         "gutter": "stable"
@@ -208,20 +208,20 @@
       "direction": "up",
       "before": {
         "x": -69,
-        "y": 182,
+        "y": 170,
         "width": 528,
         "height": 352,
-        "scrollTop": 394,
+        "scrollTop": 430,
         "scrollClient": 390,
         "overflow": "auto",
         "gutter": "stable"
       },
       "during": {
         "x": -69,
-        "y": 182,
+        "y": 170,
         "width": 528,
         "height": 352,
-        "scrollTop": 394,
+        "scrollTop": 430,
         "scrollClient": 390,
         "overflow": "hidden",
         "gutter": "stable"
@@ -240,5 +240,5 @@
     "docs/drawing-guidance-p008-block14-1280.png"
   ],
   "errors": [],
-  "finishedAt": "2026-09-28T06:11:22.605Z"
+  "finishedAt": "2026-09-28T08:43:08.641Z"
 }

@@ -38,7 +38,7 @@ import {
   CellPressable,
 } from "./src/components/Controls";
 import { NotebookPaper } from "./src/components/NotebookPaper";
-import { HandFrame, HandRule, Rows } from "./src/components/HandDrawn";
+import { HandFrame, Rows } from "./src/components/HandDrawn";
 import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
@@ -579,10 +579,7 @@ function Main() {
                   </View>
                 </View>
                 <View style={s.pathHeading}>
-                  <View>
-                    <Text style={s.sectionTitle}>Оглавление</Text>
-                    <HandRule seed="contents" width={cells(9)} />
-                  </View>
+                  <Text style={s.sectionTitle}>Оглавление</Text>
                   <Text style={s.progressText}>
                     {finished} из {lessonPages.length} пройдено
                   </Text>
@@ -819,6 +816,7 @@ function Main() {
                 )}
                 <ScrollView
                   horizontal
+                  style={{ flexGrow: 0 }}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={s.stepDots}
                 >
@@ -829,17 +827,12 @@ function Main() {
                       accessibilityLabel={`Шаг ${i + 1}: ${b.title}`}
                       accessibilityState={{ selected: i === progress.block }}
                       onPress={() => setProgress((p) => ({ ...p, block: i }))}
-                      style={[s.stepDot, i === progress.block && s.stepActive]}
+                      style={[
+                        s.stepDot,
+                        isDone(b, progress.answers[b.id]) && s.stepDone,
+                        i === progress.block && s.stepActive,
+                      ]}
                     >
-                      {/* A square outlined by hand inside its two cells. */}
-                      {i !== progress.block && (
-                        <HandFrame
-                          seed={b.id}
-                          color={
-                            isDone(b, progress.answers[b.id]) ? c.red : c.line
-                          }
-                        />
-                      )}
                       <Text
                         style={[
                           s.stepDotText,
@@ -1310,6 +1303,9 @@ const s = StyleSheet.create({
     paddingRight: CELL,
     paddingBottom: 38,
     flexDirection: "row",
+    // The columns keep their own heights: stretched to the list of pages,
+    // the lesson column handed the extra to the row of step squares.
+    alignItems: "flex-start",
     gap: cells(2),
   },
   sidebar: { width: cells(10) },
@@ -1354,7 +1350,7 @@ const s = StyleSheet.create({
   lessonTop: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 16,
     minHeight: cells(2),
   },
   backButton: {
@@ -1404,18 +1400,23 @@ const s = StyleSheet.create({
     fontSize: 14,
     lineHeight: CELL,
   },
-  // A square takes two cells by two and is outlined a little inside them, so
-  // the squares stand on the lines of the sheet two cells apart.
-  stepDots: { gap: 8, paddingVertical: 4 },
+  // The squares stand in a band of three rows, apart from the page's name
+  // above and the task below; each takes two cells and is drawn a little
+  // inside them. A small square gets a plain line: a hand-drawn one this
+  // small reads as a smudge.
+  stepDots: { gap: 8, paddingTop: 16, paddingBottom: 16 },
   stepDot: {
     width: 40,
     height: 40,
     borderRadius: 4,
+    borderWidth: 1.5,
+    borderColor: c.line,
     backgroundColor: c.card,
     alignItems: "center",
     justifyContent: "center",
   },
-  stepActive: { backgroundColor: c.pen },
+  stepDone: { borderColor: c.red },
+  stepActive: { backgroundColor: c.pen, borderColor: c.pen },
   stepDotText: {
     fontFamily: f.bold,
     color: c.pen,
@@ -1435,12 +1436,14 @@ const s = StyleSheet.create({
     gap: CELL,
     marginTop: CELL,
   },
+  // Half a cell under the button it explains.
   lockNote: {
     fontFamily: f.regular,
     color: c.muted,
     fontSize: 14,
     lineHeight: CELL,
     textAlign: "right",
+    marginTop: CELL / 2,
   },
   modalHeader: {
     padding: 20,
