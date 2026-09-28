@@ -8,7 +8,7 @@ import { LocationTask } from "./LocationTask";
 import { CounterBoard } from "./CounterBoard";
 import { CourseTask } from "./CourseTask";
 import { PictureTask } from "./PictureTask";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { colors as c, fonts as f } from "../theme";
@@ -18,8 +18,8 @@ import { BookImage } from "./BookImage";
 import { useTaskSize } from "./taskSize";
 import { Button, RetryNote } from "./Controls";
 import { TextWithBlanks } from "./Blank";
-import { HandFrame } from "./HandDrawn";
-import { CELL } from "../lib/grid";
+import { HandFrame, Rows } from "./HandDrawn";
+import { CELL, wholeCells, written } from "../lib/grid";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { PracticalTask } from "./PracticalTask";
@@ -56,6 +56,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
   // On a phone a full-height illustration pushes the answer off screen; keep
   // the picture and the place to answer within one view.
   const size = useTaskSize();
+  const [rowWidth, setRowWidth] = useState(0);
   // A laptop window is wide but low: the sample goes to the left of the work
   // instead of above it, so both fit under the lesson header.
   const beside =
@@ -76,17 +77,27 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
       ? Array.isArray(answer.value) && answer.value.length > 0
       : answer.value !== undefined && answer.value !== "";
   return (
-    <View style={{ gap: size.tall ? CELL : CELL / 2 }}>
+    // No gaps of its own: every part takes whole rows of the sheet, and an
+    // empty row is left where one is needed.
+    <View>
       {size.compact && (
-        // Two and a half cells: with the gap under it the row is three cells,
-        // and the heading below starts on a line.
-        <View style={{ height: CELL * 2.5, justifyContent: "center" }}>
+        // The button's two rows; the heading under it is written on the
+        // lower line of its own two, which leaves a row between them.
+        <View style={{ height: CELL * 2 }}>
           <CoachButton onPress={showTaskCoach} />
         </View>
       )}
       {/* On wider screens the button sits beside the heading: a row of its own
           pushed the task a whole line down. */}
-      <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "flex-start",
+          gap: CELL,
+          // An empty row between the task and what it is about.
+          marginBottom: CELL,
+        }}
+      >
         <View
           ref={instructionRef}
           collapsable={false}
@@ -95,7 +106,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <Text
               testID="block-title"
-              style={[s.title, size.tall && { fontSize: 30, lineHeight: 36 }]}
+              style={[s.title, size.tall && written(30, 2)]}
             >
               {block.title}
             </Text>
@@ -115,7 +126,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
               testID="block-prompt"
               style={StyleSheet.flatten([
                 s.prompt,
-                size.tall && { fontSize: 24, lineHeight: 36 },
+                size.tall && written(24, 2),
               ])}
               text={block.prompt}
             />
@@ -124,18 +135,24 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         {!size.compact && <CoachButton onPress={showTaskCoach} />}
       </View>
       <View
+        onLayout={(e) => setRowWidth(e.nativeEvent.layout.width)}
         style={
           beside
             ? { flexDirection: "row", alignItems: "flex-start", gap: CELL }
-            : { gap: CELL / 2 }
+            : { gap: CELL }
         }
       >
         <View
           ref={imagesRef}
           collapsable={false}
           style={[
-            { gap: 14 },
-            beside && { flex: 4, minWidth: 0 },
+            { gap: CELL },
+            // The sample's column is a whole number of cells wide, so the
+            // work beside it starts on a line of the sheet.
+            beside &&
+              (rowWidth > 0
+                ? { width: wholeCells(((rowWidth - CELL) * 4) / 11) }
+                : { flex: 4, minWidth: 0 }),
             // Without a picture the place for it must not push the answers
             // half a cell down.
             block.kind !== "picture" &&
@@ -144,25 +161,34 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
           ]}
         >
           {block.kind === "picture" && (
-            <PictureTask
-              block={block}
-              value={Array.isArray(answer.value) ? answer.value : []}
-              onChange={(value) =>
-                onAnswer({ ...answer, value, checked: true, reviewed: false })
-              }
-            />
+            <Rows>
+              <PictureTask
+                block={block}
+                value={Array.isArray(answer.value) ? answer.value : []}
+                onChange={(value) =>
+                  onAnswer({
+                    ...answer,
+                    value,
+                    checked: true,
+                    reviewed: false,
+                  })
+                }
+              />
+            </Rows>
           )}
           {block.kind !== "picture" && !!block.images.length && (
-            <View
-              style={[
-                s.images,
+            <Rows
+              testID="picture-frame"
+              style={s.images}
+              frame={<HandFrame seed={`${block.id}-picture`} />}
+              contentStyle={[
+                s.imagesContent,
                 block.images.length > 1 && {
                   flexDirection: "row",
                   flexWrap: "wrap",
                 },
               ]}
             >
-              <HandFrame seed={`${block.id}-picture`} />
               {block.images
                 .filter((id) => id !== "p011_balls_row_3_groups")
                 .map((id) => (
@@ -186,7 +212,7 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
                     />
                   </View>
                 ))}
-            </View>
+            </Rows>
           )}
           {/* The note is about the picture, so it stays with the picture
               instead of under the answer. */}
@@ -200,25 +226,45 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
         <View
           ref={answerRef}
           collapsable={false}
-          style={[{ gap: CELL }, beside && { flex: 7, minWidth: 0 }]}
+          style={[
+            { gap: CELL },
+            beside && { flex: rowWidth > 0 ? 1 : 7, minWidth: 0 },
+            // A picture that is pressed has nothing under it until it is
+            // answered: no empty row is kept for that.
+            block.kind === "picture" &&
+              !done &&
+              !(answer.checked && !correct) && { display: "none" },
+          ]}
         >
           {block.kind === "location" && (
-            <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
+            <Rows>
+              <LocationTask block={block} answer={answer} onAnswer={onAnswer} />
+            </Rows>
           )}
           {block.kind === "read" && <Text style={s.body}>{block.body}</Text>}
           {block.kind === "story" && (
-            <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
+            <Rows>
+              <StoryTask block={block} answer={answer} onAnswer={onAnswer} />
+            </Rows>
           )}
           {block.kind === "numberGame" && (
-            <NumberGameTask block={block} answer={answer} onAnswer={onAnswer} />
+            <Rows>
+              <NumberGameTask
+                block={block}
+                answer={answer}
+                onAnswer={onAnswer}
+              />
+            </Rows>
           )}
           {block.kind === "practical" && (
-            <PracticalTask
-              block={block}
-              answer={answer}
-              onAnswer={onAnswer}
-              onDrawing={onDrawing}
-            />
+            <Rows>
+              <PracticalTask
+                block={block}
+                answer={answer}
+                onAnswer={onAnswer}
+                onDrawing={onDrawing}
+              />
+            </Rows>
           )}
           {[
             "work",
@@ -228,12 +274,14 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
             "relation",
             "targetGame",
           ].includes(block.kind) && (
-            <CourseTask
-              block={block}
-              answer={answer}
-              onAnswer={onAnswer}
-              onDrawing={onDrawing}
-            />
+            <Rows>
+              <CourseTask
+                block={block}
+                answer={answer}
+                onAnswer={onAnswer}
+                onDrawing={onDrawing}
+              />
+            </Rows>
           )}
           {block.kind === "number" && (
             <Text style={s.instruction}>Выбери верное число ниже.</Text>
@@ -313,28 +361,34 @@ function ExerciseBody({ block, answer, onAnswer, onDrawing }: ExerciseProps) {
             </View>
           )}
           {block.kind === "counters" && (
-            <CounterBoard
-              value={numeric}
-              token={block.token}
-              onChange={(value) => update({ value })}
-              onDrawing={onDrawing}
-            />
+            <Rows>
+              <CounterBoard
+                value={numeric}
+                token={block.token}
+                onChange={(value) => update({ value })}
+                onDrawing={onDrawing}
+              />
+            </Rows>
           )}
           {block.kind === "draw" && (
-            <DrawingPad
-              strokes={answer.strokes ?? []}
-              onChange={(strokes) => update({ strokes })}
-              trace={block.trace}
-              onDrawing={onDrawing}
-            />
+            <Rows>
+              <DrawingPad
+                strokes={answer.strokes ?? []}
+                onChange={(strokes) => update({ strokes })}
+                trace={block.trace}
+                onDrawing={onDrawing}
+              />
+            </Rows>
           )}
           {block.kind === "shape" && (
-            <ShapeBoard
-              onDrawing={onDrawing}
-              block={block}
-              value={Array.isArray(answer.value) ? answer.value : []}
-              onChange={(value) => update({ value })}
-            />
+            <Rows>
+              <ShapeBoard
+                onDrawing={onDrawing}
+                block={block}
+                value={Array.isArray(answer.value) ? answer.value : []}
+                onChange={(value) => update({ value })}
+              />
+            </Rows>
           )}
           {!review && (block.kind === "counters" || block.kind === "shape") && (
             <Button
@@ -392,9 +446,16 @@ function AnswerAnchor({
 const s = StyleSheet.create({
   // Heading and task take a cell and a quarter each: with the half-cell gap
   // under them a one-line task is three cells, and the picture starts on a line.
-  title: { fontFamily: f.bold, fontSize: 26, lineHeight: 30, color: c.ink },
-  doneMark: { fontFamily: f.hand, fontSize: 32, lineHeight: 32, color: c.red },
-  prompt: { fontFamily: f.regular, fontSize: 21, lineHeight: 30, color: c.ink },
+  // The heading is written on the second line of its two rows, the task
+  // takes a row for every line of it.
+  title: { fontFamily: f.bold, color: c.ink, ...written(26, 2) },
+  doneMark: { fontFamily: f.hand, color: c.red, ...written(32, 2, true) },
+  prompt: {
+    fontFamily: f.regular,
+    fontSize: 20,
+    lineHeight: CELL,
+    color: c.ink,
+  },
   source: {
     fontFamily: f.regular,
     fontSize: 13,
@@ -402,29 +463,30 @@ const s = StyleSheet.create({
     color: c.muted,
     marginTop: 7,
   },
-  body: { fontFamily: f.regular, fontSize: 18, lineHeight: 29, color: c.ink },
+  body: { fontFamily: f.regular, fontSize: 18, lineHeight: CELL, color: c.ink },
   // Картинка из книги вклеена на лист: белая рамка, тонкая линия.
   images: {
-    gap: 12,
     backgroundColor: c.card,
-    padding: 12,
+    padding: CELL / 2,
+    justifyContent: "center",
   },
+  imagesContent: { columnGap: CELL / 2, rowGap: CELL },
   // Boxes stand three cells apart and are two cells high.
   options: {
     flexDirection: "row",
     flexWrap: "wrap",
-    columnGap: 8,
+    columnGap: CELL,
     rowGap: CELL,
   },
   number: {
-    width: 64,
+    width: CELL * 2,
     height: CELL * 2,
     backgroundColor: c.card,
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
   },
-  digit: { fontFamily: f.heavy, color: c.pen, fontSize: 25 },
+  digit: { fontFamily: f.heavy, color: c.pen, fontSize: 25, lineHeight: CELL },
   selected: { backgroundColor: c.pen },
   option: {
     flexBasis: CELL * 9,
@@ -434,12 +496,23 @@ const s = StyleSheet.create({
     gap: 14,
     backgroundColor: c.card,
     paddingHorizontal: 17,
-    paddingVertical: 12,
+    paddingVertical: CELL / 2,
     borderRadius: 4,
     minHeight: CELL * 3,
   },
-  optionIndex: { fontFamily: f.bold, color: c.muted, fontSize: 13 },
-  optionText: { fontFamily: f.bold, color: c.ink, fontSize: 17, flexShrink: 1 },
+  optionIndex: {
+    fontFamily: f.bold,
+    color: c.muted,
+    fontSize: 13,
+    lineHeight: CELL,
+  },
+  optionText: {
+    fontFamily: f.bold,
+    color: c.ink,
+    fontSize: 17,
+    lineHeight: CELL,
+    flexShrink: 1,
+  },
   tray: {
     minHeight: 112,
     padding: 20,
@@ -451,7 +524,12 @@ const s = StyleSheet.create({
     gap: 12,
     flexWrap: "wrap",
   },
-  trayHint: { fontFamily: f.regular, color: c.muted, fontSize: 16 },
+  trayHint: {
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 16,
+    lineHeight: 24,
+  },
   stick: {
     height: 64,
     width: 8,
@@ -473,14 +551,19 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     gap: 8,
   },
-  count: { fontFamily: f.heavy, fontSize: 28, color: c.pen },
+  count: { fontFamily: f.heavy, fontSize: 28, lineHeight: 24, color: c.pen },
   review: {
     padding: 18,
     gap: 12,
     borderRadius: 6,
     backgroundColor: c.washWarm,
   },
-  reviewTitle: { fontFamily: f.bold, color: c.ink, fontSize: 15 },
+  reviewTitle: {
+    fontFamily: f.bold,
+    color: c.ink,
+    fontSize: 15,
+    lineHeight: 24,
+  },
   reviewBody: {
     fontFamily: f.regular,
     color: c.ink,
@@ -488,18 +571,17 @@ const s = StyleSheet.create({
     lineHeight: 22,
   },
   // Отметка учителя: написана красной ручкой прямо на листе.
-  success: { paddingVertical: 4 },
+  success: {},
   successText: {
     fontFamily: f.hand,
     color: c.red,
-    fontSize: 26,
-    lineHeight: 32,
+    ...written(24, 1, true),
   },
   hint: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.muted },
   instruction: {
     fontFamily: f.regular,
     fontSize: 18,
-    lineHeight: 26,
+    lineHeight: CELL,
     color: c.ink,
   },
 });

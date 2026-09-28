@@ -9,6 +9,9 @@ import {
   type PartColor,
 } from "../lib/compositionLayout";
 import { colors as c, fonts as f } from "../theme";
+import { Rows } from "./HandDrawn";
+import { sheet } from "./sheet";
+import { CELL } from "../lib/grid";
 
 type Drag = {
   group: 0 | 1;
@@ -244,107 +247,110 @@ export function CompositionBoard({
     );
   }
   return (
-    <View testID="composition-board" style={{ gap: 10 }}>
-      <Text style={{ fontFamily: f.bold, color: c.ink }}>
+    <View testID="composition-board">
+      <Text style={{ lineHeight: 24, fontFamily: f.bold, color: c.ink }}>
         {pattern
           ? `Переноси ${noun} на одно поле. Разложи их как на рисунке.`
           : `Переноси ${noun} на одно поле. Клади их рядом.`}
       </Text>
-      <View
-        onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-        style={{ height: 276 }}
-      >
+      <Rows style={{ marginTop: CELL }} object>
         <View
-          ref={field}
-          testID="composition-field"
-          style={{
-            height: 148,
-            borderRadius: 6,
-            backgroundColor: c.wash,
-            borderWidth: 2,
-            borderStyle: "dashed",
-            borderColor: "#2b4ba8",
-          }}
-        />
-        {Array.from({ length: total }, (_, i) => (
+          onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+          style={{ height: 276 }}
+        >
           <View
-            key={i}
+            ref={field}
+            testID="composition-field"
+            style={{
+              height: 148,
+              borderRadius: 6,
+              backgroundColor: c.wash,
+              borderWidth: 2,
+              borderStyle: "dashed",
+              borderColor: "#2b4ba8",
+            }}
+          />
+          {Array.from({ length: total }, (_, i) => (
+            <View
+              key={i}
+              pointerEvents="none"
+              style={{
+                position: "absolute",
+                left: geometry.center(i).x - geometry.cell / 2,
+                top: geometry.center(i).y - geometry.cell / 2,
+                width: geometry.cell,
+                height: geometry.cell,
+                borderWidth: 1,
+                borderColor: "#b8cbbc",
+              }}
+            />
+          ))}
+          <Text
+            testID="composition-total"
+            pointerEvents="none"
+            style={{
+              lineHeight: 24,
+              position: "absolute",
+              top: 111,
+              width: "100%",
+              textAlign: "center",
+              fontFamily: f.bold,
+              color: c.ink,
+            }}
+          >
+            {showEquation
+              ? `${counts[0]} + ${counts[1]} = ${count}`
+              : `${counts[0]} и ${counts[1]} · Всего ${count}`}
+          </Text>
+          <View
+            testID="composition-supply"
             pointerEvents="none"
             style={{
               position: "absolute",
-              left: geometry.center(i).x - geometry.cell / 2,
-              top: geometry.center(i).y - geometry.cell / 2,
-              width: geometry.cell,
-              height: geometry.cell,
-              borderWidth: 1,
-              borderColor: "#b8cbbc",
+              top: 168,
+              width: "100%",
+              height: 108,
+              backgroundColor: c.washWarm,
+              borderRadius: 6,
             }}
-          />
-        ))}
-        <Text
-          testID="composition-total"
-          pointerEvents="none"
-          style={{
-            position: "absolute",
-            top: 111,
-            width: "100%",
-            textAlign: "center",
-            fontFamily: f.bold,
-            color: c.ink,
-          }}
-        >
-          {showEquation
-            ? `${counts[0]} + ${counts[1]} = ${count}`
-            : `${counts[0]} и ${counts[1]} · Всего ${count}`}
-        </Text>
-        <View
-          testID="composition-supply"
-          pointerEvents="none"
-          style={{
-            position: "absolute",
-            top: 168,
-            width: "100%",
-            height: 108,
-            backgroundColor: c.washWarm,
-            borderRadius: 6,
-          }}
-        >
-          <Text
-            style={{ textAlign: "center", fontFamily: f.bold, color: c.ink }}
           >
-            Бери здесь · лишний предмет верни сюда
-          </Text>
-          {colors.map((color, i) => (
             <Text
-              key={i}
               style={{
-                position: "absolute",
-                top: 83,
-                left: sourceCenter(i).x - 55,
-                width: 110,
+                lineHeight: 24,
                 textAlign: "center",
                 fontFamily: f.bold,
                 color: c.ink,
               }}
             >
-              {partPalette[color].label}
+              Бери здесь · лишний предмет верни сюда
             </Text>
-          ))}
+            {colors.map((color, i) => (
+              <Text
+                key={i}
+                style={{
+                  lineHeight: 24,
+                  position: "absolute",
+                  top: 83,
+                  left: sourceCenter(i).x - 55,
+                  width: 110,
+                  textAlign: "center",
+                  fontFamily: f.bold,
+                  color: c.ink,
+                }}
+              >
+                {partPalette[color].label}
+              </Text>
+            ))}
+          </View>
+          {Array.from({ length: count }, (_, index) =>
+            item(index < counts[0] ? 0 : 1, index),
+          )}
+          {item(0, -1)}
+          {item(1, -1)}
         </View>
-        {Array.from({ length: count }, (_, index) =>
-          item(index < counts[0] ? 0 : 1, index),
-        )}
-        {item(0, -1)}
-        {item(1, -1)}
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ fontFamily: f.bold, color: c.ink }}>
+      </Rows>
+      <View style={sheet.controls}>
+        <Text style={{ lineHeight: 24, fontFamily: f.bold, color: c.ink }}>
           На поле: {count} из {total}
         </Text>
         <Button
@@ -367,7 +373,7 @@ export function CompositionBoard({
       {!!message && (
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.regular, color: c.ink }}
+          style={{ lineHeight: 24, fontFamily: f.regular, color: c.ink }}
         >
           {message}
         </Text>

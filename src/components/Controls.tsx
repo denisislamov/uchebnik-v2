@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, Text, StyleSheet, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { colors as c, fonts as f } from "../theme";
+import { CELL, upToCells } from "../lib/grid";
+import { HandFrame } from "./HandDrawn";
 /** `done`: the action already succeeded — flat, no pen lip, not pressable, still fully legible. */
 export function Button({
   children,
@@ -20,8 +22,17 @@ export function Button({
   label?: string;
   small?: boolean;
 }) {
+  // A button is two cells high and a whole number of cells wide: once its
+  // words are measured, it is widened to the next line of the sheet.
+  const words = typeof children === "string" ? children : "";
+  const [fit, setFit] = useState({ words, width: 0 });
   return (
     <Pressable
+      onLayout={(e) => {
+        const width = upToCells(e.nativeEvent.layout.width);
+        if (fit.words !== words || Math.abs(width - fit.width) > 0.5)
+          setFit({ words, width });
+      }}
       testID={done ? "button-done" : undefined}
       accessibilityRole="button"
       accessibilityLabel={label}
@@ -33,6 +44,7 @@ export function Button({
         secondary && s.secondary,
         small && s.small,
         done && s.done,
+        fit.words === words && fit.width > 0 && { minWidth: fit.width },
         disabled && !done && { opacity: 0.45 },
         pressed && !done && (secondary ? s.secondaryPressed : s.pressed),
       ]}
@@ -43,6 +55,29 @@ export function Button({
         {children}
       </Text>
     </Pressable>
+  );
+}
+/**
+ * Anything pressed that holds words — a chip, an option — is widened to a
+ * whole number of cells, as a button is.
+ */
+export function CellPressable({
+  style,
+  ...props
+}: React.ComponentProps<typeof Pressable>) {
+  const [width, setWidth] = useState(0);
+  return (
+    <Pressable
+      {...props}
+      onLayout={(e) => {
+        const w = upToCells(e.nativeEvent.layout.width);
+        if (Math.abs(w - width) > 0.5) setWidth(w);
+      }}
+      style={(state) => [
+        typeof style === "function" ? style(state) : style,
+        width > 0 && { minWidth: width },
+      ]}
+    />
   );
 }
 /**
@@ -64,6 +99,7 @@ export function RetryNote({
       accessibilityLiveRegion="polite"
       style={s.retry}
     >
+      <HandFrame seed="retry" color={c.retry} dashed />
       <View style={s.retryBadge}>
         <Svg width={18} height={18} viewBox="0 0 24 24">
           <Path
@@ -123,14 +159,17 @@ export function Cells({
   );
 }
 const s = StyleSheet.create({
+  // Two cells: a row of text and a quarter of a cell above and below it; the
+  // pen's lip under the button is inside the two cells.
   button: {
     backgroundColor: c.pen,
     borderRadius: 6,
     borderBottomWidth: 3,
     borderBottomColor: c.penDark,
     paddingHorizontal: 22,
-    paddingVertical: 13,
-    minHeight: 50,
+    paddingTop: 11,
+    paddingBottom: 10,
+    minHeight: CELL * 2,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -141,37 +180,40 @@ const s = StyleSheet.create({
     borderColor: c.pen,
     borderBottomWidth: 3,
     borderBottomColor: c.pen,
+    paddingTop: 10,
+    paddingBottom: 9.5,
   },
   secondaryPressed: { backgroundColor: c.wash },
-  small: { paddingVertical: 8, paddingHorizontal: 14, minHeight: 40 },
+  // As high as any button — a finger needs the same room — but narrower.
+  small: { paddingHorizontal: 14 },
   done: {
     backgroundColor: c.wash,
     borderWidth: 1.5,
     borderColor: c.pen,
     borderBottomWidth: 1.5,
     borderBottomColor: c.pen,
+    paddingTop: 10.5,
+    paddingBottom: 10.5,
   },
-  // An explicit line height keeps button heights integer (40 / 50 px): text
-  // metrics alone left them fractional and made scroll rounding drift.
-  label: { fontFamily: f.bold, color: c.white, fontSize: 17, lineHeight: 24 },
+  label: { fontFamily: f.bold, color: c.white, fontSize: 17, lineHeight: CELL },
   secondaryLabel: { color: c.pen },
   doneLabel: { color: c.pen },
+  // A note in pencil, two cells high.
   retry: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
     backgroundColor: c.retryWash,
-    borderWidth: 1.5,
-    borderStyle: "dashed",
-    borderColor: c.retry,
-    borderRadius: 10,
-    paddingVertical: 10,
+    borderRadius: 4,
+    paddingVertical: CELL / 2,
     paddingHorizontal: 12,
+    minHeight: CELL * 2,
   },
   retryBadge: {
     width: 30,
     height: 30,
     borderRadius: 15,
+    marginVertical: -3,
     backgroundColor: c.retry,
     alignItems: "center",
     justifyContent: "center",
@@ -181,10 +223,12 @@ const s = StyleSheet.create({
     fontFamily: f.bold,
     color: c.retry,
     fontSize: 16,
-    lineHeight: 22,
+    lineHeight: CELL,
   },
+  // The bar lies in the middle of its row.
   track: {
     height: 8,
+    marginVertical: 8,
     backgroundColor: c.card,
     borderWidth: 1,
     borderColor: c.line,
@@ -192,7 +236,14 @@ const s = StyleSheet.create({
     overflow: "hidden",
   },
   fill: { height: 8, backgroundColor: c.pen },
-  cells: { flexDirection: "row", flexWrap: "wrap", gap: 3 },
+  // Half a cell each, a quarter apart: the strip takes a row.
+  cells: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    columnGap: 6,
+    rowGap: 12,
+    paddingVertical: 6,
+  },
   cell: {
     borderWidth: 1,
     borderColor: c.line,

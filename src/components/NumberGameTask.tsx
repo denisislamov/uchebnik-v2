@@ -9,7 +9,8 @@ import {
   setNumberGameResponse,
 } from "../lib/numberGame";
 import { colors as c, fonts as f } from "../theme";
-import { Button, RetryNote } from "./Controls";
+import { Button, RetryNote, CellPressable } from "./Controls";
+import { HandFrame } from "./HandDrawn";
 
 export function NumberGameTask({
   block,
@@ -50,7 +51,7 @@ export function NumberGameTask({
               {item.options.map((option) => {
                 const selected = responses[item.id] === option;
                 return (
-                  <Pressable
+                  <CellPressable
                     key={option}
                     accessibilityRole="button"
                     accessibilityLabel={`${item.value}: ${option}`}
@@ -59,7 +60,7 @@ export function NumberGameTask({
                     style={[s.option, selected && s.selected]}
                   >
                     <Text style={s.optionText}>{option}</Text>
-                  </Pressable>
+                  </CellPressable>
                 );
               })}
             </View>
@@ -103,6 +104,7 @@ export function NumberGameTask({
         ))}
       {round && (
         <View testID={`hidden-card-${round.id}`} style={s.card}>
+          <HandFrame seed={round.id} />
           <Text style={s.instruction}>{round.label}</Text>
           <Text style={s.note}>
             К числу на открытой карточке прибавили число с закрытой карточки.
@@ -166,38 +168,41 @@ export function NumberGameTask({
 }
 
 const s = StyleSheet.create({
-  stack: { gap: 14 },
+  stack: { gap: 24 },
   card: {
-    padding: 18,
-    borderRadius: 6,
-    backgroundColor: c.card,
-    borderWidth: 1,
-    borderColor: c.line,
-    gap: 14,
+    padding: 24,
+    backgroundColor: "#ffffffb3",
+    gap: 24,
   },
   completed: {
-    padding: 16,
+    padding: 24,
     borderRadius: 6,
     backgroundColor: c.wash,
-    gap: 10,
+    gap: 12,
   },
-  instruction: { color: c.ink, fontFamily: f.bold, fontSize: 20 },
-  note: { color: c.ink, fontFamily: f.regular, fontSize: 18 },
+  instruction: {
+    color: c.ink,
+    fontFamily: f.bold,
+    fontSize: 20,
+    lineHeight: 24,
+  },
+  note: { color: c.ink, fontFamily: f.regular, fontSize: 18, lineHeight: 24 },
   digit: {
     color: c.pen,
     fontFamily: f.heavy,
     fontSize: 44,
+    lineHeight: 48,
     textAlign: "center",
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
     flexWrap: "wrap",
-    gap: 10,
+    gap: 24,
   },
   numberCard: {
-    minHeight: 64,
-    minWidth: 54,
+    height: 72,
+    width: 72,
     padding: 10,
     alignItems: "center",
     justifyContent: "center",
@@ -207,15 +212,28 @@ const s = StyleSheet.create({
     backgroundColor: c.white,
   },
   hiddenCard: { backgroundColor: c.washWarm },
-  cardNumber: { color: c.ink, fontFamily: f.heavy, fontSize: 32 },
-  equation: { color: c.ink, fontFamily: f.bold, fontSize: 26 },
+  cardNumber: {
+    color: c.ink,
+    fontFamily: f.heavy,
+    fontSize: 32,
+    lineHeight: 48,
+  },
+  equation: {
+    color: c.ink,
+    fontFamily: f.bold,
+    fontSize: 26,
+    lineHeight: 24,
+    minWidth: 24,
+    textAlign: "center",
+  },
   input: {
-    minHeight: 56,
-    minWidth: 100,
-    padding: 12,
-    borderRadius: 6,
+    height: 48,
+    width: 96,
+    paddingVertical: 0,
+    textAlign: "center",
+    borderRadius: 4,
     borderWidth: 2,
-    borderColor: c.line,
+    borderColor: c.pen,
     color: c.ink,
     fontFamily: f.bold,
     fontSize: 26,
@@ -223,9 +241,9 @@ const s = StyleSheet.create({
     backgroundColor: c.white,
   },
   option: {
-    minHeight: 52,
+    minHeight: 48,
     minWidth: 48,
-    paddingVertical: 14,
+    paddingVertical: 10,
     paddingHorizontal: 18,
     borderRadius: 6,
     borderWidth: 2,
@@ -235,6 +253,11 @@ const s = StyleSheet.create({
     alignItems: "center",
   },
   selected: { borderColor: c.pen, backgroundColor: c.wash },
-  optionText: { color: c.ink, fontFamily: f.bold, fontSize: 18 },
-  feedback: { color: c.pen, fontFamily: f.bold, fontSize: 18 },
+  optionText: {
+    color: c.ink,
+    fontFamily: f.bold,
+    fontSize: 18,
+    lineHeight: 24,
+  },
+  feedback: { color: c.pen, fontFamily: f.bold, fontSize: 18, lineHeight: 24 },
 });

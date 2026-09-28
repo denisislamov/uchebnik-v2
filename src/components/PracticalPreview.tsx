@@ -122,7 +122,7 @@ export function PracticalPreview({
   } else if (step.mode === "cards") {
     content = (
       <ScrollView horizontal showsHorizontalScrollIndicator>
-        <View style={{ flexDirection: "row", gap: 8 }}>
+        <View style={{ flexDirection: "row", gap: 12 }}>
           {(state.counts ?? []).map((digit, i) => (
             <View
               key={i}
@@ -137,7 +137,14 @@ export function PracticalPreview({
                 backgroundColor: c.paper,
               }}
             >
-              <Text style={{ fontFamily: f.bold, fontSize: 28, color: c.ink }}>
+              <Text
+                style={{
+                  fontFamily: f.bold,
+                  fontSize: 28,
+                  lineHeight: 24,
+                  color: c.ink,
+                }}
+              >
                 {digit >= 0 ? digit : "□"}
               </Text>
             </View>
@@ -150,21 +157,23 @@ export function PracticalPreview({
       step.groupLabels?.[0] === "Слева" && step.groupLabels?.[1] === "Справа";
     content = (
       <ScrollView horizontal showsHorizontalScrollIndicator>
-        <View style={{ flexDirection: sideBySide ? "row" : "column", gap: 20 }}>
+        <View style={{ flexDirection: sideBySide ? "row" : "column", gap: 24 }}>
           {(state.counts ?? []).map((count, group) => {
             const value = step.groupValues?.[group] ?? step.tokenValue ?? 1;
             return (
-              <View key={group} style={{ gap: 8 }}>
+              <View key={group} style={{ gap: 12 }}>
                 {/* A lone «Группа 1» only adds a word to read; name groups
                     when there is more than one to tell apart. */}
                 {(step.groupLabels?.[group] ||
                   (state.counts ?? []).length > 1) && (
-                  <Text style={{ fontFamily: f.bold, color: c.ink }}>
+                  <Text
+                    style={{ lineHeight: 24, fontFamily: f.bold, color: c.ink }}
+                  >
                     {step.groupLabels?.[group] ??
                       `${/ряд/.test(step.instruction) ? "Ряд" : "Группа"} ${group + 1}`}
                   </Text>
                 )}
-                <View style={{ flexDirection: "row", gap: 8, minHeight: 44 }}>
+                <View style={{ flexDirection: "row", gap: 12, minHeight: 44 }}>
                   {Array.from(
                     { length: Math.max(0, Math.floor(count)) },
                     (_, i) => (
@@ -194,6 +203,7 @@ export function PracticalPreview({
                               position: "absolute",
                               fontFamily: f.bold,
                               fontSize: 15,
+                              lineHeight: 24,
                               color: c.ink,
                               backgroundColor: c.paper,
                               borderRadius: 4,
@@ -218,7 +228,7 @@ export function PracticalPreview({
     <View
       testID={`practical-result-${step.id}`}
       onLayout={(event) => setAvailableWidth(event.nativeEvent.layout.width)}
-      style={{ gap: 8 }}
+      style={{ gap: 12 }}
     >
       {content}
     </View>

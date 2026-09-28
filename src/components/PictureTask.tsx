@@ -8,6 +8,7 @@ import { assets } from "../content/assets";
 import { RetryNote } from "./Controls";
 import { useTaskSize } from "./taskSize";
 import { colors as c, fonts as f } from "../theme";
+import { Rows } from "./HandDrawn";
 import { NumberMeaning } from "./NumberMeaning";
 function Picture({
   id,
@@ -195,21 +196,27 @@ export function PictureTask({
     );
   }
   return (
-    <View style={{ gap: 14 }}>
+    <View style={{ gap: 24 }}>
       {block.images.map((id, i) => (
-        <Picture
-          key={id}
-          id={id}
-          expected={block.expected}
-          targets={block.targets.filter((t) => t.image === i)}
-          selected={value}
-          onPick={pick}
-        />
+        <Rows key={id} object>
+          <Picture
+            id={id}
+            expected={block.expected}
+            targets={block.targets.filter((t) => t.image === i)}
+            selected={value}
+            onPick={pick}
+          />
+        </Rows>
       ))}
       {block.expected.length > 1 && (
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, color: c.pen, fontSize: 20 }}
+          style={{
+            fontFamily: f.bold,
+            color: c.pen,
+            fontSize: 20,
+            lineHeight: 24,
+          }}
         >
           Отмечено: {value.filter((x) => x !== "miss").length}
         </Text>

@@ -10,7 +10,8 @@ import {
   requiredStoryResponses,
   selectStoryVariant,
 } from "../lib/storyAssessment";
-import { Button } from "./Controls";
+import { Button, CellPressable } from "./Controls";
+import { HandFrame } from "./HandDrawn";
 import { BLANK, TextWithBlanks } from "./Blank";
 import { colors as c, fonts as f } from "../theme";
 
@@ -39,7 +40,7 @@ export function StoryTask({
     });
   };
   const chip = (key: string, value: string, label: string) => (
-    <Pressable
+    <CellPressable
       key={value}
       accessibilityRole="button"
       accessibilityLabel={label}
@@ -50,7 +51,7 @@ export function StoryTask({
       <Text style={[s.text, r[key] === value && { color: c.white }]}>
         {label}
       </Text>
-    </Pressable>
+    </CellPressable>
   );
   const input = (key: string, label: string, reset = false) => (
     <TextInput
@@ -72,12 +73,13 @@ export function StoryTask({
   };
   if (block.story.requiredVariants)
     return (
-      <View testID="story-task" style={{ gap: 20 }}>
+      <View testID="story-task" style={{ gap: 24 }}>
         <Text style={s.label}>
           Составь и реши все задачи: {block.story.variants.length}.
         </Text>
         {block.story.variants.map((v, i) => (
           <View key={v.id} style={s.card}>
+            <HandFrame seed={v.id} />
             <Text style={s.label}>
               Задача {i + 1}. {v.label}
             </Text>
@@ -123,11 +125,11 @@ export function StoryTask({
       </View>
     );
   return (
-    <View testID="story-task" style={{ gap: 18 }}>
+    <View testID="story-task" style={{ gap: 24 }}>
       <Text style={s.label}>Выбери, о чём будет задача.</Text>
       <View style={s.choices}>
         {block.story.variants.map((v) => (
-          <Pressable
+          <CellPressable
             key={v.id}
             accessibilityRole="button"
             accessibilityLabel={`Сюжет: ${v.label}`}
@@ -147,13 +149,13 @@ export function StoryTask({
             >
               {v.label}
             </Text>
-          </Pressable>
+          </CellPressable>
         ))}
       </View>
       {variant && (
         <>
           {storyInputs(block, variant).map((item) => (
-            <View key={item.id} style={{ gap: 8 }}>
+            <View key={item.id}>
               <Text style={s.label}>{item.label}</Text>
               <Text style={s.note}>
                 Выбери целое число от {item.min ?? 1} до{" "}
@@ -172,6 +174,7 @@ export function StoryTask({
             </Text>
           )}
           <View style={s.card}>
+            <HandFrame seed="story" />
             <Text style={s.label}>Твоя задача</Text>
             <TextWithBlanks
               style={s.text}
@@ -201,6 +204,7 @@ export function StoryTask({
           </View>
           {variant.steps.map((step, i) => (
             <View key={step.id} style={s.card}>
+              <HandFrame seed={step.id} />
               <Text style={s.label}>
                 {i + 1}. {step.question}
               </Text>
@@ -255,15 +259,15 @@ export function StoryTask({
   );
 }
 const s = StyleSheet.create({
-  text: { fontFamily: f.regular, fontSize: 20, color: c.ink },
-  label: { fontFamily: f.bold, fontSize: 20, color: c.ink },
-  note: { fontFamily: f.regular, fontSize: 17, color: c.muted },
-  choices: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  text: { fontFamily: f.regular, fontSize: 20, lineHeight: 24, color: c.ink },
+  label: { fontFamily: f.bold, fontSize: 20, lineHeight: 24, color: c.ink },
+  note: { fontFamily: f.regular, fontSize: 17, lineHeight: 24, color: c.muted },
+  choices: { flexDirection: "row", flexWrap: "wrap", gap: 24 },
   chip: {
-    minWidth: 58,
-    minHeight: 52,
+    minWidth: 48,
+    minHeight: 48,
     paddingHorizontal: 16,
-    paddingVertical: 13,
+    paddingVertical: 11,
     borderWidth: 1,
     borderColor: c.line,
     borderRadius: 6,
@@ -276,19 +280,23 @@ const s = StyleSheet.create({
     fontFamily: f.bold,
     fontSize: 25,
     color: c.ink,
+    textAlign: "center",
+    backgroundColor: c.white,
     borderWidth: 2,
-    borderColor: c.line,
-    borderRadius: 6,
-    minWidth: 82,
-    minHeight: 54,
-    padding: 12,
+    borderColor: c.pen,
+    borderRadius: 4,
+    width: 96,
+    height: 48,
+    paddingVertical: 0,
     alignSelf: "flex-start",
   },
-  card: { backgroundColor: c.paper, borderRadius: 6, padding: 16, gap: 12 },
+  // Written on the sheet: the ruling shows through, rows follow rows.
+  card: { backgroundColor: "#ffffffb3", padding: 24, gap: 24 },
   equation: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
-    alignItems: "center",
+    columnGap: 24,
+    rowGap: 24,
+    alignItems: "flex-end",
   },
 });

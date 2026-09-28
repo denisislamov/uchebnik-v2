@@ -12,14 +12,48 @@ import {
   Pressable,
   StyleSheet,
   useWindowDimensions,
+  type StyleProp,
+  type ViewStyle,
 } from "react-native";
 import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
-import { Button, RetryNote } from "./Controls";
+import { Button, CellPressable, RetryNote } from "./Controls";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
-import { HandFrame } from "./HandDrawn";
-import { CELL, cells } from "../lib/grid";
+import { HandFrame, Rows } from "./HandDrawn";
+import { CELL, cells, written } from "../lib/grid";
+/**
+ * A card takes whole rows of the sheet, and so does everything in it: a row
+ * of counters or a vessel is as high as it needs and is followed by the rest
+ * of its last row, so the writing under it starts on a line.
+ */
+/** Children one by one, with what stands in fragments taken out of them. */
+const parts = (children: React.ReactNode): React.ReactNode[] =>
+  React.Children.toArray(children).flatMap((child) =>
+    React.isValidElement<{ children?: React.ReactNode }>(child) &&
+    child.type === React.Fragment
+      ? parts(child.props.children)
+      : [child],
+  );
+function Card({
+  style,
+  children,
+}: {
+  style: StyleProp<ViewStyle>;
+  children: React.ReactNode;
+}) {
+  return (
+    <View style={style}>
+      {parts(children).map((child, i) =>
+        React.isValidElement(child) && child.type !== HandFrame ? (
+          <Rows key={child.key ?? i}>{child}</Rows>
+        ) : (
+          child
+        ),
+      )}
+    </View>
+  );
+}
 // An arithmetic frame such as «4 + □ =», not a worded question.
 const isExpression = (label: string) => /^[\d\s+−\-×·:÷□()]+=\s*$/.test(label);
 // A long column of + and − examples with nothing to lean on: a number row to
@@ -66,9 +100,9 @@ export function CourseTask({
   onAnswer: (a: Answer) => void;
   onDrawing: (value: boolean) => void;
 }) {
-  // On a phone a question needs the width: half a cell at the sides instead of one.
-  const narrow = useWindowDimensions().width < 600;
-  const card = [s.card, narrow && { paddingHorizontal: CELL / 2 }];
+  const card = s.card;
+  // Follows what stands above it in a card after an empty row.
+  const below = { marginTop: CELL };
   const r = answer.responses ?? {};
   const set = (key: string, value: string) =>
     onAnswer({ ...answer, responses: { ...r, [key]: value }, checked: false });
@@ -87,7 +121,7 @@ export function CourseTask({
   const chips = (key: string, values: (number | string)[], label: string) => (
     <View style={s.row}>
       {values.map((v) => (
-        <Pressable
+        <CellPressable
           key={v}
           accessibilityRole="button"
           accessibilityLabel={`${label}: ${v}`}
@@ -98,7 +132,7 @@ export function CourseTask({
           <Text style={[s.text, r[key] === String(v) && { color: c.white }]}>
             {v}
           </Text>
-        </Pressable>
+        </CellPressable>
       ))}
     </View>
   );
@@ -115,7 +149,7 @@ export function CourseTask({
       >
         −
       </Button>
-      <Text style={s.text}>{Number(r[key]) || 0}</Text>
+      <Text style={[s.text, s.amount]}>{Number(r[key]) || 0}</Text>
       <Button
         small
         secondary
@@ -132,7 +166,7 @@ export function CourseTask({
   return (
     <View style={{ gap: CELL }}>
       {block.kind === "targetGame" && (
-        <View style={card}>
+        <Card style={card}>
           <HandFrame seed="card" />
           <Text style={s.label}>
             Игрок 1: {r.score0 || 0} · Игрок 2: {r.score1 || 0}
@@ -142,54 +176,56 @@ export function CourseTask({
               ? `Выиграл игрок ${Number(r.score0) >= 100 ? 1 : 2}!`
               : `Ход игрока ${(Number(r.turn) || 0) + 1}`}
           </Text>
-          <View
-            style={{
-              alignSelf: "center",
-              width: 240,
-              height: 240,
-              borderRadius: 120,
-              borderWidth: 2,
-              borderColor: c.pen,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {[10, 20, 30].map((points, i) => (
-              <Pressable
-                key={points}
-                accessibilityRole="button"
-                accessibilityLabel={`Попасть в круг: ${points} очков`}
-                style={{
-                  position: "absolute",
-                  width: 240 - i * 70,
-                  height: 240 - i * 70,
-                  borderRadius: 120,
-                  borderWidth: 2,
-                  borderColor: c.pen,
-                  alignItems: "center",
-                  backgroundColor:
-                    i === 0 ? c.paper : i === 1 ? c.wash : c.washWarm,
-                }}
-                onPress={() => {
-                  if (courseCorrect(block, answer)) return;
-                  const turn = Number(r.turn) || 0;
-                  onAnswer({
-                    ...answer,
-                    checked: true,
-                    responses: {
-                      ...r,
-                      [`score${turn}`]: String(
-                        (Number(r[`score${turn}`]) || 0) + points,
-                      ),
-                      turn: String(1 - turn),
-                    },
-                  });
-                }}
-              >
-                <Text style={s.text}>{points}</Text>
-              </Pressable>
-            ))}
-          </View>
+          <Rows object>
+            <View
+              style={{
+                alignSelf: "center",
+                width: 240,
+                height: 240,
+                borderRadius: 120,
+                borderWidth: 2,
+                borderColor: c.pen,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {[10, 20, 30].map((points, i) => (
+                <Pressable
+                  key={points}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Попасть в круг: ${points} очков`}
+                  style={{
+                    position: "absolute",
+                    width: 240 - i * 70,
+                    height: 240 - i * 70,
+                    borderRadius: 120,
+                    borderWidth: 2,
+                    borderColor: c.pen,
+                    alignItems: "center",
+                    backgroundColor:
+                      i === 0 ? c.paper : i === 1 ? c.wash : c.washWarm,
+                  }}
+                  onPress={() => {
+                    if (courseCorrect(block, answer)) return;
+                    const turn = Number(r.turn) || 0;
+                    onAnswer({
+                      ...answer,
+                      checked: true,
+                      responses: {
+                        ...r,
+                        [`score${turn}`]: String(
+                          (Number(r[`score${turn}`]) || 0) + points,
+                        ),
+                        turn: String(1 - turn),
+                      },
+                    });
+                  }}
+                >
+                  <Text style={s.text}>{points}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </Rows>
           <Button
             secondary
             small
@@ -197,10 +233,10 @@ export function CourseTask({
           >
             Новая игра
           </Button>
-        </View>
+        </Card>
       )}
       {block.kind === "recipe" && (
-        <View style={card}>
+        <Card style={card}>
           <HandFrame seed="card" />
           <Text style={s.label}>
             {block.context
@@ -247,7 +283,9 @@ export function CourseTask({
               )}. Результат должен быть целым числом от ${block.minResult ?? 0} до ${block.max}.`}
           />
           {[...new Set(block.formula.match(/[abc]/g) ?? [])].map((k) => (
-            <View key={k} style={s.row}>
+            // The box stands under its name: beside it, it would start
+            // wherever the words end.
+            <View key={k}>
               <Text style={s.text}>
                 {block.inputLabels?.[k] ??
                   { a: "Первое число", b: "Второе число", c: "Третье число" }[
@@ -260,10 +298,10 @@ export function CourseTask({
           ))}
           <Text style={s.label}>Результат всей задачи</Text>
           {input("result", "Результат всей задачи")}
-        </View>
+        </Card>
       )}
       {block.kind === "relation" && (
-        <View style={card}>
+        <Card style={card}>
           <HandFrame seed="card" />
           {["left", "right"].map((side) => (
             <View key={side}>
@@ -304,7 +342,7 @@ export function CourseTask({
               </View>
             </View>
           ))}
-        </View>
+        </Card>
       )}
       {block.kind === "relation" &&
         Number(r.left) > 0 &&
@@ -334,33 +372,41 @@ export function CourseTask({
                 text={field.context}
               />
             )}
-            <View style={card}>
+            <Card style={card}>
               <HandFrame seed={`card-${field.id}`} />
               {/* «1. 1 + 1 =» reads as part of the example; a bare expression
                 goes without its number, which the screen reader still gets. */}
-              <TextWithBlanks
-                style={s.label}
-                text={
-                  isExpression(field.label)
-                    ? field.label
-                    : `${i + 1}. ${field.label}`
-                }
-              />
-              {field.options
-                ? chips(field.id, field.options, spokenBlanks(field.label))
-                : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
-              {answer.checked &&
-                (r[field.id]?.trim() === field.expected ? (
-                  <Text style={s.feedback}>✓ Верно</Text>
-                ) : (
-                  <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
-                ))}
-            </View>
+              {/* The question and the box under it follow one another; the
+                  teacher's mark stands beside the box and takes no row. */}
+              <View>
+                <TextWithBlanks
+                  style={s.label}
+                  text={
+                    isExpression(field.label)
+                      ? field.label
+                      : `${i + 1}. ${field.label}`
+                  }
+                />
+                <View style={s.row}>
+                  {field.options
+                    ? chips(field.id, field.options, spokenBlanks(field.label))
+                    : input(field.id, spokenBlanks(`${i + 1}. ${field.label}`))}
+                  {answer.checked &&
+                    (r[field.id]?.trim() === field.expected ? (
+                      <Text style={s.feedback}>✓ Верно</Text>
+                    ) : (
+                      <View style={{ flexGrow: 1, flexBasis: cells(8) }}>
+                        <RetryNote alert={false}>Попробуй ещё раз</RetryNote>
+                      </View>
+                    ))}
+                </View>
+              </View>
+            </Card>
           </React.Fragment>
         ))}
       {block.kind === "compose" &&
         block.rules.map((rule, i) => (
-          <View key={i} style={card}>
+          <Card key={i} style={card}>
             <HandFrame seed={`card-${i}`} />
             <Text style={s.label}>
               {block.story ? "Придумай задачу" : "Составь пример"} {i + 1}
@@ -374,7 +420,7 @@ export function CourseTask({
                 : ""}
               Числа до {rule.max}.
             </Text>
-            <View style={s.row}>
+            <View style={s.sum}>
               {input(`${i}a`, "Первое число")}
               <Text style={s.operator}>{rule.operator}</Text>
               {input(`${i}b`, "Второе число")}
@@ -382,7 +428,7 @@ export function CourseTask({
               {input(`${i}c`, "Результат")}
             </View>
             {block.story && r[`${i}story`] && (
-              <View style={{ gap: 12 }}>
+              <View style={{ marginTop: CELL }}>
                 <Text style={s.text}>
                   {
                     composeStory(
@@ -407,10 +453,10 @@ export function CourseTask({
               ) : (
                 <RetryNote alert={false}>Проверь числа и действие</RetryNote>
               ))}
-          </View>
+          </Card>
         ))}
       {block.kind === "activity" && block.activity.mode === "sequence" && (
-        <View>
+        <View style={{ gap: CELL }}>
           <Text style={s.note}>
             Нажимай числа по порядку: {block.activity.targets.join(", ")}.
             Нажатые закрашиваются.
@@ -423,7 +469,7 @@ export function CourseTask({
                 )
               : [...new Set(block.activity.targets)].sort((a, b) => a - b)
             ).map((n) => (
-              <Pressable
+              <CellPressable
                 key={n}
                 style={[
                   s.chip,
@@ -456,17 +502,19 @@ export function CourseTask({
                 >
                   {n}
                 </Text>
-              </Pressable>
+              </CellPressable>
             ))}
           </View>
           {block.activity.board === "pages" &&
             block.activity.targets.some(
               (_, i) => r[`${i}visited`] === "yes",
             ) && (
-              <BookImage
-                id={`page_${String(block.activity.targets.filter((_, i) => r[`${i}visited`] === "yes").at(-1)).padStart(3, "0")}`}
-                maxHeight={350}
-              />
+              <Rows object>
+                <BookImage
+                  id={`page_${String(block.activity.targets.filter((_, i) => r[`${i}visited`] === "yes").at(-1)).padStart(3, "0")}`}
+                  maxHeight={350}
+                />
+              </Rows>
             )}
           <Text style={s.note}>
             {block.activity.targets
@@ -482,7 +530,7 @@ export function CourseTask({
             key = String(i),
             value = Number(r[key]) || 0;
           return (
-            <View key={i} style={card}>
+            <Card key={i} style={card}>
               <HandFrame seed={`card-${i}`} />
               <Text style={s.label}>
                 {a.labels?.[i] ??
@@ -539,7 +587,7 @@ export function CourseTask({
                     {(a.denominations ?? [1, 2, 3, 5, 10, 15, 20])
                       .filter((n) => !a.exchange || n < target)
                       .map((n) => (
-                        <Pressable
+                        <CellPressable
                           key={n}
                           style={[s.chip, { borderRadius: 40 }]}
                           accessibilityRole="button"
@@ -560,7 +608,7 @@ export function CourseTask({
                           }}
                         >
                           <Text style={s.text}>{n} к.</Text>
-                        </Pressable>
+                        </CellPressable>
                       ))}
                   </View>
                   <Text style={s.text}>В кошельке: {value} копеек</Text>
@@ -594,9 +642,9 @@ export function CourseTask({
                       const k = `${i}g${g}`,
                         count = Number(r[k]) || 0;
                       return (
-                        <Pressable
+                        <CellPressable
                           key={g}
-                          style={[s.group, { minWidth: 90 }]}
+                          style={[s.group, { minWidth: cells(4) }]}
                           accessibilityRole="button"
                           accessibilityLabel={`Группа ${g + 1}, предметов ${count}`}
                           onPress={() => {
@@ -616,7 +664,7 @@ export function CourseTask({
                               <View key={j} style={tokenStyle} />
                             ))}
                           </View>
-                        </Pressable>
+                        </CellPressable>
                       );
                     })}
                   </View>
@@ -652,7 +700,9 @@ export function CourseTask({
                       { length: Number(r[`${i}tens`]) || 0 },
                       (_, j) => (
                         <View key={j} style={s.bundle}>
-                          <Text style={{ color: c.white }}>10</Text>
+                          <Text style={{ lineHeight: 24, color: c.white }}>
+                            10
+                          </Text>
                         </View>
                       ),
                     )}
@@ -748,7 +798,7 @@ export function CourseTask({
                   <Text style={s.note}>
                     Учебная линейка. Единицы на экране заданы моделью.
                   </Text>
-                  <View style={[s.row, { gap: 0 }]}>
+                  <Rows object contentStyle={[s.row, { gap: 0 }]}>
                     {Array.from({ length: target > 10 ? 11 : 11 }, (_, n) => {
                       const v = n * (target > 10 ? 10 : 1);
                       return (
@@ -767,7 +817,7 @@ export function CourseTask({
                         </Pressable>
                       );
                     })}
-                  </View>
+                  </Rows>
                   {target > 10 && stepper(key, "Передвинуть отметку", 100)}
                   <Text style={s.note}>
                     Выбрано: {value} {a.unit ?? "см"}
@@ -776,20 +826,22 @@ export function CourseTask({
               )}
               {a.mode === "liquid" && (
                 <>
-                  <View style={s.vessel}>
-                    <View
-                      style={{
-                        height: `${Math.min(100, (value / (a.unit === "мл" ? 1000 : 3)) * 100)}%`,
-                        backgroundColor: "#9acfd5",
-                        width: "100%",
-                        position: "absolute",
-                        bottom: 0,
-                      }}
-                    />
-                    <Text style={s.text}>
-                      {value} {a.unit ?? "л"}
-                    </Text>
-                  </View>
+                  <Rows object>
+                    <View style={s.vessel}>
+                      <View
+                        style={{
+                          height: `${Math.min(100, (value / (a.unit === "мл" ? 1000 : 3)) * 100)}%`,
+                          backgroundColor: "#9acfd5",
+                          width: "100%",
+                          position: "absolute",
+                          bottom: 0,
+                        }}
+                      />
+                      <Text style={s.text}>
+                        {value} {a.unit ?? "л"}
+                      </Text>
+                    </View>
+                  </Rows>
                   {stepper(
                     key,
                     "Налить мерку",
@@ -828,7 +880,7 @@ export function CourseTask({
                   </Text>
                 </>
               )}
-            </View>
+            </Card>
           );
         })}
       <Button
@@ -850,38 +902,60 @@ export function CourseTask({
 }
 const s = StyleSheet.create({
   chipDone: { backgroundColor: c.pen, borderColor: c.pen },
-  row: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", gap: 8 },
+  // Things in a row stand half a cell apart, rows of them a cell apart.
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-end",
+    columnGap: CELL,
+    rowGap: CELL,
+  },
+  // An example written in a row: boxes four cells wide, a sign in its own
+  // cell between them, half a cell at its sides.
+  sum: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-end",
+    columnGap: CELL / 2,
+    rowGap: CELL,
+  },
   // A question is written on the sheet and bracketed in pencil: the ruling
-  // shows through, and the box for the answer is two cells high.
+  // shows through. A row is left empty above the question and under the
+  // answer; lines of the question and the two rows of the answer box follow
+  // one another.
   card: {
-    paddingTop: CELL / 2,
-    paddingBottom: CELL,
+    paddingVertical: CELL,
     paddingHorizontal: CELL,
     backgroundColor: "#ffffffb3",
-    gap: CELL / 2,
+    gap: CELL,
   },
+  // The row of numbers is ruled like the sheet: a cell and a half by two.
   numberLine: { flexDirection: "row", flexWrap: "wrap" },
   numberCell: {
-    width: 34,
-    height: 38,
+    width: CELL * 1.5,
+    height: CELL * 2,
     borderWidth: 1,
     borderColor: c.line,
     marginLeft: -1,
-    marginTop: -1,
     alignItems: "center",
-    justifyContent: "center",
+    // The number is written on the lower line of the two.
+    justifyContent: "flex-end",
     backgroundColor: c.white,
   },
-  numberText: { fontFamily: f.bold, fontSize: 18, color: c.pen },
+  numberText: {
+    fontFamily: f.bold,
+    fontSize: 18,
+    lineHeight: CELL,
+    color: c.pen,
+  },
   label: { fontFamily: f.bold, fontSize: 19, lineHeight: CELL, color: c.ink },
-  text: { fontFamily: f.bold, fontSize: 20, color: c.pen },
-  note: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.ink },
+  text: { fontFamily: f.bold, fontSize: 20, lineHeight: CELL, color: c.pen },
+  note: { fontFamily: f.regular, fontSize: 16, lineHeight: CELL, color: c.ink },
   context: {
     fontFamily: f.regular,
     fontSize: 20,
-    lineHeight: 29,
+    lineHeight: CELL,
     color: c.ink,
-    marginTop: 10,
   },
   input: {
     backgroundColor: c.white,
@@ -889,31 +963,41 @@ const s = StyleSheet.create({
     borderColor: c.pen,
     borderRadius: 4,
     width: cells(4),
-    minHeight: cells(2),
+    height: cells(2),
+    paddingVertical: 0,
     textAlign: "center",
     fontFamily: f.bold,
     fontSize: 26,
     color: c.ink,
   },
-  operator: { fontSize: 28, color: c.pen },
+  operator: {
+    fontSize: 28,
+    lineHeight: CELL,
+    width: CELL,
+    textAlign: "center",
+    color: c.pen,
+  },
+  // The number between «−» and «+» takes two cells, as the buttons do.
+  amount: { minWidth: cells(2), textAlign: "center" },
   chip: {
-    padding: 12,
-    minWidth: 48,
-    minHeight: 48,
+    paddingVertical: CELL / 2 - 1,
+    paddingHorizontal: 12,
+    minWidth: cells(2),
+    minHeight: cells(2),
     borderWidth: 1,
     borderColor: c.pen,
     borderRadius: 6,
     alignItems: "center",
   },
   selected: { backgroundColor: c.pen },
-  feedback: { fontFamily: f.hand, color: c.red, fontSize: 22, lineHeight: 26 },
+  feedback: { fontFamily: f.hand, color: c.red, ...written(22, 1, true) },
   group: {
-    padding: 12,
+    padding: CELL / 2 - 2,
     borderWidth: 2,
     borderColor: c.pen,
     borderRadius: 6,
-    maxWidth: 200,
-    minHeight: 90,
+    maxWidth: cells(8),
+    minHeight: cells(4),
   },
   bundle: {
     width: 30,

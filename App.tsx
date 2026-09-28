@@ -31,10 +31,15 @@ import {
 } from "./src/lib/assessment";
 import { readProgress, saveProgress } from "./src/lib/storage";
 import { colors as c, fonts as f } from "./src/theme";
-import { Button, Cells, ProgressBar } from "./src/components/Controls";
+import {
+  Button,
+  Cells,
+  ProgressBar,
+  CellPressable,
+} from "./src/components/Controls";
 import { NotebookPaper } from "./src/components/NotebookPaper";
-import { HandFrame, HandRule } from "./src/components/HandDrawn";
-import { CELL, cells, wholeCells } from "./src/lib/grid";
+import { HandFrame, HandRule, Rows } from "./src/components/HandDrawn";
+import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
@@ -253,16 +258,17 @@ function Main() {
           lessonMain.current?.measureInWindow((_x, y, _w, h) => {
             const bottom = y + h + lastScroll.current;
             const slack = paneHeight - bottom - 16;
-            if (Math.abs(slack) < 6) return;
+            // The task is laid out in rows of the sheet, so room is handed
+            // over a row at a time: less than a row of it stays under
+            // «Дальше», and an overflow takes a whole row back.
+            if (slack > -6 && slack < CELL) return;
+            const rows = Math.floor(slack / CELL) * CELL;
             setFit((f) =>
               f.key !== fitKey
                 ? f
                 : {
                     ...f,
-                    extra: Math.max(
-                      -600,
-                      Math.min(900, Math.round(f.extra + slack)),
-                    ),
+                    extra: Math.max(-600, Math.min(900, f.extra + rows)),
                   },
             );
           }),
@@ -297,6 +303,9 @@ function Main() {
     byExercise
       ? p.blocks.findIndex((b) => b.exerciseNumber === queryNumber)
       : -1;
+  const pageLine =
+    `Страница ${page.number} · ${page.subtitle}` +
+    (short && block.exerciseNumber ? ` · № ${block.exerciseNumber}` : "");
   const advance = canAdvance(block, answer);
   // Once the child has done the task, glide just far enough to show the next
   // button — «Проверить…» while it waits for a check, «Дальше» once solved —
@@ -500,8 +509,14 @@ function Main() {
               ]}
             >
               <View style={{ width: writing, maxWidth: "100%" }}>
-                <View style={[s.cover, !wide && { flexDirection: "column" }]}>
-                  <View style={[s.coverText, wide && { paddingRight: 36 }]}>
+                <Rows
+                  style={s.cover}
+                  contentStyle={[
+                    s.coverContent,
+                    !wide && { flexDirection: "column" },
+                  ]}
+                >
+                  <View style={[s.coverText, wide && { paddingRight: CELL }]}>
                     <View style={s.label}>
                       <View style={s.labelInner}>
                         <Text style={s.labelTitle}>Тетрадь</Text>
@@ -513,7 +528,7 @@ function Main() {
                         </Text>
                       </View>
                     </View>
-                    <View style={{ alignSelf: "flex-start", marginTop: 24 }}>
+                    <View style={{ alignSelf: "flex-start", marginTop: CELL }}>
                       <Button
                         onPress={() =>
                           stepsDone || progress.page > 1
@@ -542,12 +557,10 @@ function Main() {
                   >
                     <BookImage id="p010_boys_fishing" maxHeight={320} />
                   </View>
-                </View>
-                <View style={{ gap: 12, marginTop: 20 }}>
+                </Rows>
+                <View>
                   <Text style={s.eyebrow}>Вне занятий · материалы книги</Text>
-                  <View
-                    style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}
-                  >
+                  <View style={s.chips}>
                     {extraPages.map((p) => (
                       <Button
                         key={p.id}
@@ -575,10 +588,8 @@ function Main() {
                   </Text>
                 </View>
                 <ProgressBar value={finished / lessonPages.length} />
-                <View style={{ gap: 12, marginVertical: 20 }}>
-                  <View
-                    style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
-                  >
+                <View style={{ gap: CELL, marginVertical: CELL }}>
+                  <View style={s.chips}>
                     {[
                       "Знакомство с числами",
                       "Первый десяток",
@@ -670,7 +681,7 @@ function Main() {
                           </View>
                           <Text style={s.cardTitle}>{p.title}</Text>
                           <Text style={s.cardSubtitle}>{p.subtitle}</Text>
-                          <View style={{ marginTop: "auto", paddingTop: 16 }}>
+                          <View style={{ marginTop: "auto", paddingTop: 12 }}>
                             <Cells total={p.blocks.length} done={count} />
                           </View>
                         </Pressable>
@@ -750,15 +761,9 @@ function Main() {
                 {/* One row: the arrow home, the page's name, the original. The
                     app header stays on the contents page; here it only
                     repeated «Арифметика» and took a line. */}
-                {/* Two cells: the arrow home, the page's name with its number
-                    under it, the original. */}
-                <View
-                  style={[
-                    s.lessonTop,
-                    // On a phone the line under the name takes two rows.
-                    (tall || compact) && { minHeight: cells(3) },
-                  ]}
-                >
+                {/* Two rows of cells: the arrow home, the page's name written
+                    on the lower line with its number after it, the original. */}
+                <View style={s.lessonTop}>
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel="На главную"
@@ -768,25 +773,23 @@ function Main() {
                   >
                     <BackArrow />
                   </Pressable>
-                  <View style={{ flex: 1, minWidth: 0 }}>
+                  <View style={[s.lessonName, compact && { paddingTop: CELL }]}>
                     <Text
                       style={[
                         s.lessonTitle,
-                        tall && { fontSize: 38, lineHeight: cells(2) },
+                        tall && written(38, 2, true),
+                        // On a phone a long name takes two lines: a row
+                        // each, under the empty row at the top.
+                        compact && s.lessonTitleCompact,
                       ]}
                     >
                       {page.title}
                     </Text>
-                    <Text
-                      style={[s.lessonSubtitle, tall && s.lessonSubtitleTall]}
-                    >
-                      Страница {page.number} · {page.subtitle}
-                      {short && block.exerciseNumber
-                        ? ` · № ${block.exerciseNumber}`
-                        : ""}
-                    </Text>
+                    {!compact && (
+                      <Text style={s.lessonSubtitle}>{pageLine}</Text>
+                    )}
                   </View>
-                  <Pressable
+                  <CellPressable
                     accessibilityRole="button"
                     onPress={() => {
                       setOriginal(true);
@@ -794,8 +797,10 @@ function Main() {
                     }}
                   >
                     <Text style={s.sourceLink}>Оригинал ↗</Text>
-                  </Pressable>
+                  </CellPressable>
                 </View>
+                {/* On a phone the name takes the whole row; its number goes under it. */}
+                {compact && <Text style={s.lessonSubtitleRow}>{pageLine}</Text>}
                 {/* On a laptop screen the step squares carry the count, as on a phone. */}
                 {!short && (
                   <View style={s.stepHeading}>
@@ -883,10 +888,7 @@ function Main() {
                     />
                   </TaskFitExtra.Provider>
                 </View>
-                <View
-                  ref={navigation}
-                  style={[s.navigation, short && { marginTop: CELL / 2 }]}
-                >
+                <View ref={navigation} style={s.navigation}>
                   <Button
                     secondary
                     disabled={
@@ -1138,62 +1140,55 @@ const s = StyleSheet.create({
     paddingTop: cells(2),
   },
   cover: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: CELL,
     backgroundColor: c.cover,
     borderRadius: 4,
     padding: CELL,
     marginBottom: cells(2),
   },
   coverText: { flex: 1, alignSelf: "stretch", justifyContent: "center" },
+  // The label pasted on the cover is nine cells high.
   label: {
     backgroundColor: c.white,
     borderWidth: 1.5,
     borderColor: c.ink,
-    padding: 5,
+    padding: 6,
   },
   labelInner: {
     borderWidth: 1,
     borderColor: c.ink,
-    paddingVertical: 18,
+    paddingVertical: 15,
     paddingHorizontal: 16,
     alignItems: "center",
-    gap: 4,
   },
-  labelTitle: {
-    fontFamily: f.bold,
-    fontSize: 28,
-    lineHeight: 34,
+  labelTitle: { fontFamily: f.bold, color: c.ink, ...written(28, 2) },
+  labelHand: { fontFamily: f.hand, color: c.pen, ...written(40, 2, true) },
+  labelLine: {
+    fontFamily: f.regular,
+    fontSize: 17,
+    lineHeight: CELL,
     color: c.ink,
   },
-  labelHand: {
-    fontFamily: f.hand,
-    fontSize: 40,
-    lineHeight: 46,
-    color: c.pen,
-  },
-  labelLine: { fontFamily: f.regular, fontSize: 17, color: c.ink },
   labelRule: {
     alignSelf: "stretch",
     height: 1,
     backgroundColor: c.line,
-    marginTop: 10,
-    marginBottom: 4,
+    marginTop: CELL / 2,
+    marginBottom: CELL / 2,
   },
   labelNote: {
     fontFamily: f.regular,
     fontSize: 12,
-    lineHeight: 16,
+    lineHeight: CELL,
     color: c.muted,
     textAlign: "center",
   },
+  coverContent: { flexDirection: "row", alignItems: "center", gap: CELL },
   coverFoot: {
     fontFamily: f.regular,
     color: c.ink,
     fontSize: 15,
-    lineHeight: 22,
-    marginTop: 14,
+    lineHeight: CELL,
+    marginTop: CELL,
   },
   coverArt: {
     width: "46%",
@@ -1202,149 +1197,157 @@ const s = StyleSheet.create({
     borderColor: c.ink,
     padding: 10,
   },
+  // Buttons in a row stand a cell apart, rows of them too.
+  chips: { flexDirection: "row", flexWrap: "wrap", gap: CELL },
   pathHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
-    gap: 16,
-    marginTop: 36,
-    marginBottom: 14,
+    gap: CELL,
+    marginTop: CELL,
     flexWrap: "wrap",
   },
   eyebrow: {
     fontFamily: f.regular,
     fontSize: 14,
+    lineHeight: CELL,
     color: c.muted,
-    marginBottom: 6,
   },
-  sectionTitle: {
-    fontFamily: f.hand,
-    color: c.pen,
-    fontSize: 40,
-    lineHeight: 46,
-  },
+  sectionTitle: { fontFamily: f.hand, color: c.pen, ...written(40, 2, true) },
   progressText: {
     fontFamily: f.regular,
     color: c.muted,
     fontSize: 15,
-    paddingBottom: 8,
+    lineHeight: CELL,
   },
+  // Two cells high: the words stand in the upper one, the pen's line closes
+  // the lower.
   search: {
-    paddingVertical: 12,
+    height: cells(2),
     paddingHorizontal: 4,
     borderBottomWidth: 1.5,
     borderColor: c.pen,
     fontFamily: f.regular,
     fontSize: 20,
     color: c.ink,
-    maxWidth: 420,
+    maxWidth: cells(18),
   },
   pageGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: CELL,
-    marginTop: CELL,
   },
-  // A card is a whole number of cells wide and eleven cells high.
+  // A card is a whole number of cells wide and eleven cells high: half a
+  // cell around, a row for the number, the picture, the name, the strip.
   pageCard: {
     backgroundColor: c.card,
-    padding: 14,
+    padding: CELL / 2,
     minHeight: cells(11),
   },
   cardTop: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 12,
-    minHeight: 24,
+    marginBottom: CELL / 2,
+    height: CELL,
   },
-  pageNumber: { fontFamily: f.bold, fontSize: 14, color: c.pen },
-  pageStatus: { fontFamily: f.regular, fontSize: 13, color: c.muted },
+  pageNumber: {
+    fontFamily: f.bold,
+    fontSize: 14,
+    lineHeight: CELL,
+    color: c.pen,
+  },
+  pageStatus: {
+    fontFamily: f.regular,
+    fontSize: 13,
+    lineHeight: CELL,
+    color: c.muted,
+  },
   pageDone: {
     fontFamily: f.hand,
     fontSize: 24,
-    lineHeight: 24,
+    lineHeight: CELL,
     color: c.red,
   },
-  cardArt: { height: 110, justifyContent: "center", marginBottom: 14 },
+  cardArt: {
+    height: CELL * 4.5,
+    justifyContent: "center",
+    marginBottom: CELL / 2,
+  },
   cardTitle: {
     fontFamily: f.bold,
     fontSize: 18,
-    lineHeight: 24,
+    lineHeight: CELL,
     color: c.ink,
   },
   cardSubtitle: {
     fontFamily: f.regular,
     fontSize: 13,
-    lineHeight: 18,
+    lineHeight: CELL,
     color: c.muted,
-    marginTop: 4,
   },
   homeFooter: {
-    borderTopWidth: 1.5,
-    borderColor: c.line,
-    marginTop: 42,
-    paddingTop: 20,
+    marginTop: cells(2),
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 20,
+    gap: CELL,
   },
   footerText: {
     fontFamily: f.regular,
     color: c.muted,
     fontSize: 12,
-    lineHeight: 18,
+    lineHeight: CELL,
   },
-  // Everything here is counted in cells of the sheet (24 px): the writing
-  // starts one cell from the top, the columns stand two cells apart.
+  // Everything here is counted in cells of the sheet (24 px). The page's
+  // name is written on the second line from the top, so the row above it is
+  // the margin; the columns stand two cells apart.
   lessonLayout: {
     width: "100%",
     // A big screen gives the task more width, so its picture can use the
     // window's height instead of leaving it empty under «Дальше».
     maxWidth: 1800,
     alignSelf: "center",
-    paddingTop: CELL,
     paddingRight: CELL,
     paddingBottom: 38,
     flexDirection: "row",
     gap: cells(2),
   },
   sidebar: { width: cells(10) },
-  // As tall as the row with the page's name, so the list starts level with
-  // the step squares.
-  sideHeading: { lineHeight: CELL, marginBottom: CELL },
+  // Written level with the page's name, so the list starts level with the
+  // step squares.
+  sideHeading: { ...written(14, 2) },
   sideItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
     borderRadius: 4,
     paddingHorizontal: 11,
-    paddingVertical: 4,
     minHeight: cells(2),
   },
   sideNumber: {
     fontFamily: f.regular,
     color: c.muted,
     fontSize: 13,
+    lineHeight: CELL,
     width: 28,
   },
-  sideTitle: { fontFamily: f.bold, color: c.ink, fontSize: 14, flex: 1 },
+  sideTitle: {
+    fontFamily: f.bold,
+    color: c.ink,
+    fontSize: 14,
+    lineHeight: CELL,
+    flex: 1,
+  },
   sideNote: {
     marginTop: cells(2),
-    padding: 16,
-    paddingBottom: 20,
+    paddingVertical: CELL / 2,
+    paddingHorizontal: 16,
   },
-  sideNoteTitle: {
-    fontFamily: f.hand,
-    fontSize: 22,
-    lineHeight: 26,
-    color: c.pen,
-    marginBottom: 6,
-  },
+  sideNoteTitle: { fontFamily: f.hand, color: c.pen, ...written(22, 1, true) },
   sideNoteText: {
     fontFamily: f.regular,
     fontSize: 13,
-    lineHeight: 20,
+    lineHeight: CELL,
     color: c.ink,
   },
   lessonMain: { minWidth: 0, maxWidth: "100%" },
@@ -1367,23 +1370,30 @@ const s = StyleSheet.create({
   sourceLink: {
     fontFamily: f.bold,
     color: c.pen,
-    fontSize: 15,
-    paddingVertical: 10,
+    textAlign: "right",
+    ...written(15, 2),
   },
-  // The name and the line under it fill the two cells of the row.
-  lessonTitle: {
-    fontFamily: f.hand,
-    color: c.pen,
-    fontSize: 28,
-    lineHeight: 30,
+  // The name and what follows it stand on one line.
+  lessonName: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    columnGap: CELL / 2,
   },
+  lessonTitle: { fontFamily: f.hand, color: c.pen, ...written(28, 2, true) },
+  lessonTitleCompact: { ...written(26, 1, true), top: 3 },
   lessonSubtitle: {
     fontFamily: f.regular,
-    fontSize: 13,
-    lineHeight: 18,
     color: c.muted,
+    ...written(14, 2),
   },
-  lessonSubtitleTall: { fontSize: 15, lineHeight: CELL },
+  lessonSubtitleRow: {
+    fontFamily: f.regular,
+    color: c.muted,
+    fontSize: 13,
+    lineHeight: CELL,
+  },
   stepHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -1406,22 +1416,31 @@ const s = StyleSheet.create({
     justifyContent: "center",
   },
   stepActive: { backgroundColor: c.pen },
-  stepDotText: { fontFamily: f.bold, color: c.pen, fontSize: 16 },
-  stepDoneText: { fontFamily: f.hand, color: c.red, fontSize: 24 },
+  stepDotText: {
+    fontFamily: f.bold,
+    color: c.pen,
+    fontSize: 16,
+    lineHeight: CELL,
+  },
+  stepDoneText: {
+    fontFamily: f.hand,
+    color: c.red,
+    fontSize: 24,
+    lineHeight: CELL,
+  },
   exerciseCard: {},
   navigation: {
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 14,
-    marginTop: 26,
+    gap: CELL,
+    marginTop: CELL,
   },
   lockNote: {
     fontFamily: f.regular,
     color: c.muted,
     fontSize: 14,
-    lineHeight: 20,
+    lineHeight: CELL,
     textAlign: "right",
-    marginTop: 10,
   },
   modalHeader: {
     padding: 20,

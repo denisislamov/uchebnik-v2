@@ -35,7 +35,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       assert.ok(flat <= 2, `the solved button is flat (${flat}px)`);
       await p.getByTestId("done-mark").waitFor();
       const height = await p.getByRole("button", { name: "Дальше →", exact: true }).evaluate((e) => e.getBoundingClientRect().height);
-      assert.ok(Math.abs(height - Math.round(height)) < 0.01 && height >= 50, `buttons are integer-high (${height})`);
+      assert.ok(Math.abs(height - Math.round(height)) < 0.01 && height >= 48, `buttons are integer-high (${height})`);
       report.checks.push({ viewport, lipBefore: lip, doneMark: true, nextHeight: height });
       await ctx.close();
     }

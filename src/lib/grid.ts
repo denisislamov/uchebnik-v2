@@ -5,6 +5,26 @@ export const cells = (n: number) => n * CELL;
 export const wholeCells = (px: number, least = 1) =>
   Math.max(least, Math.floor(px / CELL)) * CELL;
 
+/** The least whole number of cells that holds `px`. */
+export const upToCells = (px: number) => Math.ceil((px - 0.5) / CELL) * CELL;
+/**
+ * Text written on the sheet: a line of text takes one row of cells, a heading
+ * two, and the letters stand a little above the ruled line under them, as a
+ * hand writes them. Small text fits a row as it is; a heading has to be moved
+ * down to its line, by as much as its font leaves above the baseline.
+ */
+export function written(fontSize: number, rows: 1 | 2 = 1, hand = false) {
+  const lineHeight = rows * CELL,
+    // Where the font puts the baseline in a line of this height.
+    baseline = lineHeight / 2 + fontSize * (hand ? 0.23 : 0.42),
+    shift = Math.round(lineHeight - 4 - baseline);
+  return {
+    fontSize,
+    lineHeight,
+    ...(shift > 2 && { position: "relative" as const, top: shift }),
+  };
+}
+
 /** The same seed always draws the same line: a frame must not twitch on re-render. */
 export function handRandom(seed: string) {
   let h = 2166136261;

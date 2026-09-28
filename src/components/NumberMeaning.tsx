@@ -3,6 +3,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import type { Block, Hotspot } from "../content/types";
 import { assets } from "../content/assets";
 import { colors as c, fonts as f } from "../theme";
+import { Rows } from "./HandDrawn";
 import { useCoachAnchor } from "./GestureCoach";
 
 type PictureBlock = Extract<Block, { kind: "picture" }>;
@@ -37,16 +38,16 @@ function MeaningCard({
           borderRadius: 6,
           backgroundColor: selected ? "#e8eef9" : c.paper,
           padding: 12,
-          gap: 10,
+          gap: 12,
         }}
       >
         {block.images[target.image].includes("abacus_") ? (
           <View
             testID="modern-meaning-tokens"
             style={{
-              height: 125,
+              height: 120,
               flexDirection: "row",
-              gap: 16,
+              gap: 24,
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -68,7 +69,7 @@ function MeaningCard({
             source={assets[block.images[target.image]].source}
             resizeMode="contain"
             accessible={false}
-            style={{ height: 125, width: "100%" }}
+            style={{ height: 120, width: "100%" }}
           />
         )}
         <Text
@@ -76,13 +77,19 @@ function MeaningCard({
             fontFamily: f.bold,
             color: c.ink,
             fontSize: 18,
+            lineHeight: 24,
             textAlign: "center",
           }}
         >
           {target.label}
         </Text>
         <Text
-          style={{ fontFamily: f.regular, color: c.pen, textAlign: "center" }}
+          style={{
+            lineHeight: 24,
+            fontFamily: f.regular,
+            color: c.pen,
+            textAlign: "center",
+          }}
         >
           {selected ? "Рассмотрели" : "Коснись рисунка"}
         </Text>
@@ -102,8 +109,11 @@ export function NumberMeaning({
   const [last, setLast] = useState<string>();
   const active = block.targets.find((t) => t.id === last);
   return (
-    <View testID="number-meaning" style={{ gap: 16 }}>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
+    <View testID="number-meaning" style={{ gap: 24 }}>
+      <Rows
+        object
+        contentStyle={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}
+      >
         {block.targets.map((target) => (
           <MeaningCard
             key={target.id}
@@ -121,12 +131,17 @@ export function NumberMeaning({
             }}
           />
         ))}
-      </View>
+      </Rows>
       {active && (
         <Text
           testID="meaning-feedback"
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, fontSize: 22, color: c.pen }}
+          style={{
+            fontFamily: f.bold,
+            fontSize: 22,
+            lineHeight: 24,
+            color: c.pen,
+          }}
         >
           {active.label}.{" "}
           {active.label.startsWith("Цифра")
@@ -139,7 +154,7 @@ export function NumberMeaning({
           fontFamily: f.regular,
           color: c.ink,
           fontSize: 20,
-          lineHeight: 29,
+          lineHeight: 24,
         }}
       >
         {block.quantityMeaning!.conclusion}

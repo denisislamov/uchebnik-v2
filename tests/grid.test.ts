@@ -5,7 +5,9 @@ import {
   handLine,
   handRandom,
   handRect,
+  upToCells,
   wholeCells,
+  written,
 } from "../src/lib/grid.ts";
 
 const numbers = (path: string) =>
@@ -60,4 +62,34 @@ test("a small box is drawn with a steadier hand than a large one", () => {
   assert.ok(spread(40, 40) <= 1.5, String(spread(40, 40)));
   assert.ok(spread(40, 40) < spread(960, 480));
   assert.ok(spread(960, 480) <= 2.5);
+});
+test("what holds a block is the least whole number of rows", () => {
+  assert.equal(upToCells(240), 240);
+  assert.equal(upToCells(240.4), 240, "a fraction of a pixel is not a row");
+  assert.equal(upToCells(241), 264);
+  assert.equal(upToCells(1), CELL);
+});
+test("written text takes whole rows and stands a little above its line", () => {
+  for (const [size, rows, hand] of [
+    [14, 1, false],
+    [20, 1, false],
+    [26, 2, false],
+    [30, 2, false],
+    [28, 2, true],
+    [38, 2, true],
+    [22, 1, true],
+  ] as const) {
+    const style = written(size, rows, hand) as {
+      lineHeight: number;
+      top?: number;
+    };
+    assert.equal(style.lineHeight, rows * CELL);
+    // Where the font puts the baseline, measured in the browser for both fonts.
+    const baseline =
+      style.lineHeight / 2 + size * (hand ? 0.23 : 0.42) + (style.top ?? 0);
+    assert.ok(
+      baseline <= style.lineHeight - 2 && baseline >= style.lineHeight - 8,
+      `${size}px in ${rows} rows stands ${style.lineHeight - baseline} px above the line`,
+    );
+  }
 });

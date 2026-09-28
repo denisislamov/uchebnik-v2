@@ -13,6 +13,9 @@ import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { Button, RetryNote } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
+import { Rows, useColumns } from "./HandDrawn";
+import { sheet } from "./sheet";
+import { CELL } from "../lib/grid";
 import { traceProgress } from "../lib/tracing";
 import { DigitCards } from "./DigitCards";
 import { PracticalPreview } from "./PracticalPreview";
@@ -78,9 +81,10 @@ export function PracticalTask({
   const correct = practicalCorrect(block, answer);
   const sideBySide =
     step?.groupLabels?.[0] === "Слева" && step?.groupLabels?.[1] === "Справа";
+  const [measureGroups, column] = useColumns(step?.counts.length ?? 1);
   const rowLayout = !!step && /ряд/.test(step.instruction);
   return (
-    <View testID="practical-task" style={{ gap: 18 }}>
+    <View testID="practical-task" style={{ gap: CELL }}>
       {block.steps
         .slice(0, current < 0 ? undefined : current)
         .map((previous, i) => (
@@ -88,18 +92,19 @@ export function PracticalTask({
             key={previous.id}
             style={{
               backgroundColor: c.wash,
-              padding: 12,
-              borderRadius: 6,
-              gap: 8,
+              padding: CELL / 2,
+              borderRadius: 4,
             }}
           >
-            <Text style={{ fontFamily: f.bold, color: c.pen }}>
+            <Text style={[sheet.count, { color: c.pen }]}>
               ✓ {i + 1}. {previous.instruction}
             </Text>
-            <PracticalPreview
-              step={previous}
-              state={answer.practical?.[previous.id] ?? {}}
-            />
+            <Rows style={{ marginBottom: CELL / 2 }} object>
+              <PracticalPreview
+                step={previous}
+                state={answer.practical?.[previous.id] ?? {}}
+              />
+            </Rows>
             <Button
               small
               secondary
@@ -118,13 +123,13 @@ export function PracticalTask({
           </View>
         ))}
       {step && (
-        <View testID={`practical-step-${step.id}`} style={{ gap: 14 }}>
-          <Text style={{ fontFamily: f.bold, fontSize: 20, color: c.ink }}>
+        <View testID={`practical-step-${step.id}`} style={{ gap: CELL }}>
+          <Text style={[sheet.question, { fontSize: 20 }]}>
             {current + 1}. {step.instruction}
           </Text>
           {choiceKeys.map(({ key, label }) => (
-            <View key={key} style={{ gap: 8 }}>
-              <Text style={{ fontFamily: f.bold, color: c.ink }}>
+            <View key={key}>
+              <Text style={sheet.count}>
                 {label} Сначала выбери число, затем нарисуй.
               </Text>
               <TextInput
@@ -144,41 +149,44 @@ export function PracticalTask({
                     strokes: [],
                   });
                 }}
-                style={{
-                  borderWidth: 1,
-                  borderColor: c.line,
-                  borderRadius: 6,
-                  padding: 14,
-                  fontSize: 24,
-                  color: c.ink,
-                  minWidth: 90,
-                  alignSelf: "flex-start",
-                }}
+                style={sheet.answer}
               />
             </View>
           ))}
           {step.mode === "place" && (
             <View
-              style={{ flexDirection: sideBySide ? "row" : "column", gap: 16 }}
+              onLayout={measureGroups}
+              style={{
+                flexDirection: sideBySide ? "row" : "column",
+                gap: CELL,
+              }}
             >
               {step.counts.map((target, group) => (
                 <View
                   key={group}
-                  style={{
-                    gap: 8,
-                    ...(sideBySide ? { flex: 1, minWidth: 0 } : {}),
-                  }}
+                  style={
+                    sideBySide
+                      ? column
+                        ? { width: column }
+                        : { flex: 1, minWidth: 0 }
+                      : undefined
+                  }
                 >
                   {(step.counts.length > 1 || step.groupLabels?.[group]) && (
                     <Text
-                      style={{ fontFamily: f.bold, color: c.ink, fontSize: 18 }}
+                      style={{
+                        fontFamily: f.bold,
+                        color: c.ink,
+                        fontSize: 18,
+                        lineHeight: 24,
+                      }}
                     >
                       {step.groupLabels?.[group] ??
                         `${rowLayout ? "Ряд" : "Группа"} ${group + 1}`}
                     </Text>
                   )}
                   {(step.groupValues?.[group] ?? step.tokenValue ?? 1) > 1 && (
-                    <Text style={{ fontFamily: f.regular, color: c.muted }}>
+                    <Text style={sheet.remark}>
                       Один пучок —{" "}
                       {step.groupValues?.[group] ?? step.tokenValue} палочек.
                     </Text>
@@ -204,16 +212,16 @@ export function PracticalTask({
             </View>
           )}
           {step.mode === "draw" && trace && (
-            <View testID="practical-sheet" style={{ gap: 10 }}>
+            <View testID="practical-sheet">
               {!!step.lengths && (
-                <Text style={{ fontFamily: f.regular, color: c.muted }}>
+                <Text style={sheet.remark}>
                   Экранная модель: одна клетка — 1 см. Размер на экране зависит
                   от устройства. Проведи отрезок по клеткам; короткими штрихами
                   отметь деления.
                 </Text>
               )}
               {trace.columns > 16 && (
-                <Text style={{ fontFamily: f.regular, color: c.muted }}>
+                <Text style={sheet.remark}>
                   Длинную линию проводи по частям. Лист сам передвинется к
                   следующему пунктиру.
                 </Text>
@@ -266,16 +274,12 @@ export function PracticalTask({
         </View>
       )}
       {current < 0 && (
-        <View style={{ gap: 14 }}>
+        <View style={{ gap: CELL }}>
           {block.fields.map((field) => (
-            <View key={field.id} style={{ gap: 8 }}>
-              <Text style={{ fontFamily: f.bold, color: c.ink, fontSize: 19 }}>
-                {field.label}
-              </Text>
+            <View key={field.id} style={{ gap: CELL / 2 }}>
+              <Text style={sheet.question}>{field.label}</Text>
               {field.options ? (
-                <View
-                  style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}
-                >
+                <View style={sheet.chips}>
                   {field.options.map((option) => (
                     <Button
                       key={option}
@@ -311,17 +315,7 @@ export function PracticalTask({
                   }
                   keyboardType="number-pad"
                   inputMode="numeric"
-                  style={{
-                    borderColor: c.line,
-                    borderWidth: 2,
-                    borderRadius: 6,
-                    padding: 14,
-                    fontSize: 24,
-                    color: c.ink,
-                    fontFamily: f.bold,
-                    minWidth: 90,
-                    alignSelf: "flex-start",
-                  }}
+                  style={sheet.answer}
                 />
               )}
             </View>

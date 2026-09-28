@@ -5,6 +5,9 @@ import { View, Text, Platform, ScrollView } from "react-native";
 import type { Point } from "../content/types";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
+import { Rows } from "./HandDrawn";
+import { CELL } from "../lib/grid";
+import { sheet } from "./sheet";
 import { counterBoardLayout, counterSupplyCenter } from "../lib/counterLayout";
 import { nextCounterSlot } from "../lib/coachTargets";
 export function CounterBoard({
@@ -107,7 +110,9 @@ export function CounterBoard({
     count,
     rowMode ? "row" : "groups",
     // …and takes the room a big window leaves free.
-    fit ? Math.min(420, 132 + Math.max(0, measured)) : 190,
+    // With the tray under it the board is eleven rows of the sheet, and
+    // grows by whole rows.
+    fit ? Math.min(417, 129 + Math.max(0, measured)) : 190,
   );
   const boardWidth = geometry.width;
   const fieldHeight = slots ? 190 : geometry.fieldHeight;
@@ -291,6 +296,7 @@ export function CounterBoard({
               position: "absolute",
               fontFamily: f.bold,
               fontSize: 15,
+              lineHeight: 24,
               color: c.ink,
               backgroundColor: c.paper,
               borderRadius: 4,
@@ -304,7 +310,7 @@ export function CounterBoard({
           /яблок|гриб|орех|карандаш|пряник/.test(objectLabel) && (
             <Text
               pointerEvents="none"
-              style={{ position: "absolute", fontSize: 30 }}
+              style={{ position: "absolute", fontSize: 30, lineHeight: 48 }}
             >
               {/яблок/.test(objectLabel)
                 ? "🍎"
@@ -381,6 +387,7 @@ export function CounterBoard({
             textAlign: "center",
             fontFamily: f.bold,
             color: c.muted,
+            lineHeight: CELL,
           }}
         >
           Бери здесь
@@ -391,8 +398,17 @@ export function CounterBoard({
     </View>
   );
   return (
-    <View testID="counter-board" style={{ gap: 10 }}>
-      <Text style={{ fontFamily: f.bold, color: c.ink, fontSize: 16 }}>
+    // Rows of the sheet: what to do, an empty row, the board in whole rows,
+    // the count with the button.
+    <View testID="counter-board">
+      <Text
+        style={{
+          fontFamily: f.bold,
+          color: c.ink,
+          fontSize: 16,
+          lineHeight: 24,
+        }}
+      >
         Возьми{" "}
         {objectLabel ??
           (token === "stick"
@@ -403,53 +419,58 @@ export function CounterBoard({
         внизу и перенеси на поле.
       </Text>
       {!(fit && finePointer()) && (
-        <Text style={{ fontFamily: f.regular, color: c.muted, fontSize: 14 }}>
+        <Text
+          style={{
+            fontFamily: f.regular,
+            color: c.muted,
+            fontSize: 14,
+            lineHeight: 24,
+          }}
+        >
           Не отпускай палец, пока несёшь предмет. Лишний предмет верни вниз.
         </Text>
       )}
       {rowMode && (
-        <Text style={{ fontFamily: f.regular, color: c.muted }}>
+        <Text
+          style={{ fontFamily: f.regular, color: c.muted, lineHeight: CELL }}
+        >
           Все предметы остаются в одном ряду. Длинный ряд можно листать влево и
           вправо.
         </Text>
       )}
-      <View onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
-        {rowMode ? (
-          <ScrollView
-            ref={rowScroll}
-            testID="counter-row-scroll"
-            horizontal
-            scrollEnabled={!drag}
-            showsHorizontalScrollIndicator
-            scrollEventThrottle={16}
-            onScroll={(e) => setRowScrollX(e.nativeEvent.contentOffset.x)}
-            onContentSizeChange={() => {
-              if (active.current) return;
-              setRowScrollX(geometry.scrollX);
-              rowScroll.current?.scrollTo({
-                x: geometry.scrollX,
-                animated: false,
-              });
-            }}
-            style={{ height: supplyTop + 110 }}
-            contentContainerStyle={{ width: boardWidth }}
-          >
-            {board}
-          </ScrollView>
-        ) : (
-          board
-        )}
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <Rows style={{ marginTop: CELL }} object>
+        <View onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
+          {rowMode ? (
+            <ScrollView
+              ref={rowScroll}
+              testID="counter-row-scroll"
+              horizontal
+              scrollEnabled={!drag}
+              showsHorizontalScrollIndicator
+              scrollEventThrottle={16}
+              onScroll={(e) => setRowScrollX(e.nativeEvent.contentOffset.x)}
+              onContentSizeChange={() => {
+                if (active.current) return;
+                setRowScrollX(geometry.scrollX);
+                rowScroll.current?.scrollTo({
+                  x: geometry.scrollX,
+                  animated: false,
+                });
+              }}
+              style={{ height: supplyTop + 110 }}
+              contentContainerStyle={{ width: boardWidth }}
+            >
+              {board}
+            </ScrollView>
+          ) : (
+            board
+          )}
+        </View>
+      </Rows>
+      <View style={sheet.controls}>
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, color: c.ink }}
+          style={{ fontFamily: f.bold, color: c.ink, lineHeight: CELL }}
         >
           На поле: {count}
         </Text>
@@ -465,7 +486,7 @@ export function CounterBoard({
       {!!message && (
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.regular, color: c.ink }}
+          style={{ fontFamily: f.regular, color: c.ink, lineHeight: CELL }}
         >
           {message}
         </Text>

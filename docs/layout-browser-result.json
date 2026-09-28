@@ -6,44 +6,44 @@
         "width": 390,
         "height": 844
       },
-      "homeArrow": 40,
+      "homeArrow": 4,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 252.765625
+      "imageHeight": 240
     },
     {
       "viewport": {
         "width": 768,
         "height": 1024
       },
-      "homeArrow": 28,
+      "homeArrow": 4,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 553.734375
+      "imageHeight": 552
     },
     {
       "viewport": {
         "width": 1280,
         "height": 900
       },
-      "homeArrow": 28,
+      "homeArrow": 4,
       "dvh": {
         "supported": true,
         "html": "100dvh",
         "root": "100dvh"
       },
-      "imageHeight": 430
+      "imageHeight": 408
     },
     {
       "phoneSheet": [
-        493.453125,
-        493.453125
+        493,
+        493
       ]
     }
   ],

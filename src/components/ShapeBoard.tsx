@@ -5,6 +5,8 @@ import Svg, { Line } from "react-native-svg";
 import type { Block } from "../content/types";
 import { edgeKey } from "../lib/assessment";
 import { colors as c, fonts as f } from "../theme";
+import { Rows } from "./HandDrawn";
+import { CELL } from "../lib/grid";
 import { Button } from "./Controls";
 import { useTaskSize } from "./taskSize";
 export function ShapeBoard({
@@ -217,120 +219,124 @@ export function ShapeBoard({
     setDrag(null);
   }
   return (
-    <View style={{ gap: 12 }}>
-      <Text style={{ fontFamily: f.regular, color: c.muted }}>
+    <View>
+      <Text style={{ fontFamily: f.regular, color: c.muted, lineHeight: CELL }}>
         Возьми палочку {landscape ? "справа" : "внизу"} и положи на пунктир.
         Чтобы повернуть палочку, нажми «Повернуть».
       </Text>
-      <View
-        ref={boardRef}
-        testID="stick-board"
-        onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-        style={{
-          height: landscape
-            ? Math.max(fieldHeight, 24 + scale / 2 + longest / 2 + 16)
-            : Math.max(440, 365 + longest / 2),
-          backgroundColor: c.wash,
-          borderRadius: 6,
-          overflow: "hidden",
-        }}
-      >
+      <Rows object>
         <View
-          ref={fieldRef}
-          pointerEvents="none"
+          ref={boardRef}
+          testID="stick-board"
+          onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: fieldHeight,
+            height: landscape
+              ? Math.max(fieldHeight, 24 + scale / 2 + longest / 2 + 16)
+              : Math.max(440, 365 + longest / 2),
+            backgroundColor: c.wash,
+            borderRadius: 6,
+            overflow: "hidden",
           }}
         >
-          <Svg width={width} height={fieldHeight}>
-            {edges.map((t) => {
-              const a = vertices[block.edges[t.index][0]],
-                b = vertices[block.edges[t.index][1]];
-              return (
-                <Line
-                  key={t.key}
-                  x1={a.x}
-                  y1={a.y}
-                  x2={b.x}
-                  y2={b.y}
-                  stroke={value.includes(t.key) ? "#bb8052" : "#2b4ba8"}
-                  strokeWidth={value.includes(t.key) ? 9 : 3}
-                  strokeDasharray={value.includes(t.key) ? undefined : "6 5"}
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </Svg>
-          {edges.map((t) => (
-            <View
-              key={t.key}
-              ref={t.index === available[0]?.index ? targetRef : undefined}
-              collapsable={false}
-              testID={`stick-target-${t.index}`}
-              style={{
-                position: "absolute",
-                left: t.x - 5,
-                top: t.y - 5,
-                width: 10,
-                height: 10,
-              }}
-            />
-          ))}
-        </View>
-        {available.map((t) => {
-          const position = drag?.index === t.index ? drag : tray(t.index);
-          return (
-            <React.Fragment key={t.key}>
+          <View
+            ref={fieldRef}
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: fieldHeight,
+            }}
+          >
+            <Svg width={width} height={fieldHeight}>
+              {edges.map((t) => {
+                const a = vertices[block.edges[t.index][0]],
+                  b = vertices[block.edges[t.index][1]];
+                return (
+                  <Line
+                    key={t.key}
+                    x1={a.x}
+                    y1={a.y}
+                    x2={b.x}
+                    y2={b.y}
+                    stroke={value.includes(t.key) ? "#bb8052" : "#2b4ba8"}
+                    strokeWidth={value.includes(t.key) ? 9 : 3}
+                    strokeDasharray={value.includes(t.key) ? undefined : "6 5"}
+                    strokeLinecap="round"
+                  />
+                );
+              })}
+            </Svg>
+            {edges.map((t) => (
               <View
-                ref={sourceRef}
-                accessibilityLabel={`Палочка ${t.index + 1}`}
-                testID={`stick-${t.index}`}
-                accessibilityHint="Перетащи на подходящий пунктир"
-                {...handlers(t.index)}
-                style={[
-                  {
-                    position: "absolute",
-                    left: position.x - t.length / 2,
-                    top: position.y - 22,
-                    width: t.length,
-                    height: 44,
-                    justifyContent: "center",
-                    transform: [
-                      { rotate: `${t.angle + (rotation[t.index] ?? 0)}deg` },
-                    ],
-                    zIndex: drag?.index === t.index ? 10 : 1,
-                  },
-                  Platform.OS === "web"
-                    ? ({ touchAction: "none", cursor: "grab" } as any)
-                    : undefined,
-                ]}
-              >
+                key={t.key}
+                ref={t.index === available[0]?.index ? targetRef : undefined}
+                collapsable={false}
+                testID={`stick-target-${t.index}`}
+                style={{
+                  position: "absolute",
+                  left: t.x - 5,
+                  top: t.y - 5,
+                  width: 10,
+                  height: 10,
+                }}
+              />
+            ))}
+          </View>
+          {available.map((t) => {
+            const position = drag?.index === t.index ? drag : tray(t.index);
+            return (
+              <React.Fragment key={t.key}>
                 <View
-                  pointerEvents="none"
-                  style={{
-                    height: 9,
-                    backgroundColor: "#bb8052",
-                    borderRadius: 5,
-                    borderWidth: 1,
-                    borderColor: "#93613a",
-                  }}
-                />
-              </View>
-            </React.Fragment>
-          );
-        })}
-      </View>
+                  ref={sourceRef}
+                  accessibilityLabel={`Палочка ${t.index + 1}`}
+                  testID={`stick-${t.index}`}
+                  accessibilityHint="Перетащи на подходящий пунктир"
+                  {...handlers(t.index)}
+                  style={[
+                    {
+                      position: "absolute",
+                      left: position.x - t.length / 2,
+                      top: position.y - 22,
+                      width: t.length,
+                      height: 44,
+                      justifyContent: "center",
+                      transform: [
+                        { rotate: `${t.angle + (rotation[t.index] ?? 0)}deg` },
+                      ],
+                      zIndex: drag?.index === t.index ? 10 : 1,
+                    },
+                    Platform.OS === "web"
+                      ? ({ touchAction: "none", cursor: "grab" } as any)
+                      : undefined,
+                  ]}
+                >
+                  <View
+                    pointerEvents="none"
+                    style={{
+                      height: 9,
+                      backgroundColor: "#bb8052",
+                      borderRadius: 5,
+                      borderWidth: 1,
+                      borderColor: "#93613a",
+                    }}
+                  />
+                </View>
+              </React.Fragment>
+            );
+          })}
+        </View>
+      </Rows>
       {/* Rotate, count and undo share one row: under the board they took three. */}
       <View
         style={{
           flexDirection: "row",
           flexWrap: "wrap",
-          alignItems: "center",
-          gap: 12,
+          alignItems: "flex-end",
+          columnGap: CELL,
+          marginTop: CELL,
+          minHeight: CELL * 2,
         }}
       >
         {available.map((t) => (
@@ -350,7 +356,14 @@ export function ShapeBoard({
             </Button>
           </View>
         ))}
-        <Text style={{ fontFamily: f.bold, color: c.pen, flexGrow: 1 }}>
+        <Text
+          style={{
+            fontFamily: f.bold,
+            color: c.pen,
+            lineHeight: CELL,
+            flexGrow: 1,
+          }}
+        >
           Палочек: {value.length} из {edges.length}
         </Text>
         <Button
@@ -369,7 +382,7 @@ export function ShapeBoard({
       {!!message && (
         <Text
           accessibilityLiveRegion="polite"
-          style={{ fontFamily: f.bold, color: c.pen }}
+          style={{ fontFamily: f.bold, color: c.pen, lineHeight: CELL }}
         >
           {message}
         </Text>

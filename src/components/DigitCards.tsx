@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import { View, Text, Platform } from "react-native";
 import { Button } from "./Controls";
 import { colors as c, fonts as f } from "../theme";
+import { Rows } from "./HandDrawn";
 import { nextDigitCard } from "../lib/coachTargets";
 
 export function DigitCards({
@@ -150,96 +151,117 @@ export function DigitCards({
           onResponderTerminationRequest: () => false,
         };
   return (
-    <View style={{ gap: 12 }}>
-      <Text style={{ fontFamily: f.bold, color: c.ink }}>
+    <View style={{ gap: 24 }}>
+      <Text style={{ lineHeight: 24, fontFamily: f.bold, color: c.ink }}>
         Возьми карточки с цифрами и перенеси в рамки. Слева — десятки, справа —
         единицы.
       </Text>
-      <View
-        ref={boardRef}
-        testID="digit-cards"
-        onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
-        style={{ height: 275, borderRadius: 6, backgroundColor: c.paper }}
-      >
-        {[0, 1].map((i) => (
-          <View
-            key={i}
-            ref={i === nextCard?.index ? fieldRef : undefined}
-            testID={`digit-slot-${i}`}
-            style={{
-              position: "absolute",
-              left: width / 2 + (i - 0.5) * 76 - 30,
-              top: 15,
-              width: 60,
-              height: 60,
-              borderWidth: 2,
-              borderStyle: "dashed",
-              borderColor: c.pen,
-              borderRadius: 4,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ fontFamily: f.heavy, fontSize: 32, color: c.ink }}>
-              {value[i] >= 0 ? value[i] : ""}
-            </Text>
-          </View>
-        ))}
-        {Array.from({ length: 10 }, (_, digit) => (
-          <View
-            key={digit}
-            ref={digit === nextCard?.digit ? sourceRef : undefined}
-            testID={`digit-source-${digit}`}
-            accessibilityRole="button"
-            accessibilityLabel={`Карточка ${digit}`}
-            {...handlers(digit)}
-            style={[
-              {
+      <Rows object>
+        <View
+          ref={boardRef}
+          testID="digit-cards"
+          onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+          style={{ height: 275, borderRadius: 6, backgroundColor: c.paper }}
+        >
+          {[0, 1].map((i) => (
+            <View
+              key={i}
+              ref={i === nextCard?.index ? fieldRef : undefined}
+              testID={`digit-slot-${i}`}
+              style={{
                 position: "absolute",
-                left: ((digit % 5) + 0.5) * cell - 24,
-                top: 136 + Math.floor(digit / 5) * 65,
+                left: width / 2 + (i - 0.5) * 76 - 30,
+                top: 15,
+                width: 60,
+                height: 60,
+                borderWidth: 2,
+                borderStyle: "dashed",
+                borderColor: c.pen,
+                borderRadius: 4,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: f.heavy,
+                  fontSize: 32,
+                  lineHeight: 48,
+                  color: c.ink,
+                }}
+              >
+                {value[i] >= 0 ? value[i] : ""}
+              </Text>
+            </View>
+          ))}
+          {Array.from({ length: 10 }, (_, digit) => (
+            <View
+              key={digit}
+              ref={digit === nextCard?.digit ? sourceRef : undefined}
+              testID={`digit-source-${digit}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Карточка ${digit}`}
+              {...handlers(digit)}
+              style={[
+                {
+                  position: "absolute",
+                  left: ((digit % 5) + 0.5) * cell - 24,
+                  top: 136 + Math.floor(digit / 5) * 65,
+                  width: 48,
+                  height: 48,
+                  borderRadius: 4,
+                  backgroundColor: c.wash,
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+                Platform.OS === "web"
+                  ? ({ touchAction: "none", cursor: "grab" } as any)
+                  : {},
+              ]}
+            >
+              <Text
+                pointerEvents="none"
+                style={{
+                  fontFamily: f.heavy,
+                  fontSize: 28,
+                  lineHeight: 24,
+                  color: c.ink,
+                }}
+              >
+                {digit}
+              </Text>
+            </View>
+          ))}
+          {draft && (
+            <View
+              pointerEvents="none"
+              style={{
+                position: "absolute",
+                left: draft.x - 24,
+                top: draft.y - 24,
                 width: 48,
                 height: 48,
                 borderRadius: 4,
-                backgroundColor: c.wash,
+                backgroundColor: c.pen,
                 alignItems: "center",
                 justifyContent: "center",
-              },
-              Platform.OS === "web"
-                ? ({ touchAction: "none", cursor: "grab" } as any)
-                : {},
-            ]}
-          >
-            <Text
-              pointerEvents="none"
-              style={{ fontFamily: f.heavy, fontSize: 28, color: c.ink }}
+                zIndex: 3,
+              }}
             >
-              {digit}
-            </Text>
-          </View>
-        ))}
-        {draft && (
-          <View
-            pointerEvents="none"
-            style={{
-              position: "absolute",
-              left: draft.x - 24,
-              top: draft.y - 24,
-              width: 48,
-              height: 48,
-              borderRadius: 4,
-              backgroundColor: c.pen,
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 3,
-            }}
-          >
-            <Text style={{ fontFamily: f.heavy, fontSize: 28, color: c.white }}>
-              {draft.digit}
-            </Text>
-          </View>
-        )}
-      </View>
+              <Text
+                style={{
+                  fontFamily: f.heavy,
+                  fontSize: 28,
+                  lineHeight: 24,
+                  color: c.white,
+                }}
+              >
+                {draft.digit}
+              </Text>
+            </View>
+          )}
+        </View>
+      </Rows>
       <Button small secondary onPress={() => onChange([-1, -1])}>
         Вернуть карточки
       </Button>

@@ -9,6 +9,7 @@ import {
   type LocationBlock,
 } from "../lib/location";
 import { RetryNote } from "./Controls";
+import { useColumns } from "./HandDrawn";
 import { colors as c, fonts as f } from "../theme";
 
 export function LocationTask({
@@ -22,8 +23,10 @@ export function LocationTask({
 }) {
   const stage = locationStage(block, answer);
   const verticalWrong = !!answer.responses?.vertical && stage === "vertical";
+  // Two options share the row, each a whole number of cells wide.
+  const [measureRow, column] = useColumns(2);
   const choices = (axis: LocationAxis) => (
-    <View style={s.options}>
+    <View onLayout={measureRow} style={s.options}>
       {locationOptions[axis].map((value) => {
         const selected = answer.responses?.[axis] === value;
         return (
@@ -36,7 +39,11 @@ export function LocationTask({
             onPress={() =>
               onAnswer(selectLocationAnswer(block, answer, axis, value))
             }
-            style={[s.option, selected && s.selected]}
+            style={[
+              s.option,
+              !!column && { flexGrow: 0, flexBasis: column },
+              selected && s.selected,
+            ]}
           >
             <Text style={[s.optionText, selected && s.selectedText]}>
               {value}
@@ -53,9 +60,11 @@ export function LocationTask({
         <Text style={s.prompt}>{block.verticalPrompt}</Text>
         {choices("vertical")}
         {verticalWrong && (
-          <RetryNote>
-            Посмотри ещё раз: рисунок ближе к верху или к низу доски?
-          </RetryNote>
+          <View style={s.note}>
+            <RetryNote>
+              Посмотри ещё раз: рисунок ближе к верху или к низу доски?
+            </RetryNote>
+          </View>
         )}
       </View>
       {stage !== "vertical" && (
@@ -71,25 +80,32 @@ export function LocationTask({
 
 const s = StyleSheet.create({
   task: { gap: 24 },
-  question: { gap: 12 },
-  step: { fontFamily: f.bold, color: c.muted, fontSize: 16 },
-  prompt: { fontFamily: f.bold, color: c.ink, fontSize: 22, lineHeight: 30 },
-  options: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
+  question: {},
+  step: { fontFamily: f.bold, color: c.muted, fontSize: 16, lineHeight: 24 },
+  prompt: { fontFamily: f.bold, color: c.ink, fontSize: 20, lineHeight: 24 },
+  // Two options share the row, a cell apart; each is three cells high.
+  options: { flexDirection: "row", flexWrap: "wrap", gap: 24, marginTop: 24 },
   option: {
-    minHeight: 60,
+    minHeight: 72,
     minWidth: 120,
     flexGrow: 1,
     flexBasis: 120,
     borderRadius: 6,
     paddingHorizontal: 18,
-    paddingVertical: 14,
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: c.wash,
     borderWidth: 2,
     borderColor: c.wash,
   },
+  note: { marginTop: 24 },
   selected: { backgroundColor: c.pen, borderColor: c.pen },
-  optionText: { fontFamily: f.heavy, fontSize: 22, color: c.ink },
+  optionText: {
+    fontFamily: f.heavy,
+    fontSize: 22,
+    lineHeight: 24,
+    color: c.ink,
+  },
   selectedText: { color: c.white },
 });

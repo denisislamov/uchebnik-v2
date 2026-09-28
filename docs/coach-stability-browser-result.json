@@ -81,22 +81,22 @@
   "errors": [],
   "explicitReveal": {
     "before": {
-      "top": 240,
-      "height": 760
+      "top": 238,
+      "height": 758
     },
     "after": {
-      "top": 120,
-      "height": 760
+      "top": 96,
+      "height": 758
     },
     "answersUnchanged": true
   },
   "scrollRestore": {
-    "before": 481,
+    "before": 442,
     "during": [
       0,
       0,
-      446
+      424
     ],
-    "after": 481
+    "after": 442
   }
 }

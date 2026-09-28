@@ -1,47 +1,12 @@
 {
-  "checked": 144,
-  "cases": [
-    {
-      "viewport": "390x844 p13",
-      "writing": 15,
-      "firstBoxRow": 13
-    },
-    {
-      "viewport": "390x844 p3",
-      "writing": 15,
-      "firstBoxRow": 14
-    },
-    {
-      "viewport": "820x1180 p13",
-      "writing": 30,
-      "firstBoxRow": 8
-    },
-    {
-      "viewport": "820x1180 p3",
-      "writing": 30,
-      "firstBoxRow": 8
-    },
-    {
-      "viewport": "1280x800 p13",
-      "writing": 37,
-      "firstBoxRow": 8
-    },
-    {
-      "viewport": "1280x800 p3",
-      "writing": 37,
-      "firstBoxRow": 8
-    },
-    {
-      "viewport": "1920x1080 p13",
-      "writing": 57,
-      "firstBoxRow": 10
-    },
-    {
-      "viewport": "1920x1080 p3",
-      "writing": 57,
-      "firstBoxRow": 10
-    }
+  "tasks": 57,
+  "screens": [
+    "390×844",
+    "820×1180",
+    "1280×800"
   ],
+  "measured": 9302,
+  "off": [],
   "errors": [],
   "passed": true
 }

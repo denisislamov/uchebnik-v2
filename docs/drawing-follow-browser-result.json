@@ -7,8 +7,8 @@
         "height": 844
       },
       "line": 1,
-      "top": 558,
-      "bottom": 690
+      "top": 520,
+      "bottom": 652
     },
     {
       "viewport": {
@@ -16,8 +16,8 @@
         "height": 844
       },
       "line": 2,
-      "top": 558,
-      "bottom": 602
+      "top": 520,
+      "bottom": 564
     },
     {
       "viewport": {
@@ -25,8 +25,8 @@
         "height": 844
       },
       "line": 3,
-      "top": 602,
-      "bottom": 646
+      "top": 564,
+      "bottom": 608
     },
     {
       "viewport": {
@@ -34,8 +34,8 @@
         "height": 844
       },
       "line": 4,
-      "top": 558,
-      "bottom": 690
+      "top": 520,
+      "bottom": 652
     },
     {
       "viewport": {
@@ -43,8 +43,8 @@
         "height": 844
       },
       "line": 5,
-      "top": 558,
-      "bottom": 602
+      "top": 520,
+      "bottom": 564
     },
     {
       "viewport": {
@@ -52,8 +52,8 @@
         "height": 844
       },
       "line": 6,
-      "top": 602,
-      "bottom": 646
+      "top": 564,
+      "bottom": 608
     },
     {
       "viewport": {
@@ -61,8 +61,8 @@
         "height": 844
       },
       "line": 7,
-      "top": 558,
-      "bottom": 690
+      "top": 520,
+      "bottom": 652
     },
     {
       "viewport": {
@@ -70,8 +70,8 @@
         "height": 844
       },
       "line": 8,
-      "top": 558,
-      "bottom": 602
+      "top": 520,
+      "bottom": 564
     },
     {
       "viewport": {
@@ -79,8 +79,8 @@
         "height": 844
       },
       "line": 9,
-      "top": 602,
-      "bottom": 646
+      "top": 564,
+      "bottom": 608
     },
     {
       "viewport": {
@@ -88,8 +88,8 @@
         "height": 844
       },
       "line": 10,
-      "top": 558,
-      "bottom": 690
+      "top": 520,
+      "bottom": 652
     },
     {
       "viewport": {
@@ -97,8 +97,8 @@
         "height": 844
       },
       "line": 11,
-      "top": 558,
-      "bottom": 602
+      "top": 520,
+      "bottom": 564
     },
     {
       "viewport": {
@@ -106,8 +106,8 @@
         "height": 844
       },
       "line": 12,
-      "top": 602,
-      "bottom": 646
+      "top": 564,
+      "bottom": 608
     },
     {
       "viewport": {
@@ -223,8 +223,8 @@
         "height": 760
       },
       "line": 1,
-      "top": 354,
-      "bottom": 438
+      "top": 320,
+      "bottom": 404
     },
     {
       "viewport": {
@@ -232,8 +232,8 @@
         "height": 760
       },
       "line": 2,
-      "top": 354,
-      "bottom": 382
+      "top": 320,
+      "bottom": 348
     },
     {
       "viewport": {
@@ -241,8 +241,8 @@
         "height": 760
       },
       "line": 3,
-      "top": 382,
-      "bottom": 410
+      "top": 348,
+      "bottom": 376
     },
     {
       "viewport": {
@@ -250,8 +250,8 @@
         "height": 760
       },
       "line": 4,
-      "top": 354,
-      "bottom": 438
+      "top": 320,
+      "bottom": 404
     },
     {
       "viewport": {
@@ -259,8 +259,8 @@
         "height": 760
       },
       "line": 5,
-      "top": 354,
-      "bottom": 382
+      "top": 320,
+      "bottom": 348
     },
     {
       "viewport": {
@@ -268,8 +268,8 @@
         "height": 760
       },
       "line": 6,
-      "top": 382,
-      "bottom": 410
+      "top": 348,
+      "bottom": 376
     },
     {
       "viewport": {
@@ -277,8 +277,8 @@
         "height": 760
       },
       "line": 7,
-      "top": 354,
-      "bottom": 438
+      "top": 320,
+      "bottom": 404
     },
     {
       "viewport": {
@@ -286,8 +286,8 @@
         "height": 760
       },
       "line": 8,
-      "top": 354,
-      "bottom": 382
+      "top": 320,
+      "bottom": 348
     },
     {
       "viewport": {
@@ -295,8 +295,8 @@
         "height": 760
       },
       "line": 9,
-      "top": 382,
-      "bottom": 410
+      "top": 348,
+      "bottom": 376
     },
     {
       "viewport": {
@@ -304,8 +304,8 @@
         "height": 760
       },
       "line": 10,
-      "top": 354,
-      "bottom": 438
+      "top": 320,
+      "bottom": 404
     },
     {
       "viewport": {
@@ -313,8 +313,8 @@
         "height": 760
       },
       "line": 11,
-      "top": 354,
-      "bottom": 382
+      "top": 320,
+      "bottom": 348
     },
     {
       "viewport": {
@@ -322,8 +322,8 @@
         "height": 760
       },
       "line": 12,
-      "top": 382,
-      "bottom": 410
+      "top": 348,
+      "bottom": 376
     }
   ],
   "errors": []

@@ -22,6 +22,8 @@ import { colors as c, fonts as f } from "../theme";
 import { Button, ProgressBar, RetryNote } from "./Controls";
 import { padCellSize, targetSpanCells } from "../lib/padLayout";
 import { finePointer, useTaskSize } from "./taskSize";
+import { Rows } from "./HandDrawn";
+import { CELL, wholeCells } from "../lib/grid";
 export function DrawingPad({
   strokes,
   onChange,
@@ -68,7 +70,10 @@ export function DrawingPad({
         widestTarget,
         fit && sheetTop !== null
           ? {
-              height: windowHeight - sheetTop - 150 + measured,
+              // Under the sheet: the rest of its last row, an empty row,
+              // the hint, an empty row, «Дальше» and the line under it.
+              // Whole rows, so the sheet fills them and none is wasted.
+              height: wholeCells(windowHeight - sheetTop - 210 + measured),
               rows,
               // Smaller cells only for a mouse or trackpad, never for a finger.
               minCell: finePointer() ? 28 : 44,
@@ -214,37 +219,105 @@ export function DrawingPad({
         progress.start + trace!.stages[progress.stage].length,
       )
     : strokes;
+  // What is written in a row stands on the lower line of its two.
+  const row = { flexDirection: "row", alignItems: "flex-end" } as const;
+  // The pencils, the name of the line and the button share a row where it is
+  // long enough for them; beside a sample, or on a phone, the name goes above.
+  const inRow = !compact && containerWidth >= CELL * 28;
   return (
-    <View style={{ gap: 12 }}>
+    <View>
       {progress && strokes.length > progress.accepted.length && (
         <Text
           accessibilityRole="alert"
-          style={{ fontFamily: f.regular, color: c.red }}
+          style={{ fontFamily: f.regular, color: c.red, lineHeight: CELL }}
         >
           Образец обновлён. Этот рисунок нужно выполнить заново; остальные
           ответы сохранены.
         </Text>
       )}
-      {progress && (
-        <View style={{ gap: 8 }}>
-          {/* Two lines kept even for a short name: the sheet below stays put. */}
-          <View
-            style={{
-              flexDirection: "row",
+      {/* Rows of the sheet: what to draw, how far along, the pencils. On a
+          phone the name may take two lines, and two are kept for it: the
+          sheet below stays put. Wider screens have room for the pencils and
+          the name in one row. */}
+      {progress && !inRow && (
+        <View
+          style={[
+            row,
+            {
               alignItems: "flex-start",
-              gap: 12,
-              minHeight: compact ? 44 : undefined,
+              gap: CELL,
+              height: compact ? CELL * 2 : CELL,
+            },
+          ]}
+        >
+          <Text
+            accessibilityLiveRegion="polite"
+            numberOfLines={compact ? 2 : 1}
+            style={{
+              flex: 1,
+              fontFamily: f.bold,
+              color: c.pen,
+              fontSize: 17,
+              lineHeight: CELL,
             }}
           >
+            {progress.done
+              ? "Все элементы получились!"
+              : `${target?.label} · ${progress.completed + 1} из ${progress.total}`}
+          </Text>
+          {trace!.stages.length > 1 && !progress.done && (
+            <Text
+              style={{
+                fontFamily: f.regular,
+                color: c.muted,
+                fontSize: 13,
+                lineHeight: CELL,
+              }}
+            >
+              лист {progress.stage + 1} из {trace!.stages.length}
+            </Text>
+          )}
+        </View>
+      )}
+      <View style={[row, { height: CELL * 2 }]}>
+        {DRAWING_COLORS.map((v, i) => (
+          <Pressable
+            key={v}
+            accessibilityRole="button"
+            accessibilityLabel={`Цвет: ${["чёрный", "красный", "синий"][i]}`}
+            accessibilityState={{ selected: color === v }}
+            onPress={() => setChosenColor(v)}
+            // Two cells for the finger, the pencil's dot a little inside them.
+            style={{
+              width: CELL * 2,
+              height: CELL * 2,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: v,
+                borderWidth: 4,
+                borderColor: color === v ? "#2b4ba8" : c.card,
+              }}
+            />
+          </Pressable>
+        ))}
+        {progress && inRow ? (
+          <View style={[row, { flex: 1, marginLeft: CELL, gap: CELL }]}>
             <Text
               accessibilityLiveRegion="polite"
-              numberOfLines={2}
+              numberOfLines={1}
               style={{
                 flex: 1,
                 fontFamily: f.bold,
                 color: c.pen,
                 fontSize: 17,
-                lineHeight: 22,
+                lineHeight: CELL,
               }}
             >
               {progress.done
@@ -257,42 +330,16 @@ export function DrawingPad({
                   fontFamily: f.regular,
                   color: c.muted,
                   fontSize: 13,
-                  lineHeight: 22,
+                  lineHeight: CELL,
                 }}
               >
                 лист {progress.stage + 1} из {trace!.stages.length}
               </Text>
             )}
           </View>
-          <ProgressBar value={progress.completed / progress.total} />
-        </View>
-      )}
-      <View
-        style={{
-          flexDirection: "row",
-          gap: 8,
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        {DRAWING_COLORS.map((v, i) => (
-          <Pressable
-            key={v}
-            accessibilityRole="button"
-            accessibilityLabel={`Цвет: ${["чёрный", "красный", "синий"][i]}`}
-            accessibilityState={{ selected: color === v }}
-            onPress={() => setChosenColor(v)}
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 22,
-              backgroundColor: v,
-              borderWidth: 4,
-              borderColor: color === v ? "#2b4ba8" : c.card,
-            }}
-          />
-        ))}
-        <View style={{ flex: 1 }} />
+        ) : (
+          <View style={{ flex: 1 }} />
+        )}
         <Button
           small
           secondary
@@ -307,201 +354,216 @@ export function DrawingPad({
           Отменить штрих
         </Button>
       </View>
-      <View
-        ref={sheetBox}
-        onLayout={(e) => {
-          setContainerWidth(e.nativeEvent.layout.width);
-          sheetBox.current?.measureInWindow((_x, y) =>
-            setSheetTop((old) =>
-              old !== null && Math.abs(old - y) < 4 ? old : y,
-            ),
-          );
-        }}
-        style={{ width: "100%" }}
-      >
-        <ScrollView
-          ref={scrollRef}
-          horizontal
-          scrollEnabled={scrollable && !drawingNow}
-          showsHorizontalScrollIndicator={scrollable}
-          canCancelContentTouches={false}
-          contentContainerStyle={{
-            width: Math.max(width, containerWidth),
-            justifyContent: "center",
+      {/* The bar lies in the row that is left empty above the sheet. */}
+      {progress ? (
+        <ProgressBar value={progress.completed / progress.total} />
+      ) : (
+        <View style={{ height: CELL }} />
+      )}
+      <Rows>
+        <View
+          ref={sheetBox}
+          onLayout={(e) => {
+            setContainerWidth(e.nativeEvent.layout.width);
+            sheetBox.current?.measureInWindow((_x, y) =>
+              setSheetTop((old) =>
+                old !== null && Math.abs(old - y) < 4 ? old : y,
+              ),
+            );
           }}
           style={{ width: "100%" }}
         >
-          <View
-            ref={fieldRef}
-            accessibilityLabel="Поле для рисования"
-            style={[
-              {
-                width,
-                height,
-                borderWidth: 1,
-                borderColor: "#94b8b5",
-                borderRadius: 4,
-                overflow: "hidden",
-                backgroundColor: "#fffef9",
-              },
-              Platform.OS === "web"
-                ? ({ touchAction: "none" } as any)
-                : undefined,
-            ]}
-            onStartShouldSetResponder={() =>
-              (progress?.completed ?? strokes.length) < 100 && !progress?.done
-            }
-            onMoveShouldSetResponder={() =>
-              (progress?.completed ?? strokes.length) < 100 && !progress?.done
-            }
-            onResponderGrant={(e) => {
-              setDrawing(true);
-              // Keep feedback in place while drawing: removing it can clamp the
-              // parent scroll position and move the notebook under the finger.
-              const p = coords(e);
-              active.current = {
-                color,
-                points: [p, { x: Math.min(1, p.x + 0.001), y: p.y }],
-                cellPx: cellSize,
-              };
-              setDraft(active.current);
+          <ScrollView
+            ref={scrollRef}
+            horizontal
+            scrollEnabled={scrollable && !drawingNow}
+            showsHorizontalScrollIndicator={scrollable}
+            canCancelContentTouches={false}
+            contentContainerStyle={{
+              width: Math.max(width, containerWidth),
+              justifyContent: "center",
             }}
-            onResponderMove={(e) => {
-              if (!active.current || active.current.points.length >= 1000)
-                return;
-              active.current = {
-                ...active.current,
-                points: [...active.current.points, coords(e)],
-              };
-              setDraft(active.current);
-            }}
-            onResponderRelease={finish}
-            onResponderTerminate={() => {
-              active.current = null;
-              setDraft(null);
-              setDrawing(false);
-            }}
-            onResponderTerminationRequest={() => false}
+            style={{ width: "100%" }}
           >
-            <View pointerEvents="none">
-              <Svg width={width} height={height}>
-                {Array.from({ length: columns + 1 }, (_, i) => (
-                  <Line
-                    key={`v${i}`}
-                    x1={(i * width) / columns}
-                    y1={0}
-                    x2={(i * width) / columns}
-                    y2={height}
-                    stroke="#b9c8de"
-                    strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
-                  />
-                ))}
-                {Array.from({ length: rows + 1 }, (_, i) => (
-                  <Line
-                    key={`h${i}`}
-                    x1={0}
-                    y1={(i * height) / rows}
-                    x2={width}
-                    y2={(i * height) / rows}
-                    stroke="#b9c8de"
-                    strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
-                  />
-                ))}
-                {trace &&
-                  progress &&
-                  trace.stages[progress.stage].map((t, i) =>
-                    i < progress.index ? null : t.dot ? (
+            <View
+              ref={fieldRef}
+              accessibilityLabel="Поле для рисования"
+              style={[
+                {
+                  width,
+                  height,
+                  borderWidth: 1,
+                  borderColor: "#94b8b5",
+                  borderRadius: 4,
+                  overflow: "hidden",
+                  backgroundColor: "#fffef9",
+                },
+                Platform.OS === "web"
+                  ? ({ touchAction: "none" } as any)
+                  : undefined,
+              ]}
+              onStartShouldSetResponder={() =>
+                (progress?.completed ?? strokes.length) < 100 && !progress?.done
+              }
+              onMoveShouldSetResponder={() =>
+                (progress?.completed ?? strokes.length) < 100 && !progress?.done
+              }
+              onResponderGrant={(e) => {
+                setDrawing(true);
+                // Keep feedback in place while drawing: removing it can clamp the
+                // parent scroll position and move the notebook under the finger.
+                const p = coords(e);
+                active.current = {
+                  color,
+                  points: [p, { x: Math.min(1, p.x + 0.001), y: p.y }],
+                  cellPx: cellSize,
+                };
+                setDraft(active.current);
+              }}
+              onResponderMove={(e) => {
+                if (!active.current || active.current.points.length >= 1000)
+                  return;
+                active.current = {
+                  ...active.current,
+                  points: [...active.current.points, coords(e)],
+                };
+                setDraft(active.current);
+              }}
+              onResponderRelease={finish}
+              onResponderTerminate={() => {
+                active.current = null;
+                setDraft(null);
+                setDrawing(false);
+              }}
+              onResponderTerminationRequest={() => false}
+            >
+              <View pointerEvents="none">
+                <Svg width={width} height={height}>
+                  {Array.from({ length: columns + 1 }, (_, i) => (
+                    <Line
+                      key={`v${i}`}
+                      x1={(i * width) / columns}
+                      y1={0}
+                      x2={(i * width) / columns}
+                      y2={height}
+                      stroke="#b9c8de"
+                      strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
+                    />
+                  ))}
+                  {Array.from({ length: rows + 1 }, (_, i) => (
+                    <Line
+                      key={`h${i}`}
+                      x1={0}
+                      y1={(i * height) / rows}
+                      x2={width}
+                      y2={(i * height) / rows}
+                      stroke="#b9c8de"
+                      strokeWidth={i % 4 === 0 ? 1.3 : 0.65}
+                    />
+                  ))}
+                  {trace &&
+                    progress &&
+                    trace.stages[progress.stage].map((t, i) =>
+                      i < progress.index ? null : t.dot ? (
+                        <Circle
+                          key={i}
+                          cx={t.points[0].x * width}
+                          cy={t.points[0].y * height}
+                          r={i === progress.index ? 6 : 4}
+                          stroke={t.color}
+                          fill="none"
+                          strokeDasharray="2 2"
+                          opacity={i === progress.index ? 1 : 0.3}
+                        />
+                      ) : (
+                        <Path
+                          key={i}
+                          d={d(t.points)}
+                          stroke={t.color}
+                          strokeWidth={2}
+                          strokeDasharray="5 5"
+                          opacity={i === progress.index ? 0.65 : 0.2}
+                          fill="none"
+                        />
+                      ),
+                    )}
+                  {target && !target.dot && !closed && (
+                    <>
                       <Circle
-                        key={i}
-                        cx={t.points[0].x * width}
-                        cy={t.points[0].y * height}
-                        r={i === progress.index ? 6 : 4}
-                        stroke={t.color}
-                        fill="none"
-                        strokeDasharray="2 2"
-                        opacity={i === progress.index ? 1 : 0.3}
+                        cx={target.points.at(-1)!.x * width}
+                        cy={target.points.at(-1)!.y * height}
+                        r={4}
+                        fill={target.bidirectional ? target.color : c.paper}
+                        stroke={target.color}
                       />
-                    ) : (
-                      <Path
-                        key={i}
-                        d={d(t.points)}
-                        stroke={t.color}
-                        strokeWidth={2}
-                        strokeDasharray="5 5"
-                        opacity={i === progress.index ? 0.65 : 0.2}
-                        fill="none"
+                      <Circle
+                        cx={target.points[0].x * width}
+                        cy={target.points[0].y * height}
+                        r={5}
+                        fill={target.color}
                       />
-                    ),
+                    </>
                   )}
-                {target && !target.dot && !closed && (
-                  <>
-                    <Circle
-                      cx={target.points.at(-1)!.x * width}
-                      cy={target.points.at(-1)!.y * height}
-                      r={4}
-                      fill={target.bidirectional ? target.color : c.paper}
-                      stroke={target.color}
-                    />
-                    <Circle
-                      cx={target.points[0].x * width}
-                      cy={target.points[0].y * height}
-                      r={5}
-                      fill={target.color}
-                    />
-                  </>
-                )}
-                {[...visible, ...(draft ? [draft] : [])].map((s, i) => (
-                  <Path
-                    key={i}
-                    d={d(s.points)}
-                    stroke={
-                      error && !active.current && i === visible.length
-                        ? c.retry
-                        : drawingColor(s.color)
-                    }
-                    strokeWidth={3}
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                ))}
-                {(!closed && !active.current ? arrows : []).map((arrow, i) => {
-                  const { tip, tail, left, right } = traceArrowGeometry(
-                    arrow,
-                    cellSize,
-                  );
-                  const path = `M ${tail.x} ${tail.y} L ${tip.x} ${tip.y} M ${left.x} ${left.y} L ${tip.x} ${tip.y} L ${right.x} ${right.y}`;
-                  return (
+                  {[...visible, ...(draft ? [draft] : [])].map((s, i) => (
                     <Path
-                      key={`direction-${i}`}
-                      testID="drawing-direction-arrow"
-                      d={path}
-                      stroke={directionColor}
-                      strokeWidth={1.5}
+                      key={i}
+                      d={d(s.points)}
+                      stroke={
+                        error && !active.current && i === visible.length
+                          ? c.retry
+                          : drawingColor(s.color)
+                      }
+                      strokeWidth={3}
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-                  );
-                })}
-              </Svg>
+                  ))}
+                  {(!closed && !active.current ? arrows : []).map(
+                    (arrow, i) => {
+                      const { tip, tail, left, right } = traceArrowGeometry(
+                        arrow,
+                        cellSize,
+                      );
+                      const path = `M ${tail.x} ${tail.y} L ${tip.x} ${tip.y} M ${left.x} ${left.y} L ${tip.x} ${tip.y} L ${right.x} ${right.y}`;
+                      return (
+                        <Path
+                          key={`direction-${i}`}
+                          testID="drawing-direction-arrow"
+                          d={path}
+                          stroke={directionColor}
+                          strokeWidth={1.5}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      );
+                    },
+                  )}
+                </Svg>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </Rows>
       {/* Everything that changes from line to line sits under the sheet:
           above it, a hint growing by a line pushed the sheet under the finger. */}
       {target && (
         <View
           testID="drawing-direction-hint"
-          style={{ padding: 12, borderRadius: 4, backgroundColor: "#e8eef9" }}
+          style={{
+            marginTop: CELL,
+            padding: CELL / 2,
+            borderRadius: 4,
+            backgroundColor: "#e8eef9",
+          }}
         >
           <Text
             style={{
               fontFamily: f.bold,
               color: directionColor,
               fontSize: 15,
-              lineHeight: 22,
+              lineHeight: CELL,
             }}
           >
             {target.dot
@@ -516,7 +578,11 @@ export function DrawingPad({
           </Text>
         </View>
       )}
-      {error !== "" && <RetryNote>{error}</RetryNote>}
+      {error !== "" && (
+        <View style={{ marginTop: CELL }}>
+          <RetryNote>{error}</RetryNote>
+        </View>
+      )}
     </View>
   );
 }

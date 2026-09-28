@@ -2,6 +2,11 @@ import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
 import { Image, View } from "react-native";
 import { assets } from "../content/assets";
+import { CELL } from "../lib/grid";
+const inRows = (height: number) => {
+  const step = height < CELL * 4 ? CELL / 2 : CELL;
+  return Math.max(step, Math.floor((height + 0.5) / step) * step);
+};
 export function BookImage({
   id,
   maxHeight = 310,
@@ -87,8 +92,13 @@ export function BookImage({
           width: "100%",
           aspectRatio: a.width / a.height,
           maxHeight,
+          // A picture is as high as whole rows of the sheet allow (a low
+          // strip, as half rows): the frame around it then stands on the
+          // lines with nothing to spare.
           ...(frameWidth > 0 && {
-            height: Math.min(maxHeight, (frameWidth * a.height) / a.width),
+            height: inRows(
+              Math.min(maxHeight, (frameWidth * a.height) / a.width),
+            ),
           }),
           borderRadius: 4,
         }}
