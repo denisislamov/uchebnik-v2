@@ -2,7 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { allBlocks, pages } from "../src/content/book.ts";
 import { parseProgress, CONTENT_REVISION } from "../src/lib/assessment.ts";
-import { revision3Steps } from "../src/content/legacyStepIds.ts";
+import {
+  revision3Steps,
+  revision4Steps,
+} from "../src/content/legacyStepIds.ts";
 import { composeStory, storySubjects } from "../src/lib/composeStory.ts";
 import { taskTeaching } from "../src/lib/taskTeaching.ts";
 
@@ -95,23 +98,29 @@ test("counting hints give the rule before counting starts", () => {
   assert.ok(steps.slice(1).every((t) => !/Считай каждый предмет/.test(t)));
 });
 
-test("a revision-3 save reopens the same step after steps were folded", () => {
-  for (const [page, ids] of Object.entries(revision3Steps)) {
-    const n = Number(page);
-    ids.forEach((id, index) => {
-      const saved = parseProgress(
-        JSON.stringify({
-          version: 1,
-          contentRevision: 3,
-          page: n,
-          block: index,
-          answers: {},
-        }),
-        pages,
-      );
-      assert.equal(saved.contentRevision, CONTENT_REVISION);
-      const now = pages[n - 1].blocks.findIndex((b) => b.id === id);
-      if (now >= 0) assert.equal(saved.block, now, `${id}`);
-    });
-  }
+test("revision-3 and revision-4 saves reopen the same step after steps were folded", () => {
+  for (const [revision, steps] of [
+    [3, revision3Steps],
+    [4, revision4Steps],
+    // Page 99 changed only after revision 4; an older save needs the same map.
+    [3, revision4Steps],
+  ] as const)
+    for (const [page, ids] of Object.entries(steps)) {
+      const n = Number(page);
+      ids.forEach((id, index) => {
+        const saved = parseProgress(
+          JSON.stringify({
+            version: 1,
+            contentRevision: revision,
+            page: n,
+            block: index,
+            answers: {},
+          }),
+          pages,
+        );
+        assert.equal(saved.contentRevision, CONTENT_REVISION);
+        const now = pages[n - 1].blocks.findIndex((b) => b.id === id);
+        if (now >= 0) assert.equal(saved.block, now, `${id}`);
+      });
+    }
 });

@@ -3,7 +3,11 @@ import { courseCorrect } from "./courseAssessment.ts";
 import { practicalCorrect } from "./practical.ts";
 import { storyCorrect } from "./storyAssessment.ts";
 import { numberGameCorrect } from "./numberGame.ts";
-import { revision2Steps, revision3Steps } from "../content/legacyStepIds.ts";
+import {
+  revision2Steps,
+  revision3Steps,
+  revision4Steps,
+} from "../content/legacyStepIds.ts";
 import { traceProgress, drawingColor, DRAWING_COLORS } from "./tracing.ts";
 import type { Answer, Block, BookPage, Progress } from "../content/types.ts";
 export const edgeKey = (a: number, b: number) =>
@@ -82,7 +86,7 @@ export const pageCompleted = (
   answers: Record<string, Answer>,
 ) => page.blocks.every((b) => isDone(b, answers[b.id]));
 /** Bumped whenever steps are added, removed or reordered on a page. */
-export const CONTENT_REVISION = 4;
+export const CONTENT_REVISION = 5;
 export const emptyProgress = (): Progress => ({
   version: 1,
   contentRevision: CONTENT_REVISION,
@@ -274,9 +278,12 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
     const saved =
       p.contentRevision === CONTENT_REVISION
         ? undefined
-        : p.contentRevision === 3
-          ? revision3Steps[page]
-          : revision2Steps[page];
+        : p.contentRevision === 4
+          ? revision4Steps[page]
+          : p.contentRevision === 3
+            ? // A page untouched between 3 and 4 kept its steps until 5.
+              (revision3Steps[page] ?? revision4Steps[page])
+            : revision2Steps[page];
     if (
       saved &&
       Number.isInteger(requestedBlock) &&

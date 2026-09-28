@@ -16,7 +16,7 @@ const KEY = 'uchebnik:pchelko-1959:pages-001-010:v1';
         const page = pages.find(p=>p.blocks.some(b=>b.id===id));
         const block = page.blocks.findIndex(b=>b.id===id), b=page.blocks[block];
         await p.goto(baseURL+'/metadata.json');
-        await p.evaluate(({KEY,page,block,id})=>localStorage.setItem(KEY,JSON.stringify({version:1,contentRevision:4,page,block,answers:{[id]:{value:['card-1'],checked:true}}})), {KEY,page:page.number,block,id});
+        await p.evaluate(({KEY,page,block,id})=>localStorage.setItem(KEY,JSON.stringify({version:1,contentRevision:5,page,block,answers:{[id]:{value:['card-1'],checked:true}}})), {KEY,page:page.number,block,id});
         await p.goto(baseURL);
         await p.getByRole('button',{name:/^(Продолжить занятие|Начать заниматься)/}).click();
         await p.getByTestId('number-meaning').waitFor();

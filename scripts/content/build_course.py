@@ -42,10 +42,12 @@ def heading(b,data):
  # and the heading names the kind of work: from the spec's role when it has one, else from the built task.
  role=b['role'].lower();t=b['text'];kind=data.get('kind')
  if role.startswith('задача'):return 'Задача'
+ if kind=='work' and role.startswith(('инструкция','образец','правило','пояснение','таблица','счётн')) and data['fields'] and all(re.search('[=□]',f['label']) for f in data['fields']):return examplesHeading(' '.join(f['label'] for f in data['fields']))
  if role.startswith('пример'):return examplesHeading(t)
  if role.startswith(('упражнение','задание')):return 'Упражнение'
  if role.startswith('практическ'):return 'Практическое задание'
- if role.startswith(('инструкция','образец','правило','пояснение')):return 'Рассмотри'
+ # «Рассмотри» heads something to read; a sample with answer fields is named by its work.
+ if role.startswith(('инструкция','образец','правило','пояснение')) and kind=='read':return 'Рассмотри'
  if role.startswith('таблица'):return 'Таблица'
  if role.startswith('игра'):return 'Игра'
  if role.startswith('счётн'):return 'Счёт'
@@ -97,7 +99,7 @@ OV[702]=compose([rule('+',11,3),rule(':',14,7)],True)
 OV[360]=compose([rule('+',2,3,max=10),rule('−',10,5,max=10)],True)
 OV[331]=work([('Какое число на второй карточке?',7)])
 OV[331]['prompt']='На одной карточке написано 10. На другой — число на 3 меньше. Найди его.'
-OV[489]=work([('Всего кусков пластилина в двух коробках',14),('Осталось после выдачи 13 кусков',1)])
+OV[489]=work([('Сколько всего кусков пластилина в двух коробках?',14),('Сколько кусков осталось?',1)])
 OV[489]['prompt']='В одной коробке было 7 кусков пластилина, в другой — столько же. Детям выдали 13 кусков. Сколько осталось?'
 OV[737]['activity']['board']='pages'
 OV[739]['activity']['board']='hundred'
@@ -165,6 +167,8 @@ def twoParts(blk):
   second[0]=dict(second[0],context=tidy(parts[1]))
   return dict(blk,prompt=tidy(parts[0]),fields=first+[plain[0]]+second)
  return dict(blk,prompt=tidy(blk['prompt']))
+# Topics that stay long even after the first clause is taken.
+PAGE_TITLES={76:'Задачи на «больше» и «меньше»',85:'Вычитание из 11 и из 12',89:'Задачи в два действия. Килограмм',134:'Умножение круглых десятков',135:'Умножение и деление круглых десятков'}
 def pageTitle(topic):
  # A page title is the topic in a few words; the source topic lists every exercise on the page
  # («… (кролики 3 + 1, морковки 4 + 1), схемы с кружками»). Keep the first clause without brackets.
@@ -211,7 +215,7 @@ for page in source:
   if n and data.get('kind')=='work' and bareExamples(t) and 'prompt' not in data:base['prompt']='Реши примеры и запиши ответы.'
   if n:base['title']=heading(b,data)
   blocks.append(twoParts(dict(base,**data)))
- out.append(dict(id=f'page-{p:03}',number=p,title=pageTitle(page['topic']),subtitle=('Первый десяток' if p<59 else 'Второй десяток' if p<126 else 'Первая сотня'),hero=f'page_{p:03}',sourceDoc=f'textbook/page_docs/arithmetic_grade1_pchelko_1959_p{p:03}.md',blocks=blocks))
+ out.append(dict(id=f'page-{p:03}',number=p,title=PAGE_TITLES.get(p) or pageTitle(page['topic']),subtitle=('Первый десяток' if p<59 else 'Второй десяток' if p<126 else 'Первая сотня'),hero=f'page_{p:03}',sourceDoc=f'textbook/page_docs/arithmetic_grade1_pchelko_1959_p{p:03}.md',blocks=blocks))
 if unresolved:(ROOT/'scripts/content/unresolved.json').write_text(json.dumps(unresolved,ensure_ascii=False,indent=2)+'\n')
 print('Unresolved',len(unresolved),[b['number'] for b in unresolved])
 
@@ -223,6 +227,42 @@ for page in out:
  missing=[a['id'] for a in assets if a['page']==page['number'] and a['id'] not in used]
  if missing:page['blocks'].insert(0,dict(id=f"p{page['number']:03}-source-art",kind='read',title='Рисунки страницы',prompt='Рассмотри',body='Рассмотри рисунки. Затем переходи к заданиям.',images=missing))
  if not page['blocks']:page['blocks']=[dict(id=f"p{page['number']:03}-original",kind='read',title=page['title'],prompt='Рассмотри страницу',body='Оригинальная страница учебника.',images=[page['hero']])]
+# What the child reads under the heading is the task, not a description of how the page is printed.
+# sourceText keeps the transcription; the prompt is rewritten where it described layout or asked nothing.
+PROMPTS={
+ 264:'На первой проволоке 5 косточек, а на второй столько же и ещё 1 косточка. На второй проволоке на 1 косточку больше, чем на первой. Сколько косточек на второй проволоке?',
+ 505:'Ученик говорит: „Я прибавил к 6 число и получил в ответе 11. Угадайте, какое число я прибавил“. Какое число прибавил ученик? Проведите и вы такую игру.',
+ 571:'Считайте по 5 до 20. Потом решите примеры.',
+ 739:'Найдите в таблице числа: 5, 15, 25, 35, 45, 55, 65, 75, 85, 95.\nНайдите в таблице числа: 3, 23, 43, 63, 83.',
+ 318:'Решите примеры. Потом найдите пример с ответом 13, затем 14, 15 и так далее.',
+ 610:'Решите примеры. Потом найдите пример с ответом 11, затем с ответом 12, 13, 14, 15 и так далее до 20.',
+ 578:'В каждом столбике найдите пример с нужным ответом. В первом столбике — с ответом 9. Во втором — с ответом 20. В третьем — с ответом 16.',
+ 659:'В каждом столбике найдите пример с нужным ответом. В первом столбике — с ответом 5. Во втором — с ответом 6. В третьем — с ответом 4. В четвёртом — с ответом 7.',
+ 699:'В каждом столбике найдите пример с нужным ответом. В первом столбике — с ответом 1. Во втором — с ответом 2. В третьем — с ответом 3. В четвёртом — с ответом 4.',
+ 813:'В каждом столбике найдите пример с нужным ответом. В первом столбике — с ответом 100. Во втором — с ответом 12. В третьем — с ответом 2.',
+ 638:'Разделить поровну между тремя учениками: 3 карандаша, 6 карандашей, 9 карандашей, 12 карандашей, 15 карандашей, 18 карандашей.',
+ 654:'Разделить поровну между 4 учениками: 4 пера, 8 перьев, 12 перьев, 16 кубиков, 20 кубиков.',
+ 672:'Разделить поровну между 5 учениками: 5 кубиков, 10 кубиков, 15 кубиков, 20 кубиков.',
+ 776:'От 100 отнимайте по 10, пока не получится 0.',
+ 647:'Я задумал число. Чтобы угадать его, умножьте 9 на 2. Разделите полученное число на 3. Прибавьте ко вновь полученному числу столько же. Какое число я задумал?',
+}
+CUTS=[r'\n\s*(?:Справа от рисунка запись|Ниже по центру)\s*:[\s\S]*$',r'\n?\s*В большой рамке[\s\S]*$',r'\s*Под условием не палочки[\s\S]*$',r':\s*Строки[\s\S]*$',r'\s*\(в одну строку[^)]*\)']
+PRINTED=r'рамк[аеи]\b|в рамке|рамкой|окружност|столбик(?:а|ов) по \d|верхн(?:яя|ий) (?:строка|ряд)|строка \d|[Сс]права от|[Сс]лева[:;]|[Сс]лева (?:образец|\d)|под чертой|\(черта\)|[Пп]од костяшками|далее рисунок|вертикальной черты|В каждой прямоугольник|над рисунком|[Вв]нутри строки|справа операция'
+def tells(t):return bool(re.search(r'(?:^|[.!?:]\s+|\n\s*)(?:[«„"(]?[А-ЯЁ][а-яё]+(?:ите|йте|ьте|ить|ать|ять|и|й|ь|ись)\b)|\?|(?<![а-яё])[а-яё]{3,}(?:ите|йте|ьте)(?![а-яё])',t))
+def childPrompt(blk,number):
+ kind=blk['kind'];t=blk['prompt']
+ if kind=='read':return blk
+ if number in PROMPTS and not blk.get('ownPrompt'):t=PROMPTS[number]
+ for cut in CUTS:t=re.sub(cut,'',t)
+ t=re.sub(r'\s*Далее с новой строки \(без номера\):\s*','\n\n',t)
+ t=re.sub(r'(Считайте по \d+ до \d+):[^\n]*',r'\1.',t)
+ t=re.sub(r'^(Разделить[^:\n]*между [^:\n]*):\s*$',r'\1.',t.strip(),flags=re.M) if kind=='activity' else t
+ fs=blk.get('fields') or []
+ sums=bool(fs) and all(re.search('[=□]',f['label']) and not re.search('[А-Яа-яЁё]{3}',f['label']) for f in fs)
+ if kind=='work' and sums and (re.search(PRINTED,t) or not tells(t)):
+  both=any('×' in f['label'] for f in fs) and any('+' in f['label'] for f in fs) and not number
+  t='Сложи одинаковые числа. Потом запиши умножением.' if both else 'Реши примеры и запиши ответы.'
+ return dict(blk,prompt=t.strip())
 # Testers read the page-description blocks («Заголовки», «Блок 6. Домино 6 + 1», «Рисунки страницы») as
 # steps that ask nothing. On pages from 30 on they are folded: headings go, a mid-page heading marks a new
 # topic, pictures meet in one opening step, and only rules and worked samples stay as steps of their own.
@@ -263,7 +303,7 @@ for page in out:
   if kind=='heading':
    topic=headingText(b)
    # A heading after the first task starts a new topic on the same page; say so instead of dropping it.
-   if numbered and topic and len(topic)>3:kept.append(dict(b,title=f'Новая тема: {topic}',body='Дальше задания на новую тему.',prompt='Рассмотри'))
+   if numbered and topic and len(topic)>3 and not re.search(r'сигнатур|номер страницы|колонцифр',b.get('body','')+b['title']):kept.append(dict(b,title='Новая тема',body=topic+'.',prompt='Рассмотри'))
    elif b['images']:look=look or dict(b);look['images']=list(dict.fromkeys(look['images']+b['images']))
    continue
   if kind=='rule':kept.append(dict(b,title=plainTitle(b['title']),body=plainBody(b.get('body',''))));continue
@@ -271,7 +311,10 @@ for page in out:
   else:look['images']=list(dict.fromkeys(look['images']+b['images']))
  if look and look['images']:kept.insert(0,dict(look,title='Рассмотри картинки',body='Рассмотри картинки. Потом переходи к заданиям.'))
  # «Блок 8.» numbers the description, not anything the child sees.
- page['blocks']=[dict(b,title=re.sub(r'^Блок \d+\.\s*','',b['title']),**({'prompt':noTypeNotes(b['prompt'])} if 'prompt' in b else {})) for b in kept]
+ kept=[dict(b,title=re.sub(r'^Блок \d+\.\s*','',b['title']),**({'prompt':noTypeNotes(b['prompt'])} if 'prompt' in b else {})) for b in kept]
+ kept=[childPrompt(b,b.get('exerciseNumber')) for b in kept]
+ # An unnumbered scheme with answer fields is headed by its work, not by the description of the drawing.
+ page['blocks']=[dict(b,title='Сложение и умножение' if any('×' in f['label'] for f in b['fields']) and any('+' in f['label'] for f in b['fields']) else examplesHeading(' '.join(f['label'] for f in b['fields']))) if b['kind']=='work' and not b.get('exerciseNumber') and re.search(r'^(?:Схема|Рамка) «|под рамками',b['title']) else b for b in kept]
 # The table of contents is one page to read, not four steps of «Блок N».
 toc=out[143-11]
 parts=[b for b in toc['blocks'] if re.search('Часть',b['title'])]

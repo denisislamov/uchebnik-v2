@@ -36,10 +36,6 @@ test("the task text is hidden only when it literally repeats the heading", () =>
     } as never),
     false,
   );
-  const repeats = allBlocks.filter(promptRepeatsTitle).length;
-  // 120 generated blocks have title == prompt; 8 of them are read-only cards, which keep their heading.
-  assert.ok(
-    repeats >= 100 && repeats < 200,
-    `${repeats} generated blocks repeat their heading`,
-  );
+  // Review 2 gave every step its own task text; the guard stays for new content.
+  assert.equal(allBlocks.filter(promptRepeatsTitle).length, 0);
 });

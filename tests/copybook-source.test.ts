@@ -13,7 +13,7 @@ test("page 6 has twelve black waves without added dots", () => {
 test("four flags are two cells wide with inward notches; last flag is mirrored", () => {
   const flags = allBlocks
     .filter((b) => b.kind === "draw" && b.id.startsWith("p012-"))
-    .find((b) => b.title.includes("Нарисуй"))!;
+    .find((b) => b.prompt.includes("Нарисуй"))!;
   assert.ok(flags.kind === "draw" && flags.trace);
   for (let i = 0; i < 4; i++) {
     const points: { x: number; y: number }[] = flags.trace.stages

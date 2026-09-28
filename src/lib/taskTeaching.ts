@@ -604,7 +604,9 @@ function buildTaskTeaching(block: Block): TaskTeaching {
           t.points[0].x === t.points.at(-1)!.x &&
           t.points[0].y === t.points.at(-1)!.y,
       );
-      const numeral = /Обведи цифру|Напиши \d/.test(block.prompt);
+      const numeral = /Обведи цифру|Напиши (?:цифру |число )?\d/.test(
+        block.prompt,
+      );
       const labeled = /подпиши/.test(block.prompt);
       const bidirectional = targets.some((t) => t.bidirectional);
       const family = numeral

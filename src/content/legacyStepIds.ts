@@ -2125,3 +2125,21 @@ export const revision3Steps: Record<number, string[]> = {
     "p143-source04"
   ]
 };
+
+// Step IDs from content revision 4 on pages whose steps changed afterwards: a page footer
+// had been taken for a heading on page 99 and stood there as a step of its own.
+export const revision4Steps: Record<number, string[]> = {
+  "99": [
+    "p099-source01",
+    "p099-source02",
+    "p099-source03",
+    "p099-source04",
+    "p099-source05",
+    "p099-source06",
+    "p099-source07",
+    "p099-source08",
+    "p099-source09",
+    "p099-source10",
+    "p099-source11"
+  ]
+};

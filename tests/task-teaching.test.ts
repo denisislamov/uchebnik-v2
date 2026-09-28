@@ -200,7 +200,11 @@ test("explanations respect the source order: tens on 59, multiplication on 97, d
   // These boundaries come from the first actual introduction in the runtime
   // source blocks, not from a guessed age or an arbitrary early-page cutoff.
   assert.match(get("p059-source03").prompt, /десяток/);
-  assert.match(get("p097-source04").prompt, /2×2/);
+  // The scheme's task text names the action; the first product is its answer field.
+  const scheme = get("p097-source04");
+  assert.ok(
+    scheme.kind === "work" && scheme.fields.some((f) => /2×2/.test(f.label)),
+  );
   assert.match(get("p113-source04").prompt, /Разделить поровну/);
   for (const block of allBlocks) {
     const page = Number(block.id.slice(1, 4));
