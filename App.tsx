@@ -358,9 +358,10 @@ function Main() {
       alive = false;
       timers.forEach(clearTimeout);
     };
-    // …and when the task has answered: its words may take a row more than
-    // was kept for them.
-  }, [fitKey, windowWidth, windowHeight, paneHeight, answer.checked, advance]);
+    // Not when the task is answered: its size is settled when it opens, and
+    // a picture that grew and shrank under the finger was a jump. What the
+    // task answers with has rows kept for it from the start.
+  }, [fitKey, windowWidth, windowHeight, paneHeight]);
   const fitExtra = fit.key === fitKey ? fit.extra : 0;
 
   const finished = lessonPages.filter((p) =>

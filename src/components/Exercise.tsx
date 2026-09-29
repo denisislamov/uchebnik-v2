@@ -78,6 +78,8 @@ function ExerciseBody({
   // the picture and the place to answer within one view.
   const size = useTaskSize();
   const [rowWidth, setRowWidth] = useState(0);
+  // The last press on a picture to press was beside everything on it.
+  const [pictureMiss, setPictureMiss] = useState(false);
   // What the work hands to the sample's column (see Aside). Its rows are
   // reckoned, not measured: a hint or a «try again» note that grows by a
   // line must not resize the sample, and with it the sheet under the pen.
@@ -330,6 +332,7 @@ function ExerciseBody({
                           ),
                         })
                       }
+                      onMiss={setPictureMiss}
                     />
                   </Rows>
                 )}
@@ -619,8 +622,25 @@ function ExerciseBody({
                   )}
                 {/* A task checked by a press has no button: the words have
                   their two rows under the answers. */}
-                {["choice", "location", "picture"].includes(block.kind) && (
-                  <ResultRows />
+                {["choice", "location"].includes(block.kind) && <ResultRows />}
+                {block.kind === "picture" && (
+                  // The rows under a picture to press say what the last
+                  // press did: a miss, how many are marked, «верно».
+                  <ResultRows>
+                    {result ??
+                      (pictureMiss ? (
+                        <RetryNote tight>
+                          Нажми прямо на предмет или цифру.
+                        </RetryNote>
+                      ) : block.expected.length > 1 ? (
+                        <Text accessibilityLiveRegion="polite" style={s.marked}>
+                          Отмечено:{" "}
+                          {Array.isArray(answer.value)
+                            ? answer.value.filter((x) => x !== "miss").length
+                            : 0}
+                        </Text>
+                      ) : null)}
+                  </ResultRows>
                 )}
               </View>
             </View>
@@ -715,6 +735,12 @@ const s = StyleSheet.create({
     color: c.pen,
     fontSize: 34,
     lineHeight: CELL * 2,
+  },
+  marked: {
+    fontFamily: f.bold,
+    color: c.pen,
+    fontSize: 20,
+    lineHeight: CELL,
   },
   digitPhone: { fontSize: 30, lineHeight: CELL * 2 },
   // Pressed, a box answers at once; chosen, it is filled and framed.

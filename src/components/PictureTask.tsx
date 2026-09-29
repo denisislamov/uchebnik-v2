@@ -5,7 +5,6 @@ import { View, Image, Pressable, Text } from "react-native";
 import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
 import type { Block, Hotspot, Point } from "../content/types";
 import { assets } from "../content/assets";
-import { RetryNote } from "./Controls";
 import { useTaskSize } from "./taskSize";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
@@ -177,16 +176,23 @@ export function PictureTask({
   block,
   value,
   onChange,
+  onMiss,
 }: {
   block: Extract<Block, { kind: "picture" }>;
   value: string[];
   onChange: (v: string[]) => void;
+  /**
+   * A press beside everything. What a press says — a miss, how many are
+   * marked — is written in the rows kept for the task's answer (see
+   * Exercise), not under the picture: a line that came and went there moved
+   * the picture.
+   */
+  onMiss?: (miss: boolean) => void;
 }) {
-  const [miss, setMiss] = useState(false);
   if (block.quantityMeaning)
     return <NumberMeaning block={block} value={value} onChange={onChange} />;
   function pick(id: string) {
-    setMiss(id === "miss");
+    onMiss?.(id === "miss");
     if (id === "miss") return;
     onChange(
       block.expected.length === 1
@@ -211,20 +217,6 @@ export function PictureTask({
           />
         </Rows>
       ))}
-      {block.expected.length > 1 && (
-        <Text
-          accessibilityLiveRegion="polite"
-          style={{
-            fontFamily: f.bold,
-            color: c.pen,
-            fontSize: 20,
-            lineHeight: 24,
-          }}
-        >
-          Отмечено: {value.filter((x) => x !== "miss").length}
-        </Text>
-      )}
-      {miss && <RetryNote>Нажми прямо на предмет или цифру.</RetryNote>}
     </View>
   );
 }

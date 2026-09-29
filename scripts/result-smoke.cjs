@@ -7,6 +7,9 @@
  * task on a tablet or a computer, a task a phone shows whole — is opened answered, right and wrong, and
  * the words, with the button that offers help after a second miss, must stand over the navigation. A
  * drawing is drawn with the mouse to its last line.
+ *
+ * Nothing moves while the child answers: on a picture to press, every target is pressed and the
+ * background between them, and the picture keeps its size and place through all of it.
  */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -79,6 +82,30 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const expected = t.state === "solved" ? /^✓ Верно! / : /^Пока не совпало\. .*Показать подсказку$/;
         if (!expected.test(m.said) || m.under > 1 || m.over > 1 || m.scrolled)
           report.hidden.push({ screen: `${viewport.width}×${viewport.height}`, id: t.b.id, kind: t.b.kind, state: t.state, ...m });
+      }
+      // A picture to press keeps its size and place while it is pressed, hit or missed.
+      for (const t of tasks.filter((t) => t.b.kind === "picture" && t.state === "solved")) {
+        const block = t.b;
+        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: t.page, i: t.index });
+        await p.goto(baseURL);
+        await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
+        await stepShown(p);
+        await p.waitForTimeout(300);
+        const pic = p.getByRole("button", { name: "Рисунок задания" });
+        const place = async () => {
+          const r = await p.locator('[data-testid="exercise-card"] img').first().boundingBox();
+          return [r.x, r.y, r.width, r.height].map(Math.round).join(",");
+        };
+        const first = await place();
+        const presses = block.targets.map((h) => ({ x: h.x + h.w / 2, y: h.y + h.h / 2 }));
+        presses.splice(1, 0, { x: 0.02, y: 0.98 });
+        for (const q of presses) {
+          const r = await pic.boundingBox();
+          await p.mouse.click(r.x + q.x * r.width, r.y + q.y * r.height);
+          await p.waitForTimeout(250);
+          const now = await place();
+          if (now !== first) report.hidden.push({ screen: `${viewport.width}×${viewport.height}`, id: block.id, kind: "picture", state: "pressed", moved: `${first} → ${now}` });
+        }
       }
       if (!phone) {
         // A drawing, drawn to its last line: «верно» stands where the hint stood.
