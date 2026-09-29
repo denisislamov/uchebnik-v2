@@ -53,7 +53,7 @@ def build(assets, calc):
  act(11,'Два шага','sequence',[1,2],prompt='Сделай 2 шага вперёд.')
  work(11,'Два набора мячей',[('Левая картинка. Сколько мячей слева?',2),('Левая картинка. Сколько мячей справа?',1),('Сколько всего мячей на левой картинке?',3),('Правая картинка. Сколько мячей слева?',1),('Правая картинка. Сколько мячей справа?',2),('Сколько всего мячей на правой картинке?',3)],['balls_left_2_and_1','balls_right_1_and_2'],prompt='Посчитай мячи на каждой картинке.')
  walk=act(11,'Три шага','sequence',[1,2,3],prompt='Сделай 3 шага вперёд.');pages[11].remove(walk);walk['id']='p011-walk-three';pages[11].insert(5,walk)
- lines=draw(11,'Линии по клеткам','cells:1,2h,3h,3v,2v,1',['writing_strip_squares_rects']);lines['id']='p011-lesson07';lines['prompt']='Проведи линии по клеткам, отрывая палец в конце каждой.'
+ lines=draw(11,'Клетки по образцу','cells:1,2h,3h,3v,2v,1',['writing_strip_squares_rects']);lines['id']='p011-lesson07';lines['prompt']='Обведи клетки, как на образце: сначала всю фигуру, потом линии между клетками.'
  work(12,'Число четыре',[('Сколько детей?',4),('Сколько жетонов на карточке?',4),('Сколько точек на карточке?',4)],['children_woodwork_table','abacus_4','domino_4'],prompt='Посчитай детей, жетоны и точки.')
  digit(12,4,'digit_4_sample');shape(12,'Квадрат из палочек','Сложи квадрат из четырёх палочек.',['square'],'sticks_square')
  more(12,4);add(12,'practical','Ножки мебели','Сколько ножек у стола и у табуретки на картинке?',images=['children_woodwork_table'],steps=[dict(id='table',instruction='Покажи столько палочек, сколько ножек у стола.',mode='place',token='stick',counts=[4]),dict(id='chair',instruction='Покажи столько палочек, сколько ножек у табуретки.',mode='place',token='stick',counts=[4])],fields=[])

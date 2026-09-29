@@ -65,6 +65,12 @@ export function numberTrace(n: number): TracePlan {
   }
   return { columns: 12, rows: 8, stages: [targets] };
 }
+/**
+ * Groups of cells as the book draws them (p. 11): each group is outlined as
+ * one closed contour — a square, a strip of two or three — and the lines
+ * between its cells are drawn after it. The contour may be started anywhere
+ * and drawn either way; a line inside, from either end.
+ */
 function cells(spec: string): TracePlan {
   const stages: TraceTarget[][] = [];
   for (const item of spec.split(",")) {
@@ -72,39 +78,36 @@ function cells(spec: string): TracePlan {
       vertical = item.endsWith("v"),
       x = 2,
       y = 1,
-      targets: TraceTarget[] = [];
-    // Each cell side is a distinct child action; shared sides occur only once.
-    const edges = new Set<string>();
-    for (let i = 0; i < n; i++) {
-      const a = x + (vertical ? 0 : i),
-        b = y + (vertical ? i : 0);
-      for (const points of [
+      w = vertical ? 1 : n,
+      h = vertical ? n : 1;
+    const targets: TraceTarget[] = [
+      path(
         [
-          [a, b],
-          [a + 1, b],
+          [x, y],
+          [x + w, y],
+          [x + w, y + h],
+          [x, y + h],
+          [x, y],
         ],
-        [
-          [a + 1, b],
-          [a + 1, b + 1],
-        ],
-        [
-          [a + 1, b + 1],
-          [a, b + 1],
-        ],
-        [
-          [a, b + 1],
-          [a, b],
-        ],
-      ]) {
-        const key = points
-          .map((p) => p.join(","))
-          .sort()
-          .join("|");
-        if (edges.has(key)) continue;
-        edges.add(key);
-        targets.push(path(points, "Проведи линию и оторви палец"));
-      }
-    }
+        n > 1 ? "Обведи все клетки вместе" : "Обведи клетку",
+      ),
+    ];
+    for (let i = 1; i < n; i++)
+      targets.push({
+        ...path(
+          vertical
+            ? [
+                [x, y + i],
+                [x + 1, y + i],
+              ]
+            : [
+                [x + i, y],
+                [x + i, y + 1],
+              ],
+          "Проведи линию между клетками",
+        ),
+        bidirectional: true,
+      });
     stages.push(targets);
   }
   return { columns: 12, rows: 8, stages };
