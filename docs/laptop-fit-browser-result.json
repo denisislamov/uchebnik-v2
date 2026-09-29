@@ -1,7 +1,7 @@
 {
-  "passed": true,
-  "checked": 300,
+  "passed": false,
+  "checked": 145,
   "overflow": [],
   "errors": [],
-  "slowest": 519
+  "slowest": 5686
 }

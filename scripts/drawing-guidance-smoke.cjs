@@ -2,7 +2,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 const reportPath = "docs/drawing-guidance-browser-result.json";
 const report = {
@@ -108,6 +108,7 @@ async function settle(page) {
     await page
       .getByRole("button", { name: "Продолжить занятие  →", exact: true })
       .click();
+    await stepShown(page);
     const pad = page.getByLabel("Поле для рисования", { exact: true });
     await pad.scrollIntoViewIfNeeded();
     await page.evaluate(() => document.fonts.ready);

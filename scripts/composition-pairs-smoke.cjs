@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages } = await import("../src/content/book.ts");
@@ -54,6 +54,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             name: /^(Продолжить занятие|Начать заниматься)/,
           })
           .click();
+        await stepShown(p);
         await p.getByTestId("composition-board").waitFor();
         assert.equal(await p.getByTestId("composition-field").count(), 1);
         assert.equal(await p.getByTestId("counter-board").count(), 0);
@@ -236,6 +237,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         assert.equal(firstSize.width, secondSize.width);
         await p.reload();
         await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
+        await stepShown(p);
         await btn("✓ Получилось!").waitFor();
         if (page === 11)
           await p.screenshot({

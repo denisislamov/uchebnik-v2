@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
-const { openStep } = require("./browser-context.cjs");
+const { openStep, stepShown } = require("./browser-context.cjs");
 (async () => {
   const browser = await chromium.launch({
     headless: true,
@@ -19,6 +19,7 @@ const { openStep } = require("./browser-context.cjs");
     await p.goto(process.env.DEBUG_URL || "http://127.0.0.1:8082");
     const btn = (name) => p.getByRole("button", { name, exact: true });
     await btn("Начать заниматься  →").click();
+    await stepShown(p);
     const panel = p.getByTestId("debug-source-panel");
     await panel.waitFor();
     assert.match(

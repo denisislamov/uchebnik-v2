@@ -1,4 +1,4 @@
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -43,6 +43,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       );
       await p.goto(baseURL);
       await btn("Продолжить занятие  →").click();
+      await stepShown(p);
       await p.getByText(b.title, { exact: true }).last().waitFor();
     };
     const placeToken = async (board, slot) => {
@@ -172,6 +173,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     // Reload must restore a completed answer and its current page.
     await p.reload();
     await btn("Продолжить занятие  →").click();
+    await stepShown(p);
     await btn("✓ Получилось!").waitFor();
     report.scenarios.push("mobile persisted completion");
     assert.equal(

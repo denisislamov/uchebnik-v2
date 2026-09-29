@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 
 (async () => {
@@ -69,6 +69,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p
       .getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ })
       .click();
+    await stepShown(p);
     await button("Как это сделать?").waitFor();
   }
   // One tutorial per task: the gesture demonstration follows the explanation steps.

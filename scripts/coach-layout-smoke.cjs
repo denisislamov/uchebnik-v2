@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -101,6 +101,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           name: /^(Продолжить занятие|Начать заниматься)/,
         })
         .click();
+      await stepShown(p);
       await button("Как это сделать?").click();
       await p.getByTestId("gesture-coach").waitFor();
       await p.waitForTimeout(250);

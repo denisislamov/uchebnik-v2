@@ -20,7 +20,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages } = await import("../src/content/book.ts");
@@ -57,6 +57,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         await p.evaluate(({ KEY, page, index }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page, block: index, answers: {} })), { KEY, page, index });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
+        await stepShown(p);
         await p.getByTestId("exercise-card").waitFor();
         // Pictures load and the task is fitted to the window; measure once the page holds still.
         let last = "";

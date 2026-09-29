@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages, allBlocks } = await import("../src/content/book.ts");
@@ -43,6 +43,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     );
     await page.goto(baseURL);
     await button("Продолжить занятие  →").click();
+    await stepShown(page);
     await page
       .getByText(p.blocks.find((b) => b.id === id).title, { exact: true })
       .last()
@@ -175,6 +176,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     assert.ok(isDone(placement, await answer(placement.id)));
     await page.reload();
     await button("Продолжить занятие  →").click();
+    await stepShown(page);
     assert.ok(isDone(placement, await answer(placement.id)));
     await button("Изменить действие 1").click();
     assert.equal(isDone(placement, await answer(placement.id)), false);
@@ -509,6 +511,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     }
     await page.reload();
     await button("Продолжить занятие  →").click();
+    await stepShown(page);
     assert.ok(isDone(pictured, await answer(pictured.id)));
     await page
       .getByRole("textbox", { name: "Сколько ложек купили?", exact: true })

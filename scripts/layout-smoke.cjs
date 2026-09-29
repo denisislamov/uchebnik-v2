@@ -2,7 +2,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages } = await import("../src/content/book.ts");
@@ -24,6 +24,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: page.number, i: index });
       await p.goto(baseURL);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
+      await stepShown(p);
       const home = p.getByRole("button", { name: "На главную", exact: true });
       const before = await home.boundingBox();
       assert.ok(before && before.y >= 0 && before.y < 80, "the arrow home opens the lesson");
@@ -39,7 +40,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       assert.ok(image, "illustration rendered");
       // The picture's share follows the screen height: small enough on a phone to keep the answer in view, not tiny on a monitor.
       if (viewport.width < 600) assert.ok(image.height <= viewport.height * 0.3 + 1, `phone illustration stays compact (${image.height})`);
-      if (viewport.width >= 1000) assert.ok(image.height >= 270 - 1, `desktop illustration is not shrunk (${image.height})`);
+      // On a computer the task is fitted to the window whole — the picture, both questions and «Проверить»
+      // stand over the navigation — and the picture keeps at least nine rows of the sheet.
+      if (viewport.width >= 1000) assert.ok(image.height >= 216 - 1, `desktop illustration is not shrunk (${image.height})`);
       const next = p.getByRole("button", { name: "Дальше →", exact: true });
       assert.equal(await next.getAttribute("aria-disabled"), "true", "«Дальше» waits until the task is solved");
       report.checks.push({ viewport, homeArrow: before.y, dvh, imageHeight: image.height });
@@ -57,6 +60,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: 3, i: di });
       await p.goto(baseURL);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
+      await stepShown(p);
       const sheet = p.getByLabel("Поле для рисования");
       await sheet.scrollIntoViewIfNeeded();
       const a = await sheet.boundingBox();

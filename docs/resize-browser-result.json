@@ -6,7 +6,7 @@
       "page": 4,
       "index": 1,
       "layoutsDuringDrag": 1,
-      "settledInMs": 116,
+      "settledInMs": 110,
       "followedOnceInMs": 11
     },
     {
@@ -14,24 +14,24 @@
       "page": 4,
       "index": 4,
       "layoutsDuringDrag": 1,
-      "settledInMs": 202,
-      "followedOnceInMs": 12
+      "settledInMs": 213,
+      "followedOnceInMs": 8
     },
     {
       "kind": "draw",
       "page": 3,
       "index": 5,
       "layoutsDuringDrag": 1,
-      "settledInMs": 127,
-      "followedOnceInMs": 12
+      "settledInMs": 124,
+      "followedOnceInMs": 15
     },
     {
       "kind": "work",
       "page": 11,
       "index": 0,
       "layoutsDuringDrag": 1,
-      "settledInMs": 110,
-      "followedOnceInMs": 10
+      "settledInMs": 113,
+      "followedOnceInMs": 9
     }
   ],
   "errors": []

@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages } = await import("../src/content/book.ts");
@@ -39,6 +39,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     );
     await p.goto(baseURL);
     await button("Продолжить занятие  →").click();
+    await stepShown(p);
   }
   async function drag(from, to, touch = false) {
     await from.scrollIntoViewIfNeeded();
@@ -191,6 +192,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     });
     await p.reload();
     await button("Продолжить занятие  →").click();
+    await stepShown(p);
     await squareBoard
       .getByTestId("composition-total")
       .filter({ hasText: "2 и 1 · Всего 3" })
@@ -204,6 +206,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     }, KEY);
     await p.goto(baseURL);
     await button("Продолжить занятие  →").click();
+    await stepShown(p);
     await squareBoard
       .getByTestId("composition-total")
       .filter({ hasText: "0 и 0 · Всего 0" })
@@ -293,6 +296,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     for (const width of [390, 1440]) {
       await p.setViewportSize({ width, height: 1100 });
       await open("p010-block09");
+      // Off a phone the board takes the room the window leaves: it is measured as the child
+      // first sees it, not while it is being fitted.
+      await stepShown(p);
       const lines = await p
         .getByTestId("stick-board")
         .locator("svg line")
@@ -304,7 +310,13 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         );
       assert.equal(lines.length, 3);
       assert.ok(Math.max(...lines) - Math.min(...lines) < 0.01);
-      assert.ok(Math.max(...lines) < 250);
+      // A stick is no longer than the board lets it be, and the whole board is in view.
+      assert.ok(Math.max(...lines) <= 420, `a stick is ${Math.max(...lines)} px long`);
+      const board = await p.getByTestId("stick-board").boundingBox();
+      if (width >= 600) {
+        const nav = await p.getByTestId("lesson-nav").boundingBox();
+        assert.ok(board.y >= 0 && board.y + board.height <= nav.y, "the board stands over the navigation");
+      }
     }
 
     assert.deepEqual(errors, []);

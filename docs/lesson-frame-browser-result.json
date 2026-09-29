@@ -57,7 +57,7 @@
         "width": 390,
         "height": 844
       },
-      "adultGate": "тридцать два"
+      "adultGate": "тридцать один"
     },
     {
       "viewport": {
@@ -115,7 +115,7 @@
         "width": 820,
         "height": 1180
       },
-      "adultGate": "сорок два"
+      "adultGate": "шестьдесят четыре"
     },
     {
       "viewport": {
@@ -173,7 +173,7 @@
         "width": 1280,
         "height": 800
       },
-      "adultGate": "семьдесят девять"
+      "adultGate": "сорок два"
     }
   ],
   "errors": []

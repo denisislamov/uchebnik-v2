@@ -19,7 +19,7 @@ import { Andika_400Regular } from "@expo-google-fonts/andika/400Regular";
 import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
 import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
 import Svg, { Path, Rect } from "react-native-svg";
-import { pages, allBlocks, lessonPages, extraPages } from "./src/content/book";
+import { pages, allBlocks, lessonPages } from "./src/content/book";
 import type { Answer, Progress } from "./src/content/types";
 import {
   emptyProgress,
@@ -693,7 +693,13 @@ function Main() {
                       />
                     </View>
                     <View style={s.pageGrid}>
-                      {lessonPages
+                      {/* The cover, the book's own contents and its imprint
+                          are not lessons: they are not offered on the
+                          page, and are found by their number or name. */}
+                      {(search.trim()
+                        ? pages.filter((p) => p.number !== 2)
+                        : lessonPages
+                      )
                         .filter((p) => {
                           if (search.trim()) {
                             const n = Number(search.replace(/[^0-9]/g, ""));
@@ -763,30 +769,6 @@ function Main() {
                             </Pressable>
                           );
                         })}
-                    </View>
-                    {/* The book's pages outside the lessons: after the
-                        lessons, where they do not stand in the child's way. */}
-                    <View style={{ marginTop: cells(2) }}>
-                      <Text style={s.eyebrow}>
-                        Вне занятий · материалы книги
-                      </Text>
-                      <View style={s.chips}>
-                        {extraPages.map((p) => (
-                          <Button
-                            key={p.id}
-                            small
-                            secondary
-                            label={`Страница ${p.number}. ${p.title}`}
-                            onPress={() => selectPage(p.number)}
-                          >
-                            {p.number === 1
-                              ? "Здравствуй, арифметика! · Обложка"
-                              : p.number === 143
-                                ? "Оглавление книги"
-                                : "Выходные данные"}
-                          </Button>
-                        ))}
-                      </View>
                     </View>
                     <View style={s.homeFooter}>
                       <Text style={s.footerText}>
@@ -1161,7 +1143,7 @@ const s = StyleSheet.create({
     backgroundColor: c.cover,
     marginBottom: cells(2),
   },
-  coverText: { flex: 1, alignSelf: "stretch", justifyContent: "center" },
+  coverText: { flex: 1, alignSelf: "stretch" },
   // The label pasted on the cover is nine cells high.
   label: {
     backgroundColor: c.white,
@@ -1198,7 +1180,8 @@ const s = StyleSheet.create({
     color: c.muted,
     textAlign: "center",
   },
-  coverContent: { flexDirection: "row", alignItems: "center", gap: CELL },
+  // The label and the picture stand on one line: their tops are level.
+  coverContent: { flexDirection: "row", alignItems: "flex-start", gap: CELL },
   coverFoot: {
     fontFamily: f.regular,
     color: c.ink,
@@ -1222,12 +1205,6 @@ const s = StyleSheet.create({
     gap: CELL,
     marginTop: CELL,
     flexWrap: "wrap",
-  },
-  eyebrow: {
-    fontFamily: f.regular,
-    fontSize: 14,
-    lineHeight: CELL,
-    color: c.muted,
   },
   sectionTitle: { fontFamily: f.hand, color: c.pen, ...written(40, 2, true) },
   progressText: {

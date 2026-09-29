@@ -1,4 +1,9 @@
-const { baseURL, newTestContext, openStep } = require("./browser-context.cjs");
+const {
+  baseURL,
+  newTestContext,
+  openStep,
+  stepShown,
+} = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -62,6 +67,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     };
     await p.goto(baseURL);
     await button("Начать заниматься  →").click();
+    await stepShown(p);
     assert.equal(
       await p.getByText("Мы рассмотрели", { exact: true }).count(),
       0,
@@ -159,6 +165,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     );
     await p.reload();
     await button("Продолжить занятие  →").click();
+    await stepShown(p);
     await p.getByText("Все элементы получились!", { exact: true }).waitFor();
     await button("Отменить штрих").click();
     assert.equal(
@@ -194,6 +201,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await m
       .getByRole("button", { name: "Начать заниматься  →", exact: true })
       .click();
+    await stepShown(m);
     await openStep(m, "Шаг 2: Большой мяч");
     await m.getByRole("button", { name: "Левый мяч", exact: true }).tap();
     await m.getByText("✓ Верно!", { exact: false }).waitFor();

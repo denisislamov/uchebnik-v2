@@ -1,4 +1,4 @@
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -42,6 +42,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       );
       await p.goto(baseURL);
       await btn("Продолжить занятие  →").click();
+      await stepShown(p);
       await p.getByText(b.title, { exact: true }).last().waitFor();
     };
     const load = () =>

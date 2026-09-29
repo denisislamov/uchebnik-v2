@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
   COACH = "uchebnik:gesture-coach:v2";
 (async () => {
@@ -54,6 +54,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
           name: /^(Продолжить занятие|Начать заниматься)/,
         })
         .click();
+      await stepShown(p);
       await p
         .getByRole("button", { name: "Как это сделать?", exact: true })
         .waitFor({ state: "attached" });

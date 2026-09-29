@@ -4,7 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const os = require("node:os");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const browser = await chromium.launch();
@@ -58,6 +58,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             name: /^(Продолжить занятие|Начать заниматься)/,
           })
           .click();
+        await stepShown(p);
         await p
           .getByRole("button", { name: "Как это сделать?", exact: true })
           .click();

@@ -1,10 +1,6 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
-const {
-  baseURL,
-  newTestContext,
-  stepShown,
-} = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages, allBlocks } = await import("../src/content/book.ts");
@@ -29,9 +25,25 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p.goto(baseURL);
     await btn("Начать заниматься  →").waitFor();
     assert.equal(await btn("Страница 2. О нашей книге").count(), 0);
-    await btn("Страница 1. Здравствуй, арифметика!").waitFor();
+    // The book's pages outside the lessons are not offered on the page; they are found by number.
+    assert.equal(await btn("Страница 1. Здравствуй, арифметика!").count(), 0);
+    assert.equal(await p.getByText(/Вне занятий/).count(), 0);
+    const find = p.getByRole("textbox", {
+      name: "Найти страницу или задание",
+      exact: true,
+    });
+    for (const n of [1, 143, 144]) {
+      await find.fill(String(n));
+      await btn(`Страница ${n}. ${pages[n - 1].title}`).waitFor();
+    }
+    await find.fill("2");
+    assert.equal(await btn("Страница 2. О нашей книге").count(), 0);
+    await find.fill("");
     await btn("Начать заниматься  →").click();
-    await p.getByTestId("lesson-line").getByText("Страница 3 · Больше или меньше?", { exact: true }).waitFor();
+    await p
+      .getByTestId("lesson-line")
+      .getByText("Страница 3 · Больше или меньше?", { exact: true })
+      .waitFor();
     assert.equal(await btn("Открыть страницу 2").count(), 0);
     const open = async (b) => {
       const page = pages.find((p) => p.blocks.includes(b)),
@@ -142,9 +154,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       let still = await p.getByTestId(`stick-target-${index}`).boundingBox();
       for (let k = 0, n = 0; k < 60 && n < 8; k++) {
         await p.waitForTimeout(60);
-        const next = await p
-          .getByTestId(`stick-target-${index}`)
-          .boundingBox();
+        const next = await p.getByTestId(`stick-target-${index}`).boundingBox();
         n =
           next &&
           still &&

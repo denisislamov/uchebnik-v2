@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const { chromium } = require('playwright');
-const { baseURL, newTestContext } = require('./browser-context.cjs');
+const { baseURL, newTestContext, stepShown } = require('./browser-context.cjs');
 const KEY = 'uchebnik:pchelko-1959:pages-001-010:v1';
 (async () => {
   const { pages } = await import('../src/content/book.ts');
@@ -19,6 +19,7 @@ const KEY = 'uchebnik:pchelko-1959:pages-001-010:v1';
         await p.evaluate(({KEY,page,block,id})=>localStorage.setItem(KEY,JSON.stringify({version:1,contentRevision:5,page,block,answers:{[id]:{value:['card-1'],checked:true}}})), {KEY,page:page.number,block,id});
         await p.goto(baseURL);
         await p.getByRole('button',{name:/^(Продолжить занятие|Начать заниматься)/}).click();
+        await stepShown(p);
         await p.getByTestId('number-meaning').waitFor();
         const card = label=>p.getByRole('button',{name:label,exact:true});
         // The old numeral-only completion must not skip the new exploration.
@@ -39,6 +40,7 @@ const KEY = 'uchebnik:pchelko-1959:pages-001-010:v1';
         if (id==='p008-block08') await p.getByTestId('modern-meaning-tokens').waitFor();
         await p.reload();
         await p.getByRole('button',{name:/^(Продолжить занятие|Начать заниматься)/}).click();
+        await stepShown(p);
         await p.getByText('✓ Верно!',{exact:false}).waitFor();
         await p.getByTestId('number-meaning').scrollIntoViewIfNeeded();
         if(id==='p007-block07') await p.screenshot({path:`docs/number-meaning-${viewport.width}.png`,fullPage:true});

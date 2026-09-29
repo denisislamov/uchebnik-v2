@@ -2,7 +2,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const { pages } = await import("../src/content/book.ts");
@@ -25,6 +25,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: page.number, i: index });
       await p.goto(baseURL);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
+      await stepShown(p);
       const pad = p.getByLabel("Поле для рисования", { exact: true });
       await pad.waitFor();
       const pane = await p.getByTestId("lesson-scroll-pane").boundingBox();

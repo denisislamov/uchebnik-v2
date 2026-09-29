@@ -2,7 +2,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext } = require("./browser-context.cjs");
+const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -36,6 +36,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           name: /^(Продолжить занятие|Начать заниматься)/,
         })
         .click();
+      await stepShown(p);
       const replay = p.getByRole("button", {
         name: "Как это сделать?",
         exact: true,
@@ -165,6 +166,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     );
     await p.goto(baseURL);
     await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
+    await stepShown(p);
     await p.clock.install();
     await p
       .getByRole("button", { name: "Как это сделать?", exact: true })
@@ -244,6 +246,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           name: /^(Продолжить занятие|Начать заниматься)/,
         })
         .click();
+      await stepShown(p);
       const pane = p.getByTestId("lesson-scroll-pane");
       // Start at the very bottom: the first step explains the instruction at the top,
       // so the tutorial has to scroll the lesson away from here.
