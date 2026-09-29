@@ -40,7 +40,7 @@ import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
 import { SettledWindow, useSettledWindowSource } from "./src/lib/settledWindow";
 import { scrollbarGutter } from "./src/lib/scrollbar";
-import { fitLook, startFit } from "./src/lib/fit";
+import { fitLook, startFit, type Fit } from "./src/lib/fit";
 import { AdultGate } from "./src/components/AdultGate";
 import {
   LessonNav,
@@ -298,12 +298,14 @@ function Main() {
   // the room left under the task (or the overflow) is measured and handed to
   // the picture or the sheet. Then the size is frozen, so nothing moves while
   // the child answers.
+  const advance = canAdvance(block, answer);
   const [paneHeight, setPaneHeight] = useState(0);
   // What was handed over belongs to the step: a window of another size keeps
   // it (the formulas follow the window's height themselves) and is measured
   // again, so the task does not fall back to its first size and grow anew.
   const fitKey = `${home}|${pageEnd}|${block.id}`;
   const [fit, setFit] = useState({ key: "", extra: 0 });
+  const leftKey = useRef("");
   // While a step that has just been opened is being fitted it is not shown:
   // the child sees it at its size, not growing and shrinking into it.
   const [shown, setShown] = useState("");
@@ -321,8 +323,16 @@ function Main() {
     // The task is looked at right after it is laid out and again once
     // pictures have loaded; each look goes on, a few frames apart, until the
     // task fits (see fitLook). Then the size stays as it is.
+    // A task left as it is — too long for a phone — is not tried again when
+    // it answers or the window changes: it would shrink and come back.
+    const same =
+      fit.key === fitKey &&
+      leftKey.current === `${fitKey}|${windowWidth}x${windowHeight}`;
     let alive = true,
-      state = startFit(fit.key === fitKey ? fit.extra : 0);
+      state: Fit = {
+        ...startFit(fit.key === fitKey ? fit.extra : 0),
+        left: same,
+      };
     const timers: ReturnType<typeof setTimeout>[] = [];
     const look = (more: number) =>
       lessonMain.current?.measureInWindow((_x, y, _w, h) => {
@@ -337,6 +347,8 @@ function Main() {
         if (next.fit.extra !== state.extra)
           setFit({ key: fitKey, extra: next.fit.extra });
         state = next.fit;
+        if (state.left)
+          leftKey.current = `${fitKey}|${windowWidth}x${windowHeight}`;
         if (next.show) setShown(fitKey);
         if (next.again) timers.push(setTimeout(() => look(more - 1), 40));
       });
@@ -346,7 +358,9 @@ function Main() {
       alive = false;
       timers.forEach(clearTimeout);
     };
-  }, [fitKey, windowWidth, windowHeight, paneHeight]);
+    // …and when the task has answered: its words may take a row more than
+    // was kept for them.
+  }, [fitKey, windowWidth, windowHeight, paneHeight, answer.checked, advance]);
   const fitExtra = fit.key === fitKey ? fit.extra : 0;
 
   const finished = lessonPages.filter((p) =>
@@ -375,10 +389,10 @@ function Main() {
       : -1;
   const pageLine = `Страница ${page.number} · ${page.title}`,
     stepLine = `Шаг ${progress.block + 1} из ${page.blocks.length}`;
-  const advance = canAdvance(block, answer);
-  // «Дальше» stands under the sheet and is always in view. «Проверить…» is
-  // part of the task: once the child has answered, the page glides just far
-  // enough to show it, as the drawing sheet glides to its next line. A step
+  // «Дальше» stands under the sheet and is always in view. «Проверить…» and
+  // what the task answers with are parts of the task: on a task longer than
+  // the screen the page glides just far enough to show them once the child
+  // has answered, as the drawing sheet glides to its next line. A step
   // that was already solved when it opened stays where it is, and so does
   // one that has only been opened.
   const exerciseCard = useRef<View>(null);
@@ -413,12 +427,21 @@ function Main() {
                 /^Проверить/.test((b as HTMLElement).innerText.trim()) &&
                 b.getAttribute("aria-disabled") !== "true",
             ) as HTMLElement | undefined);
-      // Once per step: a later answer does not pull the page again.
-      if (!check || g.shown) return;
-      const pane = verticalScrollPane(check);
+      // What the task answered with — «верно» or where to look again — is
+      // shown too, on a task long enough to be scrolled.
+      const said = [
+        ...(card?.querySelectorAll('[data-testid="task-result"]') ?? []),
+      ].find((e) => (e as HTMLElement).innerText.trim() !== "") as
+        HTMLElement | undefined;
+      const result = answer.checked || advance ? said : undefined;
+      const target = result ?? check,
+        kind = result ? "result" : "check";
+      // Each once per step: a later answer does not pull the page again.
+      if (!target || g.shown.includes(kind)) return;
+      const pane = verticalScrollPane(target);
       if (!pane) return;
-      g.shown = "check";
-      const box = check.getBoundingClientRect(),
+      g.shown += kind;
+      const box = target.getBoundingClientRect(),
         view = pane.getBoundingClientRect();
       // Down only, and never past the top of the task.
       const shift = box.bottom + 24 - view.bottom;
@@ -790,7 +813,9 @@ function Main() {
                   style={[
                     s.lessonLayout,
                     { paddingLeft: left },
-                    compact && { paddingRight: left },
+                    // On a phone the row kept empty under a fitted task is
+                    // margin enough.
+                    compact && { paddingRight: left, paddingBottom: 0 },
                   ]}
                 >
                   <View

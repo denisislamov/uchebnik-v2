@@ -12,6 +12,7 @@ import { CounterBoard } from "./CounterBoard";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { Button, RetryNote } from "./Controls";
+import { CheckRow } from "./Result";
 import { colors as c, fonts as f } from "../theme";
 import { Rows, useColumns } from "./HandDrawn";
 import { sheet } from "./sheet";
@@ -249,26 +250,25 @@ export function PracticalTask({
               onChange={(counts) => update({ ...state, counts })}
             />
           )}
-          <Button
-            onPress={() => {
-              if (!practicalStepCorrect(step, state)) {
-                setMessage(
-                  "Пока не совпало. Проверь количество и выполни действие до конца.",
+          <CheckRow note={!!message && <RetryNote tight>{message}</RetryNote>}>
+            <Button
+              onPress={() => {
+                if (!practicalStepCorrect(step, state)) {
+                  setMessage("Пока не совпало. Проверь количество.");
+                  return;
+                }
+                setMessage("");
+                onAnswer(
+                  updatePractical(block, answer, step.id, {
+                    ...state,
+                    confirmed: true,
+                  }),
                 );
-                return;
-              }
-              setMessage("");
-              onAnswer(
-                updatePractical(block, answer, step.id, {
-                  ...state,
-                  confirmed: true,
-                }),
-              );
-            }}
-          >
-            Проверить действие
-          </Button>
-          {!!message && <RetryNote>{message}</RetryNote>}
+              }}
+            >
+              Проверить действие
+            </Button>
+          </CheckRow>
         </View>
       )}
       {current < 0 && (
@@ -318,18 +318,20 @@ export function PracticalTask({
               )}
             </View>
           ))}
-          <Button
-            done={answer.checked && correct}
-            onPress={() =>
-              onAnswer({
-                ...answer,
-                checked: true,
-                attempts: (answer.attempts ?? 0) + 1,
-              })
-            }
-          >
-            {answer.checked && correct ? "✓ Верно" : "Проверить ответ"}
-          </Button>
+          <CheckRow>
+            <Button
+              done={answer.checked && correct}
+              onPress={() =>
+                onAnswer({
+                  ...answer,
+                  checked: true,
+                  attempts: (answer.attempts ?? 0) + 1,
+                })
+              }
+            >
+              {answer.checked && correct ? "✓ Верно" : "Проверить ответ"}
+            </Button>
+          </CheckRow>
         </View>
       )}
     </View>

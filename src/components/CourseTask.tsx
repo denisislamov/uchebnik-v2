@@ -18,6 +18,7 @@ import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button, CellPressable, RetryNote } from "./Controls";
+import { CheckRow } from "./Result";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
 import { HandFrame, Rows } from "./HandDrawn";
 import { CELL, cells, written } from "../lib/grid";
@@ -1016,20 +1017,22 @@ export function CourseTask({
             </Card>
           );
         })}
-      <Button
-        done={answer.checked && courseCorrect(block, answer)}
-        onPress={() =>
-          onAnswer({
-            ...answer,
-            checked: true,
-            attempts: (answer.attempts ?? 0) + 1,
-          })
-        }
-      >
-        {answer.checked && courseCorrect(block, answer)
-          ? "✓ Получилось!"
-          : "Проверить"}
-      </Button>
+      <CheckRow>
+        <Button
+          done={answer.checked && courseCorrect(block, answer)}
+          onPress={() =>
+            onAnswer({
+              ...answer,
+              checked: true,
+              attempts: (answer.attempts ?? 0) + 1,
+            })
+          }
+        >
+          {answer.checked && courseCorrect(block, answer)
+            ? "✓ Получилось!"
+            : "Проверить"}
+        </Button>
+      </CheckRow>
     </View>
   );
 }

@@ -10,7 +10,8 @@ import {
   requiredStoryResponses,
   selectStoryVariant,
 } from "../lib/storyAssessment";
-import { Button, CellPressable } from "./Controls";
+import { Button, CellPressable, RetryNote } from "./Controls";
+import { CheckRow } from "./Result";
 import { HandFrame, Pasted } from "./HandDrawn";
 import { BLANK, TextWithBlanks } from "./Blank";
 import { colors as c, fonts as f } from "../theme";
@@ -103,24 +104,28 @@ export function StoryTask({
             />
           </Pasted>
         ))}
-        <Button
-          onPress={() =>
-            onAnswer({
-              ...answer,
-              checked: true,
-              attempts: (answer.attempts ?? 0) + 1,
-            })
+        <CheckRow
+          note={
+            answer.checked &&
+            !storyCorrect(block, answer) && (
+              <RetryNote tight>
+                Проверь каждую задачу: условия, действия, единицы и ответы.
+              </RetryNote>
+            )
           }
         >
-          Проверить все задачи
-        </Button>
-        {answer.checked && (
-          <Text accessibilityRole="alert" style={s.note}>
-            {storyCorrect(block, answer)
-              ? "✓ Все задачи решены верно"
-              : "Проверь каждую задачу. Нужны все условия, действия, единицы и ответы."}
-          </Text>
-        )}
+          <Button
+            onPress={() =>
+              onAnswer({
+                ...answer,
+                checked: true,
+                attempts: (answer.attempts ?? 0) + 1,
+              })
+            }
+          >
+            Проверить все задачи
+          </Button>
+        </CheckRow>
       </View>
     );
   return (
@@ -233,26 +238,31 @@ export function StoryTask({
             </Pasted>
           ))}
           {!embedded && (
-            <Button
-              done={answer.checked && storyCorrect(block, answer)}
-              onPress={() =>
-                onAnswer({
-                  ...answer,
-                  checked: true,
-                  attempts: (answer.attempts ?? 0) + 1,
-                })
+            <CheckRow
+              note={
+                answer.checked &&
+                !storyCorrect(block, answer) && (
+                  <RetryNote tight>
+                    Проверь числа, действия, ответы и единицу.
+                  </RetryNote>
+                )
               }
             >
-              {answer.checked && storyCorrect(block, answer)
-                ? "✓ Верно"
-                : "Проверить задачу"}
-            </Button>
-          )}
-          {!embedded && answer.checked && !storyCorrect(block, answer) && (
-            <Text accessibilityRole="alert" style={s.note}>
-              Проверь числа, выбранные действия, ответы и единицу. В задаче
-              нужны ответы на все вопросы.
-            </Text>
+              <Button
+                done={answer.checked && storyCorrect(block, answer)}
+                onPress={() =>
+                  onAnswer({
+                    ...answer,
+                    checked: true,
+                    attempts: (answer.attempts ?? 0) + 1,
+                  })
+                }
+              >
+                {answer.checked && storyCorrect(block, answer)
+                  ? "✓ Верно"
+                  : "Проверить задачу"}
+              </Button>
+            </CheckRow>
           )}
         </>
       )}

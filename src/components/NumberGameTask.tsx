@@ -10,6 +10,7 @@ import {
 } from "../lib/numberGame";
 import { colors as c, fonts as f } from "../theme";
 import { Button, RetryNote, CellPressable } from "./Controls";
+import { CheckRow } from "./Result";
 import { HandFrame, Pasted } from "./HandDrawn";
 
 export function NumberGameTask({
@@ -76,7 +77,9 @@ export function NumberGameTask({
               ))}
           </Pasted>
         ))}
-        <Button onPress={check}>Проверить</Button>
+        <CheckRow>
+          <Button onPress={check}>Проверить</Button>
+        </CheckRow>
       </View>
     );
   }
@@ -157,21 +160,22 @@ export function NumberGameTask({
           {!!message && <RetryNote>{message}</RetryNote>}
         </Pasted>
       )}
-      {numberGameCorrect(block, answer) && (
-        <Text accessibilityLiveRegion="polite" style={s.feedback}>
-          Обе загадки разгаданы!
-        </Text>
-      )}
-      {answer.checked && !numberGameCorrect(block, answer) && (
-        <RetryNote>
-          Сначала разгадай и открой карточки в обеих загадках.
-        </RetryNote>
-      )}
       {/* One thing to do at a time: while a card waits to be opened, the
           check of the whole task is a quiet button. */}
-      <Button secondary={!!round} onPress={check}>
-        Проверить
-      </Button>
+      <CheckRow
+        note={
+          answer.checked &&
+          !numberGameCorrect(block, answer) && (
+            <RetryNote tight>
+              Сначала разгадай и открой карточки в обеих загадках.
+            </RetryNote>
+          )
+        }
+      >
+        <Button secondary={!!round} onPress={check}>
+          Проверить
+        </Button>
+      </CheckRow>
     </View>
   );
 }

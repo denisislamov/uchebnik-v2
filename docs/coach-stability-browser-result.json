@@ -91,12 +91,12 @@
     "answersUnchanged": true
   },
   "scrollRestore": {
-    "before": 268,
+    "before": 316,
     "during": [
       0,
       0,
-      268
+      290
     ],
-    "after": 268
+    "after": 316
   }
 }

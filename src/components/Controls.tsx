@@ -121,18 +121,21 @@ export function CellPressable({
 export function RetryNote({
   children,
   alert = true,
+  tight = false,
 }: {
   children: React.ReactNode;
   alert?: boolean;
+  /** Written in rows kept for it: no air of its own around the words. */
+  tight?: boolean;
 }) {
   return (
     <View
       testID="retry-note"
       accessibilityRole={alert ? "alert" : undefined}
       accessibilityLiveRegion="polite"
-      style={s.retry}
+      style={[s.retry, tight && s.retryTight]}
     >
-      <View style={s.retryBadge}>
+      <View style={[s.retryBadge, tight && s.retryBadgeTight]}>
         <Svg width={18} height={18} viewBox="0 0 24 24">
           <Path
             d="M19 12a7 7 0 1 1-2.05-4.95M19 4v4h-4"
@@ -249,6 +252,12 @@ const s = StyleSheet.create({
     paddingHorizontal: 12,
     minHeight: CELL * 2,
   },
+  retryTight: {
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    alignItems: "flex-start",
+  },
+  retryBadgeTight: { marginVertical: 0, marginTop: -3 },
   retryBadge: {
     width: 30,
     height: 30,

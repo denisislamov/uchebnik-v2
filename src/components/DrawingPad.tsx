@@ -31,11 +31,14 @@ export function DrawingPad({
   onChange,
   trace,
   onDrawing,
+  result,
 }: {
   strokes: Stroke[];
   onChange: (v: Stroke[]) => void;
   trace?: TracePlan;
   onDrawing: (v: boolean) => void;
+  /** What the task answers with once the drawing is done: it stands where the hint stood. */
+  result?: React.ReactNode;
 }) {
   const progress = trace ? traceProgress(trace, strokes) : null;
   const target =
@@ -282,6 +285,7 @@ export function DrawingPad({
         </View>
       )}
       {error !== "" && <RetryNote>{error}</RetryNote>}
+      {!target && error === "" && <View testID="task-result">{result}</View>}
     </View>
   );
   // Beside a sample on a laptop the name and the hint go under the sample,
@@ -298,6 +302,7 @@ export function DrawingPad({
       target?.label,
       closed,
       error,
+      !!result,
     ].join("|"),
   );
   return (
