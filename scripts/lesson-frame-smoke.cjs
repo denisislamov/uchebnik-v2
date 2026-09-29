@@ -43,7 +43,7 @@ const words = {
       const button = (name) => p.getByRole("button", { name, exact: true });
       const open = async (n, i, answers = {}) => {
         await p.goto(baseURL + "/metadata.json");
-        await p.evaluate(({ KEY, n, i, answers }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers })), { KEY, n, i, answers });
+        await p.evaluate(({ KEY, n, i, answers }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page: n, block: i, answers })), { KEY, n, i, answers });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await p.getByTestId("exercise-card").waitFor();
@@ -191,7 +191,7 @@ const words = {
       await p.goto(baseURL + "/metadata.json");
       const hidden = [];
       for (const { page, index, b } of whole) {
-        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: page, i: index });
+        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page: n, block: i, answers: {} })), { KEY, n: page, i: index });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);

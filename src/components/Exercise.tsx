@@ -26,7 +26,7 @@ import { TextWithBlanks } from "./Blank";
 import { HandFrame, Rows } from "./HandDrawn";
 import { CELL, upToCells, wholeCells, written } from "../lib/grid";
 import { AsideProvider } from "./Aside";
-import { CheckRow, ResultContext, ResultRows } from "./Result";
+import { CheckRow, FieldInHand, ResultContext, ResultRows } from "./Result";
 import { DrawingPad } from "./DrawingPad";
 import { ShapeBoard } from "./ShapeBoard";
 import { PracticalTask } from "./PracticalTask";
@@ -78,6 +78,15 @@ function ExerciseBody({
   // the picture and the place to answer within one view.
   const size = useTaskSize();
   const [rowWidth, setRowWidth] = useState(0);
+  // The question in hand — the one the cursor is in, or the first that is
+  // not answered right yet: the picture shows what it asks about.
+  const [inHand, setInHand] = useState<string | null>(null);
+  const questions = block.kind === "work" ? block.fields : [];
+  const asked =
+    questions.find((q) => q.id === inHand) ??
+    questions.find(
+      (q) => (answer.responses?.[q.id] ?? "").trim() !== q.expected,
+    );
   // The last press on a picture to press was beside everything on it.
   const [pictureMiss, setPictureMiss] = useState(false);
   // What the work hands to the sample's column (see Aside). Its rows are
@@ -207,447 +216,469 @@ function ExerciseBody({
   return (
     // No gaps of its own: every part takes whole rows of the sheet, and an
     // empty row is left where one is needed.
-    <ResultContext.Provider value={result}>
-      <AsideProvider value={beside ? setAsideNode : null}>
-        <View>
-          {/* The help has one place on every step and every screen: the
+    <FieldInHand.Provider value={setInHand}>
+      <ResultContext.Provider value={result}>
+        <AsideProvider value={beside ? setAsideNode : null}>
+          <View>
+            {/* The help has one place on every step and every screen: the
           right end of the row over the task. The heading under it is written
           on the lower line of its two rows, which leaves a row between them. */}
-          {header ? (
-            header(<CoachButton dense={size.compact} onPress={showTaskCoach} />)
-          ) : (
-            <View style={{ height: CELL * 2 }}>
-              <CoachButton onPress={showTaskCoach} />
-            </View>
-          )}
-          {/* What stands around the task stays; the task itself comes in. */}
-          <View testID="exercise-body" style={[s.body_, veiled && s.veiled]}>
-            <View
-              style={{
-                // An empty row between the task and what it is about.
-                marginBottom: CELL,
-              }}
-            >
+            {header ? (
+              header(
+                <CoachButton dense={size.compact} onPress={showTaskCoach} />,
+              )
+            ) : (
+              <View style={{ height: CELL * 2 }}>
+                <CoachButton onPress={showTaskCoach} />
+              </View>
+            )}
+            {/* What stands around the task stays; the task itself comes in. */}
+            <View testID="exercise-body" style={[s.body_, veiled && s.veiled]}>
               <View
-                ref={instructionRef}
-                collapsable={false}
-                style={{ flex: 1, minWidth: 0 }}
+                style={{
+                  // An empty row between the task and what it is about.
+                  marginBottom: CELL,
+                }}
               >
                 <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                  }}
+                  ref={instructionRef}
+                  collapsable={false}
+                  style={{ flex: 1, minWidth: 0 }}
                 >
-                  {/* The exercise's number stands before it, as in the book. */}
-                  {!!block.exerciseNumber && (
-                    <Text testID="exercise-number" style={s.exerciseNumber}>
-                      № {block.exerciseNumber}
-                    </Text>
-                  )}
-                  <Text
-                    testID="block-title"
-                    style={[s.title, size.tall && written(30, 2)]}
-                  >
-                    {block.title}
-                  </Text>
-                  {done && (
-                    <Text
-                      testID="done-mark"
-                      accessibilityLabel="выполнено"
-                      style={s.doneMark}
-                    >
-                      ✓
-                    </Text>
-                  )}
-                </View>
-                {block.kind !== "read" && !promptRepeatsTitle(block) && (
-                  // A gap in the prompt («1, □, □, 4») is a field, not the glyph.
-                  <TextWithBlanks
-                    testID="block-prompt"
-                    style={StyleSheet.flatten([
-                      s.prompt,
-                      size.tall && written(24, 2),
-                    ])}
-                    // On a phone one question is asked at a time: once the
-                    // first of the two about a picture's place is answered,
-                    // the second stands here.
-                    text={
-                      size.compact &&
-                      block.kind === "location" &&
-                      block.verticalPrompt.trim() === block.prompt.trim() &&
-                      locationStage(block, answer) !== "vertical"
-                        ? block.horizontalPrompt
-                        : block.prompt
-                    }
-                  />
-                )}
-              </View>
-            </View>
-            <View
-              onLayout={(e) => setRowWidth(e.nativeEvent.layout.width)}
-              style={
-                beside
-                  ? {
+                  <View
+                    style={{
                       flexDirection: "row",
-                      alignItems: "flex-start",
-                      gap: CELL,
-                    }
-                  : { gap: CELL }
-              }
-            >
-              <View
-                ref={imagesRef}
-                collapsable={false}
-                testID="sample-column"
-                style={[
-                  { gap: CELL },
-                  // The sample's column is a whole number of cells wide, so the
-                  // work beside it starts on a line of the sheet.
-                  beside &&
-                    (rowWidth > 0
-                      ? { width: sideWidth }
-                      : { flex: 4, minWidth: 0 }),
-                  // Without a picture the place for it must not push the answers
-                  // half a cell down.
-                  block.kind !== "picture" &&
-                    !block.images.length &&
-                    !review && { display: "none" },
-                ]}
-              >
-                {block.kind === "picture" && (
-                  <Rows>
-                    <PictureTask
-                      block={block}
-                      value={Array.isArray(answer.value) ? answer.value : []}
-                      onChange={(value) =>
-                        onAnswer({
-                          ...answer,
-                          value,
-                          checked: true,
-                          reviewed: false,
-                          attempts: missed(
-                            value.some((id) => !block.expected.includes(id)),
-                          ),
-                        })
-                      }
-                      onMiss={setPictureMiss}
-                    />
-                  </Rows>
-                )}
-                {block.kind !== "picture" && !!block.images.length && (
-                  <Rows
-                    testID="picture-frame"
-                    style={[
-                      s.images,
-                      // On a phone that shows the task whole the rows of the
-                      // frame's margins go to the picture.
-                      whole && { padding: 0 },
-                      // One picture: the frame hugs it instead of leaving wide
-                      // white fields at its sides.
-                      pictureWidth !== undefined && {
-                        maxWidth: pictureWidth + (whole ? 0 : CELL),
-                        width: "100%",
-                        alignSelf: "center",
-                      },
-                    ]}
-                    frame={<HandFrame seed={`${block.id}-picture`} />}
-                    contentStyle={[
-                      s.imagesContent,
-                      block.images.length > 1 && {
-                        flexDirection: "row",
-                        flexWrap: field && !beside ? "nowrap" : "wrap",
-                      },
-                    ]}
+                      alignItems: "center",
+                      gap: 10,
+                    }}
                   >
-                    {block.images
-                      .filter((id) => id !== "p011_balls_row_3_groups")
-                      .map((id, i) => (
-                        <View
-                          key={id}
-                          style={
-                            block.images.length > 1
-                              ? field && !beside
-                                ? {
-                                    flexGrow: aspects[i],
-                                    flexBasis: 0,
-                                    minWidth: 0,
-                                  }
-                                : {
-                                    flexGrow: 1,
-                                    flexBasis: 110,
-                                    maxWidth: "100%",
-                                  }
-                              : { width: "100%" }
-                          }
-                        >
-                          <BookImage id={id} maxHeight={pictureHeight} />
-                        </View>
-                      ))}
-                  </Rows>
-                )}
-                {/* The note is about the picture, so it stays with the picture
-              instead of under the answer. */}
-                {review && (
-                  <Text style={s.hint}>
-                    Мешки стоят близко друг к другу. Положи палочки для тех
-                    мешков, которые видишь, и нажми «Дальше».
-                  </Text>
-                )}
-                {beside && asideNode && (
-                  <View testID="sample-aside">{asideNode}</View>
-                )}
-              </View>
-              <View
-                ref={answerRef}
-                collapsable={false}
-                testID="work-column"
-                style={[
-                  { gap: CELL },
-                  beside && { flex: rowWidth > 0 ? 1 : 7, minWidth: 0 },
-                ]}
-              >
-                {block.kind === "location" && (
-                  <Rows>
-                    <LocationTask
-                      block={block}
-                      answer={answer}
-                      onAnswer={onAnswer}
-                    />
-                  </Rows>
-                )}
-                {block.kind === "read" && (
-                  <Text style={s.body}>{block.body}</Text>
-                )}
-                {block.kind === "story" && (
-                  <Rows>
-                    <StoryTask
-                      block={block}
-                      answer={answer}
-                      onAnswer={onAnswer}
-                    />
-                  </Rows>
-                )}
-                {block.kind === "numberGame" && (
-                  <Rows>
-                    <NumberGameTask
-                      block={block}
-                      answer={answer}
-                      onAnswer={onAnswer}
-                    />
-                  </Rows>
-                )}
-                {block.kind === "practical" && (
-                  <Rows>
-                    <PracticalTask
-                      block={block}
-                      answer={answer}
-                      onAnswer={onAnswer}
-                      onDrawing={onDrawing}
-                    />
-                  </Rows>
-                )}
-                {[
-                  "work",
-                  "compose",
-                  "activity",
-                  "recipe",
-                  "relation",
-                  "targetGame",
-                ].includes(block.kind) && (
-                  <Rows>
-                    <CourseTask
-                      block={block}
-                      answer={answer}
-                      onAnswer={onAnswer}
-                      onDrawing={onDrawing}
-                    />
-                  </Rows>
-                )}
-                {block.kind === "number" && (
-                  // What to do stands here until it is done; then the
-                  // answer to it does.
-                  <ResultRows>
-                    {result ?? (
-                      <Text style={s.instruction}>
-                        Выбери верное число ниже.
+                    {/* The exercise's number stands before it, as in the book. */}
+                    {!!block.exerciseNumber && (
+                      <Text testID="exercise-number" style={s.exerciseNumber}>
+                        № {block.exerciseNumber}
                       </Text>
                     )}
-                  </ResultRows>
-                )}
-                {block.kind === "number" && (
-                  <Rows
-                    testID="number-answers"
-                    // On a phone the eleven answers lie in two rows, so that
-                    // all of them are seen under the picture; they are laid
-                    // out by the width of the screen, not by the cells.
-                    object={!!phone}
-                    contentStyle={[
-                      s.options,
-                      !!phone && {
-                        columnGap: phone.gap,
-                        rowGap: CELL,
-                        // Six to a row and no more, whatever is left of
-                        // the width after the boxes.
-                        maxWidth: phone.box * 6 + phone.gap * 5,
-                      },
-                    ]}
-                  >
-                    {Array.from({ length: 11 }, (_, n) => (
-                      <AnswerAnchor key={n} value={n}>
+                    <Text
+                      testID="block-title"
+                      style={[s.title, size.tall && written(30, 2)]}
+                    >
+                      {block.title}
+                    </Text>
+                    {done && (
+                      <Text
+                        testID="done-mark"
+                        accessibilityLabel="выполнено"
+                        style={s.doneMark}
+                      >
+                        ✓
+                      </Text>
+                    )}
+                  </View>
+                  {block.kind !== "read" && !promptRepeatsTitle(block) && (
+                    // A gap in the prompt («1, □, □, 4») is a field, not the glyph.
+                    <TextWithBlanks
+                      testID="block-prompt"
+                      style={StyleSheet.flatten([
+                        s.prompt,
+                        size.tall && written(24, 2),
+                      ])}
+                      // On a phone one question is asked at a time: once the
+                      // first of the two about a picture's place is answered,
+                      // the second stands here.
+                      text={
+                        size.compact &&
+                        block.kind === "location" &&
+                        block.verticalPrompt.trim() === block.prompt.trim() &&
+                        locationStage(block, answer) !== "vertical"
+                          ? block.horizontalPrompt
+                          : block.prompt
+                      }
+                    />
+                  )}
+                </View>
+              </View>
+              <View
+                onLayout={(e) => setRowWidth(e.nativeEvent.layout.width)}
+                style={
+                  beside
+                    ? {
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                        gap: CELL,
+                      }
+                    : { gap: CELL }
+                }
+              >
+                <View
+                  ref={imagesRef}
+                  collapsable={false}
+                  testID="sample-column"
+                  style={[
+                    { gap: CELL },
+                    // The sample's column is a whole number of cells wide, so the
+                    // work beside it starts on a line of the sheet.
+                    beside &&
+                      (rowWidth > 0
+                        ? { width: sideWidth }
+                        : { flex: 4, minWidth: 0 }),
+                    // Without a picture the place for it must not push the answers
+                    // half a cell down.
+                    block.kind !== "picture" &&
+                      !block.images.length &&
+                      !review && { display: "none" },
+                  ]}
+                >
+                  {block.kind === "picture" && (
+                    <Rows>
+                      <PictureTask
+                        block={block}
+                        value={Array.isArray(answer.value) ? answer.value : []}
+                        onChange={(value) =>
+                          onAnswer({
+                            ...answer,
+                            value,
+                            checked: true,
+                            reviewed: false,
+                            attempts: missed(
+                              value.some((id) => !block.expected.includes(id)),
+                            ),
+                          })
+                        }
+                        onMiss={setPictureMiss}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind !== "picture" && !!block.images.length && (
+                    <Rows
+                      testID="picture-frame"
+                      style={[
+                        s.images,
+                        // On a phone that shows the task whole the rows of the
+                        // frame's margins go to the picture.
+                        whole && { padding: 0 },
+                        // One picture: the frame hugs it instead of leaving wide
+                        // white fields at its sides.
+                        pictureWidth !== undefined && {
+                          maxWidth: pictureWidth + (whole ? 0 : CELL),
+                          width: "100%",
+                          alignSelf: "center",
+                        },
+                      ]}
+                      frame={<HandFrame seed={`${block.id}-picture`} />}
+                      contentStyle={[
+                        s.imagesContent,
+                        block.images.length > 1 && {
+                          flexDirection: "row",
+                          flexWrap: field && !beside ? "nowrap" : "wrap",
+                        },
+                      ]}
+                    >
+                      {block.images
+                        .filter((id) => id !== "p011_balls_row_3_groups")
+                        .map((id, i) => (
+                          <View
+                            key={id}
+                            style={
+                              block.images.length > 1
+                                ? field && !beside
+                                  ? {
+                                      flexGrow: aspects[i],
+                                      flexBasis: 0,
+                                      minWidth: 0,
+                                    }
+                                  : {
+                                      flexGrow: 1,
+                                      flexBasis: 110,
+                                      maxWidth: "100%",
+                                    }
+                                : { width: "100%" }
+                            }
+                          >
+                            <BookImage
+                              id={id}
+                              maxHeight={pictureHeight}
+                              marks={
+                                asked?.marks?.image === id
+                                  ? asked.marks.shapes
+                                  : undefined
+                              }
+                            />
+                          </View>
+                        ))}
+                    </Rows>
+                  )}
+                  {/* The note is about the picture, so it stays with the picture
+              instead of under the answer. */}
+                  {review && (
+                    <Text style={s.hint}>
+                      Мешки стоят близко друг к другу. Положи палочки для тех
+                      мешков, которые видишь, и нажми «Дальше».
+                    </Text>
+                  )}
+                  {beside && asideNode && (
+                    <View testID="sample-aside">{asideNode}</View>
+                  )}
+                </View>
+                <View
+                  ref={answerRef}
+                  collapsable={false}
+                  testID="work-column"
+                  style={[
+                    { gap: CELL },
+                    beside && { flex: rowWidth > 0 ? 1 : 7, minWidth: 0 },
+                  ]}
+                >
+                  {block.kind === "location" && (
+                    <Rows>
+                      <LocationTask
+                        block={block}
+                        answer={answer}
+                        onAnswer={onAnswer}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind === "read" && (
+                    <Text style={s.body}>{block.body}</Text>
+                  )}
+                  {block.kind === "story" && (
+                    <Rows>
+                      <StoryTask
+                        block={block}
+                        answer={answer}
+                        onAnswer={onAnswer}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind === "numberGame" && (
+                    <Rows>
+                      <NumberGameTask
+                        block={block}
+                        answer={answer}
+                        onAnswer={onAnswer}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind === "practical" && (
+                    <Rows>
+                      <PracticalTask
+                        block={block}
+                        answer={answer}
+                        onAnswer={onAnswer}
+                        onDrawing={onDrawing}
+                      />
+                    </Rows>
+                  )}
+                  {[
+                    "work",
+                    "compose",
+                    "activity",
+                    "recipe",
+                    "relation",
+                    "targetGame",
+                  ].includes(block.kind) && (
+                    <Rows>
+                      <CourseTask
+                        block={block}
+                        answer={answer}
+                        onAnswer={onAnswer}
+                        onDrawing={onDrawing}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind === "number" && (
+                    // What to do stands here until it is done; then the
+                    // answer to it does.
+                    <ResultRows>
+                      {result ?? (
+                        <Text style={s.instruction}>
+                          Выбери верное число ниже.
+                        </Text>
+                      )}
+                    </ResultRows>
+                  )}
+                  {block.kind === "number" && (
+                    <Rows
+                      testID="number-answers"
+                      // On a phone the eleven answers lie in two rows, so that
+                      // all of them are seen under the picture; they are laid
+                      // out by the width of the screen, not by the cells.
+                      object={!!phone}
+                      contentStyle={[
+                        s.options,
+                        !!phone && {
+                          columnGap: phone.gap,
+                          rowGap: CELL,
+                          // Six to a row and no more, whatever is left of
+                          // the width after the boxes.
+                          maxWidth: phone.box * 6 + phone.gap * 5,
+                        },
+                      ]}
+                    >
+                      {Array.from({ length: 11 }, (_, n) => (
+                        <AnswerAnchor key={n} value={n}>
+                          <Pressable
+                            accessibilityRole="button"
+                            accessibilityLabel={`Ответ ${n}`}
+                            accessibilityState={{
+                              selected: answer.value === n,
+                            }}
+                            onPress={() =>
+                              onAnswer({
+                                ...answer,
+                                value: n,
+                                checked: true,
+                                reviewed: false,
+                                attempts: missed(n !== block.expected),
+                              })
+                            }
+                            style={({ pressed }) => [
+                              s.number,
+                              !!phone && {
+                                width: phone.box,
+                                height: phone.high,
+                              },
+                              pressed && s.pressed,
+                              answer.value === n && s.selected,
+                            ]}
+                          >
+                            <Text
+                              style={[
+                                s.digit,
+                                !!phone && s.digitPhone,
+                                answer.value === n && { color: c.white },
+                              ]}
+                            >
+                              {n}
+                            </Text>
+                          </Pressable>
+                        </AnswerAnchor>
+                      ))}
+                    </Rows>
+                  )}
+                  {block.kind === "choice" && (
+                    <View style={s.options}>
+                      {block.options.map((v) => (
                         <Pressable
+                          key={v}
                           accessibilityRole="button"
-                          accessibilityLabel={`Ответ ${n}`}
-                          accessibilityState={{ selected: answer.value === n }}
+                          accessibilityState={{ selected: answer.value === v }}
                           onPress={() =>
                             onAnswer({
                               ...answer,
-                              value: n,
+                              value: v,
                               checked: true,
                               reviewed: false,
-                              attempts: missed(n !== block.expected),
+                              attempts: missed(v !== block.expected),
                             })
                           }
                           style={({ pressed }) => [
-                            s.number,
-                            !!phone && { width: phone.box, height: phone.high },
+                            s.option,
                             pressed && s.pressed,
-                            answer.value === n && s.selected,
+                            answer.value === v && s.selected,
                           ]}
                         >
                           <Text
                             style={[
-                              s.digit,
-                              !!phone && s.digitPhone,
-                              answer.value === n && { color: c.white },
+                              s.optionText,
+                              answer.value === v && { color: c.white },
                             ]}
                           >
-                            {n}
+                            {v}
                           </Text>
                         </Pressable>
-                      </AnswerAnchor>
-                    ))}
-                  </Rows>
-                )}
-                {block.kind === "choice" && (
-                  <View style={s.options}>
-                    {block.options.map((v) => (
-                      <Pressable
-                        key={v}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: answer.value === v }}
-                        onPress={() =>
-                          onAnswer({
-                            ...answer,
-                            value: v,
-                            checked: true,
-                            reviewed: false,
-                            attempts: missed(v !== block.expected),
-                          })
-                        }
-                        style={({ pressed }) => [
-                          s.option,
-                          pressed && s.pressed,
-                          answer.value === v && s.selected,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            s.optionText,
-                            answer.value === v && { color: c.white },
-                          ]}
-                        >
-                          {v}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
-                )}
-                {block.kind === "counters" && (
-                  <Rows>
-                    <CounterBoard
-                      value={numeric}
-                      token={block.token}
-                      onChange={(value) => update({ value })}
-                      onDrawing={onDrawing}
-                    />
-                  </Rows>
-                )}
-                {block.kind === "draw" && (
-                  <Rows>
-                    <DrawingPad
-                      strokes={answer.strokes ?? []}
-                      onChange={(strokes) => update({ strokes })}
-                      trace={block.trace}
-                      onDrawing={onDrawing}
-                      result={result}
-                    />
-                  </Rows>
-                )}
-                {block.kind === "shape" && (
-                  <Rows>
-                    <ShapeBoard
-                      onDrawing={onDrawing}
-                      block={block}
-                      value={Array.isArray(answer.value) ? answer.value : []}
-                      onChange={(value) => update({ value })}
-                    />
-                  </Rows>
-                )}
-                {/* What the task answers with — «верно» or where to look
+                      ))}
+                    </View>
+                  )}
+                  {block.kind === "counters" && (
+                    <Rows>
+                      <CounterBoard
+                        value={numeric}
+                        token={block.token}
+                        onChange={(value) => update({ value })}
+                        onDrawing={onDrawing}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind === "draw" && (
+                    <Rows>
+                      <DrawingPad
+                        strokes={answer.strokes ?? []}
+                        onChange={(strokes) => update({ strokes })}
+                        trace={block.trace}
+                        onDrawing={onDrawing}
+                        result={result}
+                      />
+                    </Rows>
+                  )}
+                  {block.kind === "shape" && (
+                    <Rows>
+                      <ShapeBoard
+                        onDrawing={onDrawing}
+                        block={block}
+                        value={Array.isArray(answer.value) ? answer.value : []}
+                        onChange={(value) => update({ value })}
+                      />
+                    </Rows>
+                  )}
+                  {/* What the task answers with — «верно» or where to look
                   again — has its own two rows, kept for it from the start:
                   the words appear in view and move nothing. They stand
                   under the work — beside «Проверить ответ» where there is
                   one and the screen is wide; a number's answers have them
                   over them, and a drawing sheet under it, where the hint
                   stood. */}
-                {!review &&
-                  (block.kind === "counters" || block.kind === "shape") && (
-                    <CheckRow>
-                      <Button
-                        disabled={!hasValue}
-                        done={done}
-                        onPress={() =>
-                          onAnswer({
-                            ...answer,
-                            checked: true,
-                            attempts: (answer.attempts ?? 0) + 1,
-                          })
-                        }
-                      >
-                        {done ? "✓ Получилось!" : "Проверить ответ"}
-                      </Button>
-                    </CheckRow>
-                  )}
-                {/* A task checked by a press has no button: the words have
+                  {!review &&
+                    (block.kind === "counters" || block.kind === "shape") && (
+                      <CheckRow>
+                        <Button
+                          disabled={!hasValue}
+                          done={done}
+                          onPress={() =>
+                            onAnswer({
+                              ...answer,
+                              checked: true,
+                              attempts: (answer.attempts ?? 0) + 1,
+                            })
+                          }
+                        >
+                          {done ? "✓ Получилось!" : "Проверить ответ"}
+                        </Button>
+                      </CheckRow>
+                    )}
+                  {/* A task checked by a press has no button: the words have
                   their two rows under the answers. */}
-                {["choice", "location"].includes(block.kind) && <ResultRows />}
-                {block.kind === "picture" && (
-                  // The rows under a picture to press say what the last
-                  // press did: a miss, how many are marked, «верно».
-                  <ResultRows>
-                    {result ??
-                      (pictureMiss ? (
-                        <RetryNote tight>
-                          Нажми прямо на предмет или цифру.
-                        </RetryNote>
-                      ) : block.expected.length > 1 ? (
-                        <Text accessibilityLiveRegion="polite" style={s.marked}>
-                          Отмечено:{" "}
-                          {Array.isArray(answer.value)
-                            ? answer.value.filter((x) => x !== "miss").length
-                            : 0}
-                        </Text>
-                      ) : null)}
-                  </ResultRows>
-                )}
+                  {["choice", "location"].includes(block.kind) && (
+                    <ResultRows />
+                  )}
+                  {block.kind === "picture" && (
+                    // The rows under a picture to press say what the last
+                    // press did: a miss, how many are marked, «верно».
+                    <ResultRows>
+                      {result ??
+                        (pictureMiss ? (
+                          <RetryNote tight>
+                            Нажми прямо на предмет или цифру.
+                          </RetryNote>
+                        ) : block.expected.length > 1 ? (
+                          <Text
+                            accessibilityLiveRegion="polite"
+                            style={s.marked}
+                          >
+                            Отмечено:{" "}
+                            {Array.isArray(answer.value)
+                              ? answer.value.filter((x) => x !== "miss").length
+                              : 0}
+                          </Text>
+                        ) : null)}
+                    </ResultRows>
+                  )}
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </AsideProvider>
-    </ResultContext.Provider>
+        </AsideProvider>
+      </ResultContext.Provider>
+    </FieldInHand.Provider>
   );
 }
 function AnswerAnchor({

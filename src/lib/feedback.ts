@@ -47,6 +47,24 @@ export function successLine(block: Block, answer: Answer): string {
         return block.fields.length > 1
           ? `Все ответы записаны верно: ${block.fields.length}.`
           : "Ответ записан верно.";
+      case "activity": {
+        // The coins put into the purse, written as the sum they make.
+        if (
+          block.activity.mode !== "coins" ||
+          block.activity.targets.length > 1
+        )
+          return "Задание выполнено.";
+        const coins = (answer.responses?.["0coins"] ?? "")
+          .split(",")
+          .filter(Boolean)
+          .map(Number);
+        const sum = coins.reduce((a, b) => a + b, 0);
+        if (!coins.length) return "Задание выполнено.";
+        const said = `${sum} ${plural(sum, "копейка", "копейки", "копеек")}`;
+        return coins.length > 1
+          ? `${coins.join(" + ")} = ${said}.`
+          : `В кошельке ${said}.`;
+      }
       default:
         return "Задание выполнено.";
     }

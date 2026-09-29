@@ -79,3 +79,17 @@ test("help is offered after the second miss, not before", () => {
   assert.equal(offerHelp({ attempts: HELP_AFTER - 1 }), false);
   assert.equal(offerHelp({ attempts: HELP_AFTER }), true);
 });
+
+test("coins put into the purse are named as the sum they make", () => {
+  const coins = blocks.find(
+    (b) => b.kind === "activity" && b.activity.mode === "coins",
+  )!;
+  assert.equal(
+    successLine(coins, { responses: { "0": "3", "0coins": "1,2" } }),
+    "✓ Верно! 1 + 2 = 3 копейки.",
+  );
+  assert.equal(
+    successLine(coins, { responses: { "0": "3", "0coins": "3" } }),
+    "✓ Верно! В кошельке 3 копейки.",
+  );
+});

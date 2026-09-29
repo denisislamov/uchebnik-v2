@@ -4,7 +4,7 @@ import { composeStory, storySubjects } from "../lib/composeStory";
 import { DrawingPad } from "./DrawingPad";
 import { relationPlan } from "../lib/relationDrawing";
 import { BookImage } from "./BookImage";
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -18,7 +18,8 @@ import type { Answer, Block } from "../content/types";
 import { courseCorrect, compositionCorrect } from "../lib/courseAssessment";
 import { colors as c, fonts as f } from "../theme";
 import { Button, CellPressable, RetryNote } from "./Controls";
-import { CheckRow } from "./Result";
+import { CheckRow, FieldInHand } from "./Result";
+import { CoinPurse } from "./CoinPurse";
 import { BLANK, TextWithBlanks, spokenBlanks } from "./Blank";
 import { HandFrame, Rows } from "./HandDrawn";
 import { CELL, cells, written } from "../lib/grid";
@@ -174,6 +175,7 @@ export function CourseTask({
 }) {
   const card = s.card;
   const narrow = useSheetWindow().width < 600;
+  const takeInHand = useContext(FieldInHand);
   // Follows what stands above it in a card after an empty row.
   const below = { marginTop: CELL };
   const r = answer.responses ?? {};
@@ -185,6 +187,7 @@ export function CourseTask({
       accessibilityLabel={label}
       value={r[key] ?? ""}
       onChangeText={(v) => set(key, v.replace(/[^0-9]/g, "").slice(0, 3))}
+      onFocus={() => takeInHand?.(key)}
       keyboardType="number-pad"
       inputMode="numeric"
       maxLength={3}
@@ -655,21 +658,24 @@ export function CourseTask({
           return (
             <Card key={i} style={card}>
               <HandFrame seed={`card-${i}`} />
-              <Text style={s.label}>
-                {a.labels?.[i] ??
-                  (a.measure
-                    ? "Измерь предмет на рисунке"
-                    : a.mode === "count"
-                      ? (a.groupLabels?.[i] ??
-                        "Положи столько предметов, сколько на рисунке")
-                      : a.mode === "groups"
-                        ? `Разложи ${target} предметов поровну между ${a.groups} группами`
-                        : a.mode === "place"
-                          ? `Число ${target}: десятки и единицы`
-                          : a.mode === "composition"
-                            ? `Разложи ${target} на две части`
-                            : `Набери ${target} ${a.unit ?? ""}`)}
-              </Text>
+              {/* The purse says itself how much is to be put into it. */}
+              {a.mode !== "coins" && (
+                <Text style={s.label}>
+                  {a.labels?.[i] ??
+                    (a.measure
+                      ? "Измерь предмет на рисунке"
+                      : a.mode === "count"
+                        ? (a.groupLabels?.[i] ??
+                          "Положи столько предметов, сколько на рисунке")
+                        : a.mode === "groups"
+                          ? `Разложи ${target} предметов поровну между ${a.groups} группами`
+                          : a.mode === "place"
+                            ? `Число ${target}: десятки и единицы`
+                            : a.mode === "composition"
+                              ? `Разложи ${target} на две части`
+                              : `Набери ${target} ${a.unit ?? ""}`)}
+                </Text>
+              )}
               {a.mode === "count" && a.token && (
                 <CounterBoard
                   value={value}
@@ -705,50 +711,54 @@ export function CourseTask({
                 </>
               )}
               {a.mode === "coins" && (
-                <>
-                  <View style={s.row}>
-                    {(a.denominations ?? [1, 2, 3, 5, 10, 15, 20])
-                      .filter((n) => !a.exchange || n < target)
-                      .map((n) => (
-                        <CellPressable
-                          key={n}
-                          style={[s.chip, { borderRadius: 40 }]}
-                          accessibilityRole="button"
-                          accessibilityLabel={`Монета ${n} копеек`}
-                          onPress={() => {
-                            if (value + n <= 200)
-                              onAnswer({
-                                ...answer,
-                                checked: false,
-                                responses: {
-                                  ...r,
-                                  [key]: String(value + n),
-                                  [`${i}coins`]: [r[`${i}coins`], String(n)]
-                                    .filter(Boolean)
-                                    .join(","),
-                                },
-                              });
-                          }}
-                        >
-                          <Text style={s.text}>{n} к.</Text>
-                        </CellPressable>
-                      ))}
-                  </View>
-                  <Text style={s.text}>В кошельке: {value} копеек</Text>
-                  <Button
-                    small
-                    secondary
-                    onPress={() =>
+                <CoinPurse
+                  target={target}
+                  coins={(r[`${i}coins`] || "")
+                    .split(",")
+                    .filter(Boolean)
+                    .map(Number)}
+                  denominations={(
+                    a.denominations ?? [1, 2, 3, 5, 10, 15, 20]
+                  ).filter((n) => !a.exchange || n < target)}
+                  onAdd={(n) => {
+                    if (value + n <= 200)
                       onAnswer({
                         ...answer,
                         checked: false,
-                        responses: { ...r, [key]: "0", [`${i}coins`]: "" },
-                      })
-                    }
-                  >
-                    Вернуть монеты
-                  </Button>
-                </>
+                        responses: {
+                          ...r,
+                          [key]: String(value + n),
+                          [`${i}coins`]: [r[`${i}coins`], String(n)]
+                            .filter(Boolean)
+                            .join(","),
+                        },
+                      });
+                  }}
+                  onTake={(index) => {
+                    const left = (r[`${i}coins`] || "")
+                      .split(",")
+                      .filter(Boolean)
+                      .filter((_, k) => k !== index);
+                    onAnswer({
+                      ...answer,
+                      checked: false,
+                      responses: {
+                        ...r,
+                        [key]: String(
+                          left.reduce((sum, v) => sum + Number(v), 0),
+                        ),
+                        [`${i}coins`]: left.join(","),
+                      },
+                    });
+                  }}
+                  onReset={() =>
+                    onAnswer({
+                      ...answer,
+                      checked: false,
+                      responses: { ...r, [key]: "0", [`${i}coins`]: "" },
+                    })
+                  }
+                />
               )}
               {a.mode === "groups" && (
                 <>

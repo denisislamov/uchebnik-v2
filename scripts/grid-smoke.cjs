@@ -54,7 +54,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       p.on("pageerror", (e) => report.errors.push(e.message));
       for (const { page, index, id } of kinds.values()) {
         await p.goto(baseURL + "/metadata.json");
-        await p.evaluate(({ KEY, page, index }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page, block: index, answers: {} })), { KEY, page, index });
+        await p.evaluate(({ KEY, page, index }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page, block: index, answers: {} })), { KEY, page, index });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);

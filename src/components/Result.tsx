@@ -9,6 +9,11 @@ import { useTaskSize } from "./taskSize";
  */
 export const ResultContext = createContext<React.ReactNode>(null);
 /**
+ * The question in hand: the one the child has put the cursor into, or the
+ * first not yet answered. The picture shows what it asks about.
+ */
+export const FieldInHand = createContext<((id: string) => void) | null>(null);
+/**
  * The button that checks the work, and what the check says. On a wide screen
  * they share a row: the words stand beside the button and take no rows of
  * their own. On a phone they stand under it, in two rows kept for them.

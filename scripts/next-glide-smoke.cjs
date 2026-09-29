@@ -24,7 +24,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     p.on("pageerror", (e) => report.errors.push(e.message));
     const open = async (n, i, answers, title) => {
       await p.goto(baseURL + "/metadata.json");
-      await p.evaluate(({ KEY, n, i, answers }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers })), { KEY, n, i, answers });
+      await p.evaluate(({ KEY, n, i, answers }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page: n, block: i, answers })), { KEY, n, i, answers });
       await p.goto(baseURL);
       await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
       await p.getByTestId("exercise-card").getByText(title, { exact: true }).waitFor();

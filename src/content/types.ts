@@ -34,6 +34,12 @@ export type WorkField = {
   options?: string[];
   /** Condition of the next part of a two-part problem, printed just above this question. */
   context?: string;
+  /**
+   * What the question asks about, shown on the picture while the question is
+   * answered: outlines, each the centre and the two radii as shares of the
+   * picture's width and height.
+   */
+  marks?: { image: string; shapes: number[][] };
 };
 export type ComposeRule = {
   operator: string;

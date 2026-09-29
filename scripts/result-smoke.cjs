@@ -73,7 +73,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           return { said: slot.innerText.trim().replace(/\n/g, " "), under: Math.round(bottom - view.bottom), over: Math.round(view.top - top), scrolled: pane.scrollTop };
         });
       for (const t of tasks.filter((t) => !phone || whole(t.b))) {
-        await p.evaluate(({ KEY, t }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: t.page, block: t.index, answers: { [t.b.id]: t.answer } })), { KEY, t: { page: t.page, index: t.index, b: { id: t.b.id }, answer: t.answer } });
+        await p.evaluate(({ KEY, t }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page: t.page, block: t.index, answers: { [t.b.id]: t.answer } })), { KEY, t: { page: t.page, index: t.index, b: { id: t.b.id }, answer: t.answer } });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
@@ -86,7 +86,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       // A picture to press keeps its size and place while it is pressed, hit or missed.
       for (const t of tasks.filter((t) => t.b.kind === "picture" && t.state === "solved")) {
         const block = t.b;
-        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: t.page, i: t.index });
+        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page: n, block: i, answers: {} })), { KEY, n: t.page, i: t.index });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
@@ -112,7 +112,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const page = pages.find((pg) => pg.number === 3);
         const index = page.blocks.findIndex((b) => b.kind === "draw" && b.trace);
         const block = page.blocks[index];
-        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: 3, i: index });
+        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 6, page: n, block: i, answers: {} })), { KEY, n: 3, i: index });
         await p.goto(baseURL);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);

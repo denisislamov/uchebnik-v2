@@ -51,7 +51,17 @@ def build(assets, calc):
  split(11,3,['three_squares_2_1'])
  coins(11,3);pages[11][-1]['prompt']='Из каких монет можно составить 3 копейки? Набери 3 копейки из монет разрезной таблицы.'
  act(11,'Два шага','sequence',[1,2],prompt='Сделай 2 шага вперёд.')
- work(11,'Два набора мячей',[('Левая картинка. Сколько мячей слева?',2),('Левая картинка. Сколько мячей справа?',1),('Сколько всего мячей на левой картинке?',3),('Правая картинка. Сколько мячей слева?',1),('Правая картинка. Сколько мячей справа?',2),('Сколько всего мячей на правой картинке?',3)],['balls_left_2_and_1','balls_right_1_and_2'],prompt='Посчитай мячи на каждой картинке.')
+ # One picture to a step, and every question shows on it the balls it asks about:
+ # six questions about two pictures at once were more than a child could take in.
+ def balls(title,image,left,right,marks):
+  b=work(11,title,[('Сколько мячей слева?',left),('Сколько мячей справа?',right),('Сколько мячей всего?',left+right)],[image],prompt='Посчитай мячи на картинке.')
+  for f,shapes in zip(b['fields'],[marks[:left],marks[left:],marks]):f['marks']=dict(image=f'p011_{image}',shapes=shapes)
+  return b
+ # Each ball: the centre and the two radii of its outline, as shares of the picture.
+ balls('Мячи: первая картинка','balls_left_2_and_1',2,1,[[0.215,0.27,0.15,0.28],[0.36,0.62,0.15,0.28],[0.80,0.60,0.15,0.28]])
+ second=balls('Мячи: вторая картинка','balls_right_1_and_2',1,2,[[0.16,0.57,0.135,0.36],[0.585,0.56,0.135,0.36],[0.79,0.30,0.135,0.36]])
+ # The step added by the split takes no number from the steps after it.
+ second['id']='p011-balls-right';serial[11]-=1
  walk=act(11,'Три шага','sequence',[1,2,3],prompt='Сделай 3 шага вперёд.');pages[11].remove(walk);walk['id']='p011-walk-three';pages[11].insert(5,walk)
  lines=draw(11,'Клетки по образцу','cells:1,2h,3h,3v,2v,1',['writing_strip_squares_rects']);lines['id']='p011-lesson07';lines['prompt']='Обведи клетки, как на образце: сначала всю фигуру, потом линии между клетками.'
  work(12,'Число четыре',[('Сколько детей?',4),('Сколько жетонов на карточке?',4),('Сколько точек на карточке?',4)],['children_woodwork_table','abacus_4','domino_4'],prompt='Посчитай детей, жетоны и точки.')
@@ -113,7 +123,8 @@ def build(assets, calc):
   missing=[a['id'] for a in assets if a['page']==p and a['id'] not in used]
   for image in missing:
    suffix=image[5:]
-   if p==11: dest=next(b for b in blocks if b['title']=='Два набора мячей')
+   # The row with both sets of balls is the same balls once more: it is kept with the first of the two steps and not shown.
+   if p==11: dest=next(b for b in blocks if b['id']=='p011-lesson06')
    elif re.search(r'^digit_|^abacus_|^domino_|^dots_|green_dots|green_circles|^circles_[56]$|^coin_',suffix):
     dest=next((b for b in blocks if b.get('plan','').startswith('digit:')),blocks[0])
    elif 'number_' in suffix:dest=next((b for b in blocks if 'не хватает' in b['title']),next((b for b in blocks if b.get('activity',{}).get('mode')=='sequence'),blocks[0]))

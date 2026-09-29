@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
 import { Image, View } from "react-native";
+import Svg, { Ellipse } from "react-native-svg";
 import { assets } from "../content/assets";
 import { CELL } from "../lib/grid";
 import { colors as c } from "../theme";
@@ -13,9 +14,15 @@ const inRows = (height: number) => {
 export function BookImage({
   id,
   maxHeight = 310,
+  marks,
 }: {
   id: string;
   maxHeight?: number;
+  /**
+   * What a question asks about, outlined on the picture: each outline is
+   * the centre and the two radii as shares of the picture.
+   */
+  marks?: number[][];
 }) {
   const frame = useRef<View>(null);
   // react-native-web gives an <Image> its file's height, not the aspect
@@ -110,6 +117,46 @@ export function BookImage({
           borderRadius: 4,
         }}
       />
+      {!!marks?.length && (
+        // Drawn in the picture's own pixels and scaled with it: a pen line
+        // around each thing, and a lighter one under it, so that it is seen
+        // on a dark ball as on a light one.
+        <View
+          testID="picture-marks"
+          pointerEvents="none"
+          style={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}
+        >
+          <Svg
+            width="100%"
+            height="100%"
+            viewBox={`0 0 ${a.width} ${a.height}`}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {marks.map(([cx, cy, rx, ry], i) => (
+              <React.Fragment key={i}>
+                <Ellipse
+                  cx={cx * a.width}
+                  cy={cy * a.height}
+                  rx={rx * a.width}
+                  ry={ry * a.height}
+                  fill="none"
+                  stroke={c.white}
+                  strokeWidth={a.width / 45}
+                />
+                <Ellipse
+                  cx={cx * a.width}
+                  cy={cy * a.height}
+                  rx={rx * a.width}
+                  ry={ry * a.height}
+                  fill="none"
+                  stroke={c.pen}
+                  strokeWidth={a.width / 90}
+                />
+              </React.Fragment>
+            ))}
+          </Svg>
+        </View>
+      )}
     </View>
   );
 }

@@ -8,18 +8,16 @@ export const revision2Steps: Record<number, string[]> = {
     "p001-block05",
     "p001-block06",
     "p001-block07",
-    "p001-block08"
+    "p001-block08",
   ],
-  "2": [
-    "p002-block01"
-  ],
+  "2": ["p002-block01"],
   "3": [
     "p003-block01",
     "p003-block02",
     "p003-block03",
     "p003-block04",
     "p003-block05",
-    "p003-block06"
+    "p003-block06",
   ],
   "4": [
     "p004-block01",
@@ -30,14 +28,14 @@ export const revision2Steps: Record<number, string[]> = {
     "p004-block06",
     "p004-block07",
     "p004-block08",
-    "p004-block09"
+    "p004-block09",
   ],
   "5": [
     "p005-block01",
     "p005-block02",
     "p005-block03",
     "p005-block04",
-    "p005-block05"
+    "p005-block05",
   ],
   "6": [
     "p006-block01",
@@ -47,7 +45,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p006-block05",
     "p006-block06",
     "p006-block07",
-    "p006-block08"
+    "p006-block08",
   ],
   "7": [
     "p007-block01",
@@ -60,7 +58,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p007-block08",
     "p007-block09",
     "p007-block10",
-    "p007-block11"
+    "p007-block11",
   ],
   "8": [
     "p008-block01",
@@ -78,7 +76,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p008-block13",
     "p008-block14",
     "p008-block15",
-    "p008-block16"
+    "p008-block16",
   ],
   "9": [
     "p009-block01",
@@ -86,7 +84,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p009-block03",
     "p009-block04",
     "p009-block05",
-    "p009-block06"
+    "p009-block06",
   ],
   "10": [
     "p010-block01",
@@ -100,7 +98,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p010-block09",
     "p010-block10",
     "p010-block11",
-    "p010-block12"
+    "p010-block12",
   ],
   "11": [
     "p011-lesson01",
@@ -110,7 +108,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p011-lesson05",
     "p011-walk-three",
     "p011-lesson06",
-    "p011-lesson07"
+    "p011-lesson07",
   ],
   "12": [
     "p012-lesson01",
@@ -118,7 +116,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p012-lesson03",
     "p012-lesson04",
     "p012-lesson05",
-    "p012-lesson06"
+    "p012-lesson06",
   ],
   "13": [
     "p013-lesson01",
@@ -126,14 +124,14 @@ export const revision2Steps: Record<number, string[]> = {
     "p013-lesson03",
     "p013-lesson04",
     "p013-lesson05",
-    "p013-lesson06"
+    "p013-lesson06",
   ],
   "14": [
     "p014-lesson01",
     "p014-lesson02",
     "p014-lesson03",
     "p014-lesson04",
-    "p014-lesson05"
+    "p014-lesson05",
   ],
   "15": [
     "p015-lesson01",
@@ -142,20 +140,10 @@ export const revision2Steps: Record<number, string[]> = {
     "p015-lesson04",
     "p015-lesson05",
     "p015-lesson06",
-    "p015-lesson07"
+    "p015-lesson07",
   ],
-  "16": [
-    "p016-lesson01",
-    "p016-lesson02",
-    "p016-lesson03",
-    "p016-lesson04"
-  ],
-  "17": [
-    "p017-lesson01",
-    "p017-lesson02",
-    "p017-lesson03",
-    "p017-lesson04"
-  ],
+  "16": ["p016-lesson01", "p016-lesson02", "p016-lesson03", "p016-lesson04"],
+  "17": ["p017-lesson01", "p017-lesson02", "p017-lesson03", "p017-lesson04"],
   "18": [
     "p018-lesson01",
     "p018-lesson02",
@@ -163,7 +151,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p018-lesson04",
     "p018-lesson05",
     "p018-lesson06",
-    "p018-lesson07"
+    "p018-lesson07",
   ],
   "19": [
     "p019-lesson01",
@@ -176,23 +164,17 @@ export const revision2Steps: Record<number, string[]> = {
     "p019-lesson08",
     "p019-lesson09",
     "p019-lesson10",
-    "p019-lesson11"
+    "p019-lesson11",
   ],
-  "20": [
-    "p020-lesson01"
-  ],
-  "21": [
-    "p021-lesson01",
-    "p021-lesson02",
-    "p021-lesson03"
-  ],
+  "20": ["p020-lesson01"],
+  "21": ["p021-lesson01", "p021-lesson02", "p021-lesson03"],
   "22": [
     "p022-lesson01",
     "p022-lesson02",
     "p022-lesson03",
     "p022-lesson04",
     "p022-lesson05",
-    "p022-lesson06"
+    "p022-lesson06",
   ],
   "23": [
     "p023-lesson01",
@@ -204,7 +186,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p023-lesson07",
     "p023-lesson08",
     "p023-lesson09",
-    "p023-lesson10"
+    "p023-lesson10",
   ],
   "24": [
     "p024-lesson01",
@@ -212,7 +194,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p024-lesson03",
     "p024-lesson04",
     "p024-lesson05",
-    "p024-lesson06"
+    "p024-lesson06",
   ],
   "25": [
     "p025-lesson01",
@@ -225,7 +207,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p025-lesson08",
     "p025-lesson09",
     "p025-lesson10",
-    "p025-lesson11"
+    "p025-lesson11",
   ],
   "26": [
     "p026-lesson01",
@@ -233,7 +215,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p026-lesson03",
     "p026-lesson04",
     "p026-lesson05",
-    "p026-lesson06"
+    "p026-lesson06",
   ],
   "27": [
     "p027-lesson01",
@@ -246,7 +228,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p027-lesson08",
     "p027-lesson09",
     "p027-lesson10",
-    "p027-lesson11"
+    "p027-lesson11",
   ],
   "28": [
     "p028-lesson01",
@@ -254,7 +236,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p028-lesson03",
     "p028-lesson04",
     "p028-lesson05",
-    "p028-lesson06"
+    "p028-lesson06",
   ],
   "29": [
     "p029-lesson01",
@@ -265,7 +247,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p029-lesson06",
     "p029-lesson07",
     "p029-lesson08",
-    "p029-lesson09"
+    "p029-lesson09",
   ],
   "30": [
     "p030-source-art",
@@ -278,7 +260,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p030-source11",
     "p030-source13",
     "p030-source14",
-    "p030-source16"
+    "p030-source16",
   ],
   "31": [
     "p031-source-art",
@@ -289,7 +271,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p031-source08",
     "p031-source09",
     "p031-source11",
-    "p031-source12"
+    "p031-source12",
   ],
   "32": [
     "p032-source-art",
@@ -301,7 +283,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p032-source10",
     "p032-source12",
     "p032-source14",
-    "p032-source15"
+    "p032-source15",
   ],
   "33": [
     "p033-source-art",
@@ -310,7 +292,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p033-source05",
     "p033-source07",
     "p033-source08",
-    "p033-source10"
+    "p033-source10",
   ],
   "34": [
     "p034-source-art",
@@ -320,7 +302,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p034-source08",
     "p034-source09",
     "p034-source11",
-    "p034-source13"
+    "p034-source13",
   ],
   "35": [
     "p035-source-art",
@@ -332,7 +314,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p035-source11",
     "p035-source13",
     "p035-source14",
-    "p035-source16"
+    "p035-source16",
   ],
   "36": [
     "p036-source-art",
@@ -342,7 +324,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p036-source07",
     "p036-source09",
     "p036-source11",
-    "p036-source13"
+    "p036-source13",
   ],
   "37": [
     "p037-source01",
@@ -354,7 +336,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p037-source07",
     "p037-source08",
     "p037-source09",
-    "p037-source10"
+    "p037-source10",
   ],
   "38": [
     "p038-source01",
@@ -368,7 +350,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p038-source09",
     "p038-source10",
     "p038-source11",
-    "p038-source12"
+    "p038-source12",
   ],
   "39": [
     "p039-source01",
@@ -379,7 +361,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p039-source06",
     "p039-source07",
     "p039-source08",
-    "p039-source09"
+    "p039-source09",
   ],
   "40": [
     "p040-source01",
@@ -395,7 +377,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p040-source11",
     "p040-source12",
     "p040-source13",
-    "p040-source14"
+    "p040-source14",
   ],
   "41": [
     "p041-source01",
@@ -408,7 +390,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p041-source08",
     "p041-source09",
     "p041-source10",
-    "p041-source11"
+    "p041-source11",
   ],
   "42": [
     "p042-source01",
@@ -423,7 +405,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p042-source10",
     "p042-source11",
     "p042-source12",
-    "p042-source13"
+    "p042-source13",
   ],
   "43": [
     "p043-source01",
@@ -440,7 +422,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p043-source12",
     "p043-source13",
     "p043-source14",
-    "p043-source15"
+    "p043-source15",
   ],
   "44": [
     "p044-source01",
@@ -452,7 +434,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p044-source07",
     "p044-source08",
     "p044-source09",
-    "p044-source10"
+    "p044-source10",
   ],
   "45": [
     "p045-source01",
@@ -464,7 +446,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p045-source07",
     "p045-source08",
     "p045-source09",
-    "p045-source10"
+    "p045-source10",
   ],
   "46": [
     "p046-source01",
@@ -482,7 +464,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p046-source13",
     "p046-source14",
     "p046-source15",
-    "p046-source16"
+    "p046-source16",
   ],
   "47": [
     "p047-source01",
@@ -494,7 +476,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p047-source07",
     "p047-source08",
     "p047-source09",
-    "p047-source10"
+    "p047-source10",
   ],
   "48": [
     "p048-source01",
@@ -506,7 +488,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p048-source07",
     "p048-source08",
     "p048-source09",
-    "p048-source10"
+    "p048-source10",
   ],
   "49": [
     "p049-source01",
@@ -520,7 +502,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p049-source09",
     "p049-source10",
     "p049-source11",
-    "p049-source12"
+    "p049-source12",
   ],
   "50": [
     "p050-source01",
@@ -531,7 +513,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p050-source06",
     "p050-source07",
     "p050-source08",
-    "p050-source09"
+    "p050-source09",
   ],
   "51": [
     "p051-source01",
@@ -547,7 +529,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p051-source11",
     "p051-source12",
     "p051-source13",
-    "p051-source14"
+    "p051-source14",
   ],
   "52": [
     "p052-source01",
@@ -558,7 +540,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p052-source06",
     "p052-source07",
     "p052-source08",
-    "p052-source09"
+    "p052-source09",
   ],
   "53": [
     "p053-source01",
@@ -566,7 +548,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p053-source03",
     "p053-source04",
     "p053-source05",
-    "p053-source06"
+    "p053-source06",
   ],
   "54": [
     "p054-source01",
@@ -577,7 +559,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p054-source06",
     "p054-source07",
     "p054-source08",
-    "p054-source09"
+    "p054-source09",
   ],
   "55": [
     "p055-source01",
@@ -585,7 +567,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p055-source03",
     "p055-source04",
     "p055-source05",
-    "p055-source06"
+    "p055-source06",
   ],
   "56": [
     "p056-source-art",
@@ -597,7 +579,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p056-source06",
     "p056-source07",
     "p056-source08",
-    "p056-source09"
+    "p056-source09",
   ],
   "57": [
     "p057-source-art",
@@ -607,14 +589,14 @@ export const revision2Steps: Record<number, string[]> = {
     "p057-source04",
     "p057-source05",
     "p057-source06",
-    "p057-source07"
+    "p057-source07",
   ],
   "58": [
     "p058-source-art",
     "p058-source01",
     "p058-source02",
     "p058-source03",
-    "p058-source04"
+    "p058-source04",
   ],
   "59": [
     "p059-source-art",
@@ -623,14 +605,14 @@ export const revision2Steps: Record<number, string[]> = {
     "p059-source03",
     "p059-source04",
     "p059-source05",
-    "p059-source06"
+    "p059-source06",
   ],
   "60": [
     "p060-source-art",
     "p060-source01",
     "p060-source02",
     "p060-source03",
-    "p060-source04"
+    "p060-source04",
   ],
   "61": [
     "p061-source01",
@@ -641,7 +623,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p061-source06",
     "p061-source07",
     "p061-source08",
-    "p061-source09"
+    "p061-source09",
   ],
   "62": [
     "p062-source01",
@@ -655,7 +637,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p062-source09",
     "p062-source10",
     "p062-source11",
-    "p062-source12"
+    "p062-source12",
   ],
   "63": [
     "p063-source02",
@@ -665,7 +647,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p063-source06",
     "p063-source07",
     "p063-source08",
-    "p063-source09"
+    "p063-source09",
   ],
   "64": [
     "p064-source-art",
@@ -678,7 +660,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p064-source08",
     "p064-source09",
     "p064-source10",
-    "p064-source11"
+    "p064-source11",
   ],
   "65": [
     "p065-source-art",
@@ -690,7 +672,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p065-source06",
     "p065-source08",
     "p065-source09",
-    "p065-source10"
+    "p065-source10",
   ],
   "66": [
     "p066-source01",
@@ -703,7 +685,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p066-source08",
     "p066-source09",
     "p066-source10",
-    "p066-source11"
+    "p066-source11",
   ],
   "67": [
     "p067-source01",
@@ -713,7 +695,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p067-source05",
     "p067-source06",
     "p067-source07",
-    "p067-source08"
+    "p067-source08",
   ],
   "68": [
     "p068-source01",
@@ -726,7 +708,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p068-source08",
     "p068-source09",
     "p068-source10",
-    "p068-source11"
+    "p068-source11",
   ],
   "69": [
     "p069-source01",
@@ -739,7 +721,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p069-source08",
     "p069-source09",
     "p069-source10",
-    "p069-source11"
+    "p069-source11",
   ],
   "70": [
     "p070-source01",
@@ -752,7 +734,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p070-source08",
     "p070-source09",
     "p070-source10",
-    "p070-source11"
+    "p070-source11",
   ],
   "71": [
     "p071-source-art",
@@ -764,7 +746,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p071-source07",
     "p071-source08",
     "p071-source09",
-    "p071-source10"
+    "p071-source10",
   ],
   "72": [
     "p072-source-art",
@@ -777,7 +759,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p072-source08",
     "p072-source09",
     "p072-source10",
-    "p072-source11"
+    "p072-source11",
   ],
   "73": [
     "p073-source01",
@@ -786,7 +768,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p073-source04",
     "p073-source05",
     "p073-source06",
-    "p073-source07"
+    "p073-source07",
   ],
   "74": [
     "p074-source01",
@@ -800,7 +782,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p074-source09",
     "p074-source10",
     "p074-source11",
-    "p074-source12"
+    "p074-source12",
   ],
   "75": [
     "p075-source01",
@@ -814,7 +796,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p075-source09",
     "p075-source10",
     "p075-source11",
-    "p075-source12"
+    "p075-source12",
   ],
   "76": [
     "p076-source01",
@@ -826,7 +808,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p076-source07",
     "p076-source08",
     "p076-source09",
-    "p076-source10"
+    "p076-source10",
   ],
   "77": [
     "p077-source01",
@@ -835,7 +817,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p077-source06",
     "p077-source07",
     "p077-source08",
-    "p077-source09"
+    "p077-source09",
   ],
   "78": [
     "p078-source01",
@@ -848,7 +830,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p078-source08",
     "p078-source09",
     "p078-source10",
-    "p078-source11"
+    "p078-source11",
   ],
   "79": [
     "p079-source-art",
@@ -861,7 +843,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p079-source07",
     "p079-source09",
     "p079-source10",
-    "p079-source11"
+    "p079-source11",
   ],
   "80": [
     "p080-source-art",
@@ -873,7 +855,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p080-source07",
     "p080-source08",
     "p080-source09",
-    "p080-source10"
+    "p080-source10",
   ],
   "81": [
     "p081-source-art",
@@ -883,7 +865,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p081-source04",
     "p081-source05",
     "p081-source06",
-    "p081-source07"
+    "p081-source07",
   ],
   "82": [
     "p082-source-art",
@@ -895,7 +877,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p082-source06",
     "p082-source07",
     "p082-source08",
-    "p082-source09"
+    "p082-source09",
   ],
   "83": [
     "p083-source-art",
@@ -908,7 +890,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p083-source07",
     "p083-source08",
     "p083-source09",
-    "p083-source10"
+    "p083-source10",
   ],
   "84": [
     "p084-source-art",
@@ -921,7 +903,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p084-source07",
     "p084-source08",
     "p084-source09",
-    "p084-source10"
+    "p084-source10",
   ],
   "85": [
     "p085-source01",
@@ -931,7 +913,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p085-source05",
     "p085-source06",
     "p085-source07",
-    "p085-source08"
+    "p085-source08",
   ],
   "86": [
     "p086-source01",
@@ -942,7 +924,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p086-source06",
     "p086-source07",
     "p086-source08",
-    "p086-source09"
+    "p086-source09",
   ],
   "87": [
     "p087-source01",
@@ -954,7 +936,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p087-source07",
     "p087-source08",
     "p087-source09",
-    "p087-source10"
+    "p087-source10",
   ],
   "88": [
     "p088-source01",
@@ -965,7 +947,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p088-source06",
     "p088-source07",
     "p088-source08",
-    "p088-source09"
+    "p088-source09",
   ],
   "89": [
     "p089-source01",
@@ -976,7 +958,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p089-source06",
     "p089-source07",
     "p089-source08",
-    "p089-source09"
+    "p089-source09",
   ],
   "90": [
     "p090-source01",
@@ -990,7 +972,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p090-source09",
     "p090-source10",
     "p090-source11",
-    "p090-source12"
+    "p090-source12",
   ],
   "91": [
     "p091-source01",
@@ -1001,7 +983,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p091-source06",
     "p091-source07",
     "p091-source08",
-    "p091-source09"
+    "p091-source09",
   ],
   "92": [
     "p092-source-art",
@@ -1014,7 +996,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p092-source07",
     "p092-source08",
     "p092-source09",
-    "p092-source10"
+    "p092-source10",
   ],
   "93": [
     "p093-source-art",
@@ -1025,7 +1007,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p093-source05",
     "p093-source06",
     "p093-source07",
-    "p093-source08"
+    "p093-source08",
   ],
   "94": [
     "p094-source-art",
@@ -1037,7 +1019,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p094-source06",
     "p094-source07",
     "p094-source08",
-    "p094-source09"
+    "p094-source09",
   ],
   "95": [
     "p095-source01",
@@ -1049,7 +1031,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p095-source07",
     "p095-source08",
     "p095-source09",
-    "p095-source10"
+    "p095-source10",
   ],
   "96": [
     "p096-source-art",
@@ -1059,7 +1041,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p096-source04",
     "p096-source05",
     "p096-source06",
-    "p096-source07"
+    "p096-source07",
   ],
   "97": [
     "p097-source01",
@@ -1073,7 +1055,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p097-source09",
     "p097-source10",
     "p097-source11",
-    "p097-source12"
+    "p097-source12",
   ],
   "98": [
     "p098-source01",
@@ -1084,7 +1066,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p098-source06",
     "p098-source07",
     "p098-source08",
-    "p098-source09"
+    "p098-source09",
   ],
   "99": [
     "p099-source01",
@@ -1097,7 +1079,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p099-source08",
     "p099-source09",
     "p099-source10",
-    "p099-source11"
+    "p099-source11",
   ],
   "100": [
     "p100-source01",
@@ -1108,7 +1090,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p100-source06",
     "p100-source07",
     "p100-source08",
-    "p100-source09"
+    "p100-source09",
   ],
   "101": [
     "p101-source01",
@@ -1117,7 +1099,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p101-source04",
     "p101-source05",
     "p101-source06",
-    "p101-source08"
+    "p101-source08",
   ],
   "102": [
     "p102-source01",
@@ -1129,7 +1111,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p102-source07",
     "p102-source08",
     "p102-source09",
-    "p102-source10"
+    "p102-source10",
   ],
   "103": [
     "p103-source01",
@@ -1141,7 +1123,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p103-source07",
     "p103-source08",
     "p103-source09",
-    "p103-squares554"
+    "p103-squares554",
   ],
   "104": [
     "p104-source01",
@@ -1154,7 +1136,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p104-source08",
     "p104-source09",
     "p104-source10",
-    "p104-compose561"
+    "p104-compose561",
   ],
   "105": [
     "p105-source-art",
@@ -1163,7 +1145,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p105-source03",
     "p105-source04",
     "p105-source05",
-    "p105-count571"
+    "p105-count571",
   ],
   "106": [
     "p106-source-art",
@@ -1173,7 +1155,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p106-source04",
     "p106-source05",
     "p106-source06",
-    "p106-source07"
+    "p106-source07",
   ],
   "107": [
     "p107-source-art",
@@ -1183,7 +1165,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p107-source04",
     "p107-source05",
     "p107-source06",
-    "p107-source07"
+    "p107-source07",
   ],
   "108": [
     "p108-source-art",
@@ -1195,7 +1177,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p108-source06",
     "p108-source07",
     "p108-source08",
-    "p108-source09"
+    "p108-source09",
   ],
   "109": [
     "p109-source01",
@@ -1206,7 +1188,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p109-source06",
     "p109-source07",
     "p109-source08",
-    "p109-source09"
+    "p109-source09",
   ],
   "110": [
     "p110-source01",
@@ -1216,7 +1198,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p110-source05",
     "p110-source06",
     "p110-source07",
-    "p110-source08"
+    "p110-source08",
   ],
   "111": [
     "p111-source01",
@@ -1224,7 +1206,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p111-source04",
     "p111-source05",
     "p111-source06",
-    "p111-source07"
+    "p111-source07",
   ],
   "112": [
     "p112-source01",
@@ -1234,7 +1216,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p112-source05",
     "p112-source06",
     "p112-source07",
-    "p112-source08"
+    "p112-source08",
   ],
   "113": [
     "p113-source01",
@@ -1245,7 +1227,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p113-source06",
     "p113-source07",
     "p113-source08",
-    "p113-source09"
+    "p113-source09",
   ],
   "114": [
     "p114-source01",
@@ -1256,7 +1238,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p114-source06",
     "p114-source07",
     "p114-source08",
-    "p114-source09"
+    "p114-source09",
   ],
   "115": [
     "p115-source01",
@@ -1266,7 +1248,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p115-source05",
     "p115-source06",
     "p115-source07",
-    "p115-source08"
+    "p115-source08",
   ],
   "116": [
     "p116-source01",
@@ -1276,7 +1258,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p116-source05",
     "p116-source06",
     "p116-source07",
-    "p116-source08"
+    "p116-source08",
   ],
   "117": [
     "p117-source-art",
@@ -1291,7 +1273,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p117-source09",
     "p117-source10",
     "p117-source11",
-    "p117-division654"
+    "p117-division654",
   ],
   "118": [
     "p118-source-art",
@@ -1302,7 +1284,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p118-source05",
     "p118-source06",
     "p118-source07",
-    "p118-source08"
+    "p118-source08",
   ],
   "119": [
     "p119-source-art",
@@ -1315,7 +1297,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p119-source07",
     "p119-source08",
     "p119-source09",
-    "p119-division672"
+    "p119-division672",
   ],
   "120": [
     "p120-source-art",
@@ -1327,7 +1309,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p120-source06",
     "p120-source07",
     "p120-source08",
-    "p120-source09"
+    "p120-source09",
   ],
   "121": [
     "p121-source01",
@@ -1341,7 +1323,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p121-source09",
     "p121-source10",
     "p121-source11",
-    "p121-source12"
+    "p121-source12",
   ],
   "122": [
     "p122-source01",
@@ -1353,7 +1335,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p122-source07",
     "p122-source08",
     "p122-source09",
-    "p122-source10"
+    "p122-source10",
   ],
   "123": [
     "p123-source01",
@@ -1364,7 +1346,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p123-source06",
     "p123-source07",
     "p123-source08",
-    "p123-source09"
+    "p123-source09",
   ],
   "124": [
     "p124-source01",
@@ -1374,14 +1356,14 @@ export const revision2Steps: Record<number, string[]> = {
     "p124-source05",
     "p124-source06",
     "p124-source07",
-    "p124-source08"
+    "p124-source08",
   ],
   "125": [
     "p125-source01",
     "p125-source02",
     "p125-source03",
     "p125-source04",
-    "p125-source05"
+    "p125-source05",
   ],
   "126": [
     "p126-source-art",
@@ -1391,7 +1373,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p126-source05",
     "p126-source06",
     "p126-source07",
-    "p126-source09"
+    "p126-source09",
   ],
   "127": [
     "p127-source-art",
@@ -1405,7 +1387,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p127-source08",
     "p127-source09",
     "p127-source10",
-    "p127-source11"
+    "p127-source11",
   ],
   "128": [
     "p128-source-art",
@@ -1417,7 +1399,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p128-source06",
     "p128-source07",
     "p128-source08",
-    "p128-source09"
+    "p128-source09",
   ],
   "129": [
     "p129-source-art",
@@ -1436,7 +1418,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p129-source13",
     "p129-source14",
     "p129-source15",
-    "p129-source16"
+    "p129-source16",
   ],
   "130": [
     "p130-source-art",
@@ -1450,7 +1432,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p130-source08",
     "p130-source09",
     "p130-source10",
-    "p130-source11"
+    "p130-source11",
   ],
   "131": [
     "p131-source-art",
@@ -1464,7 +1446,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p131-source08",
     "p131-source09",
     "p131-source10",
-    "p131-source11"
+    "p131-source11",
   ],
   "132": [
     "p132-source-art",
@@ -1478,7 +1460,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p132-source08",
     "p132-source09",
     "p132-source10",
-    "p132-source11"
+    "p132-source11",
   ],
   "133": [
     "p133-source01",
@@ -1492,7 +1474,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p133-source09",
     "p133-source10",
     "p133-source11",
-    "p133-source12"
+    "p133-source12",
   ],
   "134": [
     "p134-source01",
@@ -1508,7 +1490,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p134-source11",
     "p134-source12",
     "p134-source13",
-    "p134-source14"
+    "p134-source14",
   ],
   "135": [
     "p135-source01",
@@ -1519,7 +1501,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p135-source06",
     "p135-source07",
     "p135-source08",
-    "p135-source09"
+    "p135-source09",
   ],
   "136": [
     "p136-source01",
@@ -1532,7 +1514,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p136-source08",
     "p136-source09",
     "p136-source10",
-    "p136-source11"
+    "p136-source11",
   ],
   "137": [
     "p137-source01",
@@ -1547,7 +1529,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p137-source10",
     "p137-source11",
     "p137-source12",
-    "p137-source13"
+    "p137-source13",
   ],
   "138": [
     "p138-source01",
@@ -1559,7 +1541,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p138-source09",
     "p138-source10",
     "p138-source11",
-    "p138-source12"
+    "p138-source12",
   ],
   "139": [
     "p139-source01",
@@ -1572,7 +1554,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p139-source08",
     "p139-source09",
     "p139-source10",
-    "p139-source11"
+    "p139-source11",
   ],
   "140": [
     "p140-source01",
@@ -1586,7 +1568,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p140-source09",
     "p140-source10",
     "p140-source11",
-    "p140-source12"
+    "p140-source12",
   ],
   "141": [
     "p141-source01",
@@ -1600,7 +1582,7 @@ export const revision2Steps: Record<number, string[]> = {
     "p141-source09",
     "p141-source10",
     "p141-source11",
-    "p141-source12"
+    "p141-source12",
   ],
   "142": [
     "p142-source01",
@@ -1609,17 +1591,10 @@ export const revision2Steps: Record<number, string[]> = {
     "p142-source04",
     "p142-source05",
     "p142-source06",
-    "p142-play892"
+    "p142-play892",
   ],
-  "143": [
-    "p143-source01",
-    "p143-source02",
-    "p143-source03",
-    "p143-source04"
-  ],
-  "144": [
-    "p144-original"
-  ]
+  "143": ["p143-source01", "p143-source02", "p143-source03", "p143-source04"],
+  "144": ["p144-original"],
 };
 
 // Step IDs from content revision 3 on pages whose steps changed in review 2
@@ -1632,11 +1607,9 @@ export const revision3Steps: Record<number, string[]> = {
     "p018-lesson04",
     "p018-lesson05",
     "p018-lesson06",
-    "p018-lesson07"
+    "p018-lesson07",
   ],
-  "20": [
-    "p020-lesson01"
-  ],
+  "20": ["p020-lesson01"],
   "30": [
     "p030-source-art",
     "p030-source01",
@@ -1648,7 +1621,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p030-source11",
     "p030-source13",
     "p030-source14",
-    "p030-source16"
+    "p030-source16",
   ],
   "31": [
     "p031-source-art",
@@ -1659,7 +1632,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p031-source08",
     "p031-source09",
     "p031-source11",
-    "p031-source12"
+    "p031-source12",
   ],
   "33": [
     "p033-source-art",
@@ -1668,7 +1641,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p033-source05",
     "p033-source07",
     "p033-source08",
-    "p033-source10"
+    "p033-source10",
   ],
   "35": [
     "p035-source-art",
@@ -1680,7 +1653,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p035-source11",
     "p035-source13",
     "p035-source14",
-    "p035-source16"
+    "p035-source16",
   ],
   "36": [
     "p036-source-art",
@@ -1690,7 +1663,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p036-source07",
     "p036-source09",
     "p036-source11",
-    "p036-source13"
+    "p036-source13",
   ],
   "38": [
     "p038-source01",
@@ -1704,7 +1677,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p038-source09",
     "p038-source10",
     "p038-source11",
-    "p038-source12"
+    "p038-source12",
   ],
   "40": [
     "p040-source01",
@@ -1720,7 +1693,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p040-source11",
     "p040-source12",
     "p040-source13",
-    "p040-source14"
+    "p040-source14",
   ],
   "41": [
     "p041-source01",
@@ -1733,7 +1706,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p041-source08",
     "p041-source09",
     "p041-source10",
-    "p041-source11"
+    "p041-source11",
   ],
   "42": [
     "p042-source01",
@@ -1748,7 +1721,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p042-source10",
     "p042-source11",
     "p042-source12",
-    "p042-source13"
+    "p042-source13",
   ],
   "43": [
     "p043-source01",
@@ -1765,7 +1738,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p043-source12",
     "p043-source13",
     "p043-source14",
-    "p043-source15"
+    "p043-source15",
   ],
   "46": [
     "p046-source01",
@@ -1783,7 +1756,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p046-source13",
     "p046-source14",
     "p046-source15",
-    "p046-source16"
+    "p046-source16",
   ],
   "49": [
     "p049-source01",
@@ -1797,7 +1770,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p049-source09",
     "p049-source10",
     "p049-source11",
-    "p049-source12"
+    "p049-source12",
   ],
   "50": [
     "p050-source01",
@@ -1808,7 +1781,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p050-source06",
     "p050-source07",
     "p050-source08",
-    "p050-source09"
+    "p050-source09",
   ],
   "51": [
     "p051-source01",
@@ -1824,7 +1797,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p051-source11",
     "p051-source12",
     "p051-source13",
-    "p051-source14"
+    "p051-source14",
   ],
   "52": [
     "p052-source01",
@@ -1835,7 +1808,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p052-source06",
     "p052-source07",
     "p052-source08",
-    "p052-source09"
+    "p052-source09",
   ],
   "53": [
     "p053-source01",
@@ -1843,7 +1816,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p053-source03",
     "p053-source04",
     "p053-source05",
-    "p053-source06"
+    "p053-source06",
   ],
   "54": [
     "p054-source01",
@@ -1854,7 +1827,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p054-source06",
     "p054-source07",
     "p054-source08",
-    "p054-source09"
+    "p054-source09",
   ],
   "59": [
     "p059-source-art",
@@ -1863,7 +1836,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p059-source03",
     "p059-source04",
     "p059-source05",
-    "p059-source06"
+    "p059-source06",
   ],
   "62": [
     "p062-source01",
@@ -1877,7 +1850,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p062-source09",
     "p062-source10",
     "p062-source11",
-    "p062-source12"
+    "p062-source12",
   ],
   "74": [
     "p074-source01",
@@ -1891,7 +1864,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p074-source09",
     "p074-source10",
     "p074-source11",
-    "p074-source12"
+    "p074-source12",
   ],
   "78": [
     "p078-source01",
@@ -1904,7 +1877,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p078-source08",
     "p078-source09",
     "p078-source10",
-    "p078-source11"
+    "p078-source11",
   ],
   "86": [
     "p086-source01",
@@ -1915,7 +1888,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p086-source06",
     "p086-source07",
     "p086-source08",
-    "p086-source09"
+    "p086-source09",
   ],
   "93": [
     "p093-source-art",
@@ -1925,7 +1898,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p093-source05",
     "p093-source06",
     "p093-source07",
-    "p093-source08"
+    "p093-source08",
   ],
   "97": [
     "p097-source01",
@@ -1939,7 +1912,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p097-source09",
     "p097-source10",
     "p097-source11",
-    "p097-source12"
+    "p097-source12",
   ],
   "108": [
     "p108-source-art",
@@ -1951,7 +1924,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p108-source06",
     "p108-source07",
     "p108-source08",
-    "p108-source09"
+    "p108-source09",
   ],
   "109": [
     "p109-source01",
@@ -1962,7 +1935,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p109-source06",
     "p109-source07",
     "p109-source08",
-    "p109-source09"
+    "p109-source09",
   ],
   "110": [
     "p110-source01",
@@ -1972,7 +1945,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p110-source05",
     "p110-source06",
     "p110-source07",
-    "p110-source08"
+    "p110-source08",
   ],
   "113": [
     "p113-source01",
@@ -1983,7 +1956,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p113-source06",
     "p113-source07",
     "p113-source08",
-    "p113-source09"
+    "p113-source09",
   ],
   "115": [
     "p115-source01",
@@ -1993,7 +1966,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p115-source05",
     "p115-source06",
     "p115-source07",
-    "p115-source08"
+    "p115-source08",
   ],
   "116": [
     "p116-source01",
@@ -2003,7 +1976,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p116-source05",
     "p116-source06",
     "p116-source07",
-    "p116-source08"
+    "p116-source08",
   ],
   "121": [
     "p121-source01",
@@ -2017,7 +1990,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p121-source09",
     "p121-source10",
     "p121-source11",
-    "p121-source12"
+    "p121-source12",
   ],
   "122": [
     "p122-source01",
@@ -2029,7 +2002,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p122-source07",
     "p122-source08",
     "p122-source09",
-    "p122-source10"
+    "p122-source10",
   ],
   "126": [
     "p126-source01",
@@ -2038,7 +2011,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p126-source05",
     "p126-source06",
     "p126-source07",
-    "p126-source09"
+    "p126-source09",
   ],
   "127": [
     "p127-source-art",
@@ -2052,7 +2025,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p127-source08",
     "p127-source09",
     "p127-source10",
-    "p127-source11"
+    "p127-source11",
   ],
   "129": [
     "p129-source-art",
@@ -2071,7 +2044,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p129-source13",
     "p129-source14",
     "p129-source15",
-    "p129-source16"
+    "p129-source16",
   ],
   "130": [
     "p130-source-art",
@@ -2085,7 +2058,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p130-source08",
     "p130-source09",
     "p130-source10",
-    "p130-source11"
+    "p130-source11",
   ],
   "134": [
     "p134-source01",
@@ -2101,7 +2074,7 @@ export const revision3Steps: Record<number, string[]> = {
     "p134-source11",
     "p134-source12",
     "p134-source13",
-    "p134-source14"
+    "p134-source14",
   ],
   "137": [
     "p137-source01",
@@ -2116,14 +2089,9 @@ export const revision3Steps: Record<number, string[]> = {
     "p137-source10",
     "p137-source11",
     "p137-source12",
-    "p137-source13"
+    "p137-source13",
   ],
-  "143": [
-    "p143-source01",
-    "p143-source02",
-    "p143-source03",
-    "p143-source04"
-  ]
+  "143": ["p143-source01", "p143-source02", "p143-source03", "p143-source04"],
 };
 
 // Step IDs from content revision 4 on pages whose steps changed afterwards: a page footer
@@ -2140,6 +2108,20 @@ export const revision4Steps: Record<number, string[]> = {
     "p099-source08",
     "p099-source09",
     "p099-source10",
-    "p099-source11"
-  ]
+    "p099-source11",
+  ],
+};
+// Step IDs from content revision 5 on pages whose steps changed afterwards: the two
+// pictures of balls on page 11 were one step with six questions.
+export const revision5Steps: Record<number, string[]> = {
+  "11": [
+    "p011-lesson01",
+    "p011-lesson02",
+    "p011-lesson03",
+    "p011-lesson04",
+    "p011-lesson05",
+    "p011-walk-three",
+    "p011-lesson06",
+    "p011-lesson07",
+  ],
 };
