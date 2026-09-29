@@ -17,7 +17,9 @@ import { promptRepeatsTitle } from "../lib/blockText";
 import { offerHelp, retryLine, successLine } from "../lib/feedback";
 import { BookImage } from "./BookImage";
 import { assets } from "../content/assets";
-import { useTaskSize } from "./taskSize";
+import { fitsPhone, useTaskSize } from "./taskSize";
+import { scrollbarGutter } from "../lib/scrollbar";
+import { useSheetWindow } from "../lib/settledWindow";
 import { Button, RetryNote } from "./Controls";
 import { TextWithBlanks } from "./Blank";
 import { HandFrame, Rows } from "./HandDrawn";
@@ -143,6 +145,23 @@ function ExerciseBody({
       : undefined;
   const done = isDone(block, answer),
     correct = isCorrect(block, answer);
+  // A phone shows this task whole (see `fitsPhone`).
+  const whole = size.compact && fitsPhone(block.kind);
+  // On a phone the eleven answers take two rows of six, half a cell apart
+  // and two cells high: five rows of the sheet in all.
+  const sheetWidth = useSheetWindow().width;
+  const phone = size.compact
+    ? (() => {
+        const writing =
+            rowWidth || wholeCells(sheetWidth - scrollbarGutter() - CELL / 2),
+          gap = CELL / 2;
+        return {
+          gap,
+          box: Math.min(CELL * 3, Math.floor((writing - 5 * gap) / 6)),
+          high: CELL * 2,
+        };
+      })()
+    : null;
   // An answer given by a press is checked at once: a miss is counted here.
   const missed = (wrong: boolean) => (answer.attempts ?? 0) + (wrong ? 1 : 0);
   const update = (patch: Partial<Answer>) =>
@@ -270,10 +289,13 @@ function ExerciseBody({
                   testID="picture-frame"
                   style={[
                     s.images,
+                    // On a phone that shows the task whole the rows of the
+                    // frame's margins go to the picture.
+                    whole && { padding: 0 },
                     // One picture: the frame hugs it instead of leaving wide
                     // white fields at its sides.
                     pictureWidth !== undefined && {
-                      maxWidth: pictureWidth + CELL,
+                      maxWidth: pictureWidth + (whole ? 0 : CELL),
                       width: "100%",
                       alignSelf: "center",
                     },
@@ -400,7 +422,23 @@ function ExerciseBody({
                 <Text style={s.instruction}>Выбери верное число ниже.</Text>
               )}
               {block.kind === "number" && (
-                <View style={s.options}>
+                <Rows
+                  testID="number-answers"
+                  // On a phone the eleven answers lie in two rows, so that
+                  // all of them are seen under the picture; they are laid
+                  // out by the width of the screen, not by the cells.
+                  object={!!phone}
+                  contentStyle={[
+                    s.options,
+                    !!phone && {
+                      columnGap: phone.gap,
+                      rowGap: CELL,
+                      // Six to a row and no more, whatever is left of
+                      // the width after the boxes.
+                      maxWidth: phone.box * 6 + phone.gap * 5,
+                    },
+                  ]}
+                >
                   {Array.from({ length: 11 }, (_, n) => (
                     <AnswerAnchor key={n} value={n}>
                       <Pressable
@@ -418,6 +456,7 @@ function ExerciseBody({
                         }
                         style={({ pressed }) => [
                           s.number,
+                          !!phone && { width: phone.box, height: phone.high },
                           pressed && s.pressed,
                           answer.value === n && s.selected,
                         ]}
@@ -425,6 +464,7 @@ function ExerciseBody({
                         <Text
                           style={[
                             s.digit,
+                            !!phone && s.digitPhone,
                             answer.value === n && { color: c.white },
                           ]}
                         >
@@ -433,7 +473,7 @@ function ExerciseBody({
                       </Pressable>
                     </AnswerAnchor>
                   ))}
-                </View>
+                </Rows>
               )}
               {block.kind === "choice" && (
                 <View style={s.options}>
@@ -638,6 +678,7 @@ const s = StyleSheet.create({
     fontSize: 34,
     lineHeight: CELL * 2,
   },
+  digitPhone: { fontSize: 30, lineHeight: CELL * 2 },
   // Pressed, a box answers at once; chosen, it is filled and framed.
   pressed: { backgroundColor: c.wash },
   selected: {

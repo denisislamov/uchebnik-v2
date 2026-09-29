@@ -1,5 +1,5 @@
 {
-  "passed": false,
+  "passed": true,
   "viewport": {
     "width": 800,
     "height": 375
@@ -1014,7 +1014,7 @@
           },
           "hole": {
             "x": 40,
-            "y": 50,
+            "y": 51,
             "width": 712,
             "height": 88
           },
@@ -1113,7 +1113,7 @@
           },
           "hole": {
             "x": 40,
-            "y": 39,
+            "y": 42,
             "width": 712,
             "height": 88
           },
@@ -1528,7 +1528,7 @@
           },
           "hole": {
             "x": 40,
-            "y": 51,
+            "y": 48,
             "width": 712,
             "height": 88
           },
@@ -2432,7 +2432,7 @@
           },
           "hole": {
             "x": 40,
-            "y": 45,
+            "y": 40,
             "width": 712,
             "height": 88
           },
@@ -2492,10 +2492,117 @@
     {
       "id": "p007-block11",
       "family": "number.quantity-symbol",
-      "steps": [],
-      "issues": [
-        "locator.click: Timeout 7000ms exceeded.\nCall log:\n  - waiting for getByRole('button', { name: 'Как это сделать?', exact: true })\n    - locator resolved to <button tabindex=\"0\" role=\"button\" type=\"button\" class=\"css-g5y9jx r-1loqt21 r-1otgn73 r-1awozwy r-kdyh1x r-1777fci r-1la8lll r-1pl7oy7 r-14lw9ot r-qfuuup r-wgabs5 r-17bcbqt r-rs99b7 r-1mi0q7o r-1b3ntt7 r-gu64tb\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n"
-      ]
+      "steps": [
+        {
+          "index": 1,
+          "text": "Найди на рисунке именно те предметы, о которых спрашивают. Считай каждый предмет один раз.",
+          "card": {
+            "x": 12,
+            "y": 198,
+            "width": 776,
+            "height": 165
+          },
+          "hole": {
+            "x": 40,
+            "y": 47,
+            "width": 712,
+            "height": 139
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "Начинаем: 1. Последнее число говорит, сколько всего.",
+          "card": {
+            "x": 12,
+            "y": 198,
+            "width": 776,
+            "height": 165
+          },
+          "hole": {
+            "x": 40,
+            "y": 47,
+            "width": 712,
+            "height": 139
+          },
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Сосчитай предметы в своём задании и нажми нужную цифру.",
+          "card": {
+            "x": 12,
+            "y": 202,
+            "width": 776,
+            "height": 161
+          },
+          "hole": {
+            "x": 40,
+            "y": 47,
+            "width": 712,
+            "height": 143
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        },
+        {
+          "index": 4,
+          "text": "Считай по одному. Не пропускай предметы и не считай один предмет дважды.",
+          "card": {
+            "x": 12,
+            "y": 202,
+            "width": 776,
+            "height": 161
+          },
+          "hole": {
+            "x": 40,
+            "y": 57,
+            "width": 712,
+            "height": 88
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
     },
     {
       "id": "p008-block01",
@@ -10523,10 +10630,90 @@
     {
       "id": "p058-source04",
       "family": "number-game.hidden",
-      "steps": [],
-      "issues": [
-        "page.waitForFunction: Timeout 5000ms exceeded."
-      ]
+      "steps": [
+        {
+          "index": 1,
+          "text": "Видно 4, а вместе должно быть 6. Сколько не хватает?",
+          "card": {
+            "x": 12,
+            "y": 198,
+            "width": 776,
+            "height": 165
+          },
+          "hole": {
+            "x": 40,
+            "y": 12,
+            "width": 712,
+            "height": 174
+          },
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        },
+        {
+          "index": 2,
+          "text": "От 4 досчитаем до 6: пять, шесть. Добавили 2. Впиши спрятанное число в каждом раунде.",
+          "card": {
+            "x": 12,
+            "y": 198,
+            "width": 776,
+            "height": 165
+          },
+          "hole": {
+            "x": 40,
+            "y": 12,
+            "width": 712,
+            "height": 174
+          },
+          "finger": null,
+          "surface": null,
+          "example": true,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        },
+        {
+          "index": 3,
+          "text": "Нажми «Открыть карточку», чтобы проверить число. Затем переходи к следующему раунду.",
+          "card": {
+            "x": 12,
+            "y": 198,
+            "width": 776,
+            "height": 165
+          },
+          "hole": {
+            "x": 40,
+            "y": 12,
+            "width": 712,
+            "height": 174
+          },
+          "finger": null,
+          "surface": null,
+          "example": false,
+          "offscreenHelp": false,
+          "pane": {
+            "x": 0,
+            "y": 0,
+            "width": 800,
+            "height": 295
+          },
+          "issues": []
+        }
+      ],
+      "issues": []
     },
     {
       "id": "p059-source03",

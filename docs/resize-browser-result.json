@@ -6,7 +6,7 @@
       "page": 4,
       "index": 1,
       "layoutsDuringDrag": 1,
-      "settledInMs": 110,
+      "settledInMs": 119,
       "followedOnceInMs": 11
     },
     {
@@ -14,15 +14,15 @@
       "page": 4,
       "index": 4,
       "layoutsDuringDrag": 1,
-      "settledInMs": 213,
-      "followedOnceInMs": 8
+      "settledInMs": 202,
+      "followedOnceInMs": 12
     },
     {
       "kind": "draw",
       "page": 3,
       "index": 5,
       "layoutsDuringDrag": 1,
-      "settledInMs": 124,
+      "settledInMs": 128,
       "followedOnceInMs": 15
     },
     {
@@ -30,8 +30,8 @@
       "page": 11,
       "index": 0,
       "layoutsDuringDrag": 1,
-      "settledInMs": 113,
-      "followedOnceInMs": 9
+      "settledInMs": 109,
+      "followedOnceInMs": 11
     }
   ],
   "errors": []

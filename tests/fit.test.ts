@@ -80,3 +80,40 @@ test("the last look shows the task whatever it sees", () => {
   assert.equal(fitLook(startFit(), 300, 720, 0).show, true);
   assert.equal(fitLook(startFit(), 900, 720, 0).show, true);
 });
+
+test("on a phone a task that cannot be seen whole gets its picture back", () => {
+  // The picture gives up to 150 px and no more; the task is still too long.
+  const height = (extra: number) => 900 + Math.max(-150, extra);
+  let fit: Fit = startFit(),
+    shown = false,
+    looks = 0;
+  while (!shown && looks < 12) {
+    const next = fitLook(fit, height(fit.extra), 600, 12 - looks, true);
+    fit = next.fit;
+    shown = next.show;
+    looks++;
+  }
+  assert.ok(shown);
+  assert.equal(fit.extra, 0, "nothing stays taken from the picture");
+  assert.equal(fit.left, true);
+  // Looked at again later — once pictures have loaded — it is left alone.
+  const later = fitLook(fit, height(0), 600, 8, true);
+  assert.equal(later.fit.extra, 0);
+  assert.deepEqual([later.show, later.again], [true, false]);
+});
+
+test("on a phone a task that fits is fitted as anywhere else", () => {
+  const height = (extra: number) => 640 + Math.max(-150, extra);
+  let fit: Fit = startFit(),
+    shown = false,
+    looks = 0;
+  while (!shown && looks < 12) {
+    const next = fitLook(fit, height(fit.extra), 600, 12 - looks, true);
+    fit = next.fit;
+    shown = next.show;
+    looks++;
+  }
+  assert.ok(shown);
+  assert.ok(!fit.left);
+  assert.ok(height(fit.extra) <= 600 - 24 + 6);
+});

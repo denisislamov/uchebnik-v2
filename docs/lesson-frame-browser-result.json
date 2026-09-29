@@ -41,8 +41,8 @@
       "answer": {
         "x": 7,
         "y": 504,
-        "width": 72,
-        "height": 72
+        "width": 50,
+        "height": 48
       }
     },
     {
@@ -57,7 +57,7 @@
         "width": 390,
         "height": 844
       },
-      "adultGate": "тридцать один"
+      "adultGate": "сорок девять"
     },
     {
       "viewport": {
@@ -173,7 +173,28 @@
         "width": 1280,
         "height": 800
       },
-      "adultGate": "сорок два"
+      "adultGate": "тридцать два"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seenWhole": 37
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 664
+      },
+      "seenWhole": 37
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "seenWhole": 37
     }
   ],
   "errors": []

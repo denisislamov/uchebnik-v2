@@ -19,6 +19,8 @@ export type Fit = {
   idle: number;
   /** Whether anything has been handed over since the step was opened. */
   handed: boolean;
+  /** The task cannot be fitted and has been left as it is laid out by itself. */
+  left?: boolean;
 };
 export const LEAST = -600,
   MOST = 900;
@@ -38,7 +40,13 @@ export function fitLook(
   bottom: number,
   pane: number,
   looksLeft: number,
+  /**
+   * On a phone a task that cannot be seen whole is not squeezed for nothing:
+   * what was taken from its picture is given back, and the task is scrolled.
+   */
+  orAsItIs = false,
 ): { fit: Fit; show: boolean; again: boolean } {
+  if (fit.left) return { fit, show: true, again: false };
   // A row is kept empty under the task.
   const slack = pane - bottom - CELL;
   const still = Math.abs(bottom - fit.seen) < 1;
@@ -68,6 +76,12 @@ export function fitLook(
   // Nothing more to try: shown as it is, and scrolled if it is too long.
   const spent = extra === fit.extra;
   const show = spent || looksLeft <= 0;
+  if (show && slack < 0 && orAsItIs)
+    return {
+      fit: { extra: 0, seen: bottom, idle: 0, handed: true, left: true },
+      show: true,
+      again: false,
+    };
   return {
     fit: { extra, seen: bottom, idle, handed: true },
     show,

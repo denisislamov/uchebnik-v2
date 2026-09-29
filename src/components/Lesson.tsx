@@ -63,7 +63,11 @@ export function LessonTop({
   help: React.ReactNode;
 }) {
   return (
-    <View testID="lesson-top" style={s.top}>
+    <View
+      testID="lesson-top"
+      // The narrowest phones have half a cell between the three.
+      style={[s.top, compact && width < cells(13) && { gap: CELL / 2 }]}
+    >
       <Pressable
         accessibilityRole="button"
         accessibilityLabel="На главную"
@@ -85,7 +89,13 @@ export function LessonTop({
         onPress={onSteps}
         style={[s.steps, compact && s.stepsCompact]}
       >
-        <Text style={[s.stepsText, compact && { fontSize: 14 }]}>{step}</Text>
+        <Text
+          numberOfLines={1}
+          style={[s.stepsText, compact && { fontSize: 14 }]}
+        >
+          {/* A narrow phone has room for the count alone. */}
+          {compact && width < cells(15) ? step.replace(/^Шаг /, "") : step}
+        </Text>
       </Pressable>
       {help}
     </View>

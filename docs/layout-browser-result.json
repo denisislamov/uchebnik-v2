@@ -1,5 +1,5 @@
 {
-  "passed": false,
+  "passed": true,
   "checks": [
     {
       "viewport": {
@@ -26,6 +26,25 @@
         "root": "100dvh"
       },
       "imageHeight": 336
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "homeArrow": 24,
+      "dvh": {
+        "supported": true,
+        "html": "100dvh",
+        "root": "100dvh"
+      },
+      "imageHeight": 240
+    },
+    {
+      "phoneSheet": [
+        408,
+        408
+      ]
     }
   ],
   "errors": []

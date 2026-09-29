@@ -6,14 +6,17 @@
  *  - The way out and the help stand over the task, «Назад» and «Дальше» under the sheet — in the same
  *    place on every step, and always in view.
  *  - What a finger aims at is large and stands apart: answers three cells by three and a cell apart,
- *    navigation 64 px high, nothing pressed smaller than 48 px.
+ *    navigation 64 px high, nothing pressed smaller than 48 px. On a phone the eleven answers take two
+ *    rows of six, so that all of them are seen.
+ *  - A phone shows a task with a picture and answers whole: what is asked, the picture and every
+ *    answer are on the screen at once, with nothing to scroll to.
  *  - A page ends with a word about it and a choice: go on or stop. Stopping keeps the progress.
  *  - The adults' part opens after a question a child does not answer.
  */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
-const { baseURL, newTestContext, openStep } = require("./browser-context.cjs");
+const { baseURL, newTestContext, openStep, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 const words = {
   двадцать: 20, тридцать: 30, сорок: 40, пятьдесят: 50, шестьдесят: 60, семьдесят: 70, восемьдесят: 80, девяносто: 90,
@@ -27,6 +30,7 @@ const words = {
   const numberIndex = numberStep.blocks.findIndex((b) => b.kind === "number");
   const browser = await chromium.launch({ headless: true });
   const report = { passed: false, checks: [], errors: [] };
+  let whole = [];
   try {
     for (const viewport of [
       { width: 390, height: 844 },
@@ -76,13 +80,16 @@ const words = {
       // Answers: large, apart, and away from the navigation.
       const answers = await p.getByRole("button", { name: /^Ответ \d+$/ }).evaluateAll((els) => els.map((e) => e.getBoundingClientRect()).map((r) => ({ x: r.x, y: r.y, width: r.width, height: r.height })));
       assert.equal(answers.length, 11);
-      for (const a of answers) assert.ok(a.width >= 72 && a.height >= 72, `${viewport.width}: an answer is ${a.width}×${a.height}`);
+      const phone = viewport.width < 600;
+      for (const a of answers)
+        assert.ok(phone ? a.width >= 44 && a.height >= 48 : a.width >= 72 && a.height >= 72, `${viewport.width}: an answer is ${a.width}×${a.height}`);
+      if (phone) assert.equal(new Set(answers.map((a) => Math.round(a.y))).size, 2, "on a phone the answers take two rows");
       for (const a of answers)
         for (const b of answers)
           if (a !== b) {
             const dx = Math.max(b.x - (a.x + a.width), a.x - (b.x + b.width)),
               dy = Math.max(b.y - (a.y + a.height), a.y - (b.y + b.height));
-            assert.ok(Math.max(dx, dy) >= 24 - 0.5, `${viewport.width}: answers stand ${Math.max(dx, dy)} px apart`);
+            assert.ok(Math.max(dx, dy) >= (phone ? 12 : 24) - 0.5, `${viewport.width}: answers stand ${Math.max(dx, dy)} px apart`);
           }
       for (const other of [numberIndex + 1, 0]) {
         await openStep(p, `Шаг ${other + 1}: ${numberStep.blocks[other].title}`);
@@ -168,13 +175,60 @@ const words = {
       report.checks.push({ viewport, adultGate: question });
       await ctx.close();
     }
+    // A phone shows the task whole, whatever its height: the screens of common phones, with and
+    // without the browser's own bars.
+    for (const page of pages.filter((p) => p.number >= 3 && p.number <= 12))
+      for (const [index, b] of page.blocks.entries())
+        if (["number", "choice", "location"].includes(b.kind) || (b.kind === "picture" && !b.quantityMeaning)) whole.push({ page: page.number, index, b });
+    for (const viewport of [
+      { width: 390, height: 844 },
+      { width: 390, height: 664 },
+      { width: 360, height: 640 },
+    ]) {
+      const ctx = await newTestContext(browser, { viewport, hasTouch: true });
+      const p = await ctx.newPage();
+      p.on("pageerror", (e) => report.errors.push(e.message));
+      await p.goto(baseURL + "/metadata.json");
+      const hidden = [];
+      for (const { page, index, b } of whole) {
+        await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 5, page: n, block: i, answers: {} })), { KEY, n: page, i: index });
+        await p.goto(baseURL);
+        await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
+        await stepShown(p);
+        await p.waitForTimeout(100);
+        const seen = await p.evaluate(() => {
+          const pane = document.querySelector('[data-testid="lesson-scroll-pane"]');
+          const view = pane.getBoundingClientRect();
+          const inView = (e) => {
+            const r = e.getBoundingClientRect();
+            return r.top >= view.top - 1 && r.bottom <= view.bottom + 1;
+          };
+          const card = document.querySelector('[data-testid="exercise-card"]');
+          const pressed = [...card.querySelectorAll('[role="button"]')];
+          const pictures = [...card.querySelectorAll("img")];
+          return {
+            scrolled: pane.scrollTop,
+            longer: pane.scrollHeight - pane.clientHeight,
+            out: pressed.filter((e) => !inView(e)).map((e) => e.innerText || e.getAttribute("aria-label")),
+            pictures: pictures.map((e) => Math.round(e.getBoundingClientRect().height)),
+            picturesOut: pictures.filter((e) => !inView(e)).length,
+            title: inView(card.querySelector('[data-testid="block-title"]')),
+          };
+        });
+        if (seen.scrolled || seen.longer > 1 || seen.out.length || seen.picturesOut || !seen.title || (seen.pictures.length && Math.min(...seen.pictures) < 96))
+          hidden.push({ id: b.id, kind: b.kind, ...seen });
+      }
+      assert.deepEqual(hidden, [], `${viewport.width}×${viewport.height}: ${hidden.length} tasks are not seen whole`);
+      report.checks.push({ viewport, seenWhole: whole.length });
+      await ctx.close();
+    }
     assert.deepEqual(report.errors, []);
     report.passed = true;
   } finally {
     fs.writeFileSync("docs/lesson-frame-browser-result.json", JSON.stringify(report, null, 2) + "\n");
     await browser.close();
   }
-  console.log(`PASS lesson frame: ${report.checks.length} checks on 3 screens`);
+  console.log(`PASS lesson frame: ${report.checks.length} checks; a phone shows ${whole.length} tasks whole on 3 screens`);
 })().catch((e) => {
   console.error(e);
   process.exit(1);

@@ -37,7 +37,7 @@ import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
-import { TaskFitExtra } from "./src/components/taskSize";
+import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
 import { SettledWindow, useSettledWindowSource } from "./src/lib/settledWindow";
 import { scrollbarGutter } from "./src/lib/scrollbar";
 import { fitLook, startFit } from "./src/lib/fit";
@@ -314,8 +314,10 @@ function Main() {
   const lessonMain = useRef<View>(null);
   useEffect(() => {
     setFit((f) => (f.key === fitKey ? f : { key: fitKey, extra: 0 }));
-    if (compact || home || pageEnd) setShown(fitKey);
-    if (compact || home || pageEnd || !paneHeight) return;
+    // A phone scrolls, except for the tasks it shows whole.
+    const fitted = !compact || fitsPhone(block.kind);
+    if (!fitted || home || pageEnd) setShown(fitKey);
+    if (!fitted || home || pageEnd || !paneHeight) return;
     // The task is looked at right after it is laid out and again once
     // pictures have loaded; each look goes on, a few frames apart, until the
     // task fits (see fitLook). Then the size stays as it is.
@@ -330,6 +332,7 @@ function Main() {
           y + h + lastScroll.current,
           paneHeight,
           more,
+          compact,
         );
         if (next.fit.extra !== state.extra)
           setFit({ key: fitKey, extra: next.fit.extra });

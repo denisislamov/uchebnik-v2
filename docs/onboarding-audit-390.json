@@ -20,12 +20,17 @@
           },
           "hole": {
             "x": 12,
-            "y": 196,
-            "width": 351,
-            "height": 160
+            "y": 211.6875,
+            "width": 366,
+            "height": 186.625
           },
           "finger": null,
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 219.6875,
+            "width": 350,
+            "height": 170.625
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -47,12 +52,17 @@
           },
           "hole": {
             "x": 12,
-            "y": 196,
-            "width": 351,
-            "height": 160
+            "y": 199.1875,
+            "width": 366,
+            "height": 186.625
           },
           "finger": null,
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 207.1875,
+            "width": 350,
+            "height": 170.625
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -696,18 +706,23 @@
             "height": 310
           },
           "hole": {
-            "x": 94.25,
-            "y": 240.671875,
-            "width": 48.90625,
-            "height": 72.96875
+            "x": 97.984375,
+            "y": 180.171875,
+            "width": 50.5625,
+            "height": 79.078125
           },
           "finger": {
-            "x": 109.703125,
-            "y": 294.109375,
+            "x": 114.265625,
+            "y": 238.796875,
             "width": 34,
             "height": 44
           },
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 112.125,
+            "width": 350,
+            "height": 265.734375
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -729,14 +744,14 @@
             "height": 285
           },
           "hole": {
-            "x": 191,
-            "y": 660,
-            "width": 88,
-            "height": 88
+            "x": 247,
+            "y": 568,
+            "width": 66,
+            "height": 64
           },
           "finger": {
-            "x": 226,
-            "y": 701,
+            "x": 271,
+            "y": 597,
             "width": 34,
             "height": 44
           },
@@ -763,7 +778,7 @@
           },
           "hole": {
             "x": 12,
-            "y": 36,
+            "y": 64,
             "width": 363,
             "height": 88
           },
@@ -1345,13 +1360,18 @@
             "height": 215
           },
           "hole": {
-            "x": 43.59375,
-            "y": 196,
-            "width": 286.8125,
-            "height": 256
+            "x": 12,
+            "y": 121,
+            "width": 366,
+            "height": 342.96875
           },
           "finger": null,
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 129,
+            "width": 350,
+            "height": 326.96875
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -1373,9 +1393,9 @@
           },
           "hole": {
             "x": 12,
-            "y": 472,
+            "y": 544,
             "width": 363,
-            "height": 88
+            "height": 86
           },
           "finger": null,
           "surface": null,
@@ -1400,9 +1420,9 @@
           },
           "hole": {
             "x": 12,
-            "y": 472,
+            "y": 544,
             "width": 363,
-            "height": 88
+            "height": 86
           },
           "finger": null,
           "surface": null,
@@ -2476,7 +2496,7 @@
             "x": 12,
             "y": 184,
             "width": 363,
-            "height": 328
+            "height": 184
           },
           "finger": null,
           "surface": null,
@@ -2503,7 +2523,7 @@
             "x": 12,
             "y": 184,
             "width": 363,
-            "height": 316
+            "height": 184
           },
           "finger": null,
           "surface": null,
@@ -2530,7 +2550,7 @@
             "x": 12,
             "y": 184,
             "width": 363,
-            "height": 328
+            "height": 184
           },
           "finger": null,
           "surface": null,
@@ -3361,12 +3381,17 @@
           },
           "hole": {
             "x": 12,
-            "y": 232,
-            "width": 352.0625,
-            "height": 369.984375
+            "y": 113.796875,
+            "width": 366,
+            "height": 382.40625
           },
           "finger": null,
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 121.796875,
+            "width": 350,
+            "height": 366.40625
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -3388,12 +3413,17 @@
           },
           "hole": {
             "x": 12,
-            "y": 232,
-            "width": 352.0625,
-            "height": 369.984375
+            "y": 101.296875,
+            "width": 366,
+            "height": 382.40625
           },
           "finger": null,
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 109.296875,
+            "width": 350,
+            "height": 366.40625
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -3415,12 +3445,17 @@
           },
           "hole": {
             "x": 12,
-            "y": 232,
-            "width": 352.0625,
-            "height": 369.984375
+            "y": 101.296875,
+            "width": 366,
+            "height": 382.40625
           },
           "finger": null,
-          "surface": null,
+          "surface": {
+            "x": 20,
+            "y": 109.296875,
+            "width": 350,
+            "height": 366.40625
+          },
           "example": false,
           "offscreenHelp": false,
           "pane": {
@@ -11226,7 +11261,7 @@
           },
           "finger": {
             "x": 186,
-            "y": 376.25,
+            "y": 390.5,
             "width": 34,
             "height": 44
           },
@@ -12758,7 +12793,7 @@
           },
           "finger": {
             "x": 186,
-            "y": 326.375,
+            "y": 390.5,
             "width": 34,
             "height": 44
           },

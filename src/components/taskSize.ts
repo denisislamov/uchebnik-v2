@@ -33,22 +33,47 @@ export function useTaskSize() {
     fit,
     tall,
     measured: compact ? 0 : measured,
+    // On a phone a task that can be seen whole — a picture with a few
+    // answers under it — is fitted to the screen too (see `fitsPhone`): the
+    // picture gives up rows, down to four of them, until the answers are in
+    // view, or takes the rows a tall screen leaves. Any other task scrolls,
+    // and its picture keeps its share.
     /** Illustration next to something to answer. */
     picture: compact
-      ? clamp(height * 0.3, 170, 280)
+      ? clamp(
+          height * 0.3 + measured,
+          measured ? 96 : 170,
+          measured ? 420 : 280,
+        )
       : clamp(height - 470 - extra, 180, 1400),
     /** Illustration of a step that is only looked at. */
     read: compact
-      ? clamp(height * 0.4, 220, 360)
+      ? clamp(
+          height * 0.4 + measured,
+          measured ? 96 : 220,
+          measured ? 480 : 360,
+        )
       : clamp(height - 400 - extra, 220, 1400),
     /** Picture that is itself the answer: it gets the most room. */
     target: compact
-      ? clamp(height * 0.42, 240, 420)
+      ? clamp(
+          height * 0.42 + measured,
+          measured ? 120 : 240,
+          measured ? 480 : 420,
+        )
       : clamp(height - 470 - extra, 200, 1400),
     /** Sample beside the work on a wide window: the column's height. */
     beside: clamp(height - 330 - extra, 200, 1400),
   };
 }
+/**
+ * Tasks a phone shows whole: what is asked, the picture and every answer are
+ * seen at once, because a child who cannot see an answer does not look for
+ * it. Boards, drawing sheets and lists of questions are longer than a phone
+ * and are scrolled.
+ */
+export const fitsPhone = (kind: string) =>
+  ["number", "choice", "location", "picture", "read"].includes(kind);
 /** A mouse or trackpad: targets may be smaller than a fingertip. */
 export function finePointer() {
   return (

@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "baseURL": "http://127.0.0.1:8101",
+  "baseURL": "http://127.0.0.1:8102",
   "checks": [
     {
       "name": "chair tutorial touches actual selectable chair polygons",
