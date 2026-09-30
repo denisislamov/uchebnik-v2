@@ -8,6 +8,8 @@ import {
   revision3Steps,
   revision4Steps,
   revision5Steps,
+  revision6Steps,
+  splitSteps,
 } from "../content/legacyStepIds.ts";
 import { traceProgress, drawingColor, DRAWING_COLORS } from "./tracing.ts";
 import type { Answer, Block, BookPage, Progress } from "../content/types.ts";
@@ -87,7 +89,7 @@ export const pageCompleted = (
   answers: Record<string, Answer>,
 ) => page.blocks.every((b) => isDone(b, answers[b.id]));
 /** Bumped whenever steps are added, removed or reordered on a page. */
-export const CONTENT_REVISION = 6;
+export const CONTENT_REVISION = 7;
 export const emptyProgress = (): Progress => ({
   version: 1,
   contentRevision: CONTENT_REVISION,
@@ -109,6 +111,19 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
     )
       return fallback;
     const allowed = new Set(pages.flatMap((p) => p.blocks.map((b) => b.id)));
+    // Questions about a picture that now has a step of its own go with it.
+    const revision = Number(p.contentRevision) || 1;
+    for (const split of splitSteps) {
+      const old = p.answers[split.from];
+      if (revision >= split.since || !old?.responses || p.answers[split.to])
+        continue;
+      const responses: Record<string, unknown> = {};
+      for (const [was, is] of split.fields)
+        if (old.responses[was] !== undefined)
+          responses[is] = old.responses[was];
+      if (Object.keys(responses).length)
+        p.answers[split.to] = { responses, checked: old.checked === true };
+    }
     const answers: Record<string, Answer> = {};
     for (const [id, a] of Object.entries(p.answers) as [string, any][]) {
       if (!allowed.has(id) || !a || typeof a !== "object") continue;
@@ -276,20 +291,22 @@ export function parseProgress(raw: string | null, pages: BookPage[]): Progress {
     }
     // A saved step index points into the steps of the revision it was saved
     // with; find the same step (or the next surviving one) by its ID.
+    // Each list holds the pages whose steps changed after that revision; a
+    // page untouched then kept its steps until a later list.
+    const snapshots: [number, Record<number, string[]>][] = [
+      [3, revision3Steps],
+      [4, revision4Steps],
+      [5, revision5Steps],
+      [6, revision6Steps],
+    ];
     const saved =
       p.contentRevision === CONTENT_REVISION
         ? undefined
-        : p.contentRevision === 5
-          ? revision5Steps[page]
-          : p.contentRevision === 4
-            ? // A page untouched between 4 and 5 kept its steps until 6.
-              (revision4Steps[page] ?? revision5Steps[page])
-            : p.contentRevision === 3
-              ? // A page untouched between 3 and 4 kept its steps until 5.
-                (revision3Steps[page] ??
-                revision4Steps[page] ??
-                revision5Steps[page])
-              : revision2Steps[page];
+        : !p.contentRevision || p.contentRevision < 3
+          ? revision2Steps[page]
+          : snapshots.find(
+              ([r, steps]) => r >= p.contentRevision && steps[page],
+            )?.[1][page];
     if (
       saved &&
       Number.isInteger(requestedBlock) &&

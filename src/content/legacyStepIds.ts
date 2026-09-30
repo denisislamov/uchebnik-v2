@@ -2125,3 +2125,146 @@ export const revision5Steps: Record<number, string[]> = {
     "p011-lesson07",
   ],
 };
+// Step IDs from content revision 6 on pages whose steps changed afterwards: plums, nuts,
+// the count of page 18 and the dominoes were one step with questions about several pictures.
+export const revision6Steps: Record<number, string[]> = {
+  "13": [
+    "p013-lesson01",
+    "p013-lesson02",
+    "p013-lesson03",
+    "p013-lesson04",
+    "p013-lesson05",
+    "p013-lesson06",
+  ],
+  "15": [
+    "p015-lesson01",
+    "p015-lesson02",
+    "p015-lesson03",
+    "p015-lesson04",
+    "p015-lesson05",
+    "p015-lesson06",
+    "p015-lesson07",
+  ],
+  "18": [
+    "p018-lesson01",
+    "p018-lesson02",
+    "p018-cherries",
+    "p018-lesson03",
+    "p018-lesson04",
+    "p018-lesson05",
+    "p018-lesson06",
+    "p018-lesson07",
+  ],
+  "19": [
+    "p019-lesson01",
+    "p019-lesson02",
+    "p019-lesson03",
+    "p019-lesson04",
+    "p019-lesson05",
+    "p019-lesson06",
+    "p019-lesson08",
+    "p019-lesson09",
+    "p019-lesson10",
+    "p019-lesson11",
+  ],
+};
+/**
+ * Steps that asked about several pictures were split one picture to a step. The first
+ * picture keeps the old step and its answers; the questions about the others move to the
+ * new steps. `since` is the content revision that split them.
+ */
+export const splitSteps: {
+  since: number;
+  from: string;
+  to: string;
+  fields: [string, string][];
+}[] = [
+  {
+    since: 6,
+    from: "p011-lesson06",
+    to: "p011-balls-right",
+    fields: [
+      ["q4", "q1"],
+      ["q5", "q2"],
+      ["q6", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p013-lesson05",
+    to: "p013-plums-2",
+    fields: [
+      ["q4", "q1"],
+      ["q5", "q2"],
+      ["q6", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p013-lesson05",
+    to: "p013-plums-3",
+    fields: [
+      ["q7", "q1"],
+      ["q8", "q2"],
+      ["q9", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p015-lesson05",
+    to: "p015-nuts-2",
+    fields: [
+      ["q4", "q1"],
+      ["q5", "q2"],
+      ["q6", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p015-lesson05",
+    to: "p015-nuts-3",
+    fields: [
+      ["q7", "q1"],
+      ["q8", "q2"],
+      ["q9", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p015-lesson05",
+    to: "p015-nuts-4",
+    fields: [
+      ["q10", "q1"],
+      ["q11", "q2"],
+      ["q12", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p018-lesson01",
+    to: "p018-cherry-branch",
+    fields: [
+      ["q5", "q1"],
+      ["q6", "q2"],
+      ["q7", "q3"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p019-lesson05",
+    to: "p019-domino-2",
+    fields: [
+      ["q3", "q1"],
+      ["q4", "q2"],
+    ],
+  },
+  {
+    since: 7,
+    from: "p019-lesson05",
+    to: "p019-domino-3",
+    fields: [
+      ["q5", "q1"],
+      ["q6", "q2"],
+    ],
+  },
+];

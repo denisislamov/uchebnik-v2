@@ -51,17 +51,28 @@ def build(assets, calc):
  split(11,3,['three_squares_2_1'])
  coins(11,3);pages[11][-1]['prompt']='Из каких монет можно составить 3 копейки? Набери 3 копейки из монет разрезной таблицы.'
  act(11,'Два шага','sequence',[1,2],prompt='Сделай 2 шага вперёд.')
- # One picture to a step, and every question shows on it the balls it asks about:
- # six questions about two pictures at once were more than a child could take in.
- def balls(title,image,left,right,marks):
-  b=work(11,title,[('Сколько мячей слева?',left),('Сколько мячей справа?',right),('Сколько мячей всего?',left+right)],[image],prompt='Посчитай мячи на картинке.')
-  for f,shapes in zip(b['fields'],[marks[:left],marks[left:],marks]):f['marks']=dict(image=f'p011_{image}',shapes=shapes)
-  return b
+ # One picture to a step, and every question shows on it what it asks about: a list of
+ # questions about several pictures at once was more than a child could take in (review 3).
+ # `shots` are (picture, [(question, answer, outlines)]); an outline is the centre and the two
+ # radii of a thing as shares of the picture. The first step keeps the old ID; the others get
+ # `ids` and take no number from the steps after them.
+ ORDINAL=['первая','вторая','третья','четвёртая']
+ def per_picture(p,title,prompt,shots,ids,names=None):
+  made=[]
+  for k,(image,qs) in enumerate(shots):
+   name=names[k] if names else f'{title}: {ORDINAL[k]} картинка'
+   b=work(p,name,[(q,v) for q,v,_ in qs],[image],prompt=prompt if isinstance(prompt,str) else prompt[k])
+   for f,(_,_,shapes) in zip(b['fields'],qs):f['marks']=dict(image=f'p{p:03}_{image}',shapes=shapes)
+   if k:b['id']=ids[k-1];serial[p]-=1
+   made.append(b)
+  return made
+ def sides3(noun,left,right):
+  # Left, right and all: the outlines of «всего» are both.
+  return [(f'Сколько {noun} слева?',len(left),left),(f'Сколько {noun} справа?',len(right),right),(f'Сколько {noun} всего?',len(left)+len(right),left+right)]
  # Each ball: the centre and the two radii of its outline, as shares of the picture.
- balls('Мячи: первая картинка','balls_left_2_and_1',2,1,[[0.215,0.27,0.15,0.28],[0.36,0.62,0.15,0.28],[0.80,0.60,0.15,0.28]])
- second=balls('Мячи: вторая картинка','balls_right_1_and_2',1,2,[[0.16,0.57,0.135,0.36],[0.585,0.56,0.135,0.36],[0.79,0.30,0.135,0.36]])
- # The step added by the split takes no number from the steps after it.
- second['id']='p011-balls-right';serial[11]-=1
+ per_picture(11,'Мячи','Посчитай мячи на картинке.',[
+  ('balls_left_2_and_1',sides3('мячей',[[0.215,0.27,0.15,0.28],[0.36,0.62,0.15,0.28]],[[0.80,0.60,0.15,0.28]])),
+  ('balls_right_1_and_2',sides3('мячей',[[0.16,0.57,0.135,0.36]],[[0.585,0.56,0.135,0.36],[0.79,0.31,0.135,0.33]]))],['p011-balls-right'])
  walk=act(11,'Три шага','sequence',[1,2,3],prompt='Сделай 3 шага вперёд.');pages[11].remove(walk);walk['id']='p011-walk-three';pages[11].insert(5,walk)
  lines=draw(11,'Клетки по образцу','cells:1,2h,3h,3v,2v,1',['writing_strip_squares_rects']);lines['id']='p011-lesson07';lines['prompt']='Обведи клетки, как на образце: сначала всю фигуру, потом линии между клетками.'
  work(12,'Число четыре',[('Сколько детей?',4),('Сколько жетонов на карточке?',4),('Сколько точек на карточке?',4)],['children_woodwork_table','abacus_4','domino_4'],prompt='Посчитай детей, жетоны и точки.')
@@ -73,13 +84,21 @@ def build(assets, calc):
  work(13,'Ноги, колёса и крылья',[('Сколько ног у козочки?',4),('Сколько всего колёс у машины? Считай и те, что с другой стороны.',4),('Сколько крыльев у бабочки?',4)],['goat','truck','butterfly'],prompt='Сосчитай и запиши число.')
  split(13,4,['squares_2_2'])
  sides=lambda thing,i:[f'Картинка {i}. Сколько {thing} слева?',f'Картинка {i}. Сколько {thing} справа?',f'Сколько всего {thing} на картинке {i}?']
- work(13,'Сливы',[(q,v) for i,pair in enumerate([(3,1),(2,2),(1,3)]) for q,v in zip(sides('слив',i+1),[*pair,4])],['plums_frame_1','plums_frame_2','plums_frame_3'],prompt='Посчитай сливы на каждой картинке: слева, справа и всего.')
+ per_picture(13,'Сливы','Посчитай сливы на картинке.',[
+  ('plums_frame_1',sides3('слив',[[0.14,0.65,0.085,0.17],[0.30,0.69,0.085,0.17],[0.45,0.56,0.085,0.17]],[[0.80,0.65,0.09,0.17]])),
+  ('plums_frame_2',sides3('слив',[[0.17,0.75,0.09,0.17],[0.30,0.67,0.085,0.17]],[[0.66,0.70,0.085,0.17],[0.80,0.66,0.085,0.17]])),
+  ('plums_frame_3',sides3('слив',[[0.19,0.64,0.095,0.19]],[[0.52,0.70,0.08,0.17],[0.66,0.71,0.08,0.17],[0.80,0.62,0.085,0.19]]))],['p013-plums-2','p013-plums-3'])
  work(13,'Колёса и ноги',[('Сколько колёс у автомобиля?',4),('Сколько ног у коровы?',4),('Сколько ног у петуха?',2),('Сколько ног у собаки?',4)],prompt='Сколько? Запиши цифрой.')
  work(14,'Число пять',[('Сколько всего мальчиков?',5),('Сколько мальчиков стоит в очереди?',4),('Сколько звёзд?',5),('Сколько лепестков у цветка?',5)],['boys_queue','five_stars','apple_blossom'],prompt='Посчитай и запиши число.')
  digit(14,5,'digit_5_sample');more(14,5);act(14,'Концы звезды','place',[5],['star_outline'],prompt='Положи столько палочек, сколько концов у звезды.');fruit(14,5,'apple','apples_draw')
  work(15,'Девочка и ромашки',[('Сколько ромашек росло?',5),('Одну сорвали. Сколько осталось?',4)],['girl_daisies_1','girl_daisies_2'])['prompt']=seq_prompt
  split(15,5,['squares_4_1']);coins(15,5)
- work(15,'Орехи',[(q,v) for i,pair in enumerate([(3,2),(2,3),(4,1),(1,4)]) for q,v in zip(sides('орехов',i+1),[*pair,5])],[f'nuts_frame_{i}' for i in range(1,5)],prompt='Посчитай орехи на каждой картинке: слева, справа и всего.')
+ nut=lambda x,y:[x,y,0.11,0.14]
+ per_picture(15,'Орехи','Посчитай орехи на картинке.',[
+  ('nuts_frame_1',sides3('орехов',[nut(0.17,0.40),nut(0.34,0.30),nut(0.24,0.68)],[nut(0.63,0.47),nut(0.72,0.72)])),
+  ('nuts_frame_2',sides3('орехов',[nut(0.16,0.40),nut(0.36,0.28)],[nut(0.72,0.45),nut(0.55,0.72),nut(0.78,0.72)])),
+  ('nuts_frame_3',sides3('орехов',[nut(0.28,0.25),nut(0.18,0.50),nut(0.40,0.43),nut(0.30,0.72)],[nut(0.78,0.62)])),
+  ('nuts_frame_4',sides3('орехов',[nut(0.25,0.75)],[nut(0.47,0.35),nut(0.73,0.25),nut(0.52,0.57),nut(0.73,0.74)]))],['p015-nuts-2','p015-nuts-3','p015-nuts-4'])
  work(15,'Пальцы, лапы и ноги',[('Сколько пальцев на руке?',5),('Сколько лап у кошки?',4),('Сколько ног у курицы?',2)],prompt='Сколько? Запиши цифрой.')
  work(15,'Орехи в столбиках',[(f'Сколько орехов в столбике {i}?',i) for i in range(1,6)],['nuts_columns_1_5'],prompt='Посчитай орехи в каждом столбике.')
  for n,img in [(1,'two_dolls'),(2,'three_puppies'),(3,'four_goats'),(4,'five_kittens')]:example(16,'Прибавляем один',f'{n} + 1 = {n+1}',[img,f'cards_{n}_plus_1_eq_{n+1}'])
@@ -87,15 +106,26 @@ def build(assets, calc):
  work(17,'Кролики',[('Сколько белых кроликов?',3),('Сколько чёрных кроликов?',1),('Сколько всего кроликов?',4)],['rabbits'],prompt='Посчитай кроликов.')
  work(17,'Морковки',[('Сколько морковок слева?',4),('Сколько морковок справа?',1),('Сколько всего морковок?',5)],['carrots'],prompt='Посчитай морковки.')
  examples(17,['1+1','2+1','3+1','4+1'],[a['id'][5:] for a in assets if a['page']==17 and ('circles_' in a['id'] or 'writing' in a['id'] or 'handwritten' in a['id'])]);sums(17,['4+1','3+1','2+1','1+1','3+1','4+1'])
- work(18,'Число шесть',[('Сколько белых кур?',5),('Сколько тёмных кур?',1),('Сколько всего кур?',6),('Сколько ног у жука?',6),('Сколько вишен слева?',3),('Сколько вишен справа?',3),('Сколько всего вишен?',6)],['girl_feeding_chickens','beetle','cherries_branch'],prompt='Посчитай кур, ноги жука и вишни.')
+ white=[[0.12,0.60,0.10,0.15],[0.27,0.72,0.11,0.17],[0.50,0.66,0.055,0.14],[0.63,0.58,0.08,0.11],[0.86,0.73,0.12,0.15]];dark=[[0.70,0.73,0.10,0.17]]
+ cherry=lambda x,y:[x,y,0.055,0.14]
+ # The beetle's legs are counted by the step that lays a circle for each of them.
+ per_picture(18,'Число шесть',['Посчитай кур на картинке.','Посчитай вишни на ветке.'],[
+  ('girl_feeding_chickens',[('Сколько белых кур?',5,white),('Сколько тёмных кур?',1,dark),('Сколько всего кур?',6,white+dark)]),
+  ('cherries_branch',sides3('вишен',[cherry(0.27,0.68),cherry(0.36,0.73),cherry(0.43,0.63)],[cherry(0.71,0.68),cherry(0.80,0.72),cherry(0.89,0.62)]))],['p018-cherry-branch'],names=['Куры','Вишни: слева и справа'])
  legs=act(18,'Ноги жука','place',[6],['beetle'],groupLabels=['Ноги жука']);legs['prompt']='Положи столько кружков, сколько ног у жука.';legs['activity']['token']='circle'
  cherries=act(18,'Вишни на ветке','place',[6],['cherries_branch'],groupLabels=['Вишни на ветке']);cherries['prompt']='Положи столько кружков, сколько вишен на ветке.';cherries['activity']['token']='circle';cherries['id']='p018-cherries';serial[18]-=1
+ # The cherries are counted, then a circle is laid for each: the two steps stand together.
+ counted=next(b for b in pages[18] if b['id']=='p018-cherry-branch');pages[18].remove(counted);pages[18].insert(pages[18].index(cherries),counted)
  digit(18,6,'digit_6_sample')
  shape(18,'Дом из палочек','Сложи дом из шести палочек.',['house'],'sticks_house');shape(18,'Два треугольника','Сложи два треугольника из палочек.',['triangle','triangle'],'sticks_two_triangles')
  more(18,6);fruit(18,6,'cherry')
  work(19,'Прибавим один',[('Мальчик добавил в аквариум одну рыбку. Сколько стало рыбок?',5),('Девочка поставила ещё один цветок. Сколько стало цветов?',6)],['boy_aquarium','girl_flowerpots'],prompt='Посмотри на картинки и ответь на вопросы.')
  split(19,6,['squares_4_2']);coins(19,6)
- work(19,'Домино',[(f'Костяшка {i+1}. Сколько точек {side}?',v) for i,pair in enumerate([(5,1),(4,2),(3,3)]) for side,v in zip(['слева','справа'],pair)],['domino_5_1','domino_4_2','domino_3_3'],prompt='Посчитай точки на каждой костяшке.')
+ dot=lambda x,y:[x,y,0.07,0.12]
+ per_picture(19,'Домино','Посчитай точки на костяшке.',[
+  ('domino_5_1',[('Сколько точек слева?',5,[dot(0.13,0.28),dot(0.39,0.28),dot(0.27,0.48),dot(0.13,0.70),dot(0.39,0.70)]),('Сколько точек справа?',1,[dot(0.67,0.48)])]),
+  ('domino_4_2',[('Сколько точек слева?',4,[dot(0.13,0.28),dot(0.39,0.28),dot(0.13,0.70),dot(0.39,0.70)]),('Сколько точек справа?',2,[dot(0.81,0.28),dot(0.56,0.70)])]),
+  ('domino_3_3',[('Сколько точек слева?',3,[dot(0.37,0.25),dot(0.24,0.48),dot(0.11,0.70)]),('Сколько точек справа?',3,[dot(0.80,0.25),dot(0.66,0.48),dot(0.53,0.70)])])],['p019-domino-2','p019-domino-3'],names=['Домино: первая костяшка','Домино: вторая костяшка','Домино: третья костяшка'])
  split(19,6,objects=True);gaps=work(19,'Каких чисел не хватает?',[('Какое число после 1?',2),('Какое число перед 4?',3),('Какое число между 4 и 6?',5)]);gaps['prompt']='Каких чисел не хватает в ряду 1, □, □, 4, □, 6?';count(19,6);sums(19,['3+1','5+1','1+1','4+1','2+1','5+1'])
  # Three stories, three pictures: one step each, so it is clear which sum belongs to which picture.
  example(20,'Шарик улетел','Было 2 шарика. Один улетел, остался 1.\n2 − 1 = 1',['girl_two_balloons','girl_balloon_flies','cards_2_minus_1'])

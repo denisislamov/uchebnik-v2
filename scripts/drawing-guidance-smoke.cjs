@@ -92,7 +92,7 @@ async function settle(page) {
           KEY,
           JSON.stringify({
             version: 1,
-            contentRevision: 6,
+            contentRevision: 7,
             page: number,
             block: index,
             answers: {},
