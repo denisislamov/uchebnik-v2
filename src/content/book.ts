@@ -510,7 +510,7 @@ export const pages: BookPage[] = [
       ),
       read(
         "Это число 2",
-        "Два жетона, две точки, два зелёных кружка и цифра 2.",
+        "Две отодвинутые бусины на счётной линейке, две точки, два зелёных кружка и цифра 2.",
         [
           img(8, "abacus_2"),
           img(8, "domino_2"),
@@ -518,7 +518,7 @@ export const pages: BookPage[] = [
           img(8, "two_green_dots"),
         ],
       ),
-      number("Две копейки", "Сколько копеек обозначает монета?", 2, [
+      number("Учебная монета", "Какое число написано на монете?", 2, [
         img(8, "coin_2_kopeks"),
       ]),
       ...["рук", "ног", "глаз", "ушей"].map((t) =>
@@ -614,7 +614,7 @@ export const pages: BookPage[] = [
     ]),
     counters(
       "Две и ещё одна",
-      "Положи столько кружков, сколько жетонов на карточке.",
+      "Положи столько кружков, сколько отодвинутых бусин на счётной линейке.",
       3,
       "circle",
       [img(10, "abacus_3")],
@@ -628,7 +628,7 @@ export const pages: BookPage[] = [
         img(10, "three_green_dots"),
       ],
     ),
-    number("Три копейки", "Сколько копеек обозначает монета?", 3, [
+    number("Учебная монета", "Какое число написано на монете?", 3, [
       img(10, "coin_3_kopeks"),
     ]),
     draw(
@@ -670,6 +670,7 @@ export const pages: BookPage[] = [
 pages.push(...remainingPages);
 for (const p of pages)
   for (const b of p.blocks) {
+    if (p.number <= 10) continue;
     if (!b.images.some((id) => id.includes("abacus_"))) continue;
     const modern = (text: string) =>
       text

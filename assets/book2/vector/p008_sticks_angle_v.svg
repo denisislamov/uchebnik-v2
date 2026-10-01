@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="165" height="80" viewBox="0 0 165 80">
+<line id="stick-0" x1="13" y1="68" x2="44" y2="10" stroke="#a78665" stroke-width="6" stroke-linecap="round"/>
+<line id="stick-1" x1="44" y1="10" x2="76" y2="68" stroke="#a78665" stroke-width="6" stroke-linecap="round"/>
+<line id="stick-2" x1="94" y1="10" x2="126" y2="68" stroke="#a78665" stroke-width="6" stroke-linecap="round"/>
+<line id="stick-3" x1="126" y1="68" x2="155" y2="10" stroke="#a78665" stroke-width="6" stroke-linecap="round"/>
+</svg>

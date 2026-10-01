@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="370" height="85" viewBox="0 0 370 85">
+<path d="M16 42.5H354 M16 33v19 M354 33v19" fill="none" stroke="#6b7280" stroke-width="2.4" stroke-linecap="round"/>
+<circle id="bead-0" cx="35" cy="42.5" r="12" fill="#c8352e" stroke="#a82f2a" stroke-width="1.7"/>
+<circle id="bead-1" cx="59" cy="42.5" r="12" fill="#c8352e" stroke="#a82f2a" stroke-width="1.7"/>
+<circle id="bead-2" cx="111" cy="42.5" r="12" fill="#c8352e" stroke="#a82f2a" stroke-width="1.7"/>
+<circle id="bead-3" cx="171" cy="42.5" r="12" fill="#c8352e" stroke="#a82f2a" stroke-width="1.7"/>
+<circle id="bead-4" cx="195" cy="42.5" r="12" fill="#c8352e" stroke="#a82f2a" stroke-width="1.7"/>
+<circle id="bead-5" cx="219" cy="42.5" r="12" fill="#ffffff" stroke="#6b7280" stroke-width="1.7"/>
+<circle id="bead-6" cx="243" cy="42.5" r="12" fill="#ffffff" stroke="#6b7280" stroke-width="1.7"/>
+<circle id="bead-7" cx="267" cy="42.5" r="12" fill="#ffffff" stroke="#6b7280" stroke-width="1.7"/>
+<circle id="bead-8" cx="291" cy="42.5" r="12" fill="#ffffff" stroke="#6b7280" stroke-width="1.7"/>
+<circle id="bead-9" cx="315" cy="42.5" r="12" fill="#ffffff" stroke="#6b7280" stroke-width="1.7"/>
+</svg>

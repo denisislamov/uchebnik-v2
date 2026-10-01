@@ -184,7 +184,7 @@ const numberMeanings: Record<
       ["bicycle_two_wheels", "Два колеса"],
       ["domino_2", "Две точки"],
       ["two_green_dots", "Два кружка"],
-      ["abacus_2", "Два жетона"],
+      ["abacus_2", "Две бусины на счётной линейке"],
       ["digit_2_print", "Цифра 2"],
     ],
     conclusion: "Предметы разные, а на каждом рисунке их по два. Это число 2.",

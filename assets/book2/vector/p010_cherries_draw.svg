@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="165" height="85" viewBox="0 0 165 85">
+<circle id="cherry-0" cx="32" cy="59" r="12" fill="#a66b68" stroke="#724c4c" stroke-width="2.3"/>
+<path id="cherry-stem-0" d="M32 47 Q30 24 21 15" fill="none" stroke="#728059" stroke-width="2.6" stroke-linecap="round"/>
+<circle id="cherry-1" cx="82" cy="59" r="12" fill="#a66b68" stroke="#724c4c" stroke-width="2.3"/>
+<path id="cherry-stem-1" d="M82 47 Q80 24 71 15" fill="none" stroke="#728059" stroke-width="2.6" stroke-linecap="round"/>
+<circle id="cherry-2" cx="132" cy="59" r="12" fill="#a66b68" stroke="#724c4c" stroke-width="2.3"/>
+<path id="cherry-stem-2" d="M132 47 Q130 24 121 15" fill="none" stroke="#728059" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

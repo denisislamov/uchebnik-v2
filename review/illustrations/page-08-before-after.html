@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 8 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 8 · было / стало</h1>
+      <p>
+        Пары в современной комнате, два предмета каждого вида и счёт до двух.
+      </p>
+      <div class="items">
+        <article class="hero">
+          <h2>Два мальчика играют в шашки</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_two_boys_checkers.jpg"
+                  alt="Исходный: Два мальчика играют в шашки"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p008_two_boys_checkers@2x.png"
+                  alt="Обновлённый: Два мальчика играют в шашки"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Два конька</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_two_skates.jpg"
+                  alt="Исходный: Два конька"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p008_two_skates@2x.png"
+                  alt="Обновлённый: Два конька"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Две лыжи</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_two_skis.jpg"
+                  alt="Исходный: Две лыжи"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p008_two_skis@2x.png"
+                  alt="Обновлённый: Две лыжи"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Велосипед и два колеса</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_bicycle_two_wheels.jpg"
+                  alt="Исходный: Велосипед и два колеса"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p008_bicycle_two_wheels@2x.png"
+                  alt="Обновлённый: Велосипед и два колеса"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Счётная линейка</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_abacus_2.jpg"
+                  alt="Исходный: Счётная линейка"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_abacus_2.svg"
+                  alt="Обновлённый: Счётная линейка"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Две точки</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_domino_2.jpg"
+                  alt="Исходный: Две точки"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_domino_2.svg"
+                  alt="Обновлённый: Две точки"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Два кружка</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_two_green_dots.jpg"
+                  alt="Исходный: Два кружка"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_two_green_dots.svg"
+                  alt="Обновлённый: Два кружка"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Цифра 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_digit_2_print.jpg"
+                  alt="Исходный: Цифра 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_digit_2_print.svg"
+                  alt="Обновлённый: Цифра 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Учебная монета</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_coin_2_kopeks.jpg"
+                  alt="Исходный: Учебная монета"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_coin_2_kopeks.svg"
+                  alt="Обновлённый: Учебная монета"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Пишем 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_digit_2_sample.jpg"
+                  alt="Исходный: Пишем 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_digit_2_sample.svg"
+                  alt="Обновлённый: Пишем 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Рисуем две сливы</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_plums_draw.jpg"
+                  alt="Исходный: Рисуем две сливы"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_plums_draw.svg"
+                  alt="Обновлённый: Рисуем две сливы"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Две палочки углом</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p008_sticks_angle_v.jpg"
+                  alt="Исходный: Две палочки углом"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p008_sticks_angle_v.svg"
+                  alt="Обновлённый: Две палочки углом"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

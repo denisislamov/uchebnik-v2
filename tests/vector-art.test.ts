@@ -2,6 +2,41 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { digitSamples } from "../src/content/handwrittenDigits.ts";
+import { pages } from "../src/content/book.ts";
+
+test("revised counting rails and educational coins use the current lesson wording", () => {
+  for (const pageNo of [7, 8, 10]) {
+    const blocks = pages[pageNo - 1].blocks;
+    const rail = blocks.filter((block) =>
+      block.images.some((id) =>
+        id.endsWith(
+          `p${String(pageNo).padStart(3, "0")}_abacus_${pageNo === 7 ? 1 : pageNo === 8 ? 2 : 3}`,
+        ),
+      ),
+    );
+    assert.ok(rail.length > 0, `page ${pageNo}: counting rail block missing`);
+    const text = (block: (typeof blocks)[number]) =>
+      block.prompt +
+      " " +
+      block.title +
+      (block.kind === "read" ? block.body : "") +
+      (block.kind === "picture"
+        ? block.sourceText +
+          block.targets.map((target) => target.label).join(" ")
+        : "");
+    assert.ok(
+      rail.some((block) => /бусин|счётной линейке/.test(text(block))),
+      `page ${pageNo}: counting rail wording missing`,
+    );
+    for (const block of rail) {
+      assert.doesNotMatch(text(block), /жетон/);
+    }
+    const coin = blocks.find((block) => block.title === "Учебная монета");
+    assert.ok(coin, `page ${pageNo}: educational coin block missing`);
+    assert.match(coin.prompt, /цифру|Какое число/);
+    assert.doesNotMatch(coin.prompt, /копеек|рублей/);
+  }
+});
 
 // Row counts were checked against the eighteen cropped textbook originals.
 const diagrams: Record<string, { rows: number[]; color: string }> = {
@@ -347,4 +382,249 @@ test("page 7 educational coin displays only the denomination one", async () => {
   assert.equal([...art.xml.matchAll(/<text\b/g)].length, 1);
   assert.match(art.xml, />1<\/text>/);
   assert.doesNotMatch(art.xml, /коп|руб|₽|195\d|герб|СССР/i);
+});
+
+test("page 8 counting rail moves exactly two of ten beads left", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p008_abacus_2;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p008_abacus_2.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [360, 75]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  assert.ok(Number(beads[1].cx) - Number(beads[0].cx) < 30);
+  assert.ok(Number(beads[2].cx) - Number(beads[1].cx) >= 60);
+  assert.match(art.alt, /2 бусины слева, 8 справа/);
+});
+
+test("page 8 educational coin keeps denomination two without historical marks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p008_coin_2_kopeks;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p008_coin_2_kopeks.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [110, 110]);
+  assert.equal([...art.xml.matchAll(/id="coin-body"/g)].length, 1);
+  assert.equal([...art.xml.matchAll(/<text\b/g)].length, 1);
+  assert.match(art.xml, />2<\/text>/);
+  assert.doesNotMatch(art.xml, /коп|руб|₽|195\d|герб|СССР/i);
+});
+
+test("page 8 printed two and handwritten two retain their distinct forms", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p008_digit_2_print;
+  const sample = vectorAssets.p008_digit_2_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p008_digit_2_print.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p008_digit_2_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [70, 80]);
+  assert.deepEqual([sample.width, sample.height], [125, 110]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>2<\/text>/);
+  assert.equal(digitSamples["2"].asset, "p008_digit_2_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(
+    sample.xml,
+    /d="M63 31 C53 52 43 27 62 21 C76 14 78 29 63 47 L43 77 C53 64 58 79 65 76 C69 75 71 73 73 70"/,
+  );
+});
+
+test("page 8 stick sample has two separate two-stick angles", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p008_sticks_angle_v;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p008_sticks_angle_v.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [165, 80]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(sticks.length, 4);
+  assert.deepEqual(
+    sticks.map((stick) => [
+      Number(stick.x1),
+      Number(stick.y1),
+      Number(stick.x2),
+      Number(stick.y2),
+    ]),
+    [
+      [13, 68, 44, 10],
+      [44, 10, 76, 68],
+      [94, 10, 126, 68],
+      [126, 68, 155, 10],
+    ],
+  );
+});
+
+test("page 8 drawing sample has two separate plums and stems", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p008_plums_draw;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p008_plums_draw.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [110, 80]);
+  assert.equal([...art.xml.matchAll(/id="plum-\d+"/g)].length, 2);
+  assert.equal([...art.xml.matchAll(/id="plum-stem-\d+"/g)].length, 2);
+  assert.match(art.alt, /две отдельные сливы/);
+});
+
+test("page 9 writing strip keeps 1, 2 horizontal, 2 vertical, 1 cells", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p009_writing_strip_squares_rects;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync(
+      "assets/book2/vector/p009_writing_strip_squares_rects.svg",
+      "utf8",
+    ),
+  );
+  assert.deepEqual([art.width, art.height], [415, 100]);
+  assert.match(art.xml, /id="notebook-grid"/);
+  const cells = [...art.xml.matchAll(/<rect id="p9-cell-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.deepEqual(
+    cells.map((cell) => [Number(cell.x), Number(cell.y)]),
+    [
+      [50, 50],
+      [140, 50],
+      [170, 50],
+      [260, 20],
+      [260, 50],
+      [340, 50],
+    ],
+  );
+});
+
+test("page 10 counting rail keeps the source's two plus one grouping", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p010_abacus_3;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p010_abacus_3.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [370, 85]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  assert.ok(x[1] - x[0] < 30, "first two beads must form a pair");
+  assert.ok(x[2] - x[1] >= 45, "third bead must be separate");
+  assert.ok(x[3] - x[2] >= 60, "seven parked beads must be distinct");
+  assert.match(art.alt, /2 рядом и ещё 1/);
+});
+
+test("page 10 educational coin keeps denomination three only", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p010_coin_3_kopeks;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p010_coin_3_kopeks.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [125, 120]);
+  assert.equal([...art.xml.matchAll(/id="coin-body"/g)].length, 1);
+  assert.equal([...art.xml.matchAll(/<text\b/g)].length, 1);
+  assert.match(art.xml, />3<\/text>/);
+  assert.doesNotMatch(art.xml, /коп|руб|₽|195\d|герб|СССР/i);
+});
+
+test("page 10 printed and handwritten threes preserve the trace form", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p010_digit_3_print;
+  const sample = vectorAssets.p010_digit_3_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p010_digit_3_print.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p010_digit_3_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [75, 90]);
+  assert.deepEqual([sample.width, sample.height], [130, 110]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>3<\/text>/);
+  assert.equal(digitSamples["3"].asset, "p010_digit_3_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(
+    sample.xml,
+    /d="M59 33 C75 17 83 29 75 42 C72 47 64 50 60 50 C86 48 75 73 63 82 C52 91 45 80 52 76 C57 77 52 81 50 79"/,
+  );
+});
+
+test("page 10 cherry drawing shows three separate berries with stems", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p010_cherries_draw;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p010_cherries_draw.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [165, 85]);
+  const berries = [...art.xml.matchAll(/<circle id="cherry-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(berries.length, 3);
+  assert.equal([...art.xml.matchAll(/id="cherry-stem-\d+"/g)].length, 3);
+  assert.ok(
+    berries.every(
+      (berry, i) =>
+        i === 0 || Number(berry.cx) > Number(berries[i - 1].cx) + 25,
+    ),
+  );
+});
+
+test("page 10 two triangles each use exactly three separate sticks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p010_sticks_triangles;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p010_sticks_triangles.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [180, 80]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(sticks.length, 6);
+  assert.deepEqual(
+    sticks.slice(0, 3).map((s) => [s.x1, s.y1, s.x2, s.y2]),
+    [
+      ["12", "68", "45", "10"],
+      ["45", "10", "78", "68"],
+      ["78", "68", "12", "68"],
+    ],
+  );
+  assert.deepEqual(
+    sticks.slice(3).map((s) => [s.x1, s.y1, s.x2, s.y2]),
+    [
+      ["102", "11", "168", "11"],
+      ["168", "11", "135", "68"],
+      ["135", "68", "102", "11"],
+    ],
+  );
 });

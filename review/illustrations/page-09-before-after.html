@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 9 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 9 · было / стало</h1>
+      <p>
+        Сюжеты 1 + 1 и вопросы о парных частях тела; мягкая акварель без лишних
+        деталей.
+      </p>
+      <div class="items">
+        <article class="hero">
+          <h2>Снегирь сидит, второй подлетает</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p009_two_bullfinches_branch.jpg"
+                  alt="Исходный: Снегирь сидит, второй подлетает"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p009_two_bullfinches_branch@2x.png"
+                  alt="Обновлённый: Снегирь сидит, второй подлетает"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Петух: две ноги</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p009_rooster.jpg"
+                  alt="Исходный: Петух: две ноги"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p009_rooster@2x.png"
+                  alt="Обновлённый: Петух: две ноги"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Цыплёнок: две ноги</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p009_chick.jpg"
+                  alt="Исходный: Цыплёнок: две ноги"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p009_chick@2x.png"
+                  alt="Обновлённый: Цыплёнок: две ноги"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Кролик: два уха</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p009_rabbit.jpg"
+                  alt="Исходный: Кролик: два уха"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p009_rabbit@2x.png"
+                  alt="Обновлённый: Кролик: два уха"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Ворона: два крыла</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p009_crow_flying.jpg"
+                  alt="Исходный: Ворона: два крыла"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p009_crow_flying@2x.png"
+                  alt="Обновлённый: Ворона: два крыла"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Графическая полоса</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p009_writing_strip_squares_rects.jpg"
+                  alt="Исходный: Графическая полоса"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p009_writing_strip_squares_rects.svg"
+                  alt="Обновлённый: Графическая полоса"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

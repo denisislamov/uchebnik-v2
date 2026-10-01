@@ -308,16 +308,28 @@ def writing_strip_six_svg():
     return "\n".join(parts) + "\n", width, height
 
 
-def digit_one_print_svg():
-    width, height = dimensions("p007_digit_1_print")
+def printed_digit_svg(asset_id, digit, font_size, baseline):
+    width, height = dimensions(asset_id)
     parts = start_svg(width, height)
     parts.append(
-        f'<text x="{width/2}" y="73" text-anchor="middle" '
-        'font-family="Andika_700Bold" font-size="70" '
-        f'fill="{NOTEBOOK_INK}">1</text>'
+        f'<text x="{width/2}" y="{baseline}" text-anchor="middle" '
+        f'font-family="Andika_700Bold" font-size="{font_size}" '
+        f'fill="{NOTEBOOK_INK}">{digit}</text>'
     )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
+
+
+def digit_one_print_svg():
+    return printed_digit_svg("p007_digit_1_print", 1, 70, 73)
+
+
+def digit_two_print_svg():
+    return printed_digit_svg("p008_digit_2_print", 2, 67, 70)
+
+
+def digit_three_print_svg():
+    return printed_digit_svg("p010_digit_3_print", 3, 74, 78)
 
 
 def digit_one_sample_svg():
@@ -334,26 +346,73 @@ def digit_one_sample_svg():
     return "\n".join(parts) + "\n", width, height
 
 
-def counting_rail_one_svg():
-    width, height = dimensions("p007_abacus_1")
+def digit_two_sample_svg():
+    width, height = dimensions("p008_digit_2_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=15, y0=11, step=29))
+    # Exact centerline from the digit-2 trace in handwrittenDigits.ts.
+    parts.append(
+        '<path d="M63 31 C53 52 43 27 62 21 C76 14 78 29 63 47 '
+        'L43 77 C53 64 58 79 65 76 C69 75 71 73 73 70" '
+        f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def digit_three_sample_svg():
+    width, height = dimensions("p010_digit_3_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=18, y0=25))
+    # Exact centerline from the digit-3 trace in handwrittenDigits.ts.
+    parts.append(
+        '<path d="M59 33 C75 17 83 29 75 42 C72 47 64 50 60 50 '
+        'C86 48 75 73 63 82 C52 91 45 80 52 76 C57 77 52 81 50 79" '
+        f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def counting_rail_svg(asset_id, active, active_positions=None, parked_start=123):
+    width, height = dimensions(asset_id)
+    right = width - 16
+    middle = height / 2
     parts = start_svg(width, height)
     parts.append(
-        '<path d="M16 37.5H354 M16 28v19 M354 28v19" '
+        f'<path d="M16 {middle:g}H{right} M16 {middle-9.5:g}v19 '
+        f'M{right} {middle-9.5:g}v19" '
         f'fill="none" stroke="{FRAME}" stroke-width="2.4" '
         'stroke-linecap="round"/>'
     )
-    # One red bead is moved left; the other nine stay right in a group.
-    # All ten beads remain visible, as required by the approved counting rail.
+    # The requested number is moved left; the other beads stay grouped right.
+    if active_positions is None:
+        active_positions = tuple(35 + i * 24 for i in range(active))
     for i in range(10):
-        x = 35 if i == 0 else 123 + (i - 1) * 24
+        x = active_positions[i] if i < active else parked_start + (i - active) * 24
         color = TEACHER_RED if i < 5 else "#ffffff"
         edge = "#a82f2a" if i < 5 else FRAME
         parts.append(
-            f'<circle id="bead-{i}" cx="{x}" cy="37.5" r="12" '
+            f'<circle id="bead-{i}" cx="{x}" cy="{middle:g}" r="12" '
             f'fill="{color}" stroke="{edge}" stroke-width="1.7"/>'
         )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
+
+
+def counting_rail_one_svg():
+    return counting_rail_svg("p007_abacus_1", 1)
+
+
+def counting_rail_two_svg():
+    return counting_rail_svg("p008_abacus_2", 2)
+
+
+def counting_rail_three_svg():
+    # Preserve the source's 2 + 1 split inside the active group of three.
+    return counting_rail_svg("p010_abacus_3", 3, (35, 59, 111), parked_start=171)
 
 
 def mushroom_drawing_svg():
@@ -374,22 +433,122 @@ def mushroom_drawing_svg():
     return "\n".join(parts) + "\n", width, height
 
 
-def educational_coin_one_svg():
-    width, height = dimensions("p007_coin_1_kopek")
+def educational_coin_svg(asset_id, value):
+    width, height = dimensions(asset_id)
+    center = height / 2
+    center_x = width / 2
+    radius = round(min(width, height) * 0.39)
+    font_size = 62 if radius == 43 else 68
     parts = start_svg(width, height)
     parts.append(
-        '<circle id="coin-body" cx="55" cy="57.5" r="43" '
+        f'<circle id="coin-body" cx="{center_x:g}" cy="{center:g}" '
+        f'r="{radius}" '
         'fill="#eee8db" stroke="#8c8070" stroke-width="2.6"/>'
     )
     parts.append(
-        '<circle cx="55" cy="57.5" r="37" fill="none" '
+        f'<circle cx="{center_x:g}" cy="{center:g}" r="{radius-6}" fill="none" '
         'stroke="#c6bbaa" stroke-width="1.5"/>'
     )
     parts.append(
-        '<text x="55" y="79" text-anchor="middle" '
-        'font-family="Andika_700Bold" font-size="62" '
-        f'fill="{NOTEBOOK_INK}">1</text>'
+        f'<text x="{center_x:g}" y="{center+21.5:g}" text-anchor="middle" '
+        f'font-family="Andika_700Bold" font-size="{font_size}" '
+        f'fill="{NOTEBOOK_INK}">{value}</text>'
     )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def educational_coin_one_svg():
+    return educational_coin_svg("p007_coin_1_kopek", 1)
+
+
+def educational_coin_two_svg():
+    return educational_coin_svg("p008_coin_2_kopeks", 2)
+
+
+def educational_coin_three_svg():
+    return educational_coin_svg("p010_coin_3_kopeks", 3)
+
+
+def stick_angles_svg():
+    width, height = dimensions("p008_sticks_angle_v")
+    parts = start_svg(width, height)
+    # Two open figures in source order: a peak, then a trough.
+    sticks = ((13, 68, 44, 10), (44, 10, 76, 68),
+              (94, 10, 126, 68), (126, 68, 155, 10))
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="6" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def plum_drawing_svg():
+    width, height = dimensions("p008_plums_draw")
+    parts = start_svg(width, height)
+    for i, x in enumerate((28, 81)):
+        parts.append(
+            f'<ellipse id="plum-{i}" cx="{x}" cy="53" rx="12" ry="19" '
+            'fill="#94727b" stroke="#594a50" stroke-width="2.4"/>'
+        )
+        parts.append(
+            f'<path id="plum-stem-{i}" d="M{x} 34 Q{x-3} 17 {x-18} 13" '
+            'fill="none" stroke="#876a4b" stroke-width="2.6" '
+            'stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def writing_strip_nine_svg():
+    width, height = dimensions("p009_writing_strip_squares_rects")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=20, y0=20))
+    # One cell, a horizontal pair, a vertical pair, and one cell.
+    cells = ((50, 50), (140, 50), (170, 50),
+             (260, 20), (260, 50), (340, 50))
+    for i, (x, y) in enumerate(cells):
+        parts.append(
+            f'<rect id="p9-cell-{i}" x="{x}" y="{y}" '
+            f'width="30" height="30" fill="none" '
+            f'stroke="{NOTEBOOK_INK}" stroke-width="2.5"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def cherry_drawing_svg():
+    width, height = dimensions("p010_cherries_draw")
+    parts = start_svg(width, height)
+    for i, x in enumerate((32, 82, 132)):
+        parts.append(
+            f'<circle id="cherry-{i}" cx="{x}" cy="59" r="12" '
+            'fill="#a66b68" stroke="#724c4c" stroke-width="2.3"/>'
+        )
+        parts.append(
+            f'<path id="cherry-stem-{i}" d="M{x} 47 Q{x-2} 24 {x-11} 15" '
+            'fill="none" stroke="#728059" stroke-width="2.6" '
+            'stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def stick_triangles_svg():
+    width, height = dimensions("p010_sticks_triangles")
+    parts = start_svg(width, height)
+    # Three individual sticks per triangle: first points up, second down.
+    sticks = ((12, 68, 45, 10), (45, 10, 78, 68), (78, 68, 12, 68),
+              (102, 11, 168, 11), (168, 11, 135, 68), (135, 68, 102, 11))
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="6" stroke-linecap="round"/>'
+        )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
 
@@ -436,6 +595,23 @@ def main():
          "Счётная линейка: 1 бусина слева, 9 справа; всего 10, первые 5 красные"),
         ("p007_mushroom_draw", mushroom_drawing_svg, "Образец: один гриб с простой шляпкой и ножкой"),
         ("p007_coin_1_kopek", educational_coin_one_svg, "Учебная монета с числом 1"),
+        ("p008_abacus_2", counting_rail_two_svg,
+         "Счётная линейка: 2 бусины слева, 8 справа; всего 10, первые 5 красные"),
+        ("p008_coin_2_kopeks", educational_coin_two_svg, "Учебная монета с числом 2"),
+        ("p008_digit_2_print", digit_two_print_svg, "Печатная цифра 2"),
+        ("p008_digit_2_sample", digit_two_sample_svg, "Образец написания цифры 2 по клеткам"),
+        ("p008_sticks_angle_v", stick_angles_svg, "Две фигуры из палочек: угол вверх и угол вниз, по две палочки"),
+        ("p008_plums_draw", plum_drawing_svg, "Образец: две отдельные сливы с черенками"),
+        ("p009_writing_strip_squares_rects", writing_strip_nine_svg,
+         "Пропись: одна клетка, две клетки в ряд, две клетки друг над другом, одна клетка"),
+        ("p010_abacus_3", counting_rail_three_svg,
+         "Счётная линейка: 3 бусины слева, 2 рядом и ещё 1; 7 справа, всего 10"),
+        ("p010_coin_3_kopeks", educational_coin_three_svg, "Учебная монета с числом 3"),
+        ("p010_digit_3_print", digit_three_print_svg, "Печатная цифра 3"),
+        ("p010_digit_3_sample", digit_three_sample_svg, "Образец написания цифры 3 по клеткам"),
+        ("p010_cherries_draw", cherry_drawing_svg, "Образец: три отдельные вишни с черенками"),
+        ("p010_sticks_triangles", stick_triangles_svg,
+         "Два треугольника из палочек: первый вершиной вверх, второй вниз, по три палочки"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

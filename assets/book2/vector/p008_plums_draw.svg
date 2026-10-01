@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="80" viewBox="0 0 110 80">
+<ellipse id="plum-0" cx="28" cy="53" rx="12" ry="19" fill="#94727b" stroke="#594a50" stroke-width="2.4"/>
+<path id="plum-stem-0" d="M28 34 Q25 17 10 13" fill="none" stroke="#876a4b" stroke-width="2.6" stroke-linecap="round"/>
+<ellipse id="plum-1" cx="81" cy="53" rx="12" ry="19" fill="#94727b" stroke="#594a50" stroke-width="2.4"/>
+<path id="plum-stem-1" d="M81 34 Q78 17 63 13" fill="none" stroke="#876a4b" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
