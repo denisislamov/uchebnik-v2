@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="176" height="80" viewBox="0 0 176 80">
+<rect x="8" y="8" width="160" height="64" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<line id="card-divider" x1="134" y1="8" x2="134" y2="72" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="base-dot-0" cx="25" cy="28" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-1" cx="25" cy="55" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-2" cx="52" cy="28" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-3" cx="52" cy="55" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-4" cx="80" cy="28" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-5" cx="80" cy="55" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-6" cx="108" cy="28" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-7" cx="108" cy="55" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-0" cx="151" cy="28" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-1" cx="151" cy="55" r="8" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+</svg>

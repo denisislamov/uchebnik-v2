@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="172" height="81" viewBox="0 0 172 81">
+<rect x="8" y="9" width="156" height="63" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<line id="group-divider" x1="8" y1="72" x2="55" y2="9" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="base-dot-0" cx="27" cy="29" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-0" cx="57" cy="29" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-1" cx="32" cy="56" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-2" cx="57" cy="56" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+</svg>

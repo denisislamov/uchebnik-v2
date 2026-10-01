@@ -2175,3 +2175,325 @@ test("page 30 shows ten identical fir trees at equal spacing", async () => {
     ),
   );
 });
+
+test("page 31 dominoes add exactly two outlined circles after a divider", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [base, width] of [
+    [2, 174],
+    [4, 174],
+    [6, 176],
+    [8, 176],
+  ] as const) {
+    const id = `p031_domino_${base}_2`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [width, 80]);
+    const initial = [
+      ...art.xml.matchAll(/<circle id="base-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    const added = [
+      ...art.xml.matchAll(/<circle id="added-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    assert.equal(initial.length, base);
+    assert.equal(added.length, 2);
+    assert.ok(
+      [...initial, ...added].every(
+        (dot) => dot.fill === "none" && dot.stroke === "#2b4ba8",
+      ),
+    );
+    const dividerTag = art.xml.match(/<line id="card-divider"[^>]*\/>/)?.[0];
+    assert.ok(dividerTag);
+    const dividerX = Number(attributes(dividerTag).x1);
+    assert.ok(Math.max(...initial.map((dot) => Number(dot.cx))) < dividerX);
+    assert.ok(Math.min(...added.map((dot) => Number(dot.cx))) > dividerX);
+    assert.equal(added[0].cx, added[1].cx);
+    assert.deepEqual(
+      added.map((dot) => Number(dot.cy)),
+      [28, 55],
+    );
+    assert.match(art.alt, new RegExp(`${base}.*2`));
+  }
+});
+
+test("page 32 subtraction crosses both circles in the final column", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const count of [4, 6, 8, 10]) {
+    const id = `p032_circles_${count}_minus_2`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [175, 82]);
+    const dots = [...art.xml.matchAll(/<circle id="circle-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    const slashes = [...art.xml.matchAll(/<line id="cross-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    assert.equal(dots.length, count);
+    assert.equal(slashes.length, 2);
+    assert.ok(
+      dots.every((dot) => dot.fill === "none" && dot.stroke === "#2b4ba8"),
+    );
+    assert.ok(slashes.every((slash) => slash.stroke === "#c8352e"));
+    const columns = [...new Set(dots.map((dot) => Number(dot.cx)))];
+    assert.equal(columns.length, count / 2);
+    for (const x of columns) {
+      assert.deepEqual(
+        dots.filter((dot) => Number(dot.cx) === x).map((dot) => Number(dot.cy)),
+        [29, 56],
+      );
+    }
+    const lastX = Math.max(...columns);
+    assert.ok(
+      slashes.every(
+        (slash) => (Number(slash.x1) + Number(slash.x2)) / 2 === lastX,
+      ),
+    );
+    assert.deepEqual(
+      slashes.map((slash) => (Number(slash.y1) + Number(slash.y2)) / 2),
+      [29, 56],
+    );
+    assert.match(art.alt, new RegExp(`${count}.*2.*${count - 2}`));
+  }
+});
+
+test("page 33 diagonal separates the original odd group from two added circles", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const base of [1, 3, 5, 7]) {
+    const id = `p033_domino_${base}_plus_2`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [177, 81]);
+    const initial = [
+      ...art.xml.matchAll(/<circle id="base-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    const added = [
+      ...art.xml.matchAll(/<circle id="added-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    assert.equal(initial.length, base);
+    assert.equal(added.length, 2);
+    assert.ok(
+      [...initial, ...added].every(
+        (dot) => dot.fill === "none" && dot.stroke === "#2b4ba8",
+      ),
+    );
+    const separator = art.xml.match(/<line id="group-divider"[^>]*\/>/)?.[0];
+    assert.ok(separator);
+    const line = attributes(separator);
+    assert.ok(Number(line.x1) < Number(line.x2));
+    assert.ok(Number(line.y1) > Number(line.y2));
+    assert.equal(line.stroke, "#6b7280");
+    assert.equal([...art.xml.matchAll(/<line id="cross-\d+"/g)].length, 0);
+    const xAt = (y: number) =>
+      Number(line.x1) +
+      (Number(line.x2) - Number(line.x1)) *
+        ((y - Number(line.y1)) / (Number(line.y2) - Number(line.y1)));
+    assert.ok(initial.every((dot) => Number(dot.cx) < xAt(Number(dot.cy))));
+    assert.ok(added.every((dot) => Number(dot.cx) > xAt(Number(dot.cy))));
+    const x1 = Number(line.x1),
+      y1 = Number(line.y1);
+    const x2 = Number(line.x2),
+      y2 = Number(line.y2);
+    const lineLength = Math.hypot(x2 - x1, y2 - y1);
+    for (const dot of [...initial, ...added]) {
+      const x = Number(dot.cx),
+        y = Number(dot.cy);
+      const distance =
+        Math.abs((x2 - x1) * (y1 - y) - (x1 - x) * (y2 - y1)) / lineLength;
+      assert.ok(distance >= 9.4, `${id}: diagonal touches a circle`);
+      assert.equal(dot.r, "7");
+    }
+    assert.match(art.alt, new RegExp(`${base}.*2.*${base + 2}`));
+  }
+});
+
+test("page 34 odd subtraction crosses the last circle of each row", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const count of [3, 5, 7, 9]) {
+    const id = `p034_circles_${count}_minus_2`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [177, 79]);
+    const dots = [...art.xml.matchAll(/<circle id="circle-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    const slashes = [...art.xml.matchAll(/<line id="cross-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    assert.equal(dots.length, count);
+    assert.equal(slashes.length, 2);
+    assert.ok(
+      dots.every((dot) => dot.fill === "none" && dot.stroke === "#2b4ba8"),
+    );
+    assert.ok(slashes.every((slash) => slash.stroke === "#c8352e"));
+    const top = dots.filter((dot) => dot.cy === "29");
+    const bottom = dots.filter((dot) => dot.cy === "56");
+    assert.equal(top.length, (count + 1) / 2);
+    assert.equal(bottom.length, (count - 1) / 2);
+    const slashCenters = slashes.map((slash) => [
+      (Number(slash.x1) + Number(slash.x2)) / 2,
+      (Number(slash.y1) + Number(slash.y2)) / 2,
+    ]);
+    assert.deepEqual(slashCenters, [
+      [Math.max(...top.map((dot) => Number(dot.cx))), 29],
+      [Math.max(...bottom.map((dot) => Number(dot.cx))), 56],
+    ]);
+    assert.ok(slashCenters[0][0] > slashCenters[1][0]);
+    assert.match(art.alt, new RegExp(`${count}.*2.*${count - 2}`));
+  }
+});
+
+test("pages 35–36 addition cards preserve seven distinct plus-three groups", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const base of [1, 2, 3, 4, 5, 6, 7]) {
+    const page = base <= 4 ? "p035" : "p036";
+    const id = `${page}_domino_${base}_plus_3`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const expectedSize =
+      base === 1 ? [172, 81] : base <= 4 ? [176, 83] : [175, 83];
+    assert.deepEqual([art.width, art.height], expectedSize);
+    const initial = [
+      ...art.xml.matchAll(/<circle id="base-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    const added = [
+      ...art.xml.matchAll(/<circle id="added-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    assert.equal(initial.length, base);
+    assert.equal(added.length, 3);
+    assert.ok(
+      [...initial, ...added].every(
+        (dot) => dot.fill === "none" && dot.stroke === "#2b4ba8",
+      ),
+    );
+    assert.equal([...art.xml.matchAll(/<line id="cross-\d+"/g)].length, 0);
+    const separator = art.xml.match(/<line id="group-divider"[^>]*\/>/)?.[0];
+    assert.ok(separator);
+    const line = attributes(separator);
+    assert.equal(line.stroke, "#6b7280");
+    const x1 = Number(line.x1),
+      y1 = Number(line.y1);
+    const x2 = Number(line.x2),
+      y2 = Number(line.y2);
+    if (base % 2 === 0) {
+      assert.equal(x1, x2);
+      assert.ok(initial.every((dot) => Number(dot.cx) < x1));
+      assert.ok(added.every((dot) => Number(dot.cx) > x1));
+    } else {
+      assert.ok(x1 < x2 && y1 > y2);
+      const xAt = (y: number) => x1 + (x2 - x1) * ((y - y1) / (y2 - y1));
+      assert.ok(initial.every((dot) => Number(dot.cx) < xAt(Number(dot.cy))));
+      assert.ok(added.every((dot) => Number(dot.cx) > xAt(Number(dot.cy))));
+      for (const dot of [...initial, ...added]) {
+        const x = Number(dot.cx),
+          y = Number(dot.cy);
+        const distance =
+          Math.abs((x2 - x1) * (y1 - y) - (x1 - x) * (y2 - y1)) /
+          Math.hypot(x2 - x1, y2 - y1);
+        assert.ok(distance >= 9.4, `${id}: divider touches a circle`);
+      }
+    }
+    assert.match(art.alt, new RegExp(`${base}.*3.*${base + 3}`));
+  }
+});
+
+test("page 36 educational coins contain only the denominations 2 and 3", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [value, size] of [
+    [2, [127, 124]],
+    [3, [152, 150]],
+  ] as const) {
+    const id = `p036_coin_${value}_kopeks`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], size);
+    assert.match(art.xml, /id="coin-body"/);
+    assert.match(art.xml, new RegExp(`>${value}<\\/text>`));
+    assert.doesNotMatch(art.xml, /коп|руб|19\d\d|СССР|герб|₽/i);
+    assert.match(art.alt, new RegExp(`Учебная монета.*${value}`));
+  }
+});
+
+test("page 36 drawing samples keep two maple and three birch leaves", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, count, size, kind] of [
+    ["p036_two_maple_leaves", 2, [177, 121], "maple"],
+    ["p036_three_birch_leaves", 3, [193, 124], "birch"],
+  ] as const) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], size);
+    const outlines = [
+      ...art.xml.matchAll(
+        new RegExp(`<path id="${kind}-leaf-\\d+"[^>]*\\/>`, "g"),
+      ),
+    ].map((match) => attributes(match[0]));
+    assert.equal(outlines.length, count);
+    assert.ok(
+      outlines.every(
+        (outline) => outline.fill === "#f1efe9" && outline.stroke === "#486537",
+      ),
+    );
+    assert.equal(
+      [...art.xml.matchAll(/<line id="leaf-stem-\d+"[^>]*\/>/g)].length,
+      count,
+    );
+  }
+});
+
+test("page 34 five buttons remain a single row of five matte buttons", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p034_five_buttons;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p034_five_buttons.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [273, 60]);
+  const buttons = [...art.xml.matchAll(/<circle id="button-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  const holes = [...art.xml.matchAll(/<circle id="hole-\d+-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(buttons.length, 5);
+  assert.equal(holes.length, 20);
+  assert.deepEqual(
+    buttons.map((button) => Number(button.cx)),
+    [27, 81, 135, 189, 243],
+  );
+  assert.ok(buttons.every((button) => button.cy === "30" && button.r === "20"));
+  assert.ok(
+    buttons.every(
+      (button) => button.fill.startsWith("#") && button.fill !== "#000000",
+    ),
+  );
+  assert.match(art.alt, /Пять.*пуговиц/);
+});

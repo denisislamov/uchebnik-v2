@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="176" height="83" viewBox="0 0 176 83">
+<rect x="8" y="9" width="160" height="65" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<line id="group-divider" x1="25" y1="72" x2="89" y2="9" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="base-dot-0" cx="27" cy="29" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-1" cx="55" cy="29" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="base-dot-2" cx="27" cy="56" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-0" cx="86" cy="29" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-1" cx="55" cy="56" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="added-dot-2" cx="86" cy="56" r="7" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+</svg>

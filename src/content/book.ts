@@ -712,6 +712,16 @@ for (const block of pages[28].blocks) {
   block.activity.unit = "единицы";
 }
 if (!originalIllustrations) {
+  for (const block of pages[33].blocks) {
+    if (block.id !== "p034-source06") continue;
+    block.prompt =
+      "У Маши было 5 пуговиц. К пальто она пришила 2 пуговицы. Сколько пуговиц осталось у Маши?";
+  }
+  for (const block of pages[35].blocks) {
+    if (block.id !== "p036-source13") continue;
+    block.prompt =
+      "У Васи две учебные монеты с числами 2 и 3. Какое число получится, если их сложить?";
+  }
   for (const block of pages[28].blocks) {
     if (block.id !== "p029-lesson04") continue;
     block.images = ["p029_bars_10_all"];

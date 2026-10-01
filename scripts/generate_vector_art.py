@@ -142,6 +142,44 @@ NINE_SPLITS = {
 # The rightmost object is the one subtracted in each row.
 SUBTRACTION = {f"p021_circles_{n}_minus_1": n for n in range(2, 7)}
 
+ADDITION_TWO_LAYOUT = {
+    2: ((26,), 40, 53),
+    4: ((26, 51), 70, 86),
+    6: ((26, 54, 84), 103, 119),
+    8: ((25, 52, 80, 108), 134, 151),
+}
+
+# The diagonal separates, rather than crosses, the two newly added points.
+ODD_ADDITION_TWO = {
+    1: (((27, 29),), ((58, 29), (32, 56)), (8, 55)),
+    3: (((27, 29), (55, 29), (27, 56)),
+        ((86, 29), (55, 56)), (25, 89)),
+    5: (((27, 29), (56, 29), (86, 29), (27, 56), (56, 56)),
+        ((116, 29), (86, 56)), (56, 120)),
+    7: (((27, 29), (56, 29), (86, 29), (116, 29),
+         (27, 56), (56, 56), (86, 56)),
+        ((147, 29), (116, 56)), (86, 150)),
+}
+
+PLUS_THREE_LAYOUT = {
+    1: (((27, 29),),
+        ((57, 29), (32, 56), (57, 56)), ("diagonal", 8, 55)),
+    2: (((27, 29), (27, 56)),
+        ((55, 29), (85, 29), (55, 56)), ("vertical", 41)),
+    3: (((27, 29), (55, 29), (27, 56)),
+        ((86, 29), (55, 56), (86, 56)), ("diagonal", 25, 89)),
+    4: (((27, 29), (55, 29), (27, 56), (55, 56)),
+        ((85, 29), (115, 29), (85, 56)), ("vertical", 70)),
+    5: (((27, 29), (56, 29), (86, 29), (27, 56), (56, 56)),
+        ((116, 29), (86, 56), (116, 56)), ("diagonal", 56, 120)),
+    6: (((27, 29), (56, 29), (86, 29),
+         (27, 56), (56, 56), (86, 56)),
+        ((116, 29), (146, 29), (116, 56)), ("vertical", 101)),
+    7: (((27, 29), (56, 29), (86, 29), (116, 29),
+         (27, 56), (56, 56), (86, 56)),
+        ((146, 29), (116, 56), (146, 56)), ("diagonal", 86, 150)),
+}
+
 
 def dimensions(asset_id):
     left, top, right, bottom = BOOK_ASSETS[asset_id]["bbox"]
@@ -282,6 +320,132 @@ def subtraction_svg(asset_id, count):
         f'x2="{x+radius*1.3:.2f}" y2="{y-radius*1.3:.2f}" '
         f'stroke="{TEACHER_RED}" stroke-width="1.8" stroke-linecap="round"/>'
     )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def addition_two_domino_svg(asset_id, base_count):
+    width, height = dimensions(asset_id)
+    base_x, divider_x, added_x = ADDITION_TWO_LAYOUT[base_count]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="8" y="8" width="{width-16}" height="64" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="{divider_x}" y1="8" '
+        f'x2="{divider_x}" y2="72" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for side, columns in (("base", base_x), ("added", (added_x,))):
+        for i, (x, y) in enumerate((x, y) for x in columns for y in (28, 55)):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="8" fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def subtraction_two_svg(asset_id, count):
+    width, height = dimensions(asset_id)
+    columns = (29, 58, 89, 119, 151)[:count // 2]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="9" y="8" width="{width-18}" height="66" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (x, y) in enumerate((x, y) for x in columns for y in (29, 56)):
+        parts.append(
+            f'<circle id="circle-{i}" cx="{x}" cy="{y}" r="8" '
+            f'fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+        )
+    for i, y in enumerate((29, 56)):
+        x = columns[-1]
+        parts.append(
+            f'<line id="cross-{i}" x1="{x-8}" y1="{y+9}" '
+            f'x2="{x+8}" y2="{y-9}" stroke="{TEACHER_RED}" '
+            'stroke-width="2.3" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def odd_addition_two_svg(asset_id, base_count):
+    width, height = dimensions(asset_id)
+    base, added, (line_bottom, line_top) = ODD_ADDITION_TWO[base_count]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="8" y="9" width="{width-16}" height="63" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<line id="group-divider" x1="{line_bottom}" y1="72" '
+        f'x2="{line_top}" y2="9" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for side, dots in (("base", base), ("added", added)):
+        for i, (x, y) in enumerate(dots):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="7" fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def odd_subtraction_two_svg(asset_id, count):
+    width, height = dimensions(asset_id)
+    columns = (29, 59, 89, 119, 151)
+    top = columns[:(count + 1) // 2]
+    bottom = columns[:(count - 1) // 2]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="9" y="8" width="{width-18}" height="63" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (x, y) in enumerate(
+        tuple((x, 29) for x in top) + tuple((x, 56) for x in bottom)
+    ):
+        parts.append(
+            f'<circle id="circle-{i}" cx="{x}" cy="{y}" r="8" '
+            f'fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+        )
+    for i, (x, y) in enumerate(((top[-1], 29), (bottom[-1], 56))):
+        parts.append(
+            f'<line id="cross-{i}" x1="{x-8}" y1="{y+9}" '
+            f'x2="{x+8}" y2="{y-9}" stroke="{TEACHER_RED}" '
+            'stroke-width="2.3" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def addition_three_domino_svg(asset_id, base_count):
+    width, height = dimensions(asset_id)
+    base, added, separator = PLUS_THREE_LAYOUT[base_count]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="8" y="9" width="{width-16}" height="{height-18}" '
+        f'rx="2" fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    if separator[0] == "vertical":
+        x = separator[1]
+        parts.append(
+            f'<line id="group-divider" x1="{x}" y1="9" '
+            f'x2="{x}" y2="{height-9}" stroke="{FRAME}" stroke-width="1.8"/>'
+        )
+    else:
+        bottom_x, top_x = separator[1:]
+        parts.append(
+            f'<line id="group-divider" x1="{bottom_x}" y1="72" '
+            f'x2="{top_x}" y2="9" stroke="{FRAME}" stroke-width="1.8"/>'
+        )
+    radius = 8 if separator[0] == "vertical" else 7
+    for side, dots in (("base", base), ("added", added)):
+        for i, (x, y) in enumerate(dots):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="{radius}" fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+            )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
 
@@ -759,6 +923,14 @@ def educational_coin_five_svg():
 
 def educational_coin_ten_svg():
     return educational_coin_svg("p028_coin_10_kopeks", 10)
+
+
+def educational_coin_two_page36_svg():
+    return educational_coin_svg("p036_coin_2_kopeks", 2)
+
+
+def educational_coin_three_page36_svg():
+    return educational_coin_svg("p036_coin_3_kopeks", 3)
 
 
 def stick_angles_svg():
@@ -1595,6 +1767,86 @@ def sticks_star_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def maple_leaves_svg():
+    width, height = dimensions("p036_two_maple_leaves")
+    parts = start_svg(width, height)
+    # Two broad lobed contours can be copied by a child without scan texture.
+    for i, (x, angle) in enumerate(((45, -8), (131, 8))):
+        parts.append(f'<g transform="translate({x} 3) rotate({angle} 0 50)">')
+        parts.append(
+            f'<path id="maple-leaf-{i}" '
+            'd="M0 7 L-8 22 L-19 17 L-17 31 L-31 33 '
+            'L-21 43 L-28 55 L-12 53 L0 75 L12 53 '
+            'L28 55 L21 43 L31 33 L17 31 L19 17 L8 22 Z" '
+            f'fill="#f1efe9" stroke="{GREEN_EDGE}" stroke-width="2.2" '
+            'stroke-linejoin="round"/>'
+        )
+        parts.append(
+            f'<line id="leaf-stem-{i}" x1="0" y1="74" x2="0" y2="105" '
+            'stroke="#8e795c" stroke-width="2.5" stroke-linecap="round"/>'
+        )
+        parts.append(
+            '<path d="M0 71V29 M0 57L-17 39 M0 57L17 39" '
+            'fill="none" stroke="#9aa98e" stroke-width="1.4" '
+            'stroke-linecap="round"/>'
+        )
+        parts.append("</g>")
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def birch_leaves_svg():
+    width, height = dimensions("p036_three_birch_leaves")
+    parts = start_svg(width, height)
+    # A pointed oval with a few visible teeth, in three separate directions.
+    for i, (x, angle) in enumerate(((42, -28), (97, 3), (153, 28))):
+        parts.append(f'<g transform="translate({x} 5) rotate({angle} 0 49)">')
+        parts.append(
+            f'<path id="birch-leaf-{i}" '
+            'd="M0 7 L-8 18 L-13 17 L-15 28 L-20 29 '
+            'L-18 38 L-23 43 L-17 51 L-19 59 L-10 62 '
+            'L0 75 L10 62 L19 59 L17 51 L23 43 L18 38 '
+            'L20 29 L15 28 L13 17 L8 18 Z" '
+            f'fill="#f1efe9" stroke="{GREEN_EDGE}" stroke-width="2" '
+            'stroke-linejoin="round"/>'
+        )
+        parts.append(
+            f'<line id="leaf-stem-{i}" x1="0" y1="74" x2="0" y2="106" '
+            'stroke="#8e795c" stroke-width="2.4" stroke-linecap="round"/>'
+        )
+        parts.append(
+            '<path d="M0 72V18 M0 43L-13 33 M0 48L13 34" '
+            'fill="none" stroke="#9aa98e" stroke-width="1.3" '
+            'stroke-linecap="round"/>'
+        )
+        parts.append("</g>")
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def five_buttons_svg():
+    width, height = dimensions("p034_five_buttons")
+    parts = start_svg(width, height)
+    fills = ("#738388", "#77847a", "#8d7f78", "#7e7b91", "#748a86")
+    for i, fill in enumerate(fills):
+        x = 27 + i * 54
+        parts.append(
+            f'<circle id="button-{i}" cx="{x}" cy="30" r="20" '
+            f'fill="{fill}" stroke="#4b5961" stroke-width="1.8"/>'
+        )
+        parts.append(
+            f'<circle cx="{x}" cy="30" r="15" fill="none" '
+            'stroke="#d6d9d3" stroke-width="1.1" opacity="0.6"/>'
+        )
+        for hole, (dx, dy) in enumerate(((-4, -4), (4, -4), (-4, 4), (4, 4))):
+            parts.append(
+                f'<circle id="hole-{i}-{hole}" cx="{x+dx}" cy="{30+dy}" '
+                'r="2.2" fill="#f1efe9"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -1638,6 +1890,32 @@ def main():
         svg, width, height = subtraction_svg(asset_id, count)
         register(asset_id, svg, width, height,
                  f"Кружки: {count}; крайний справа перечёркнут, остаётся {count-1}")
+    for base_count in (2, 4, 6, 8):
+        asset_id = f"p031_domino_{base_count}_2"
+        svg, width, height = addition_two_domino_svg(asset_id, base_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {base_count} контурных кружков и ещё 2 за перегородкой; всего {base_count+2}")
+    for count in (4, 6, 8, 10):
+        asset_id = f"p032_circles_{count}_minus_2"
+        svg, width, height = subtraction_two_svg(asset_id, count)
+        register(asset_id, svg, width, height,
+                 f"Кружки: {count}; 2 в правом столбце перечёркнуты, остаётся {count-2}")
+    for base_count in (1, 3, 5, 7):
+        asset_id = f"p033_domino_{base_count}_plus_2"
+        svg, width, height = odd_addition_two_svg(asset_id, base_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {base_count} исходных кружков и 2 добавленных за диагональю; всего {base_count+2}")
+    for count in (3, 5, 7, 9):
+        asset_id = f"p034_circles_{count}_minus_2"
+        svg, width, height = odd_subtraction_two_svg(asset_id, count)
+        register(asset_id, svg, width, height,
+                 f"Кружки: {count}; 2 крайних в двух рядах перечёркнуты, остаётся {count-2}")
+    for base_count in range(1, 8):
+        page = "p035" if base_count <= 4 else "p036"
+        asset_id = f"{page}_domino_{base_count}_plus_3"
+        svg, width, height = addition_three_domino_svg(asset_id, base_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {base_count} исходных кружков и 3 добавленных за разделителем; всего {base_count+3}")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (
@@ -1821,6 +2099,16 @@ def main():
          "Десять квадратов: пять зелёных и пять красных, обе группы 2 + 1 + 2"),
         ("p030_fir_trees_10", ten_fir_trees_svg,
          "Десять одинаковых елей в одном горизонтальном ряду"),
+        ("p034_five_buttons", five_buttons_svg,
+         "Пять матовых пуговиц в одном ряду"),
+        ("p036_coin_2_kopeks", educational_coin_two_page36_svg,
+         "Учебная монета с числом 2"),
+        ("p036_coin_3_kopeks", educational_coin_three_page36_svg,
+         "Учебная монета с числом 3"),
+        ("p036_two_maple_leaves", maple_leaves_svg,
+         "Два отдельных контурных кленовых листа для срисовывания"),
+        ("p036_three_birch_leaves", birch_leaves_svg,
+         "Три отдельных контурных берёзовых листа для срисовывания"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

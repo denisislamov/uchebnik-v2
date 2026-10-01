@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="177" height="121" viewBox="0 0 177 121">
+<g transform="translate(45 3) rotate(-8 0 50)">
+<path id="maple-leaf-0" d="M0 7 L-8 22 L-19 17 L-17 31 L-31 33 L-21 43 L-28 55 L-12 53 L0 75 L12 53 L28 55 L21 43 L31 33 L17 31 L19 17 L8 22 Z" fill="#f1efe9" stroke="#486537" stroke-width="2.2" stroke-linejoin="round"/>
+<line id="leaf-stem-0" x1="0" y1="74" x2="0" y2="105" stroke="#8e795c" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M0 71V29 M0 57L-17 39 M0 57L17 39" fill="none" stroke="#9aa98e" stroke-width="1.4" stroke-linecap="round"/>
+</g>
+<g transform="translate(131 3) rotate(8 0 50)">
+<path id="maple-leaf-1" d="M0 7 L-8 22 L-19 17 L-17 31 L-31 33 L-21 43 L-28 55 L-12 53 L0 75 L12 53 L28 55 L21 43 L31 33 L17 31 L19 17 L8 22 Z" fill="#f1efe9" stroke="#486537" stroke-width="2.2" stroke-linejoin="round"/>
+<line id="leaf-stem-1" x1="0" y1="74" x2="0" y2="105" stroke="#8e795c" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M0 71V29 M0 57L-17 39 M0 57L17 39" fill="none" stroke="#9aa98e" stroke-width="1.4" stroke-linecap="round"/>
+</g>
+</svg>

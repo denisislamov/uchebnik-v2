@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="273" height="60" viewBox="0 0 273 60">
+<circle id="button-0" cx="27" cy="30" r="20" fill="#738388" stroke="#4b5961" stroke-width="1.8"/>
+<circle cx="27" cy="30" r="15" fill="none" stroke="#d6d9d3" stroke-width="1.1" opacity="0.6"/>
+<circle id="hole-0-0" cx="23" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-0-1" cx="31" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-0-2" cx="23" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="hole-0-3" cx="31" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="button-1" cx="81" cy="30" r="20" fill="#77847a" stroke="#4b5961" stroke-width="1.8"/>
+<circle cx="81" cy="30" r="15" fill="none" stroke="#d6d9d3" stroke-width="1.1" opacity="0.6"/>
+<circle id="hole-1-0" cx="77" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-1-1" cx="85" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-1-2" cx="77" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="hole-1-3" cx="85" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="button-2" cx="135" cy="30" r="20" fill="#8d7f78" stroke="#4b5961" stroke-width="1.8"/>
+<circle cx="135" cy="30" r="15" fill="none" stroke="#d6d9d3" stroke-width="1.1" opacity="0.6"/>
+<circle id="hole-2-0" cx="131" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-2-1" cx="139" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-2-2" cx="131" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="hole-2-3" cx="139" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="button-3" cx="189" cy="30" r="20" fill="#7e7b91" stroke="#4b5961" stroke-width="1.8"/>
+<circle cx="189" cy="30" r="15" fill="none" stroke="#d6d9d3" stroke-width="1.1" opacity="0.6"/>
+<circle id="hole-3-0" cx="185" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-3-1" cx="193" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-3-2" cx="185" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="hole-3-3" cx="193" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="button-4" cx="243" cy="30" r="20" fill="#748a86" stroke="#4b5961" stroke-width="1.8"/>
+<circle cx="243" cy="30" r="15" fill="none" stroke="#d6d9d3" stroke-width="1.1" opacity="0.6"/>
+<circle id="hole-4-0" cx="239" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-4-1" cx="247" cy="26" r="2.2" fill="#f1efe9"/>
+<circle id="hole-4-2" cx="239" cy="34" r="2.2" fill="#f1efe9"/>
+<circle id="hole-4-3" cx="247" cy="34" r="2.2" fill="#f1efe9"/>
+</svg>
