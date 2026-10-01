@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="120" viewBox="0 0 300 120">
+<rect id="eraser-0" x="17" y="37" width="61" height="43" rx="8" fill="#d2b9ad" stroke="#8f766e" stroke-width="2"/>
+<path d="M45 38V79" stroke="#f0e5d6" stroke-width="11"/>
+<rect id="eraser-1" x="91" y="37" width="61" height="43" rx="8" fill="#d2b9ad" stroke="#8f766e" stroke-width="2"/>
+<path d="M119 38V79" stroke="#f0e5d6" stroke-width="11"/>
+<rect id="eraser-2" x="165" y="37" width="61" height="43" rx="8" fill="#d2b9ad" stroke="#8f766e" stroke-width="2"/>
+<path d="M193 38V79" stroke="#f0e5d6" stroke-width="11"/>
+<rect id="eraser-3" x="239" y="37" width="61" height="43" rx="8" fill="#d2b9ad" stroke="#8f766e" stroke-width="2"/>
+<path d="M267 38V79" stroke="#f0e5d6" stroke-width="11"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="185" viewBox="0 0 320 185">
+<circle id="round-bed" cx="160" cy="92" r="43" fill="#adc2a6" stroke="#617751" stroke-width="2.5"/>
+<polygon id="triangle-bed-0" points="24,18 117,18 36,71" fill="#adc2a6" stroke="#617751" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon id="triangle-bed-1" points="203,18 296,18 284,71" fill="#adc2a6" stroke="#617751" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon id="triangle-bed-2" points="24,167 117,167 36,114" fill="#adc2a6" stroke="#617751" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon id="triangle-bed-3" points="203,167 296,167 284,114" fill="#adc2a6" stroke="#617751" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>

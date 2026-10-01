@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 import { pages, allBlocks } from "../src/content/book.ts";
 import {
   emptyProgress,
@@ -116,6 +117,55 @@ test("revised late-page picture prompts describe modern objects and number-only 
   assert.ok(tickets && tickets.kind === "story");
   assert.equal(tickets.story.unit, "жетоны");
   assert.match(tickets.story.variants[0].description, /учебных жетона/);
+});
+test("revised lesson wording uses modern settings and currency-free teaching tokens", () => {
+  const dated = /рубл|копе|колхоз|совхоз|пионер|бидон|печи|возов/i;
+  for (const block of allBlocks) {
+    assert.doesNotMatch(block.prompt, dated, block.id);
+    if (block.kind === "work") {
+      for (const field of block.fields) {
+        assert.doesNotMatch(field.label, dated, `${block.id}.${field.id}`);
+        for (const option of field.options ?? [])
+          assert.doesNotMatch(option, dated, `${block.id}.${field.id}`);
+      }
+    } else if (block.kind === "activity") {
+      if (block.activity.unit)
+        assert.doesNotMatch(block.activity.unit, dated, block.id);
+    } else if (block.kind === "story") {
+      assert.doesNotMatch(block.story.unit, dated, block.id);
+      for (const input of block.story.inputs ?? [])
+        assert.doesNotMatch(input.label, dated, block.id);
+      for (const variant of block.story.variants) {
+        assert.doesNotMatch(variant.description, dated, block.id);
+        for (const input of variant.inputs ?? [])
+          assert.doesNotMatch(input.label, dated, block.id);
+        for (const step of variant.steps)
+          assert.doesNotMatch(step.question, dated, block.id);
+      }
+    }
+  }
+  const source = spawnSync(
+    process.execPath,
+    [
+      "--experimental-strip-types",
+      "--input-type=module",
+      "-e",
+      'globalThis.window={location:{search:"?illustrations=original"}}; const {pages}=await import("./src/content/book.ts"); console.log(pages[36].blocks.find(b=>b.id==="p037-source02").prompt)',
+    ],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  assert.equal(source.status, 0, source.stderr);
+  assert.match(source.stdout, /рублю/);
+  const pharmacyStories = pages[77].blocks.find(
+    (block) => block.id === "p078-source05",
+  );
+  assert.ok(pharmacyStories && pharmacyStories.kind === "story");
+  assert.doesNotMatch(
+    pharmacyStories.story.variants
+      .map((variant) => variant.description)
+      .join(" "),
+    /бинт/,
+  );
 });
 test("empty, whitespace, malformed and zero are distinct", () => {
   const b = by("number");

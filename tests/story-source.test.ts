@@ -285,13 +285,13 @@ test("runtime connects all ten source stories to isCorrect and requires complete
   const sourceAnswers: Record<number, Record<string, string>> = {
     49: {
       storyVariant: "first",
-      storyUnit: "рубли",
+      storyUnit: "жетоны",
       firstOperator: "+",
       firstResult: "4",
     },
     149: {
       storyVariant: "difference",
-      storyUnit: "рубли",
+      storyUnit: "жетоны",
       firstOperator: "−",
       firstResult: "4",
     },
@@ -309,7 +309,7 @@ test("runtime connects all ten source stories to isCorrect and requires complete
     },
     360: {
       storyVariant: "soap-bandage",
-      storyUnit: "рубли",
+      storyUnit: "жетоны",
       paid: "5",
       firstOperator: "+",
       firstResult: "3",

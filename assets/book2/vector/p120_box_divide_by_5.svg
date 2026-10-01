@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="170" height="155" viewBox="0 0 170 155">
+<rect id="number-box" x="49" y="43" width="72" height="69" rx="4" fill="#fcfbf7" stroke="#6b7280" stroke-width="2"/>
+<text id="corner-0" x="12" y="34" font-family="Andika_700Bold" font-size="26" fill="#1f2433">10</text>
+<text id="corner-1" x="126" y="34" font-family="Andika_700Bold" font-size="26" fill="#1f2433">20</text>
+<text id="corner-2" x="19" y="143" font-family="Andika_700Bold" font-size="26" fill="#1f2433">5</text>
+<text id="corner-3" x="124" y="143" font-family="Andika_700Bold" font-size="26" fill="#1f2433">15</text>
+<text id="box-operation" x="85" y="88" text-anchor="middle" font-family="Andika_700Bold" font-size="30" fill="#1f2433">:5</text>
+</svg>

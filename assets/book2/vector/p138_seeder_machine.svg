@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="345" height="218" viewBox="0 0 345 218">
+<path id="seeder-hitch" d="M283 87H332" fill="none" stroke="#526c6c" stroke-width="7" stroke-linecap="round"/>
+<path id="seed-hopper" d="M52 45H284L268 105H69Z" fill="#d9e8e9" stroke="#526c6c" stroke-width="2.8"/>
+<path d="M69 110H268" stroke="#526c6c" stroke-width="5"/>
+<path id="seed-tube-0" d="M89 105V160L98 171" fill="none" stroke="#8aa6a4" stroke-width="3.4" stroke-linecap="round"/>
+<path id="seed-tube-1" d="M125 105V160L134 171" fill="none" stroke="#8aa6a4" stroke-width="3.4" stroke-linecap="round"/>
+<path id="seed-tube-2" d="M161 105V160L170 171" fill="none" stroke="#8aa6a4" stroke-width="3.4" stroke-linecap="round"/>
+<path id="seed-tube-3" d="M197 105V160L206 171" fill="none" stroke="#8aa6a4" stroke-width="3.4" stroke-linecap="round"/>
+<path id="seed-tube-4" d="M233 105V160L242 171" fill="none" stroke="#8aa6a4" stroke-width="3.4" stroke-linecap="round"/>
+<path id="seed-tube-5" d="M269 105V160L278 171" fill="none" stroke="#8aa6a4" stroke-width="3.4" stroke-linecap="round"/>
+<circle id="seeder-wheel-0" cx="72" cy="177" r="25" fill="#59666a" stroke="#364447" stroke-width="2"/>
+<circle cx="72" cy="177" r="10" fill="#d9e8e9"/>
+<circle id="seeder-wheel-1" cx="267" cy="177" r="25" fill="#59666a" stroke="#364447" stroke-width="2"/>
+<circle cx="267" cy="177" r="10" fill="#d9e8e9"/>
+</svg>

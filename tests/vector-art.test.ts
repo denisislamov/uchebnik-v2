@@ -4510,3 +4510,140 @@ test("page 110 reference table reproduces all thirty-six visible equalities", as
   assert.equal(expected.length, 36);
   assert.deepEqual(equations, expected);
 });
+
+test("final pages register all thirty-eight source crops", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const ids = [
+    "p114_frame_div_by_2", "p115_frame_div_by_3", "p116_box_divide_by_3", "p116_pencil_boxes",
+    "p117_frame_div_by_4", "p118_fish_hooks", "p119_frame_div_by_5", "p119_strip_15_cells",
+    "p120_box_divide_by_5", "p121_frame_division_by_6", "p122_frame_division_7_8_9_10",
+    "p124_three_books_6_rub_each", "p124_three_books_brace_6_rub",
+    "p126_ten_bundles_of_sticks", "p126_three_bundles_three_sticks",
+    "p127_coins_three_10_kop_one_1_kop", "p127_rule_units_tens_frame", "p127_table_tens_units_2_4", "p127_two_bundles_four_sticks",
+    "p128_row_40_50_gaps", "p128_table_numbers_1_100",
+    "p129_line_to_measure", "p129_rule_cm_abbreviation_frame", "p129_rule_meter_100_cm_frame", "p129_ruler_10_cm",
+    "p130_three_bundles_20_plus_10", "p131_buttons_30_minus_10",
+    "p132_scheme_100_minus", "p132_scheme_30_plus", "p132_scheme_70_minus",
+    "p134_coin_20_kopeks", "p134_stick_bundles_3x2", "p135_circles_40_split_2",
+    "p138_mower_machine", "p138_seeder_machine", "p141_flowerbeds_round_triangles",
+    "p142_rowing_boat", "p142_target_circles_10_20_30",
+  ];
+  assert.equal(ids.length, 38);
+  for (const id of ids) {
+    assert.ok(vectorAssets[id], id);
+    assert.equal(vectorAssets[id].xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
+  }
+});
+
+test("division frames retain the scanned unsolved expressions and box inputs", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, expected] of [
+    ["p114_frame_div_by_2", ["2:2","6:2","10:2","14:2","18:2","4:2","8:2","12:2","16:2","20:2"]],
+    ["p115_frame_div_by_3", ["3:3","9:3","15:3","6:3","12:3","18:3"]],
+    ["p117_frame_div_by_4", ["4:4","8:4","12:4","16:4","20:4"]],
+    ["p119_frame_div_by_5", ["5:5","10:5","15:5","20:5"]],
+    ["p121_frame_division_by_6", ["6:6","12:6","18:6"]],
+    ["p122_frame_division_7_8_9_10", ["7:7","8:8","9:9","10:10","14:7","16:8","18:9","20:10"]],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.deepEqual([...xml.matchAll(/<text id="division-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), expected, id);
+    assert.doesNotMatch(xml, /<text\b[^>]*>[^<]*=/);
+  }
+  assert.deepEqual([...vectorAssets.p116_box_divide_by_3.xml.matchAll(/<text id="box-number-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), ["9","12","6","15","18","9"]);
+  assert.deepEqual([...vectorAssets.p120_box_divide_by_5.xml.matchAll(/<text id="corner-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), ["10","20","5","15"]);
+});
+
+test("objects preserve source counts while modern replacements keep prices numeric", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const pencils = vectorAssets.p116_pencil_boxes.xml;
+  assert.equal([...pencils.matchAll(/id="pencil-\d+"/g)].length, 2);
+  assert.equal([...pencils.matchAll(/id="closed-box-\d+"/g)].length, 3);
+  assert.equal([...vectorAssets.p118_fish_hooks.xml.matchAll(/id="eraser-\d+"/g)].length, 4);
+  for (const [id, expected] of [
+    ["p124_three_books_6_rub_each", ["6","6","6"]],
+    ["p124_three_books_brace_6_rub", ["6"]],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.equal([...xml.matchAll(/id="book-\d+"/g)].length, 3);
+    assert.deepEqual([...xml.matchAll(/<text id="book-price-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), expected);
+    assert.doesNotMatch(xml, /руб|коп|₽/i);
+  }
+  assert.match(vectorAssets.p124_three_books_brace_6_rub.xml, /id="book-brace"/);
+});
+
+test("stick bundles, cell strip, buttons and split circles preserve exact counts", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const strip = vectorAssets.p119_strip_15_cells.xml;
+  assert.equal([...strip.matchAll(/id="strip-cell-\d+"/g)].length, 15);
+  assert.equal([...strip.matchAll(/id="strip-divider-\d+"/g)].length, 4);
+  for (const [id, bundles, loose] of [
+    ["p126_ten_bundles_of_sticks",10,0], ["p126_three_bundles_three_sticks",3,3],
+    ["p127_two_bundles_four_sticks",2,4], ["p130_three_bundles_20_plus_10",3,0],
+    ["p134_stick_bundles_3x2",6,0],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.equal([...xml.matchAll(/<g id="bundle-\d+"/g)].length, bundles, id);
+    assert.equal([...xml.matchAll(/id="bundle-stick-\d+-\d+"/g)].length, bundles*10, id);
+    assert.equal([...xml.matchAll(/id="loose-stick-\d+"/g)].length, loose, id);
+  }
+  assert.equal([...vectorAssets.p131_buttons_30_minus_10.xml.matchAll(/id="button-\d+-\d+"/g)].length, 30);
+  assert.match(vectorAssets.p131_buttons_30_minus_10.xml, /id="tens-divider"/);
+  assert.equal([...vectorAssets.p135_circles_40_split_2.xml.matchAll(/id="split-circle-\d+-\d+"/g)].length, 40);
+  assert.match(vectorAssets.p135_circles_40_split_2.xml, /id="twenty-divider"/);
+});
+
+test("place value, number gaps, hundred table and learning coins keep their digits", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, values] of [
+    ["p127_coins_three_10_kop_one_1_kop", ["10","10","10","1"]],
+    ["p134_coin_20_kopeks", ["20"]],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.deepEqual([...xml.matchAll(/<text id="coin-label-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), values);
+    assert.doesNotMatch(xml, /коп|руб|₽|19\d\d|герб/i);
+  }
+  assert.match(vectorAssets.p127_rule_units_tens_frame.xml, /Единицы пишутся на первом месте справа/);
+  assert.match(vectorAssets.p127_rule_units_tens_frame.xml, /десятки на втором/);
+  const place = vectorAssets.p127_table_tens_units_2_4.xml;
+  assert.match(place, /Десятки/); assert.match(place, /Единицы/);
+  assert.deepEqual([...place.matchAll(/<text id="place-value-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), ["2","4"]);
+  const row = vectorAssets.p128_row_40_50_gaps.xml;
+  assert.equal([...row.matchAll(/id="number-cell-\d+"/g)].length, 11);
+  assert.deepEqual([...row.matchAll(/<text id="number-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), ["40","41","42","44","45","46","47","50"]);
+  const table = vectorAssets.p128_table_numbers_1_100.xml;
+  assert.deepEqual([...table.matchAll(/<text id="hundred-label-\d+"[^>]*>(\d+)<\/text>/g)].map(m=>Number(m[1])), Array.from({length:100},(_,i)=>i+1));
+});
+
+test("centimetre ruler marks zero and ten equal intervals, with the first highlighted", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const xml = vectorAssets.p129_ruler_10_cm.xml;
+  const ticks = [...xml.matchAll(/<line id="cm-tick-\d+" x1="([\d.]+)"/g)].map(m=>Number(m[1]));
+  assert.equal(ticks.length, 11);
+  assert.ok(ticks.slice(1).every((x,i)=>Math.abs((x-ticks[i])-(ticks[1]-ticks[0]))<0.01));
+  assert.deepEqual([...xml.matchAll(/<text id="cm-label-\d+"[^>]*>(\d+)<\/text>/g)].map(m=>Number(m[1])), Array.from({length:11},(_,i)=>i));
+  assert.match(xml, /id="first-centimetre"/);
+  assert.match(vectorAssets.p129_rule_cm_abbreviation_frame.xml, /сантиметр/);
+  assert.match(vectorAssets.p129_rule_cm_abbreviation_frame.xml, /см/);
+  assert.match(vectorAssets.p129_rule_meter_100_cm_frame.xml, /1 метре/);
+  assert.match(vectorAssets.p129_rule_meter_100_cm_frame.xml, /100 сантиметров/);
+});
+
+test("tens schemes, modern machines, flowerbeds, boat and target preserve structure", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, center, corners] of [
+    ["p132_scheme_70_minus", "70−", ["20","40","10","30"]],
+    ["p132_scheme_100_minus", "100−", ["20","40","10","30"]],
+    ["p132_scheme_30_plus", "30+", ["20","50","40","70"]],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.match(xml, new RegExp(center));
+    assert.deepEqual([...xml.matchAll(/<text id="scheme-corner-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), corners);
+  }
+  assert.match(vectorAssets.p138_mower_machine.xml, /id="mower-rotor"/);
+  assert.match(vectorAssets.p138_seeder_machine.xml, /id="seed-hopper"/);
+  assert.equal([...vectorAssets.p141_flowerbeds_round_triangles.xml.matchAll(/id="triangle-bed-\d+"/g)].length, 4);
+  assert.match(vectorAssets.p141_flowerbeds_round_triangles.xml, /id="round-bed"/);
+  assert.equal([...vectorAssets.p142_rowing_boat.xml.matchAll(/id="oar-\d+"/g)].length, 2);
+  assert.equal([...vectorAssets.p142_target_circles_10_20_30.xml.matchAll(/id="target-ring-\d+"/g)].length, 3);
+  assert.deepEqual([...vectorAssets.p142_target_circles_10_20_30.xml.matchAll(/<text id="target-score-\d+"[^>]*>([^<]+)<\/text>/g)].map(m=>m[1]), ["10","20","30"]);
+});

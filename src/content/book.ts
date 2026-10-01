@@ -751,9 +751,23 @@ if (!originalIllustrations) {
     if (page67Prompts[block.id]) block.prompt = page67Prompts[block.id];
   }
   for (const block of pages[77].blocks) {
-    if (block.id !== "p078-source01") continue;
-    block.prompt =
-      "На учебных ценниках зубная щётка стоит 3 жетона, а упаковка пластырей — 1 жетон. Девочка дала кассиру 5 жетонов. Сколько жетонов она получила обратно?";
+    if (block.id === "p078-source01") {
+      block.prompt =
+        "На учебных ценниках зубная щётка стоит 3 жетона, а упаковка пластырей — 1 жетон. Девочка дала кассиру 5 жетонов. Сколько жетонов она получила обратно?";
+    } else if (block.id === "p078-source05" && block.kind === "story") {
+      block.story.variants = block.story.variants.map((variant) =>
+        variant.id.includes("bandage")
+          ? {
+              ...variant,
+              label: variant.label.replace("бинт", "пластыри"),
+              description: variant.description.replace(
+                "бинт за 1 рубль",
+                "упаковку пластырей за 1 жетон",
+              ),
+            }
+          : variant,
+      );
+    }
   }
   for (const block of pages[80].blocks) {
     if (block.id !== "p081-source07") continue;
@@ -1270,6 +1284,86 @@ if (!originalIllustrations) {
         shapes: index === 2 ? groups.flat() : groups[index],
       },
     }));
+  }
+  const remainingPeriodPrompts: Record<number, Record<string, string>> = {
+    64: {
+      "p064-source02":
+        "Школьники сделали для детского сада 18 игрушек. Из них 8 игрушек для старшей группы, а остальные — для младшей. Сколько игрушек они сделали для младшей группы?",
+    },
+    68: {
+      "p068-source11":
+        "Игрушечная лодка стоит 11 жетонов, а игрушечный катер на 4 жетона дороже. Сколько жетонов стоит катер?",
+    },
+    73: {
+      "p073-source06":
+        "В кувшине 10 стаканов молока, а в большом пищевом контейнере на 6 стаканов больше. Сколько стаканов молока в контейнере?",
+    },
+    86: {
+      "p086-source09":
+        "Мастера собрали в первый день 4 книжных стеллажа, а во второй — 5. Всего нужно собрать 13 стеллажей. Сколько стеллажей осталось собрать?",
+    },
+    93: {
+      "p093-source07":
+        "Фермер получил 16 л молока от коровы и 2 л от козы. Сколько всего литров молока он получил?",
+    },
+    95: {
+      "p095-source07":
+        "Ферма отправила в город 18 грузовиков с яблоками и грушами. С яблоками было 9 грузовиков. Сколько грузовиков было с грушами?",
+    },
+  };
+  for (const [pageNumber, prompts] of Object.entries(remainingPeriodPrompts)) {
+    for (const block of pages[Number(pageNumber) - 1].blocks) {
+      if (prompts[block.id]) block.prompt = prompts[block.id];
+    }
+  }
+  // Prices in the revised lessons use counting tokens. Keep `sourceText` and
+  // the original illustration mode verbatim so the book remains comparable.
+  const educationalPrice = (value: string) =>
+    value
+      .replace(/рублях/gi, "жетонах")
+      .replace(/рублей/gi, "жетонов")
+      .replace(/рубля/gi, "жетона")
+      .replace(/рублю/gi, "жетону")
+      .replace(/рубли/gi, "жетоны")
+      .replace(/рубль/gi, "жетон")
+      .replace(/руб\./gi, "жетона")
+      .replace(/копейках/gi, "жетонах")
+      .replace(/копейками/gi, "жетонами")
+      .replace(/копеек/gi, "жетонов")
+      .replace(/копейки/gi, "жетона")
+      .replace(/копейку/gi, "жетон")
+      .replace(/копейка/gi, "жетон");
+  for (const block of pages.flatMap((page) => page.blocks)) {
+    block.prompt = educationalPrice(block.prompt);
+    if (block.kind === "work") {
+      block.fields = block.fields.map((field) => ({
+        ...field,
+        label: educationalPrice(field.label),
+        options: field.options?.map(educationalPrice),
+        expected: educationalPrice(field.expected),
+      }));
+    } else if (block.kind === "activity") {
+      if (block.activity.unit)
+        block.activity.unit = educationalPrice(block.activity.unit);
+    } else if (block.kind === "story") {
+      block.story.unit = educationalPrice(block.story.unit);
+      block.story.inputs = block.story.inputs?.map((input) => ({
+        ...input,
+        label: educationalPrice(input.label),
+      }));
+      block.story.variants = block.story.variants.map((variant) => ({
+        ...variant,
+        description: educationalPrice(variant.description),
+        steps: variant.steps.map((step) => ({
+          ...step,
+          question: educationalPrice(step.question),
+        })),
+        inputs: variant.inputs?.map((input) => ({
+          ...input,
+          label: educationalPrice(input.label),
+        })),
+      }));
+    }
   }
 }
 export const allBlocks = pages.flatMap((p) => p.blocks);

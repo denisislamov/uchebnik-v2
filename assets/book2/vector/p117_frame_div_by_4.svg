@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="625" height="105" viewBox="0 0 625 105">
+<rect id="division-frame" x="7" y="7" width="611" height="91" rx="4" fill="#fcfbf7" stroke="#6b7280" stroke-width="2"/>
+<text id="division-0" x="62.5" y="69.3" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">4:4</text>
+<text id="division-1" x="187.5" y="69.3" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">8:4</text>
+<text id="division-2" x="312.5" y="69.3" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">12:4</text>
+<text id="division-3" x="437.5" y="69.3" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">16:4</text>
+<text id="division-4" x="562.5" y="69.3" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">20:4</text>
+</svg>

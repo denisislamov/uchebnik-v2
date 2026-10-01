@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="268" height="155" viewBox="0 0 268 155">
+<rect id="number-box" x="8" y="8" width="211" height="139" rx="4" fill="#fcfbf7" stroke="#6b7280" stroke-width="2"/>
+<text id="box-number-0" x="45" y="63" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">9</text>
+<text id="box-number-1" x="111" y="63" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">12</text>
+<text id="box-number-2" x="178" y="63" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">6</text>
+<text id="box-number-3" x="45" y="123" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">15</text>
+<text id="box-number-4" x="111" y="123" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">18</text>
+<text id="box-number-5" x="178" y="123" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">9</text>
+<text id="box-operation" x="225" y="96" font-family="Andika_700Bold" font-size="31" fill="#1f2433">:3</text>
+</svg>

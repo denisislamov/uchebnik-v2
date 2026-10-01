@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="485" height="155" viewBox="0 0 485 155">
+<path id="book-0" d="M22.8 31H138.8V94H22.8Z" fill="#e4dcc6" stroke="#6b7280" stroke-width="2"/>
+<path d="M31.8 36V89M33.8 96H143.8" fill="none" stroke="#6b7280" stroke-width="1.7"/>
+<text id="book-price-0" x="80.8" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">6</text>
+<path id="book-1" d="M184.5 31H300.5V94H184.5Z" fill="#e4dcc6" stroke="#6b7280" stroke-width="2"/>
+<path d="M193.5 36V89M195.5 96H305.5" fill="none" stroke="#6b7280" stroke-width="1.7"/>
+<text id="book-price-1" x="242.5" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">6</text>
+<path id="book-2" d="M346.2 31H462.2V94H346.2Z" fill="#e4dcc6" stroke="#6b7280" stroke-width="2"/>
+<path d="M355.2 36V89M357.2 96H467.2" fill="none" stroke="#6b7280" stroke-width="1.7"/>
+<text id="book-price-2" x="404.2" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">6</text>
+</svg>

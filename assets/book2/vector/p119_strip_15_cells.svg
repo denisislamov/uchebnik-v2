@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="65" viewBox="0 0 540 65">
+<rect id="strip-cell-0" x="9.00" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-1" x="43.80" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-2" x="78.60" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<path id="strip-divider-0" d="M113.40 10V55" stroke="#1f2433" stroke-width="4"/>
+<rect id="strip-cell-3" x="113.40" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-4" x="148.20" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-5" x="183.00" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<path id="strip-divider-1" d="M217.80 10V55" stroke="#1f2433" stroke-width="4"/>
+<rect id="strip-cell-6" x="217.80" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-7" x="252.60" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-8" x="287.40" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<path id="strip-divider-2" d="M322.20 10V55" stroke="#1f2433" stroke-width="4"/>
+<rect id="strip-cell-9" x="322.20" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-10" x="357.00" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-11" x="391.80" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<path id="strip-divider-3" d="M426.60 10V55" stroke="#1f2433" stroke-width="4"/>
+<rect id="strip-cell-12" x="426.60" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-13" x="461.40" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+<rect id="strip-cell-14" x="496.20" y="10" width="34.80" height="45" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.5"/>
+</svg>

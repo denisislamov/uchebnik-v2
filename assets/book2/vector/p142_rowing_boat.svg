@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="335" height="125" viewBox="0 0 335 125">
+<path id="boat-hull" d="M28 56Q167 79 307 56L281 99Q167 119 54 99Z" fill="#a8c9c6" stroke="#526c6c" stroke-width="3"/>
+<ellipse cx="168" cy="56" rx="139" ry="16" fill="#e5efed" stroke="#526c6c" stroke-width="2.5"/>
+<path id="oar-0" d="M122 56L35 15" stroke="#a78665" stroke-width="6" stroke-linecap="round"/>
+<path id="oar-1" d="M210 56L306 17" stroke="#a78665" stroke-width="6" stroke-linecap="round"/>
+<path d="M38 114Q95 108 145 116M190 116Q245 107 301 114" fill="none" stroke="#8aa6a4" stroke-width="2"/>
+</svg>

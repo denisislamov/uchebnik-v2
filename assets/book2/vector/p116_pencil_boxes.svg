@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="160" viewBox="0 0 760 160">
+<path id="open-lid" d="M20 61L35 20H173L169 60Z" fill="#e5e5d9" stroke="#6b7280" stroke-width="2.5"/>
+<rect id="open-box" x="20" y="69" width="153" height="65" rx="8" fill="#d9e8e9" stroke="#6b7280" stroke-width="2.5"/>
+<path id="pencil-0" d="M71 118V64L78 50L85 64V118Z" fill="#c97475" stroke="#1f2433" stroke-width="1.5"/>
+<path id="pencil-1" d="M112 118V64L119 50L126 64V118Z" fill="#7baab7" stroke="#1f2433" stroke-width="1.5"/>
+<rect id="closed-box-0" x="205" y="69" width="153" height="65" rx="8" fill="#e7dfcd" stroke="#6b7280" stroke-width="2.5"/>
+<rect x="214" y="77" width="135" height="47" rx="4" fill="#f3efe5" stroke="#b9b5a7" stroke-width="1.3"/>
+<text x="281" y="107" text-anchor="middle" font-family="Andika_700Bold" font-size="17" fill="#1f2433">Карандаши</text>
+<rect id="closed-box-1" x="390" y="69" width="153" height="65" rx="8" fill="#e7dfcd" stroke="#6b7280" stroke-width="2.5"/>
+<rect x="399" y="77" width="135" height="47" rx="4" fill="#f3efe5" stroke="#b9b5a7" stroke-width="1.3"/>
+<text x="466" y="107" text-anchor="middle" font-family="Andika_700Bold" font-size="17" fill="#1f2433">Карандаши</text>
+<rect id="closed-box-2" x="575" y="69" width="153" height="65" rx="8" fill="#e7dfcd" stroke="#6b7280" stroke-width="2.5"/>
+<rect x="584" y="77" width="135" height="47" rx="4" fill="#f3efe5" stroke="#b9b5a7" stroke-width="1.3"/>
+<text x="651" y="107" text-anchor="middle" font-family="Andika_700Bold" font-size="17" fill="#1f2433">Карандаши</text>
+</svg>

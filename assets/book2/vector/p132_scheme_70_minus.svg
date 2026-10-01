@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="183" height="100" viewBox="0 0 183 100">
+<rect id="scheme-frame" x="55" y="15" width="73" height="70" rx="3" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<text id="scheme-operation" x="91.5" y="63" text-anchor="middle" font-family="Andika_700Bold" font-size="29" fill="#1f2433">70−</text>
+<text id="scheme-corner-0" x="5" y="32" font-family="Andika_700Bold" font-size="24" fill="#1f2433">20</text>
+<text id="scheme-corner-1" x="135" y="32" font-family="Andika_700Bold" font-size="24" fill="#1f2433">40</text>
+<text id="scheme-corner-2" x="5" y="92" font-family="Andika_700Bold" font-size="24" fill="#1f2433">10</text>
+<text id="scheme-corner-3" x="135" y="92" font-family="Andika_700Bold" font-size="24" fill="#1f2433">30</text>
+</svg>

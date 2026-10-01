@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="395" height="150" viewBox="0 0 395 150">
+<path id="book-0" d="M12.5 31H119.2V94H12.5Z" fill="#8a9ca1" stroke="#6b7280" stroke-width="2"/>
+<path d="M21.5 36V89M23.5 96H124.2" fill="none" stroke="#6b7280" stroke-width="1.7"/>
+<path id="book-1" d="M144.2 31H250.8V94H144.2Z" fill="#8a9ca1" stroke="#6b7280" stroke-width="2"/>
+<path d="M153.2 36V89M155.2 96H255.8" fill="none" stroke="#6b7280" stroke-width="1.7"/>
+<path id="book-2" d="M275.8 31H382.5V94H275.8Z" fill="#8a9ca1" stroke="#6b7280" stroke-width="2"/>
+<path d="M284.8 36V89M286.8 96H387.5" fill="none" stroke="#6b7280" stroke-width="1.7"/>
+<path id="book-brace" d="M16 109Q16 118 27 118H181.5Q197.5 118 197.5 130Q197.5 118 213.5 118H368Q379 118 379 109" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<text id="book-price-0" x="197.5" y="148" text-anchor="middle" font-family="Andika_700Bold" font-size="26" fill="#1f2433">6</text>
+</svg>

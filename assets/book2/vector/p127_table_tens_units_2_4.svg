@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="365" height="172" viewBox="0 0 365 172">
+<rect id="place-table" x="7" y="7" width="351" height="158" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<path d="M182.5 7V165M7 82H358" stroke="#6b7280" stroke-width="1.7"/>
+<text id="place-heading-0" x="91.2" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="25" fill="#1f2433">Десятки</text>
+<text id="place-heading-1" x="273.8" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="25" fill="#1f2433">Единицы</text>
+<text id="place-value-0" x="91.2" y="140" text-anchor="middle" font-family="Andika_700Bold" font-size="42" fill="#1f2433">2</text>
+<text id="place-value-1" x="273.8" y="140" text-anchor="middle" font-family="Andika_700Bold" font-size="42" fill="#1f2433">4</text>
+</svg>

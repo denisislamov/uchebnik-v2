@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="570" height="145" viewBox="0 0 570 145">
+<rect id="division-frame" x="7" y="7" width="556" height="131" rx="4" fill="#fcfbf7" stroke="#6b7280" stroke-width="2"/>
+<text id="division-0" x="71.2" y="69.6" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">7:7</text>
+<text id="division-1" x="213.8" y="69.6" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">8:8</text>
+<text id="division-2" x="356.2" y="69.6" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">9:9</text>
+<text id="division-3" x="498.8" y="69.6" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">10:10</text>
+<text id="division-4" x="71.2" y="116.0" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">14:7</text>
+<text id="division-5" x="213.8" y="116.0" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">16:8</text>
+<text id="division-6" x="356.2" y="116.0" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">18:9</text>
+<text id="division-7" x="498.8" y="116.0" text-anchor="middle" font-family="Andika_700Bold" font-size="33" fill="#1f2433">20:10</text>
+</svg>

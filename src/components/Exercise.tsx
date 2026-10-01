@@ -399,6 +399,16 @@ function ExerciseBody({
                                       }
                                     : size.compact &&
                                         block.kind === "read" &&
+                                        (block.id === "p127-source-art" ||
+                                          block.id === "p128-source-art" ||
+                                          block.id === "p129-source-art")
+                                      ? {
+                                          flexGrow: 0,
+                                          flexBasis: "100%",
+                                          maxWidth: "100%",
+                                        }
+                                    : size.compact &&
+                                        block.kind === "read" &&
                                         block.images.length >= 3
                                       ? (block.id === "p093-source-art" ||
                                           block.id === "p105-source-art") &&
