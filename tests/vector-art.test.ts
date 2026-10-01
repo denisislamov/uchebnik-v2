@@ -1406,3 +1406,247 @@ test("page 20 subtraction cards preserve 2−1=1, 3−1=2, 4−1=3", async () =>
     assert.match(art.xml, /font-family="Andika_700Bold"/);
   }
 });
+
+test("page 21 cards keep the complete five-minus-one equation", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p021_cards_5_minus_1;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p021_cards_5_minus_1.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [270, 70]);
+  assert.equal([...art.xml.matchAll(/<rect id="card-\d+"[^>]*\/>/g)].length, 5);
+  const glyphs = [
+    ...art.xml.matchAll(/<text id="card-label-\d+"[^>]*>([^<]+)<\/text>/g),
+  ].map((match) => match[1]);
+  assert.deepEqual(glyphs, ["5", "−", "1", "=", "4"]);
+});
+
+test("page 21 notebook sample keeps five complete subtraction rows", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p021_writing_subtract_one;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p021_writing_subtract_one.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [263, 451]);
+  assert.match(art.xml, /id="notebook-grid"/);
+  const glyphs = [
+    ...art.xml.matchAll(/<text id="sub-(\d+)-(\d+)"[^>]*>([^<]+)<\/text>/g),
+  ].map((match) => ({
+    row: Number(match[1]),
+    column: Number(match[2]),
+    text: match[3],
+    y: Number(attributes(match[0]).y),
+  }));
+  assert.equal(glyphs.length, 25);
+  for (let row = 0; row < 5; row++) {
+    const symbols = glyphs.filter((glyph) => glyph.row === row);
+    assert.deepEqual(
+      symbols.map((glyph) => glyph.column),
+      [0, 1, 2, 3, 4],
+    );
+    assert.deepEqual(
+      symbols.map((glyph) => glyph.text),
+      [String(row + 2), "−", "1", "=", String(row + 1)],
+    );
+    assert.ok(symbols.every((glyph) => glyph.y === 73 + row * 89));
+  }
+  assert.match(art.xml, /font-family="Neucha_400Regular"/);
+});
+
+test("page 22 rail keeps six adjacent beads and the seventh separate", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p022_abacus_7;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p022_abacus_7.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [369, 73]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  for (let i = 1; i < 6; i++) assert.ok(x[i] - x[i - 1] <= 25);
+  assert.ok(x[6] - x[5] >= 60 && x[7] - x[6] >= 40);
+  assert.match(art.alt, /6 рядом и ещё 1/);
+});
+
+test("page 22 printed and handwritten sevens match the source trace", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p022_digit_7_print;
+  const sample = vectorAssets.p022_digit_7_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p022_digit_7_print.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p022_digit_7_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [51, 67]);
+  assert.deepEqual([sample.width, sample.height], [125, 103]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>7<\/text>/);
+  assert.equal(digitSamples["7"].asset, "p022_digit_7_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(
+    sample.xml,
+    /M47 32 C54 19 54 32 58 29 C63 32 70 24 74 24 L54 84/,
+  );
+  assert.match(sample.xml, /M60 48 C51 51 58 57 73 49/);
+});
+
+test("page 22 separate square and triangle use exactly seven sticks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p022_sticks_square_triangle;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p022_sticks_square_triangle.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [200, 72]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(sticks.length, 7);
+  assert.deepEqual(
+    sticks.slice(0, 4).map((s) => [s.x1, s.y1, s.x2, s.y2]),
+    [
+      ["13", "10", "68", "10"],
+      ["68", "10", "68", "65"],
+      ["68", "65", "13", "65"],
+      ["13", "65", "13", "10"],
+    ],
+  );
+  assert.deepEqual(
+    sticks.slice(4).map((s) => [s.x1, s.y1, s.x2, s.y2]),
+    [
+      ["120", "65", "151", "10"],
+      ["151", "10", "183", "65"],
+      ["183", "65", "120", "65"],
+    ],
+  );
+});
+
+test("page 23 squares preserve four green 2×2 and three red 2+1", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p023_squares_4_3;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p023_squares_4_3.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [177, 76]);
+  const squares = [...art.xml.matchAll(/<rect id="square-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(squares.length, 7);
+  assert.deepEqual(
+    squares.map((square) => square.fill),
+    [
+      "#5d863d",
+      "#5d863d",
+      "#5d863d",
+      "#5d863d",
+      "#c4695c",
+      "#c4695c",
+      "#c4695c",
+    ],
+  );
+  const xy = squares.map((square) => [Number(square.x), Number(square.y)]);
+  assert.deepEqual(xy.slice(0, 4), [
+    [14, 10],
+    [53, 10],
+    [14, 46],
+    [53, 46],
+  ]);
+  assert.deepEqual(xy.slice(4), [
+    [114, 10],
+    [153, 10],
+    [114, 46],
+  ]);
+  assert.match(art.alt, /4 зелёных.*3 красных/);
+});
+
+test("page 24 rail keeps seven adjacent beads and the eighth apart", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p024_abacus_8;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p024_abacus_8.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [368, 81]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  for (let i = 1; i < 7; i++) assert.equal(x[i] - x[i - 1], 24);
+  assert.ok(x[7] - x[6] >= 50);
+  assert.ok(x[8] - x[7] >= 40);
+  assert.equal(x[9] - x[8], 24);
+  assert.match(art.alt, /7 рядом и ещё 1/);
+});
+
+test("page 24 printed and handwritten eights match the trace target", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p024_digit_8_print;
+  const sample = vectorAssets.p024_digit_8_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p024_digit_8_print.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p024_digit_8_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [52, 77]);
+  assert.deepEqual([sample.width, sample.height], [122, 101]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>8<\/text>/);
+  assert.equal(digitSamples["8"].asset, "p024_digit_8_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(
+    sample.xml,
+    /M55 51 C50 37 63 10 70 26 C78 40 36 56 42 72 C44 88 65 85 63 65 C62 59 58 55 55 51/,
+  );
+});
+
+test("page 24 two separate squares use eight individual sticks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p024_sticks_two_squares;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p024_sticks_two_squares.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [159, 73]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(sticks.length, 8);
+  assert.deepEqual(
+    sticks.map((stick) => [stick.x1, stick.y1, stick.x2, stick.y2]),
+    [
+      ["10", "10", "64", "10"],
+      ["64", "10", "64", "64"],
+      ["64", "64", "10", "64"],
+      ["10", "64", "10", "10"],
+      ["95", "10", "149", "10"],
+      ["149", "10", "149", "64"],
+      ["149", "64", "95", "64"],
+      ["95", "64", "95", "10"],
+    ],
+  );
+  assert.ok(Number(sticks[4].x1) - Number(sticks[1].x1) >= 30);
+});

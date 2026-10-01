@@ -345,6 +345,14 @@ def digit_six_print_svg():
     return printed_digit_svg("p018_digit_6_large", 6, 72, 75)
 
 
+def digit_seven_print_svg():
+    return printed_digit_svg("p022_digit_7_print", 7, 57, 60)
+
+
+def digit_eight_print_svg():
+    return printed_digit_svg("p024_digit_8_print", 8, 67, 70)
+
+
 def digit_one_sample_svg():
     width, height = dimensions("p007_digit_1_sample")
     parts = start_svg(width, height)
@@ -436,6 +444,39 @@ def digit_six_sample_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def digit_seven_sample_svg():
+    width, height = dimensions("p022_digit_7_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=17, y0=21, step=29))
+    # Two exact strokes from the digit-7 trace in handwrittenDigits.ts.
+    for path in (
+        "M47 32 C54 19 54 32 58 29 C63 32 70 24 74 24 L54 84",
+        "M60 48 C51 51 58 57 73 49",
+    ):
+        parts.append(
+            f'<path d="{path}" fill="none" stroke="{NOTEBOOK_INK}" '
+            'stroke-width="3.5" stroke-linecap="round" '
+            'stroke-linejoin="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def digit_eight_sample_svg():
+    width, height = dimensions("p024_digit_8_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=12, y0=11))
+    # Exact centerline from the digit-8 trace in handwrittenDigits.ts.
+    parts.append(
+        '<path d="M55 51 C50 37 63 10 70 26 C78 40 36 56 42 72 '
+        'C44 88 65 85 63 65 C62 59 58 55 55 51" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def counting_rail_svg(asset_id, active, active_positions=None, parked_start=123):
     width, height = dimensions(asset_id)
     right = width - 16
@@ -490,6 +531,20 @@ def counting_rail_six_svg():
     # The source has five together and a sixth bead apart.
     return counting_rail_svg("p018_abacus_6", 6,
                              (35, 59, 83, 107, 131, 207), parked_start=247)
+
+
+def counting_rail_seven_svg():
+    # Six source beads touch; the seventh is apart from their cluster.
+    return counting_rail_svg("p022_abacus_7", 7,
+                             (35, 59, 83, 107, 131, 155, 221),
+                             parked_start=269)
+
+
+def counting_rail_eight_svg():
+    # Seven source beads touch; the eighth is apart from their cluster.
+    return counting_rail_svg("p024_abacus_8", 8,
+                             (35, 59, 83, 107, 131, 155, 179, 245),
+                             parked_start=293)
 
 
 def mushroom_drawing_svg():
@@ -1089,6 +1144,84 @@ def squares_four_and_two_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def squares_four_and_three_svg():
+    width, height = dimensions("p023_squares_4_3")
+    parts = start_svg(width, height)
+    # Four green squares on the left; two red above one red on the right.
+    squares = (
+        (14, 10, GREEN, GREEN_EDGE), (53, 10, GREEN, GREEN_EDGE),
+        (14, 46, GREEN, GREEN_EDGE), (53, 46, GREEN, GREEN_EDGE),
+        (114, 10, "#c4695c", "#9c5148"),
+        (153, 10, "#c4695c", "#9c5148"),
+        (114, 46, "#c4695c", "#9c5148"),
+    )
+    for i, (x, y, fill, edge) in enumerate(squares):
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="{y}" width="20" '
+            f'height="20" rx="2" fill="{fill}" stroke="{edge}" '
+            'stroke-width="1.8"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def handwritten_subtractions_svg():
+    width, height = dimensions("p021_writing_subtract_one")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=18, y0=17, step=31))
+    for row in range(5):
+        for column, (x, glyph) in enumerate(zip(
+            (37, 82, 131, 178, 226),
+            (str(row + 2), "−", "1", "=", str(row + 1)),
+        )):
+            parts.append(
+                f'<text id="sub-{row}-{column}" x="{x}" '
+                f'y="{73+row*89}" text-anchor="middle" '
+                'font-family="Neucha_400Regular" font-size="62" '
+                f'fill="{NOTEBOOK_INK}">{glyph}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def sticks_square_triangle_svg():
+    width, height = dimensions("p022_sticks_square_triangle")
+    parts = start_svg(width, height)
+    # Separate figures: four sticks in the square and three in the triangle.
+    sticks = ((13, 10, 68, 10), (68, 10, 68, 65),
+              (68, 65, 13, 65), (13, 65, 13, 10),
+              (120, 65, 151, 10), (151, 10, 183, 65),
+              (183, 65, 120, 65))
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def sticks_two_squares_svg():
+    width, height = dimensions("p024_sticks_two_squares")
+    parts = start_svg(width, height)
+    # Four independent sticks per square; the source leaves a gap between them.
+    sticks = (
+        (10, 10, 64, 10), (64, 10, 64, 64),
+        (64, 64, 10, 64), (10, 64, 10, 10),
+        (95, 10, 149, 10), (149, 10, 149, 64),
+        (149, 64, 95, 64), (95, 64, 95, 10),
+    )
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -1244,6 +1377,29 @@ def main():
         ("p020_cards_4_minus_1",
          lambda: subtraction_cards_svg("p020_cards_4_minus_1", 4),
          "Карточки: 4 − 1 = 3"),
+        ("p021_cards_5_minus_1",
+         lambda: subtraction_cards_svg("p021_cards_5_minus_1", 5),
+         "Карточки: 5 − 1 = 4"),
+        ("p021_writing_subtract_one", handwritten_subtractions_svg,
+         "Тетрадный образец: 2 − 1 = 1 до 6 − 1 = 5, пять строк"),
+        ("p022_abacus_7", counting_rail_seven_svg,
+         "Счётная линейка: 7 бусин слева, 6 рядом и ещё 1; 3 справа, всего 10"),
+        ("p022_digit_7_print", digit_seven_print_svg,
+         "Печатная цифра 7"),
+        ("p022_digit_7_sample", digit_seven_sample_svg,
+         "Образец написания цифры 7 по клеткам"),
+        ("p022_sticks_square_triangle", sticks_square_triangle_svg,
+         "Отдельные квадрат и треугольник: четыре и три палочки, всего семь"),
+        ("p023_squares_4_3", squares_four_and_three_svg,
+         "Семь квадратов: 4 зелёных 2 на 2 и 3 красных справа, 2 + 1"),
+        ("p024_abacus_8", counting_rail_eight_svg,
+         "Счётная линейка: 8 бусин слева, 7 рядом и ещё 1; 2 справа, всего 10"),
+        ("p024_digit_8_print", digit_eight_print_svg,
+         "Печатная цифра 8"),
+        ("p024_digit_8_sample", digit_eight_sample_svg,
+         "Образец написания цифры 8 по клеткам"),
+        ("p024_sticks_two_squares", sticks_two_squares_svg,
+         "Два отдельных квадрата по четыре палочки; всего восемь"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

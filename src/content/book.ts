@@ -678,6 +678,13 @@ for (const block of pages[10].blocks) {
 for (const block of pages[11].blocks) {
   if (block.id !== "p012-lesson01") continue;
   block.prompt = "Посчитай детей, отодвинутые бусины и точки.";
+  if (!originalIllustrations && block.kind === "work") {
+    block.fields = block.fields.map((field) =>
+      field.id === "q2"
+        ? { ...field, label: "Сколько бусин отодвинуто на счётной линейке?" }
+        : field,
+    );
+  }
 }
 for (const block of pages[14].blocks) {
   if (block.id !== "p015-lesson04" || block.kind !== "activity") continue;
@@ -700,6 +707,47 @@ for (const block of pages[18].blocks) {
   }
 }
 if (!originalIllustrations) {
+  const firstBalls = pages[10].blocks.find(
+    (block) => block.id === "p011-lesson06",
+  );
+  if (firstBalls) {
+    firstBalls.images = firstBalls.images.filter(
+      (image) => image !== "p011_balls_row_3_groups",
+    );
+  }
+  for (const { id, left, right } of [
+    {
+      id: "p011-lesson06",
+      left: [
+        [0.15, 0.5, 0.135, 0.37],
+        [0.43, 0.5, 0.135, 0.37],
+      ],
+      right: [[0.85, 0.5, 0.135, 0.37]],
+    },
+    {
+      id: "p011-balls-right",
+      left: [[0.14, 0.55, 0.135, 0.36]],
+      right: [
+        [0.605, 0.55, 0.135, 0.36],
+        [0.865, 0.55, 0.135, 0.36],
+      ],
+    },
+  ]) {
+    const block = pages[10].blocks.find((item) => item.id === id);
+    if (!block || block.kind !== "work") continue;
+    block.fields = block.fields.map((field) => ({
+      ...field,
+      marks: {
+        image: block.images[0],
+        shapes:
+          field.id === "q1"
+            ? left
+            : field.id === "q2"
+              ? right
+              : [...left, ...right],
+      },
+    }));
+  }
   const whiteHens = [
     [0.17, 0.55, 0.1, 0.16],
     [0.28, 0.74, 0.1, 0.14],

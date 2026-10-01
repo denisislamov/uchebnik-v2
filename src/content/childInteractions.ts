@@ -25,8 +25,8 @@ const polygon = (id: string, coords: number[][], label: string): Hotspot => {
     polygon: coords.map(([x, y]) => ({ x, y })),
   };
 };
-const revisedPage3 = !originalIllustrations;
-const balls = revisedPage3
+const revisedIllustrations = !originalIllustrations;
+const balls = revisedIllustrations
   ? [
       { ...area("left", 0.08, 0.09, 0.44, 0.81, "Левый мяч"), ellipse: true },
       { ...area("right", 0.67, 0.35, 0.26, 0.54, "Правый мяч"), ellipse: true },
@@ -81,7 +81,7 @@ const revisedPencils = [
     "Красный карандаш",
   ),
 ];
-const pencils = revisedPage3 ? revisedPencils : originalPencils;
+const pencils = revisedIllustrations ? revisedPencils : originalPencils;
 const maps: Record<
   string,
   { targets: Hotspot[]; expected: string[]; prompt: string }
@@ -109,7 +109,9 @@ const maps: Record<
   "p007-block02": {
     targets: [
       area("one", 0.66, 0.2, 0.21, 0.67, "Один мальчик"),
-      area("many", 0.3, 0.28, 0.32, 0.18, "Дети в глубине леса"),
+      revisedIllustrations
+        ? area("many", 0.13, 0.27, 0.24, 0.25, "Дети в глубине леса")
+        : area("many", 0.3, 0.28, 0.32, 0.18, "Дети в глубине леса"),
     ],
     expected: ["many"],
     prompt: "Где много детей? Нажми на группу.",
@@ -230,33 +232,55 @@ const counts: Record<string, { label: string; rects: number[][] }> = {
   },
   "p009-block04": {
     label: "ухо",
-    rects: [
-      [0.635, 0.08, 0.095, 0.37],
-      [0.728, 0.1, 0.07, 0.34],
-    ],
+    rects: revisedIllustrations
+      ? [
+          [0.46, 0.03, 0.13, 0.4],
+          [0.59, 0, 0.13, 0.43],
+        ]
+      : [
+          [0.635, 0.08, 0.095, 0.37],
+          [0.728, 0.1, 0.07, 0.34],
+        ],
   },
   "p009-block05": {
     label: "крыло",
-    rects: [
-      [0.4, 0.035, 0.35, 0.54],
-      [0.075, 0.59, 0.37, 0.35],
-    ],
+    rects: revisedIllustrations
+      ? [
+          [0.075, 0.02, 0.42, 0.53],
+          [0.49, 0.39, 0.47, 0.56],
+        ]
+      : [
+          [0.4, 0.035, 0.35, 0.54],
+          [0.075, 0.59, 0.37, 0.35],
+        ],
   },
   "p010-block02": {
     label: "мальчика",
-    rects: [
-      [0.115, 0.09, 0.11, 0.61],
-      [0.28, 0.38, 0.145, 0.44],
-      [0.415, 0.34, 0.2, 0.61],
-    ],
+    rects: revisedIllustrations
+      ? [
+          [0.13, 0.18, 0.16, 0.59],
+          [0.39, 0.37, 0.14, 0.46],
+          [0.52, 0.35, 0.16, 0.53],
+        ]
+      : [
+          [0.115, 0.09, 0.11, 0.61],
+          [0.28, 0.38, 0.145, 0.44],
+          [0.415, 0.34, 0.2, 0.61],
+        ],
   },
   "p010-block03": {
     label: "рыбу",
-    rects: [
-      [0.04, 0.04, 0.41, 0.55],
-      [0.64, 0.05, 0.3, 0.6],
-      [0.23, 0.53, 0.49, 0.39],
-    ],
+    rects: revisedIllustrations
+      ? [
+          [0.27, 0.08, 0.47, 0.43],
+          [0.02, 0.48, 0.49, 0.43],
+          [0.52, 0.4, 0.46, 0.46],
+        ]
+      : [
+          [0.04, 0.04, 0.41, 0.55],
+          [0.64, 0.05, 0.3, 0.6],
+          [0.23, 0.53, 0.49, 0.39],
+        ],
   },
   "p010-block04": {
     label: "ягоду",
@@ -345,8 +369,12 @@ maps["p008-block01"] = {
       ],
       "Правый стул",
     ),
-    area("window-left", 0.414, 0.065, 0.235, 0.37, "Левое окно"),
-    area("window-right", 0.75, 0.05, 0.225, 0.42, "Правое окно"),
+    revisedIllustrations
+      ? area("window-left", 0.39, 0.085, 0.2, 0.36, "Левое окно")
+      : area("window-left", 0.414, 0.065, 0.235, 0.37, "Левое окно"),
+    revisedIllustrations
+      ? area("window-right", 0.63, 0.085, 0.19, 0.36, "Правое окно")
+      : area("window-right", 0.75, 0.05, 0.225, 0.42, "Правое окно"),
     polygon(
       "frame-top",
       [

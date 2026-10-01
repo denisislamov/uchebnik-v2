@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="70" viewBox="0 0 270 70">
+<rect id="card-0" x="9" y="15" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-0" x="29" y="46" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">5</text>
+<rect id="card-1" x="62" y="15" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-1" x="82" y="46" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">−</text>
+<rect id="card-2" x="115" y="15" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-2" x="135" y="46" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">1</text>
+<rect id="card-3" x="168" y="15" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-3" x="188" y="46" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">=</text>
+<rect id="card-4" x="221" y="15" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-4" x="241" y="46" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">4</text>
+</svg>

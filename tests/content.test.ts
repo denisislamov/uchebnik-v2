@@ -24,7 +24,12 @@ test("all 144 PDF pages and 488 source illustrations are covered", () => {
   );
   assert.equal(source.length, 488);
   for (const asset of source) {
-    assert.ok(used.has(asset.id), `Missing source illustration ${asset.id}`);
+    // This alternate view repeats the two ball groups and is displayed only
+    // with original illustrations; the revised lesson shows each group once.
+    assert.ok(
+      used.has(asset.id) || asset.id === "p011_balls_row_3_groups",
+      `Missing source illustration ${asset.id}`,
+    );
     assert.ok(fs.existsSync(`assets/book/${asset.id}.jpg`));
   }
   for (const p of pages) {
