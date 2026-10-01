@@ -79,4 +79,5 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p027_pigs_grazing': { source: require('../../assets/book2/p027_pigs_grazing.png'), width: 450, height: 300, alt: "девять отдельных поросят на современной ферме: восемь светлых и один тёмный" },
   'p027_ducks_pond': { source: require('../../assets/book2/p027_ducks_pond.png'), width: 450, height: 321, alt: "девять уток у пруда: восемь плавают отдельно на воде, одна стоит на берегу" },
   'p028_kids_gymnastics': { source: require('../../assets/book2/p028_kids_gymnastics.png'), width: 730, height: 314, alt: "один взрослый учитель и девять детей делают зарядку в современном школьном спортзале" },
+  'p029_boy_toy_train': { source: require('../../assets/book2/p029_boy_toy_train.png'), width: 780, height: 317, alt: "мальчик с современной деревянной игрушечной железной дорогой: девять вагонов уже соединены с локомотивом, десятый вагон у него в руке" },
 };

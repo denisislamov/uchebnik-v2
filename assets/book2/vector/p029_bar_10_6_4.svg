@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="518" height="64" viewBox="0 0 518 64">
+<rect id="bar-cell-0" x="32" y="9" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-1" x="77" y="9" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-2" x="122" y="9" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-3" x="167" y="9" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-4" x="212" y="9" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-5" x="257" y="9" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-6" x="302" y="9" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-7" x="347" y="9" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-8" x="392" y="9" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-cell-9" x="437" y="9" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<text id="bar-label-left" x="15" y="44" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">6</text>
+<text id="bar-label-right" x="500" y="44" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">4</text>
+</svg>

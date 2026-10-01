@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="518" height="430" viewBox="0 0 518 430">
+<rect id="bar-row-0-cell-0" x="32" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-1" x="77" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-2" x="122" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-3" x="167" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-4" x="212" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-5" x="257" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-6" x="302" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-7" x="347" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-8" x="392" y="13" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-0-cell-9" x="437" y="13" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<text id="bar-row-0-label-left" x="15" y="48" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">9</text>
+<text id="bar-row-0-label-right" x="500" y="48" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">1</text>
+<rect id="bar-row-1-cell-0" x="32" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-1" x="77" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-2" x="122" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-3" x="167" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-4" x="212" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-5" x="257" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-6" x="302" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-7" x="347" y="103" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-8" x="392" y="103" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-1-cell-9" x="437" y="103" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<text id="bar-row-1-label-left" x="15" y="138" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">8</text>
+<text id="bar-row-1-label-right" x="500" y="138" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">2</text>
+<rect id="bar-row-2-cell-0" x="32" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-1" x="77" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-2" x="122" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-3" x="167" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-4" x="212" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-5" x="257" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-6" x="302" y="193" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-7" x="347" y="193" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-8" x="392" y="193" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-2-cell-9" x="437" y="193" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<text id="bar-row-2-label-left" x="15" y="228" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">7</text>
+<text id="bar-row-2-label-right" x="500" y="228" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">3</text>
+<rect id="bar-row-3-cell-0" x="32" y="283" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-1" x="77" y="283" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-2" x="122" y="283" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-3" x="167" y="283" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-4" x="212" y="283" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-5" x="257" y="283" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-6" x="302" y="283" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-7" x="347" y="283" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-8" x="392" y="283" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-3-cell-9" x="437" y="283" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<text id="bar-row-3-label-left" x="15" y="318" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">6</text>
+<text id="bar-row-3-label-right" x="500" y="318" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">4</text>
+<rect id="bar-row-4-cell-0" x="32" y="373" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-1" x="77" y="373" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-2" x="122" y="373" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-3" x="167" y="373" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-4" x="212" y="373" width="45" height="44" fill="#7baab7" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-5" x="257" y="373" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-6" x="302" y="373" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-7" x="347" y="373" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-8" x="392" y="373" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<rect id="bar-row-4-cell-9" x="437" y="373" width="45" height="44" fill="#e4bd72" stroke="#4b5961" stroke-width="1.5"/>
+<text id="bar-row-4-label-left" x="15" y="408" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">5</text>
+<text id="bar-row-4-label-right" x="500" y="408" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">5</text>
+</svg>

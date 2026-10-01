@@ -706,7 +706,16 @@ for (const block of pages[18].blocks) {
     }));
   }
 }
+for (const block of pages[28].blocks) {
+  if (block.id !== "p029-lesson07" || block.kind !== "activity") continue;
+  block.prompt = "Набери число 10 из учебных монет с цифрами.";
+  block.activity.unit = "единицы";
+}
 if (!originalIllustrations) {
+  for (const block of pages[28].blocks) {
+    if (block.id !== "p029-lesson04") continue;
+    block.images = ["p029_bars_10_all"];
+  }
   for (const block of pages[24].blocks) {
     if (block.id !== "p025-lesson01" || block.kind !== "work") continue;
     block.fields = block.fields.map((field) =>

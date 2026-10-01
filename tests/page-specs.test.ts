@@ -39,7 +39,8 @@ for (const spec of catalog)
     for (const id of spec.assetIds)
       assert.ok(
         used.has(id) ||
-          (page.number === 11 && id === "p011_balls_row_3_groups"),
+          (page.number === 11 && id === "p011_balls_row_3_groups") ||
+          (page.number === 29 && /^p029_bar_10_\d+_\d+$/.test(id)),
         `${page.number}: missing ${id}`,
       );
     for (const id of used)

@@ -2012,3 +2012,166 @@ test("page 28 star outline closes with exactly ten sticks", async () => {
   assert.equal(Math.min(...ys), 10);
   assert.equal(ys.filter((y) => y >= 90).length, 2);
 });
+
+test("page 29 each ten-cell bar keeps its blue and yellow partition", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const blueCount of [5, 6, 7, 8, 9]) {
+    const yellowCount = 10 - blueCount;
+    const id = `p029_bar_10_${blueCount}_${yellowCount}`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [518, blueCount === 9 ? 63 : 64]);
+    const cells = [...art.xml.matchAll(/<rect id="bar-cell-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    assert.equal(cells.length, 10);
+    assert.deepEqual(
+      cells.map((cell) => cell.fill),
+      [
+        ...Array(blueCount).fill("#7baab7"),
+        ...Array(yellowCount).fill("#e4bd72"),
+      ],
+    );
+    assert.deepEqual(
+      cells.map((cell) => Number(cell.x)),
+      Array.from({ length: 10 }, (_, i) => 32 + i * 45),
+    );
+    assert.match(
+      art.xml,
+      new RegExp(`id="bar-label-left"[^>]*>${blueCount}<\\/text>`),
+    );
+    assert.match(
+      art.xml,
+      new RegExp(`id="bar-label-right"[^>]*>${yellowCount}<\\/text>`),
+    );
+  }
+});
+
+test("page 29 composite bar has five distinct rows of ten", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p029_bars_10_all;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p029_bars_10_all.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [518, 430]);
+  const cells = [
+    ...art.xml.matchAll(/<rect id="bar-row-(\d+)-cell-(\d+)"[^>]*\/>/g),
+  ].map((match) => {
+    const cell = attributes(match[0]);
+    return {
+      row: Number(match[1]),
+      column: Number(match[2]),
+      fill: cell.fill,
+      y: cell.y,
+    };
+  });
+  assert.equal(cells.length, 50);
+  for (let row = 0; row < 5; row++) {
+    const line = cells.filter((cell) => cell.row === row);
+    assert.deepEqual(
+      line.map((cell) => cell.column),
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    );
+    assert.equal(
+      line.filter((cell) => cell.fill === "#7baab7").length,
+      9 - row,
+    );
+    assert.equal(
+      line.filter((cell) => cell.fill === "#e4bd72").length,
+      row + 1,
+    );
+    assert.ok(line.every((cell) => Number(cell.y) === 13 + row * 90));
+  }
+  const labels = [
+    ...art.xml.matchAll(
+      /<text id="bar-row-(\d+)-label-(left|right)"[^>]*>([^<]+)<\/text>/g,
+    ),
+  ].map((match) => [Number(match[1]), match[2], match[3]]);
+  assert.deepEqual(labels, [
+    [0, "left", "9"],
+    [0, "right", "1"],
+    [1, "left", "8"],
+    [1, "right", "2"],
+    [2, "left", "7"],
+    [2, "right", "3"],
+    [3, "left", "6"],
+    [3, "right", "4"],
+    [4, "left", "5"],
+    [4, "right", "5"],
+  ]);
+});
+
+test("page 29 squares preserve two matching 2+1+2 groups", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p029_squares_green_red;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p029_squares_green_red.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [222, 100]);
+  const squares = [...art.xml.matchAll(/<rect id="square-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(squares.length, 10);
+  assert.deepEqual(
+    squares.map((square) => square.fill),
+    [...Array(5).fill("#5d863d"), ...Array(5).fill("#c4695c")],
+  );
+  const green = squares
+    .slice(0, 5)
+    .map((square) => [Number(square.x), Number(square.y)]);
+  const red = squares
+    .slice(5)
+    .map((square) => [Number(square.x), Number(square.y)]);
+  assert.deepEqual(green, [
+    [14, 11],
+    [70, 11],
+    [42, 40],
+    [14, 69],
+    [70, 69],
+  ]);
+  assert.deepEqual(
+    red,
+    green.map(([x, y]) => [x + 118, y]),
+  );
+});
+
+test("page 30 shows ten identical fir trees at equal spacing", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p030_fir_trees_10;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p030_fir_trees_10.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [782, 115]);
+  const trees = [
+    ...art.xml.matchAll(
+      /<g id="fir-(\d+)" transform="translate\((\d+) 0\)">([\s\S]*?)<\/g>/g,
+    ),
+  ];
+  assert.equal(trees.length, 10);
+  assert.deepEqual(
+    trees.map((tree) => Number(tree[1])),
+    Array.from({ length: 10 }, (_, i) => i),
+  );
+  assert.deepEqual(
+    trees.map((tree) => Number(tree[2])),
+    Array.from({ length: 10 }, (_, i) => 41 + i * 78),
+  );
+  assert.equal(new Set(trees.map((tree) => tree[3])).size, 1);
+  assert.ok(
+    trees.every(
+      (tree) =>
+        tree[3].includes('fill="#5d863d"') &&
+        tree[3].includes('fill="#a78665"'),
+    ),
+  );
+});

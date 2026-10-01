@@ -1430,6 +1430,76 @@ def squares_four_and_three_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def append_ten_bar_row(parts, blue_count, y, cell_prefix, label_prefix):
+    yellow_count = 10 - blue_count
+    for i in range(10):
+        color = "#7baab7" if i < blue_count else "#e4bd72"
+        parts.append(
+            f'<rect id="{cell_prefix}-{i}" x="{32+i*45}" y="{y}" '
+            f'width="45" height="44" fill="{color}" '
+            'stroke="#4b5961" stroke-width="1.5"/>'
+        )
+    for side, x, count in (("left", 15, blue_count),
+                           ("right", 500, yellow_count)):
+        parts.append(
+            f'<text id="{label_prefix}-{side}" x="{x}" y="{y+35}" '
+            'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="27" fill="{NOTEBOOK_INK}">{count}</text>'
+        )
+
+
+def ten_bar_svg(asset_id, blue_count):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    append_ten_bar_row(parts, blue_count, 9, "bar-cell", "bar-label")
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def all_ten_bars_svg():
+    width, height = dimensions("p029_bars_10_all")
+    parts = start_svg(width, height)
+    # Source order is 9+1 down to 5+5; each ten-cell row occurs once.
+    for row, blue_count in enumerate((9, 8, 7, 6, 5)):
+        append_ten_bar_row(parts, blue_count, 13 + row * 90,
+                           f"bar-row-{row}-cell", f"bar-row-{row}-label")
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def squares_five_and_five_svg():
+    width, height = dimensions("p029_squares_green_red")
+    parts = start_svg(width, height)
+    # Each color repeats the source's 2 + 1 + 2 layout.
+    green = ((14, 11), (70, 11), (42, 40), (14, 69), (70, 69))
+    for i, (x, y) in enumerate(green + tuple((x+118, y) for x, y in green)):
+        color = GREEN if i < 5 else "#c4695c"
+        edge = GREEN_EDGE if i < 5 else "#9c5148"
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="{y}" width="21" '
+            f'height="21" rx="2" fill="{color}" stroke="{edge}" '
+            'stroke-width="1.8"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def ten_fir_trees_svg():
+    width, height = dimensions("p030_fir_trees_10")
+    parts = start_svg(width, height)
+    for i in range(10):
+        parts.append(f'<g id="fir-{i}" transform="translate({41+i*78} 0)">')
+        parts.append('<rect x="-3" y="88" width="6" height="16" rx="1" fill="#a78665"/>')
+        parts.append(
+            f'<path d="M0 10 L-14 39 H-8 L-23 66 H-13 L-30 92 '
+            f'H30 L13 66 H23 L8 39 H14 Z" fill="{GREEN}" '
+            f'stroke="{GREEN_EDGE}" stroke-width="1.5" stroke-linejoin="round"/>'
+        )
+        parts.append("</g>")
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def handwritten_subtractions_svg():
     width, height = dimensions("p021_writing_subtract_one")
     parts = start_svg(width, height)
@@ -1558,6 +1628,12 @@ def main():
         svg, width, height = colored_nine_split_svg(asset_id, left, right)
         register(asset_id, svg, width, height,
                  f"Карточка из девяти точек: {len(left)} красных слева и {len(right)} зелёных справа")
+    for blue_count in range(5, 10):
+        yellow_count = 10 - blue_count
+        asset_id = f"p029_bar_10_{blue_count}_{yellow_count}"
+        svg, width, height = ten_bar_svg(asset_id, blue_count)
+        register(asset_id, svg, width, height,
+                 f"Полоска из десяти клеток: {blue_count} голубых и {yellow_count} жёлтых")
     for asset_id, count in SUBTRACTION.items():
         svg, width, height = subtraction_svg(asset_id, count)
         register(asset_id, svg, width, height,
@@ -1739,6 +1815,12 @@ def main():
          "Десять карточек: 1, 2, пусто, 4, пусто, 6, пусто, 8, пусто, 10"),
         ("p028_sticks_star", sticks_star_svg,
          "Пятиконечная звезда по контуру из десяти отдельных палочек"),
+        ("p029_bars_10_all", all_ten_bars_svg,
+         "Пять строк по десять клеток: 9 + 1, 8 + 2, 7 + 3, 6 + 4, 5 + 5"),
+        ("p029_squares_green_red", squares_five_and_five_svg,
+         "Десять квадратов: пять зелёных и пять красных, обе группы 2 + 1 + 2"),
+        ("p030_fir_trees_10", ten_fir_trees_svg,
+         "Десять одинаковых елей в одном горизонтальном ряду"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)
