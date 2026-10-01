@@ -1650,3 +1650,365 @@ test("page 24 two separate squares use eight individual sticks", async () => {
   );
   assert.ok(Number(sticks[4].x1) - Number(sticks[1].x1) >= 30);
 });
+
+test("page 25 four dominoes preserve red and green partitions of eight", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [leftCount, rightCount, size] of [
+    [4, 4, [187, 85]],
+    [5, 3, [190, 85]],
+    [6, 2, [190, 85]],
+    [7, 1, [190, 85]],
+  ] as const) {
+    const id = `p025_domino_8_${leftCount}_${rightCount}`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], size);
+    const red = [...art.xml.matchAll(/<circle id="left-dot-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    const green = [
+      ...art.xml.matchAll(/<circle id="right-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    assert.equal(red.length, leftCount);
+    assert.equal(green.length, rightCount);
+    assert.ok(red.every((dot) => dot.fill === "#c4695c"));
+    assert.ok(green.every((dot) => dot.fill === "#5d863d"));
+    assert.ok(Math.max(...red.map((dot) => Number(dot.cx))) < art.width / 2);
+    assert.ok(Math.min(...green.map((dot) => Number(dot.cx))) > art.width / 2);
+    assert.match(art.xml, /id="card-divider"/);
+  }
+  const five = vectorAssets.p025_domino_8_5_3.xml;
+  const redFive = [...five.matchAll(/<circle id="left-dot-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  const greenThree = [
+    ...five.matchAll(/<circle id="right-dot-\d+"[^>]*\/>/g),
+  ].map((match) => attributes(match[0]));
+  assert.deepEqual(
+    redFive.map((dot) => Number(dot.cy)),
+    [31, 31, 44, 57, 57],
+  );
+  assert.ok(Number(greenThree[0].cy) > Number(greenThree[1].cy));
+  assert.ok(Number(greenThree[1].cy) > Number(greenThree[2].cy));
+});
+
+test("page 26 rail preserves eight adjacent beads and ninth apart", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p026_abacus_9;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p026_abacus_9.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [370, 76]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  for (let i = 1; i < 8; i++) assert.equal(x[i] - x[i - 1], 24);
+  assert.ok(x[8] - x[7] >= 60 && x[9] - x[8] >= 40);
+  assert.match(art.alt, /8 рядом и ещё 1/);
+});
+
+test("page 26 printed nine and notebook nine retain exact trace", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p026_digit_9_large;
+  const sample = vectorAssets.p026_digit_9_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p026_digit_9_large.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p026_digit_9_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [80, 80]);
+  assert.deepEqual([sample.width, sample.height], [123, 95]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>9<\/text>/);
+  assert.equal(digitSamples["9"].asset, "p026_digit_9_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(
+    sample.xml,
+    /M71 27 C67 8 48 28 47 46 C44 66 65 59 71 32 C66 50 62 68 52 76 C42 84 36 72 44 70 C49 70 44 76 43 73/,
+  );
+});
+
+test("page 26 framed dots stay five above four", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p026_dots_frame_9;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p026_dots_frame_9.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [150, 70]);
+  const dots = [...art.xml.matchAll(/<circle id="frame-dot-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(dots.length, 9);
+  assert.equal(new Set(dots.slice(0, 5).map((dot) => dot.cy)).size, 1);
+  assert.equal(new Set(dots.slice(5).map((dot) => dot.cy)).size, 1);
+  assert.ok(Number(dots[0].cy) < Number(dots[5].cy));
+  assert.ok(dots.every((dot) => dot.fill === "#2b4ba8"));
+});
+
+test("page 26 has three distinct bundles of three red flags", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p026_flags_9;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p026_flags_9.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [360, 164]);
+  const flags = [...art.xml.matchAll(/<path id="flag-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  const poles = [...art.xml.matchAll(/<line id="flag-pole-\d+"[^>]*\/>/g)];
+  assert.equal(flags.length, 9);
+  assert.equal(poles.length, 9);
+  assert.deepEqual(
+    flags.map((flag) => flag["data-group"]),
+    ["0", "0", "0", "1", "1", "1", "2", "2", "2"],
+  );
+  assert.ok(flags.every((flag) => flag.fill === "#c4695c"));
+});
+
+test("page 26 number row leaves precisely 3, 7, 9 blank", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p026_number_row_missing;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p026_number_row_missing.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [750, 100]);
+  assert.equal(
+    [...art.xml.matchAll(/<rect id="number-card-\d+"[^>]*\/>/g)].length,
+    9,
+  );
+  const labels = [
+    ...art.xml.matchAll(/<text id="number-label-(\d+)"[^>]*>([^<]+)<\/text>/g),
+  ].map((match) => [Number(match[1]), match[2]]);
+  assert.deepEqual(labels, [
+    [0, "1"],
+    [1, "2"],
+    [3, "4"],
+    [4, "5"],
+    [5, "6"],
+    [7, "8"],
+  ]);
+  assert.match(pages[25].blocks[5].prompt, /1, 2, □, 4, 5, 6, □, 8, □/);
+});
+
+test("page 26 three unshared triangles use nine sticks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p026_sticks_triangles;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p026_sticks_triangles.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [225, 77]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(sticks.length, 9);
+  const groups = [sticks.slice(0, 3), sticks.slice(3, 6), sticks.slice(6, 9)];
+  for (const group of groups) {
+    assert.equal(group[0].x2, group[1].x1);
+    assert.equal(group[0].y2, group[1].y1);
+    assert.equal(group[1].x2, group[2].x1);
+    assert.equal(group[1].y2, group[2].y1);
+    assert.equal(group[2].x2, group[0].x1);
+    assert.equal(group[2].y2, group[0].y1);
+  }
+  assert.ok(Number(groups[1][0].x1) - Number(groups[0][1].x2) >= 15);
+  assert.ok(Number(groups[2][0].x1) - Number(groups[1][1].x2) >= 15);
+});
+
+test("page 27 four dominoes keep the red-green splits of nine", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [redCount, greenCount, size] of [
+    [5, 4, [188, 73]],
+    [6, 3, [184, 73]],
+    [7, 2, [184, 73]],
+    [8, 1, [184, 73]],
+  ] as const) {
+    const id = `p027_domino_9_${redCount}_${greenCount}`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], size);
+    const red = [...art.xml.matchAll(/<circle id="left-dot-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    const green = [
+      ...art.xml.matchAll(/<circle id="right-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    assert.equal(red.length, redCount);
+    assert.equal(green.length, greenCount);
+    assert.ok(red.every((dot) => dot.fill === "#c4695c"));
+    assert.ok(green.every((dot) => dot.fill === "#5d863d"));
+    assert.ok(Math.max(...red.map((dot) => Number(dot.cx))) < art.width / 2);
+    assert.ok(Math.min(...green.map((dot) => Number(dot.cx))) > art.width / 2);
+    assert.match(art.xml, /id="card-divider"/);
+  }
+  const fiveFour = vectorAssets.p027_domino_9_5_4.xml;
+  const red = [...fiveFour.matchAll(/<circle id="left-dot-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.deepEqual(
+    red.map((dot) => Number(dot.cy)),
+    [22, 22, 37, 52, 52],
+  );
+  const eightOne = vectorAssets.p027_domino_9_8_1.xml;
+  const green = [
+    ...eightOne.matchAll(/<circle id="right-dot-\d+"[^>]*\/>/g),
+  ].map((match) => attributes(match[0]));
+  assert.equal(green[0].cy, "37");
+});
+
+test("page 28 rail keeps nine adjacent beads and tenth apart", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p028_abacus_10;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p028_abacus_10.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [384, 80]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  for (let i = 1; i < 9; i++) assert.equal(x[i] - x[i - 1], 24);
+  assert.ok(x[9] - x[8] >= 60);
+  assert.match(art.alt, /9 рядом и ещё 1/);
+});
+
+test("page 28 educational coin displays only denomination 10", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p028_coin_10_kopeks;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p028_coin_10_kopeks.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [110, 110]);
+  assert.match(art.xml, /id="coin-body"/);
+  assert.match(art.xml, />10<\/text>/);
+  assert.doesNotMatch(art.xml, /коп|руб|1952|СССР|герб|₽/i);
+  assert.match(art.alt, /Учебная монета.*10/);
+});
+
+test("page 28 print 10 and notebook 10 keep both digits and zero trace", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p028_digit_10_large;
+  const sample = vectorAssets.p028_digit_10_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p028_digit_10_large.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p028_digit_10_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [98, 84]);
+  assert.deepEqual([sample.width, sample.height], [126, 90]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>10<\/text>/);
+  assert.equal(digitSamples["0"].asset, "p028_digit_10_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(sample.xml, /id="sample-one"/);
+  assert.match(
+    sample.xml,
+    /id="sample-zero"[^>]*d="M96 20 C118 14 90 94 75 75 C61 62 83 18 96 20"/,
+  );
+});
+
+test("page 28 framed dots keep two full rows of five", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p028_dots_frame_10;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p028_dots_frame_10.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [150, 80]);
+  const dots = [...art.xml.matchAll(/<circle id="frame-dot-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(dots.length, 10);
+  assert.deepEqual(
+    dots.slice(0, 5).map((dot) => dot.cx),
+    dots.slice(5).map((dot) => dot.cx),
+  );
+  assert.equal(new Set(dots.slice(0, 5).map((dot) => dot.cy)).size, 1);
+  assert.equal(new Set(dots.slice(5).map((dot) => dot.cy)).size, 1);
+  assert.ok(Number(dots[0].cy) < Number(dots[5].cy));
+});
+
+test("page 28 ten number cards leave 3, 5, 7, 9 blank", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p028_number_row_missing;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p028_number_row_missing.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [770, 100]);
+  assert.equal(
+    [...art.xml.matchAll(/<rect id="number-card-\d+"[^>]*\/>/g)].length,
+    10,
+  );
+  const labels = [
+    ...art.xml.matchAll(/<text id="number-label-(\d+)"[^>]*>([^<]+)<\/text>/g),
+  ].map((match) => [Number(match[1]), match[2]]);
+  assert.deepEqual(labels, [
+    [0, "1"],
+    [1, "2"],
+    [3, "4"],
+    [5, "6"],
+    [7, "8"],
+    [9, "10"],
+  ]);
+  assert.match(pages[27].blocks[5].prompt, /1, 2, □, 4, □, 6, □, 8, □, 10/);
+});
+
+test("page 28 star outline closes with exactly ten sticks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p028_sticks_star;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p028_sticks_star.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [105, 107]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(sticks.length, 10);
+  for (let i = 0; i < 10; i++) {
+    const next = sticks[(i + 1) % 10];
+    assert.equal(sticks[i].x2, next.x1);
+    assert.equal(sticks[i].y2, next.y1);
+  }
+  const ys = sticks.map((stick) => Number(stick.y1));
+  assert.equal(Math.min(...ys), 10);
+  assert.equal(ys.filter((y) => y >= 90).length, 2);
+});

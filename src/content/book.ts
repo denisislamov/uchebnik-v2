@@ -707,6 +707,49 @@ for (const block of pages[18].blocks) {
   }
 }
 if (!originalIllustrations) {
+  for (const block of pages[24].blocks) {
+    if (block.id !== "p025-lesson01" || block.kind !== "work") continue;
+    block.fields = block.fields.map((field) =>
+      field.id === "q2"
+        ? {
+            ...field,
+            label:
+              "Одну из восьми книг девочка поставила на нижнюю полку. Сколько книг осталось наверху?",
+          }
+        : field,
+    );
+  }
+  for (const block of pages[25].blocks) {
+    if (block.id !== "p026-lesson01" || block.kind !== "work") continue;
+    block.prompt = "Посчитай детей на прогулке, розы и флажки.";
+    block.fields = block.fields.map((field) =>
+      field.id === "q1"
+        ? { ...field, label: "Сколько детей на прогулке?" }
+        : field,
+    );
+  }
+  for (const block of pages[26].blocks) {
+    if (block.id !== "p027-lesson01" || block.kind !== "work") continue;
+    block.title = "Поросята и утки";
+    block.prompt = "Посчитай поросят и уток.";
+    const labels: Record<string, string> = {
+      q1: "Сколько светлых поросят?",
+      q2: "Сколько тёмных поросят?",
+      q3: "Сколько всего поросят?",
+    };
+    block.fields = block.fields.map((field) => ({
+      ...field,
+      label: labels[field.id] ?? field.label,
+    }));
+  }
+  for (const block of pages[27].blocks) {
+    if (block.id !== "p028-lesson01" || block.kind !== "work") continue;
+    block.fields = block.fields.map((field) =>
+      field.id === "q2"
+        ? { ...field, label: "Сколько всего людей вместе с учителем?" }
+        : field,
+    );
+  }
   const firstBalls = pages[10].blocks.find(
     (block) => block.id === "p011-lesson06",
   );

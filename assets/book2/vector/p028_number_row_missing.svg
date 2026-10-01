@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="770" height="100" viewBox="0 0 770 100">
+<rect id="number-card-0" x="10" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<text id="number-label-0" x="38" y="75" text-anchor="middle" font-family="Neucha_400Regular" font-size="67" fill="#1f2433">1</text>
+<rect id="number-card-1" x="87" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<text id="number-label-1" x="115" y="75" text-anchor="middle" font-family="Neucha_400Regular" font-size="67" fill="#1f2433">2</text>
+<rect id="number-card-2" x="164" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<rect id="number-card-3" x="241" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<text id="number-label-3" x="269" y="75" text-anchor="middle" font-family="Neucha_400Regular" font-size="67" fill="#1f2433">4</text>
+<rect id="number-card-4" x="318" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<rect id="number-card-5" x="395" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<text id="number-label-5" x="423" y="75" text-anchor="middle" font-family="Neucha_400Regular" font-size="67" fill="#1f2433">6</text>
+<rect id="number-card-6" x="472" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<rect id="number-card-7" x="549" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<text id="number-label-7" x="577" y="75" text-anchor="middle" font-family="Neucha_400Regular" font-size="67" fill="#1f2433">8</text>
+<rect id="number-card-8" x="626" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<rect id="number-card-9" x="703" y="9" width="56" height="82" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="2.3"/>
+<text id="number-label-9" x="731" y="75" text-anchor="middle" font-family="Neucha_400Regular" font-size="51" fill="#1f2433">10</text>
+</svg>

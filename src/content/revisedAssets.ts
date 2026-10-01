@@ -72,4 +72,11 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p024_eight_pigeons': { source: require('../../assets/book2/p024_eight_pigeons.png'), width: 810, height: 405, alt: "семь голубей сидят отдельно на низкой стене во дворе современной школы, восьмой белый голубь летит справа" },
   'p024_eight_currants': { source: require('../../assets/book2/p024_eight_currants.png'), width: 320, height: 213, alt: "восемь отдельных красных ягод смородины на одной ветке" },
   'p024_eight_peas': { source: require('../../assets/book2/p024_eight_peas.png'), width: 365, height: 199, alt: "восемь отдельных зелёных горошин в одном раскрытом стручке" },
+  'p025_girl_reads_book': { source: require('../../assets/book2/p025_girl_reads_book.png'), width: 350, height: 420, alt: "девочка в современной одежде читает синюю книгу; на верхней полке ещё семь отдельных книг" },
+  'p025_girl_takes_book': { source: require('../../assets/book2/p025_girl_takes_book.png'), width: 350, height: 420, alt: "та же девочка ставит синюю книгу на нижнюю полку; на верхней полке остаются семь книг" },
+  'p026_pioneers_marching': { source: require('../../assets/book2/p026_pioneers_marching.png'), width: 720, height: 357, alt: "девять детей с рюкзаками идут на прогулку от современной школы: восемь позади и один ведущий впереди" },
+  'p026_roses_vase': { source: require('../../assets/book2/p026_roses_vase.png'), width: 320, height: 179, alt: "девять отдельных роз в простой синей вазе: пять сверху и четыре снизу" },
+  'p027_pigs_grazing': { source: require('../../assets/book2/p027_pigs_grazing.png'), width: 450, height: 300, alt: "девять отдельных поросят на современной ферме: восемь светлых и один тёмный" },
+  'p027_ducks_pond': { source: require('../../assets/book2/p027_ducks_pond.png'), width: 450, height: 321, alt: "девять уток у пруда: восемь плавают отдельно на воде, одна стоит на берегу" },
+  'p028_kids_gymnastics': { source: require('../../assets/book2/p028_kids_gymnastics.png'), width: 730, height: 314, alt: "один взрослый учитель и девять детей делают зарядку в современном школьном спортзале" },
 };

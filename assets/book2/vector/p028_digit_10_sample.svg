@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="126" height="90" viewBox="0 0 126 90">
+<path id="notebook-grid" d="M12 4V86 M41 4V86 M70 4V86 M99 4V86 M4 10H122 M4 39H122 M4 68H122" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<polyline id="sample-one" points="47,39 71,20 51,77" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="sample-zero" d="M96 20 C118 14 90 94 75 75 C61 62 83 18 96 20" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

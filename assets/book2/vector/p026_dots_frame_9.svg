@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="70" viewBox="0 0 150 70">
+<rect x="4.5" y="4.5" width="141" height="61" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="frame-dot-0" cx="19" cy="24" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-1" cx="45" cy="24" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-2" cx="76" cy="24" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-3" cx="102" cy="24" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-4" cx="129" cy="24" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-5" cx="19" cy="48" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-6" cx="45" cy="48" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-7" cx="76" cy="48" r="5.4" fill="#2b4ba8"/>
+<circle id="frame-dot-8" cx="102" cy="48" r="5.4" fill="#2b4ba8"/>
+</svg>

@@ -93,6 +93,52 @@ SPLIT_DOMINO = {
     ),
 }
 
+# Page 25 keeps the source card's red/green color and two physical halves.
+# Coordinates are circle centers inside the 190x85 (first card: 187x85) crop.
+EIGHT_SPLITS = {
+    "p025_domino_8_4_4": (
+        ((35, 31), (67, 31), (35, 57), (67, 57)),
+        ((122, 31), (154, 31), (122, 57), (154, 57)),
+    ),
+    "p025_domino_8_5_3": (
+        ((35, 31), (67, 31), (51, 44), (35, 57), (67, 57)),
+        ((120, 57), (137, 44), (154, 31)),
+    ),
+    "p025_domino_8_6_2": (
+        ((28, 31), (52, 31), (76, 31),
+         (28, 57), (52, 57), (76, 57)),
+        ((136, 31), (136, 57)),
+    ),
+    "p025_domino_8_7_1": (
+        ((21, 31), (42, 31), (63, 31), (84, 31),
+         (21, 57), (42, 57), (63, 57)),
+        ((136, 44),),
+    ),
+}
+
+# The next source page continues the same red-left/green-right cards.
+NINE_SPLITS = {
+    "p027_domino_9_5_4": (
+        ((26, 22), (70, 22), (47, 37), (26, 52), (70, 52)),
+        ((111, 22), (156, 22), (111, 52), (156, 52)),
+    ),
+    "p027_domino_9_6_3": (
+        ((26, 22), (48, 22), (70, 22),
+         (26, 52), (48, 52), (70, 52)),
+        ((111, 52), (133, 37), (156, 22)),
+    ),
+    "p027_domino_9_7_2": (
+        ((19, 22), (40, 22), (61, 22), (81, 22),
+         (19, 52), (40, 52), (61, 52)),
+        ((133, 22), (133, 52)),
+    ),
+    "p027_domino_9_8_1": (
+        ((18, 22), (39, 22), (60, 22), (80, 22),
+         (18, 52), (39, 52), (60, 52), (80, 52)),
+        ((131, 37),),
+    ),
+}
+
 # The rightmost object is the one subtracted in each row.
 SUBTRACTION = {f"p021_circles_{n}_minus_1": n for n in range(2, 7)}
 
@@ -170,6 +216,54 @@ def split_svg(asset_id, left, right):
         parts.append(dot(width, height, x, y, radius))
     for x, y in right:
         parts.append(dot(width, height, x, y, radius, outlined=True))
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def colored_eight_split_svg(asset_id, left, right):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="10" y="16" width="{width-20}" height="54" rx="3" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.9"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="{width/2:g}" y1="16" '
+        f'x2="{width/2:g}" y2="70" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for side, dots, color, edge in (
+        ("left", left, "#c4695c", "#9c5148"),
+        ("right", right, GREEN, GREEN_EDGE),
+    ):
+        for i, (x, y) in enumerate(dots):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="7" fill="{color}" stroke="{edge}" stroke-width="1.4"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def colored_nine_split_svg(asset_id, left, right):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="4" y="8" width="{width-8}" height="57" rx="3" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.9"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="{width/2:g}" y1="8" '
+        f'x2="{width/2:g}" y2="65" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for side, dots, color, edge in (
+        ("left", left, "#c4695c", "#9c5148"),
+        ("right", right, GREEN, GREEN_EDGE),
+    ):
+        for i, (x, y) in enumerate(dots):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="6.6" fill="{color}" stroke="{edge}" stroke-width="1.4"/>'
+            )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
 
@@ -353,6 +447,14 @@ def digit_eight_print_svg():
     return printed_digit_svg("p024_digit_8_print", 8, 67, 70)
 
 
+def digit_nine_print_svg():
+    return printed_digit_svg("p026_digit_9_large", 9, 72, 75)
+
+
+def digit_ten_print_svg():
+    return printed_digit_svg("p028_digit_10_large", "10", 70, 75)
+
+
 def digit_one_sample_svg():
     width, height = dimensions("p007_digit_1_sample")
     parts = start_svg(width, height)
@@ -477,6 +579,42 @@ def digit_eight_sample_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def digit_nine_sample_svg():
+    width, height = dimensions("p026_digit_9_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=15, y0=13, step=29))
+    # Exact centerline from the digit-9 trace in handwrittenDigits.ts.
+    parts.append(
+        '<path d="M71 27 C67 8 48 28 47 46 C44 66 65 59 71 32 '
+        'C66 50 62 68 52 76 C42 84 36 72 44 70 '
+        'C49 70 44 76 43 73" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def digit_ten_sample_svg():
+    width, height = dimensions("p028_digit_10_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=12, y0=10, step=29))
+    # The one follows the source sample; the zero is the exact trace target.
+    parts.append(
+        '<polyline id="sample-one" points="47,39 71,20 51,77" '
+        f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append(
+        '<path id="sample-zero" '
+        'd="M96 20 C118 14 90 94 75 75 C61 62 83 18 96 20" '
+        f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def counting_rail_svg(asset_id, active, active_positions=None, parked_start=123):
     width, height = dimensions(asset_id)
     right = width - 16
@@ -547,6 +685,19 @@ def counting_rail_eight_svg():
                              parked_start=293)
 
 
+def counting_rail_nine_svg():
+    # Eight source beads touch; the ninth is apart, with one bead parked.
+    return counting_rail_svg("p026_abacus_9", 9,
+                             (35, 59, 83, 107, 131, 155, 179, 203, 290),
+                             parked_start=335)
+
+
+def counting_rail_ten_svg():
+    # Nine source beads touch; the tenth is visibly separated.
+    return counting_rail_svg("p028_abacus_10", 10,
+                             (35, 59, 83, 107, 131, 155, 179, 203, 227, 307))
+
+
 def mushroom_drawing_svg():
     width, height = dimensions("p007_mushroom_draw")
     parts = start_svg(width, height)
@@ -604,6 +755,10 @@ def educational_coin_three_svg():
 
 def educational_coin_five_svg():
     return educational_coin_svg("p014_coin_5_kopeks", 5)
+
+
+def educational_coin_ten_svg():
+    return educational_coin_svg("p028_coin_10_kopeks", 10)
 
 
 def stick_angles_svg():
@@ -1125,6 +1280,116 @@ def number_cards_one_to_six_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def number_cards_one_to_nine_svg():
+    width, height = dimensions("p026_number_row_missing")
+    parts = start_svg(width, height)
+    # Keep the three answer positions blank: 3, 7 and 9.
+    labels = {0: "1", 1: "2", 3: "4", 4: "5", 5: "6", 7: "8"}
+    for i in range(9):
+        x = 10 + i * 82
+        parts.append(
+            f'<rect id="number-card-{i}" x="{x}" y="9" width="56" '
+            'height="82" rx="3" fill="#faf8f2" '
+            f'stroke="{FRAME}" stroke-width="2.3"/>'
+        )
+        if i in labels:
+            parts.append(
+                f'<text id="number-label-{i}" x="{x+28}" y="75" '
+                'text-anchor="middle" font-family="Neucha_400Regular" '
+                f'font-size="67" fill="{NOTEBOOK_INK}">{labels[i]}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def number_cards_one_to_ten_svg():
+    width, height = dimensions("p028_number_row_missing")
+    parts = start_svg(width, height)
+    # The even numbers remain visible; 3, 5, 7 and 9 are the answers.
+    labels = {0: "1", 1: "2", 3: "4", 5: "6", 7: "8", 9: "10"}
+    for i in range(10):
+        x = 10 + i * 77
+        parts.append(
+            f'<rect id="number-card-{i}" x="{x}" y="9" width="56" '
+            'height="82" rx="3" fill="#faf8f2" '
+            f'stroke="{FRAME}" stroke-width="2.3"/>'
+        )
+        if i in labels:
+            size = 51 if i == 9 else 67
+            parts.append(
+                f'<text id="number-label-{i}" x="{x+28}" y="75" '
+                'text-anchor="middle" font-family="Neucha_400Regular" '
+                f'font-size="{size}" fill="{NOTEBOOK_INK}">{labels[i]}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def dots_frame_nine_svg():
+    width, height = dimensions("p026_dots_frame_9")
+    parts = start_svg(width, height)
+    parts.append(frame(width, height))
+    centers = tuple((x, 24) for x in (19, 45, 76, 102, 129)) + tuple(
+        (x, 48) for x in (19, 45, 76, 102)
+    )
+    for i, (x, y) in enumerate(centers):
+        parts.append(
+            f'<circle id="frame-dot-{i}" cx="{x}" cy="{y}" r="5.4" '
+            f'fill="{PEN}"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def dots_frame_ten_svg():
+    width, height = dimensions("p028_dots_frame_10")
+    parts = start_svg(width, height)
+    parts.append(frame(width, height))
+    centers = tuple((x, y) for y in (26, 53) for x in (20, 46, 75, 101, 129))
+    for i, (x, y) in enumerate(centers):
+        parts.append(
+            f'<circle id="frame-dot-{i}" cx="{x}" cy="{y}" r="5.4" '
+            f'fill="{PEN}"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def flags_nine_svg():
+    width, height = dimensions("p026_flags_9")
+    parts = start_svg(width, height)
+    # Three bound groups, each carrying three small red flags.
+    centers = (58, 170, 282)
+    for group, center in enumerate(centers):
+        for local, offset in enumerate((-28, 0, 28)):
+            i = group * 3 + local
+            x = center + offset
+            top = (30, 17, 27)[local]
+            parts.append(
+                f'<line id="flag-pole-{i}" x1="{x}" y1="{top}" '
+                f'x2="{center}" y2="142" stroke="#8e795c" '
+                'stroke-width="2.8" stroke-linecap="round"/>'
+            )
+            if local == 0:
+                path = (f"M{x} {top} Q{x-13} {top+1} {x-22} {top+6} "
+                        f"Q{x-14} {top+17} {x-20} {top+31} "
+                        f"Q{x-7} {top+26} {x} {top+34} Z")
+            else:
+                path = (f"M{x} {top} Q{x+12} {top-2} {x+22} {top+5} "
+                        f"Q{x+15} {top+16} {x+21} {top+30} "
+                        f"Q{x+8} {top+24} {x} {top+34} Z")
+            parts.append(
+                f'<path id="flag-{i}" data-group="{group}" d="{path}" '
+                'fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>'
+            )
+        parts.append(
+            f'<rect x="{center-7}" y="139" width="14" height="12" rx="3" '
+            'fill="#c0a684" stroke="#8e795c" stroke-width="1.5"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def squares_four_and_two_svg():
     width, height = dimensions("p019_squares_4_2")
     parts = start_svg(width, height)
@@ -1222,6 +1487,44 @@ def sticks_two_squares_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def sticks_three_triangles_svg():
+    width, height = dimensions("p026_sticks_triangles")
+    parts = start_svg(width, height)
+    # Nine sticks make three separate closed triangles, without shared edges.
+    sticks = (
+        (10, 67, 38, 11), (38, 11, 66, 67), (66, 67, 10, 67),
+        (85, 67, 113, 11), (113, 11, 141, 67), (141, 67, 85, 67),
+        (160, 67, 188, 11), (188, 11, 216, 67), (216, 67, 160, 67),
+    )
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def sticks_star_svg():
+    width, height = dimensions("p028_sticks_star")
+    parts = start_svg(width, height)
+    # Ten separate edges outline a five-pointed star, without diagonals.
+    vertices = (
+        (53, 10), (65, 39), (97, 40), (73, 61), (82, 94),
+        (53, 77), (24, 94), (33, 61), (9, 40), (41, 39),
+    )
+    for i, (x1, y1) in enumerate(vertices):
+        x2, y2 = vertices[(i + 1) % len(vertices)]
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.3" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -1247,6 +1550,14 @@ def main():
         svg, width, height = split_svg(asset_id, left, right)
         register(asset_id, svg, width, height,
                  f"Карточка: синие точки слева — {len(left)}; контурные справа — {len(right)}")
+    for asset_id, (left, right) in EIGHT_SPLITS.items():
+        svg, width, height = colored_eight_split_svg(asset_id, left, right)
+        register(asset_id, svg, width, height,
+                 f"Карточка из восьми точек: {len(left)} красных слева и {len(right)} зелёных справа")
+    for asset_id, (left, right) in NINE_SPLITS.items():
+        svg, width, height = colored_nine_split_svg(asset_id, left, right)
+        register(asset_id, svg, width, height,
+                 f"Карточка из девяти точек: {len(left)} красных слева и {len(right)} зелёных справа")
     for asset_id, count in SUBTRACTION.items():
         svg, width, height = subtraction_svg(asset_id, count)
         register(asset_id, svg, width, height,
@@ -1400,6 +1711,34 @@ def main():
          "Образец написания цифры 8 по клеткам"),
         ("p024_sticks_two_squares", sticks_two_squares_svg,
          "Два отдельных квадрата по четыре палочки; всего восемь"),
+        ("p026_abacus_9", counting_rail_nine_svg,
+         "Счётная линейка: 9 бусин слева, 8 рядом и ещё 1; 1 справа, всего 10"),
+        ("p026_digit_9_large", digit_nine_print_svg,
+         "Крупная печатная цифра 9"),
+        ("p026_digit_9_sample", digit_nine_sample_svg,
+         "Образец написания цифры 9 по клеткам"),
+        ("p026_dots_frame_9", dots_frame_nine_svg,
+         "Девять точек в рамке: пять сверху и четыре снизу"),
+        ("p026_flags_9", flags_nine_svg,
+         "Девять красных флажков: три отдельные связки по три"),
+        ("p026_number_row_missing", number_cards_one_to_nine_svg,
+         "Девять числовых карточек: 1, 2, пусто, 4, 5, 6, пусто, 8, пусто"),
+        ("p026_sticks_triangles", sticks_three_triangles_svg,
+         "Три отдельных треугольника по три палочки; всего девять"),
+        ("p028_abacus_10", counting_rail_ten_svg,
+         "Счётная линейка: 10 бусин, 9 рядом и ещё 1 отдельно; первые 5 красные"),
+        ("p028_coin_10_kopeks", educational_coin_ten_svg,
+         "Учебная монета с числом 10"),
+        ("p028_digit_10_large", digit_ten_print_svg,
+         "Крупная печатная запись числа 10"),
+        ("p028_digit_10_sample", digit_ten_sample_svg,
+         "Образец написания числа 10 по клеткам"),
+        ("p028_dots_frame_10", dots_frame_ten_svg,
+         "Десять точек в рамке: пять сверху и пять снизу"),
+        ("p028_number_row_missing", number_cards_one_to_ten_svg,
+         "Десять карточек: 1, 2, пусто, 4, пусто, 6, пусто, 8, пусто, 10"),
+        ("p028_sticks_star", sticks_star_svg,
+         "Пятиконечная звезда по контуру из десяти отдельных палочек"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="164" viewBox="0 0 360 164">
+<line id="flag-pole-0" x1="30" y1="30" x2="58" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-0" data-group="0" d="M30 30 Q17 31 8 36 Q16 47 10 61 Q23 56 30 64 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<line id="flag-pole-1" x1="58" y1="17" x2="58" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-1" data-group="0" d="M58 17 Q70 15 80 22 Q73 33 79 47 Q66 41 58 51 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<line id="flag-pole-2" x1="86" y1="27" x2="58" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-2" data-group="0" d="M86 27 Q98 25 108 32 Q101 43 107 57 Q94 51 86 61 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<rect x="51" y="139" width="14" height="12" rx="3" fill="#c0a684" stroke="#8e795c" stroke-width="1.5"/>
+<line id="flag-pole-3" x1="142" y1="30" x2="170" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-3" data-group="1" d="M142 30 Q129 31 120 36 Q128 47 122 61 Q135 56 142 64 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<line id="flag-pole-4" x1="170" y1="17" x2="170" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-4" data-group="1" d="M170 17 Q182 15 192 22 Q185 33 191 47 Q178 41 170 51 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<line id="flag-pole-5" x1="198" y1="27" x2="170" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-5" data-group="1" d="M198 27 Q210 25 220 32 Q213 43 219 57 Q206 51 198 61 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<rect x="163" y="139" width="14" height="12" rx="3" fill="#c0a684" stroke="#8e795c" stroke-width="1.5"/>
+<line id="flag-pole-6" x1="254" y1="30" x2="282" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-6" data-group="2" d="M254 30 Q241 31 232 36 Q240 47 234 61 Q247 56 254 64 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<line id="flag-pole-7" x1="282" y1="17" x2="282" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-7" data-group="2" d="M282 17 Q294 15 304 22 Q297 33 303 47 Q290 41 282 51 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<line id="flag-pole-8" x1="310" y1="27" x2="282" y2="142" stroke="#8e795c" stroke-width="2.8" stroke-linecap="round"/>
+<path id="flag-8" data-group="2" d="M310 27 Q322 25 332 32 Q325 43 331 57 Q318 51 310 61 Z" fill="#c4695c" stroke="#9c5148" stroke-width="1.8"/>
+<rect x="275" y="139" width="14" height="12" rx="3" fill="#c0a684" stroke="#8e795c" stroke-width="1.5"/>
+</svg>
