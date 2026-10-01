@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="348" height="119" viewBox="0 0 348 119">
+<rect x="7" y="9" width="334" height="101" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<line id="table-divider" x1="174" y1="9" x2="174" y2="110" stroke="#6b7280" stroke-width="1.8"/>
+<line x1="7" y1="60" x2="341" y2="60" stroke="#6b7280" stroke-width="1.8"/>
+<text id="heading-tens" x="90" y="44" text-anchor="middle" font-family="Andika_700Bold" font-size="24" fill="#1f2433">Десятки.</text>
+<text id="heading-units" x="258" y="44" text-anchor="middle" font-family="Andika_700Bold" font-size="24" fill="#1f2433">Единицы.</text>
+</svg>

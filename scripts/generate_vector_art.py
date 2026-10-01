@@ -901,6 +901,320 @@ def operation_circle_svg(asset_id, operation, outer):
     return "\n".join(parts) + "\n", width, height
 
 
+def second_decade_blocks_svg(asset_id, number):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    for i in range(10):
+        x = 8 + i * 23
+        parts.append(
+            f'<rect id="ten-block-{i}" x="{x}" y="38" '
+            'width="23" height="27" fill="#d9e8e9" '
+            'stroke="#4b5961" stroke-width="1.8"/>'
+        )
+    for i in range(number - 10):
+        x = 8 + i * 23
+        parts.append(
+            f'<rect id="unit-block-{i}" x="{x}" y="11" '
+            'width="23" height="27" fill="#efdcae" '
+            'stroke="#4b5961" stroke-width="1.8"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def ten_and_six_sticks_svg():
+    width, height = dimensions("p059_bundle_ten_six_sticks")
+    parts = start_svg(width, height)
+    for i in range(10):
+        x = 20 + i * 5
+        parts.append(
+            f'<line id="bundle-stick-{i}" x1="{x}" y1="117" '
+            f'x2="{x+16}" y2="17" stroke="#a77c51" '
+            'stroke-width="3.6" stroke-linecap="round"/>'
+        )
+    parts.append(
+        '<path id="bundle-tie" d="M23 66 Q46 60 75 58 '
+        'L76 72 Q48 73 20 79 Z" fill="#a8c9c6" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, x in enumerate((122, 145, 168, 210, 233, 256)):
+        parts.append(
+            f'<line id="loose-stick-{i}" x1="{x}" y1="115" '
+            f'x2="{x+6}" y2="21" stroke="#a77c51" '
+            'stroke-width="6" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+SECOND_DECADE_STICK_GROUPS = {
+    "p063_bundle_plus_1_stick": ((145,),),
+    "p063_bundle_plus_3_sticks": ((155, 200, 245),),
+    "p064_sticks_bundle_2_plus_2": ((120, 145), (205, 230)),
+    "p071_sticks_bundle_4_plus_2": ((110, 135, 160, 185), (225, 250)),
+}
+
+
+def second_decade_sticks_svg(asset_id):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    for i in range(10):
+        x = 17 + i * 4.8
+        parts.append(
+            f'<line id="bundle-stick-{i}" x1="{x:.1f}" y1="{height-20}" '
+            f'x2="{x+19:.1f}" y2="18" stroke="#a77c51" '
+            'stroke-width="3.7" stroke-linecap="round"/>'
+        )
+    parts.append(
+        f'<path id="bundle-tie" d="M17 {height/2-7:g} '
+        f'Q42 {height/2-12:g} 78 {height/2-10:g} '
+        f'L78 {height/2+4:g} Q43 {height/2+1:g} 16 {height/2+8:g} Z" '
+        f'fill="#a8c9c6" stroke="{FRAME}" stroke-width="1.6"/>'
+    )
+    index = 0
+    for group, xs in enumerate(SECOND_DECADE_STICK_GROUPS[asset_id]):
+        for x in xs:
+            parts.append(
+                f'<line id="loose-stick-{index}" data-group="{group}" '
+                f'x1="{x}" y1="{height-20}" x2="{x+16}" y2="22" '
+                'stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>'
+            )
+            index += 1
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def buttons_ten_plus_five_svg():
+    width, height = dimensions("p063_buttons_frame_10_5")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="button-frame" x="8" y="8" width="{width-16}" '
+        f'height="{height-16}" rx="6" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<path id="frame-divider" d="M307 8V{height-8}" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for side, xs, ys in (
+        ("left", (43, 96, 149, 202, 255), (54, 124)),
+        ("right", (351, 404, 457, 510, 563), (54,)),
+    ):
+        i = 0
+        for y in ys:
+            for x in xs:
+                parts.append(
+                    f'<circle id="button-{side}-{i}" cx="{x}" cy="{y}" '
+                    'r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>'
+                )
+                i += 1
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def partition_circles_svg(asset_id, crossed=False):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    divider = width // 2
+    parts.append(
+        f'<rect id="circle-frame" x="7" y="7" width="{width-14}" '
+        f'height="{height-14}" rx="3" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<path id="frame-divider" d="M{divider} 7V{height-7}" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    if crossed:
+        xs_left, xs_right, ys, radius = ((27, 60, 93, 126, 159),
+                                         (218, 251, 284, 317, 350), (33, 88), 10)
+        for row, y in enumerate(ys):
+            for x in xs_left + xs_right:
+                i = row * 10 + (xs_left + xs_right).index(x)
+                parts.append(
+                    f'<circle id="frame-circle-{i}" cx="{x}" cy="{y}" '
+                    f'r="{radius}" fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+                )
+                if row == 1 and x in xs_right:
+                    parts.append(
+                        f'<path id="cross-{xs_right.index(x)}" '
+                        f'd="M{x-9} {y+9}L{x+9} {y-9}" fill="none" '
+                        f'stroke="{NOTEBOOK_INK}" stroke-width="2.2"/>'
+                    )
+    else:
+        xs_left, xs_right, ys, radius = ((31, 75, 119, 163, 207),
+                                         (269, 313, 357, 401, 445), (39, 98), 16)
+        for row, y in enumerate(ys):
+            for i, x in enumerate(xs_left):
+                parts.append(
+                    f'<circle id="left-circle-{row*5+i}" cx="{x}" cy="{y}" '
+                    f'r="{radius}" fill="none" stroke="{PEN}" stroke-width="2"/>'
+                )
+            for i, x in enumerate(xs_right):
+                label = "right-top-circle" if row == 0 else "right-bottom-circle"
+                fill = "none" if row == 0 else NOTEBOOK_INK
+                parts.append(
+                    f'<circle id="{label}-{i}" cx="{x}" cy="{y}" '
+                    f'r="{radius}" fill="{fill}" stroke="{PEN}" stroke-width="2"/>'
+                )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def two_rail_five_six_svg():
+    width, height = dimensions("p067_abacus_5_and_6")
+    parts = start_svg(width, height)
+    parts.append(
+        '<rect id="rail-board" x="12" y="20" width="380" height="185" '
+        f'rx="13" fill="#f7f5ec" stroke="{FRAME}" stroke-width="2"/>'
+    )
+    for row, y, count in (("top", 77, 5), ("bottom", 150, 6)):
+        parts.append(
+            f'<path id="rod-{row}" d="M29 {y}H375" fill="none" '
+            f'stroke="{FRAME}" stroke-width="4" stroke-linecap="round"/>'
+        )
+        for i in range(count):
+            x = 48 + i * 31 if i < 5 else 224
+            fill = "#d9e8e9" if i < 4 else "#b78b79"
+            parts.append(
+                f'<circle id="bead-{row}-{i}" cx="{x}" cy="{y}" r="17" '
+                f'fill="{fill}" stroke="#526c6c" stroke-width="1.7"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+SECOND_DECADE_SOLUTIONS = {
+    "p064_solution_12_plus_2": ("12+2=", "2+2= 4", "10+4=14"),
+    "p065_solution_15_plus_5": ("15+5=", "5+5=10", "10+10=20"),
+    "p071_solution_16_minus_2": ("16−2=", "6−2= 4", "10+4=14"),
+    "p072_solution_20_minus_5": ("20−5=", "10−5= 5", "10+5=15"),
+}
+
+
+def second_decade_solution_svg(asset_id):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    ys = (34, 80, 122) if height >= 140 else (32, 74, 116)
+    for i, (line, y) in enumerate(zip(SECOND_DECADE_SOLUTIONS[asset_id], ys)):
+        parts.append(
+            f'<text id="solution-line-{i}" x="10" y="{y}" '
+            f'font-family="Andika_700Bold, sans-serif" font-size="25" '
+            f'fill="{NOTEBOOK_INK}">{line}</text>'
+        )
+    parts.append(
+        f'<path id="solution-rule" d="M10 {ys[0]+13}H{width-12}" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.6"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+SECOND_DECADE_TABLES = {
+    "p072_table_minus_3": ((16, 18, 15), (19, 14, 17), "−3"),
+    "p072_table_minus_4": ((14, 17, 15), (18, 16, 19), "−4"),
+    "p073_frame_minus_5": ((15, 17, 16), (18, 20, 19), "−5"),
+}
+
+
+def second_decade_table_svg(asset_id):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        '<rect id="number-frame" x="8" y="8" width="233" height="114" '
+        f'rx="3" fill="#fcfbf7" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    top, bottom, operation = SECOND_DECADE_TABLES[asset_id]
+    for row, (numbers, y) in enumerate(((top, 48), (bottom, 101))):
+        for column, (number, x) in enumerate(zip(numbers, (48, 124, 200))):
+            parts.append(
+                f'<text id="table-cell-{row}-{column}" x="{x}" y="{y}" '
+                f'text-anchor="middle" font-family="Andika_700Bold, sans-serif" '
+                f'font-size="29" fill="{NOTEBOOK_INK}">{number}</text>'
+            )
+    parts.append(
+        f'<text id="table-operation" x="{width-42}" y="81" '
+        f'font-family="Andika_700Bold, sans-serif" font-size="32" '
+        f'fill="{NOTEBOOK_INK}">{operation}</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def second_decade_column_svg(asset_id, number):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    for i in range(10):
+        parts.append(
+            f'<rect id="ten-cell-{i}" x="8" y="{12+i*22}" '
+            'width="23" height="22" fill="#d9e8e9" '
+            'stroke="#4b5961" stroke-width="1.9"/>'
+        )
+    for i in range(number - 10):
+        row = 10 - (number - 10) + i
+        parts.append(
+            f'<rect id="unit-cell-{i}" x="31" y="{12+row*22}" '
+            'width="23" height="22" fill="#efdcae" '
+            'stroke="#4b5961" stroke-width="1.9"/>'
+        )
+    parts.append(
+        f'<text id="column-number" x="32" y="{270 if number <= 15 else 266}" '
+        f'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="27" fill="{NOTEBOOK_INK}">{number}</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def tens_units_table_svg():
+    width, height = dimensions("p060_table_tens_units")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="7" y="9" width="{width-14}" height="101" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<line id="table-divider" x1="174" y1="9" x2="174" y2="110" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<line x1="7" y1="60" x2="{width-7}" y2="60" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for key, x, title in (
+        ("tens", 90, "Десятки."),
+        ("units", 258, "Единицы."),
+    ):
+        parts.append(
+            f'<text id="heading-{key}" x="{x}" y="44" '
+            f'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="24" fill="{NOTEBOOK_INK}">{title}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def second_decade_gaps_svg():
+    width, height = dimensions("p061_strip_11_20_gaps")
+    parts = start_svg(width, height)
+    shown = {0: 11, 2: 13, 4: 15, 7: 18, 9: 20}
+    for i in range(10):
+        x = 5 + i * 72
+        parts.append(
+            f'<rect id="number-cell-{i}" x="{x}" y="10" '
+            'width="72" height="62" fill="#fbfaf7" '
+            f'stroke="{FRAME}" stroke-width="1.7"/>'
+        )
+        if i in shown:
+            parts.append(
+                f'<text id="visible-number-{i}" x="{x+36}" y="53" '
+                f'text-anchor="middle" font-family="Andika_700Bold" '
+                f'font-size="31" fill="{NOTEBOOK_INK}">{shown[i]}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def title_svg():
     width, height = dimensions("p001_cover_title_frame")
     parts = start_svg(width, height)
@@ -925,6 +1239,105 @@ def notebook_grid(width, height, x0=18, y0=20, step=30):
         f'<path id="notebook-grid" d="{" ".join(lines)}" '
         f'fill="none" stroke="{NOTEBOOK_GRID}" stroke-width="1"/>'
     )
+
+
+def dashes_dots_svg(asset_id):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=20, y0=height // 2))
+    baseline = 50 if height == 95 else 25
+    # Each dash occupies one 30 px notebook cell, followed by a dot cell.
+    # The last dash intentionally has no following dot, as in both scans.
+    for i in range(12):
+        x = 50 + i * 60 if height == 95 else 20 + i * 60
+        parts.append(
+            f'<path id="dash-{i}" d="M{x} {baseline}h27" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+            'stroke-linecap="round"/>'
+        )
+        if i < 11:
+            parts.append(
+                f'<circle id="red-dot-{i}" cx="{x+43}" cy="{baseline}" '
+                f'r="3.4" fill="{TEACHER_RED}"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def squares_row_sample_svg():
+    width, height = dimensions("p004_squares_row_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=20, y0=18))
+    for i in range(10):
+        x = 80 + i * 60
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="19" width="30" height="30" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.8"/>'
+        )
+        if i >= 5:
+            parts.append(
+                f'<path id="diagonal-{i}" d="M{x} 49L{x+30} 19" '
+                f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.8"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def fir_trees_sample_svg():
+    width, height = dimensions("p004_fir_trees_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=15, y0=20))
+    # Source tiers descend 4, 3, 2 from left to right; every branch pair
+    # meets the vertical pencil stroke at a notebook-grid intersection.
+    for tree, (x, tiers) in enumerate(((75, 4), (315, 3), (555, 2))):
+        top = 20 + (4 - tiers) * 30
+        parts.append(
+            f'<path id="tree-{tree}-trunk" d="M{x} {top}V169" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.8" '
+            'stroke-linecap="round"/>'
+        )
+        for tier in range(tiers):
+            apex = top + tier * 30
+            parts.append(
+                f'<path id="tree-{tree}-tier-{tier}" '
+                f'd="M{x-30} {apex+30}L{x} {apex}L{x+30} {apex+30}" '
+                f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.8" '
+                'stroke-linejoin="round" stroke-linecap="round"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def addition_table_svg():
+    width, height = dimensions("p053_addition_table")
+    parts = start_svg(width, height)
+    parts.append(
+        '<rect id="table-frame" x="8" y="8" width="667" height="667" '
+        'rx="4" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>'
+    )
+    parts.append(
+        '<text id="table-title" x="341.5" y="49" text-anchor="middle" '
+        'font-family="Andika_700Bold, sans-serif" font-size="27" '
+        'font-weight="700" fill="#1f2433">Таблица сложения.</text>'
+    )
+    # Three blocks of three columns; each next addend begins one row lower.
+    # Fixed-width six-character equations align all answers at the right.
+    for addend in range(1, 10):
+        block = (addend - 1) // 3
+        column = (addend - 1) % 3
+        x = (66, 274, 482)[column]
+        first_y = (92, 379, 572)[block] + column * 31
+        for first in range(1, 11 - addend):
+            result = first + addend
+            equation = f"{first}+{addend}={' ' if result < 10 else ''}{result}"
+            parts.append(
+                f'<text id="sum-{addend}-{first}" x="{x}" '
+                f'y="{first_y+(first-1)*31}" '
+                'font-family="monospace" font-size="24" '
+                f'fill="{NOTEBOOK_INK}">{equation}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
 
 
 def writing_strip_five_svg():
@@ -2434,6 +2847,9 @@ def main():
         register(asset_id, svg, width, height,
                  f"Карточка: {first_count} точек и {second_count} точек; "
                  "9 контурных, 1 заполненная, разделены косой линией")
+    svg, width, height = addition_table_svg()
+    register("p053_addition_table", svg, width, height,
+             "Таблица сложения: 45 равенств от 1 + 1 до 1 + 9, девять столбцов")
     svg, width, height = meter_abbreviation_rule_svg()
     register("p054_rule_meter_abbrev", svg, width, height,
              "Слово „метр“ сокращённо записывают м")
@@ -2453,9 +2869,72 @@ def main():
         register(asset_id, svg, width, height,
                  f"Круг: {operation}; числа снаружи: "
                  f"{outer[0]} сверху, {outer[1]} слева, {outer[2]} справа")
+    for number in range(11, 21):
+        asset_id = f"p059_blocks_{number}"
+        svg, width, height = second_decade_blocks_svg(asset_id, number)
+        register(asset_id, svg, width, height,
+                 f"Кубики: 10 в нижнем ряду и {number-10} сверху; всего {number}")
+    svg, width, height = ten_and_six_sticks_svg()
+    register("p059_bundle_ten_six_sticks", svg, width, height,
+             "Связка из 10 палочек и 6 отдельных — две группы по 3; всего 16")
+    for number in range(11, 21):
+        asset_id = f"p060_columns_{number}"
+        svg, width, height = second_decade_column_svg(asset_id, number)
+        register(asset_id, svg, width, height,
+                 f"Число {number}: вертикальный десяток из 10 клеток и "
+                 f"{number-10} единиц рядом снизу")
+    svg, width, height = tens_units_table_svg()
+    register("p060_table_tens_units", svg, width, height,
+             "Таблица: Десятки. | Единицы.; нижняя область пуста")
+    svg, width, height = second_decade_gaps_svg()
+    register("p061_strip_11_20_gaps", svg, width, height,
+             "Ряд: 11, пусто, 13, пусто, 15, пусто, пусто, 18, пусто, 20")
+    for asset_id, value in (
+        ("p062_coin_10_kopeks", 10),
+        ("p062_coin_2_kopeks", 2),
+    ):
+        svg, width, height = educational_coin_svg(asset_id, value)
+        register(asset_id, svg, width, height,
+                 f"Учебная монета с числом {value}")
+    for asset_id, groups in SECOND_DECADE_STICK_GROUPS.items():
+        svg, width, height = second_decade_sticks_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Связка из 10 палочек и отдельные группы: "
+                 f"{', '.join(map(str, map(len, groups)))}")
+    svg, width, height = buttons_ten_plus_five_svg()
+    register("p063_buttons_frame_10_5", svg, width, height,
+             "В рамке 10 пуговиц слева и 5 справа, всего 15")
+    svg, width, height = partition_circles_svg("p065_circles_frame_15_5")
+    register("p065_circles_frame_15_5", svg, width, height,
+             "В рамке слева 10 пустых кружков, справа 5 пустых и 5 заполненных")
+    svg, width, height = two_rail_five_six_svg()
+    register("p067_abacus_5_and_6", svg, width, height,
+             "Две счётные линейки: сверху 5 бусин, снизу те же 5 и ещё одна отдельно")
+    svg, width, height = partition_circles_svg("p072_circles_frame_20_minus_5", crossed=True)
+    register("p072_circles_frame_20_minus_5", svg, width, height,
+             "В рамке 20 кружков, 5 справа снизу зачёркнуты; остаётся 15")
+    for asset_id, lines in SECOND_DECADE_SOLUTIONS.items():
+        svg, width, height = second_decade_solution_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 "Образец решения: " + "; ".join(lines))
+    for asset_id, (top, bottom, operation) in SECOND_DECADE_TABLES.items():
+        svg, width, height = second_decade_table_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Таблица: {', '.join(map(str, top))}; "
+                 f"{', '.join(map(str, bottom))}; вычесть {operation[1:]}")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (
+        ("p003_writing_strip_dashes_dots",
+         lambda: dashes_dots_svg("p003_writing_strip_dashes_dots"),
+         "Пропись: 12 чёрных чёрточек и 11 красных точек попеременно"),
+        ("p004_dashes_dots_line",
+         lambda: dashes_dots_svg("p004_dashes_dots_line"),
+         "Пропись: 12 чёрных чёрточек и 11 красных точек попеременно"),
+        ("p004_fir_trees_sample", fir_trees_sample_svg,
+         "Образец: три схематические ёлочки, слева направо 4, 3 и 2 яруса ветвей"),
+        ("p004_squares_row_sample", squares_row_sample_svg,
+         "Пропись: 10 квадратов; первые 5 пустые, следующие 5 с диагональю"),
         ("p005_writing_strip_dashes_dots_slashes", writing_strip_five_svg,
          "Пропись: по четыре пары штрихов и точек, четыре косых линии; ниже 12 волн и 11 красных точек"),
         ("p006_writing_strip_circles_hooks_waves", writing_strip_six_svg,

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="730" height="55" viewBox="0 0 730 55">
+<path id="notebook-grid" d="M20 4V51 M50 4V51 M80 4V51 M110 4V51 M140 4V51 M170 4V51 M200 4V51 M230 4V51 M260 4V51 M290 4V51 M320 4V51 M350 4V51 M380 4V51 M410 4V51 M440 4V51 M470 4V51 M500 4V51 M530 4V51 M560 4V51 M590 4V51 M620 4V51 M650 4V51 M680 4V51 M710 4V51 M4 27H726" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<path id="dash-0" d="M20 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-0" cx="63" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-1" d="M80 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-1" cx="123" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-2" d="M140 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-2" cx="183" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-3" d="M200 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-3" cx="243" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-4" d="M260 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-4" cx="303" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-5" d="M320 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-5" cx="363" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-6" d="M380 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-6" cx="423" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-7" d="M440 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-7" cx="483" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-8" d="M500 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-8" cx="543" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-9" d="M560 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-9" cx="603" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-10" d="M620 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+<circle id="red-dot-10" cx="663" cy="25" r="3.4" fill="#c8352e"/>
+<path id="dash-11" d="M680 25h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

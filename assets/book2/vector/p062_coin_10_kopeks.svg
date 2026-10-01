@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="127" height="135" viewBox="0 0 127 135">
+<circle id="coin-body" cx="63.5" cy="67.5" r="50" fill="#eee8db" stroke="#8c8070" stroke-width="2.6"/>
+<circle cx="63.5" cy="67.5" r="44" fill="none" stroke="#c6bbaa" stroke-width="1.5"/>
+<text x="63.5" y="89" text-anchor="middle" font-family="Andika_700Bold" font-size="68" fill="#1f2433">10</text>
+</svg>

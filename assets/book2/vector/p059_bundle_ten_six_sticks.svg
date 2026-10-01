@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="267" height="140" viewBox="0 0 267 140">
+<line id="bundle-stick-0" x1="20" y1="117" x2="36" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-1" x1="25" y1="117" x2="41" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-2" x1="30" y1="117" x2="46" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-3" x1="35" y1="117" x2="51" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-4" x1="40" y1="117" x2="56" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-5" x1="45" y1="117" x2="61" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-6" x1="50" y1="117" x2="66" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-7" x1="55" y1="117" x2="71" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-8" x1="60" y1="117" x2="76" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<line id="bundle-stick-9" x1="65" y1="117" x2="81" y2="17" stroke="#a77c51" stroke-width="3.6" stroke-linecap="round"/>
+<path id="bundle-tie" d="M23 66 Q46 60 75 58 L76 72 Q48 73 20 79 Z" fill="#a8c9c6" stroke="#6b7280" stroke-width="1.8"/>
+<line id="loose-stick-0" x1="122" y1="115" x2="128" y2="21" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-1" x1="145" y1="115" x2="151" y2="21" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-2" x1="168" y1="115" x2="174" y2="21" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-3" x1="210" y1="115" x2="216" y2="21" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-4" x1="233" y1="115" x2="239" y2="21" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-5" x1="256" y1="115" x2="262" y2="21" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+</svg>

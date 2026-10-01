@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="185" viewBox="0 0 600 185">
+<path id="notebook-grid" d="M15 4V181 M45 4V181 M75 4V181 M105 4V181 M135 4V181 M165 4V181 M195 4V181 M225 4V181 M255 4V181 M285 4V181 M315 4V181 M345 4V181 M375 4V181 M405 4V181 M435 4V181 M465 4V181 M495 4V181 M525 4V181 M555 4V181 M585 4V181 M4 20H596 M4 50H596 M4 80H596 M4 110H596 M4 140H596 M4 170H596" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<path id="tree-0-trunk" d="M75 20V169" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linecap="round"/>
+<path id="tree-0-tier-0" d="M45 50L75 20L105 50" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-0-tier-1" d="M45 80L75 50L105 80" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-0-tier-2" d="M45 110L75 80L105 110" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-0-tier-3" d="M45 140L75 110L105 140" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-1-trunk" d="M315 50V169" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linecap="round"/>
+<path id="tree-1-tier-0" d="M285 80L315 50L345 80" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-1-tier-1" d="M285 110L315 80L345 110" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-1-tier-2" d="M285 140L315 110L345 140" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-2-trunk" d="M555 80V169" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linecap="round"/>
+<path id="tree-2-tier-0" d="M525 110L555 80L585 110" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+<path id="tree-2-tier-1" d="M525 140L555 110L585 140" fill="none" stroke="#1f2433" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

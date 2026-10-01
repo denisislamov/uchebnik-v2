@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="485" height="138" viewBox="0 0 485 138">
+<rect id="circle-frame" x="7" y="7" width="471" height="124" rx="3" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<path id="frame-divider" d="M242 7V131" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="left-circle-0" cx="31" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-1" cx="75" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-2" cx="119" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-3" cx="163" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-4" cx="207" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-top-circle-0" cx="269" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-top-circle-1" cx="313" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-top-circle-2" cx="357" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-top-circle-3" cx="401" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-top-circle-4" cx="445" cy="39" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-5" cx="31" cy="98" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-6" cx="75" cy="98" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-7" cx="119" cy="98" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-8" cx="163" cy="98" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="left-circle-9" cx="207" cy="98" r="16" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-bottom-circle-0" cx="269" cy="98" r="16" fill="#1f2433" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-bottom-circle-1" cx="313" cy="98" r="16" fill="#1f2433" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-bottom-circle-2" cx="357" cy="98" r="16" fill="#1f2433" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-bottom-circle-3" cx="401" cy="98" r="16" fill="#1f2433" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="right-bottom-circle-4" cx="445" cy="98" r="16" fill="#1f2433" stroke="#2b4ba8" stroke-width="2"/>
+</svg>

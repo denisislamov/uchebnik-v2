@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="683" height="683" viewBox="0 0 683 683">
+<rect id="table-frame" x="8" y="8" width="667" height="667" rx="4" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<text id="table-title" x="341.5" y="49" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" font-weight="700" fill="#1f2433">Таблица сложения.</text>
+<text id="sum-1-1" x="66" y="92" font-family="monospace" font-size="24" fill="#1f2433">1+1= 2</text>
+<text id="sum-1-2" x="66" y="123" font-family="monospace" font-size="24" fill="#1f2433">2+1= 3</text>
+<text id="sum-1-3" x="66" y="154" font-family="monospace" font-size="24" fill="#1f2433">3+1= 4</text>
+<text id="sum-1-4" x="66" y="185" font-family="monospace" font-size="24" fill="#1f2433">4+1= 5</text>
+<text id="sum-1-5" x="66" y="216" font-family="monospace" font-size="24" fill="#1f2433">5+1= 6</text>
+<text id="sum-1-6" x="66" y="247" font-family="monospace" font-size="24" fill="#1f2433">6+1= 7</text>
+<text id="sum-1-7" x="66" y="278" font-family="monospace" font-size="24" fill="#1f2433">7+1= 8</text>
+<text id="sum-1-8" x="66" y="309" font-family="monospace" font-size="24" fill="#1f2433">8+1= 9</text>
+<text id="sum-1-9" x="66" y="340" font-family="monospace" font-size="24" fill="#1f2433">9+1=10</text>
+<text id="sum-2-1" x="274" y="123" font-family="monospace" font-size="24" fill="#1f2433">1+2= 3</text>
+<text id="sum-2-2" x="274" y="154" font-family="monospace" font-size="24" fill="#1f2433">2+2= 4</text>
+<text id="sum-2-3" x="274" y="185" font-family="monospace" font-size="24" fill="#1f2433">3+2= 5</text>
+<text id="sum-2-4" x="274" y="216" font-family="monospace" font-size="24" fill="#1f2433">4+2= 6</text>
+<text id="sum-2-5" x="274" y="247" font-family="monospace" font-size="24" fill="#1f2433">5+2= 7</text>
+<text id="sum-2-6" x="274" y="278" font-family="monospace" font-size="24" fill="#1f2433">6+2= 8</text>
+<text id="sum-2-7" x="274" y="309" font-family="monospace" font-size="24" fill="#1f2433">7+2= 9</text>
+<text id="sum-2-8" x="274" y="340" font-family="monospace" font-size="24" fill="#1f2433">8+2=10</text>
+<text id="sum-3-1" x="482" y="154" font-family="monospace" font-size="24" fill="#1f2433">1+3= 4</text>
+<text id="sum-3-2" x="482" y="185" font-family="monospace" font-size="24" fill="#1f2433">2+3= 5</text>
+<text id="sum-3-3" x="482" y="216" font-family="monospace" font-size="24" fill="#1f2433">3+3= 6</text>
+<text id="sum-3-4" x="482" y="247" font-family="monospace" font-size="24" fill="#1f2433">4+3= 7</text>
+<text id="sum-3-5" x="482" y="278" font-family="monospace" font-size="24" fill="#1f2433">5+3= 8</text>
+<text id="sum-3-6" x="482" y="309" font-family="monospace" font-size="24" fill="#1f2433">6+3= 9</text>
+<text id="sum-3-7" x="482" y="340" font-family="monospace" font-size="24" fill="#1f2433">7+3=10</text>
+<text id="sum-4-1" x="66" y="379" font-family="monospace" font-size="24" fill="#1f2433">1+4= 5</text>
+<text id="sum-4-2" x="66" y="410" font-family="monospace" font-size="24" fill="#1f2433">2+4= 6</text>
+<text id="sum-4-3" x="66" y="441" font-family="monospace" font-size="24" fill="#1f2433">3+4= 7</text>
+<text id="sum-4-4" x="66" y="472" font-family="monospace" font-size="24" fill="#1f2433">4+4= 8</text>
+<text id="sum-4-5" x="66" y="503" font-family="monospace" font-size="24" fill="#1f2433">5+4= 9</text>
+<text id="sum-4-6" x="66" y="534" font-family="monospace" font-size="24" fill="#1f2433">6+4=10</text>
+<text id="sum-5-1" x="274" y="410" font-family="monospace" font-size="24" fill="#1f2433">1+5= 6</text>
+<text id="sum-5-2" x="274" y="441" font-family="monospace" font-size="24" fill="#1f2433">2+5= 7</text>
+<text id="sum-5-3" x="274" y="472" font-family="monospace" font-size="24" fill="#1f2433">3+5= 8</text>
+<text id="sum-5-4" x="274" y="503" font-family="monospace" font-size="24" fill="#1f2433">4+5= 9</text>
+<text id="sum-5-5" x="274" y="534" font-family="monospace" font-size="24" fill="#1f2433">5+5=10</text>
+<text id="sum-6-1" x="482" y="441" font-family="monospace" font-size="24" fill="#1f2433">1+6= 7</text>
+<text id="sum-6-2" x="482" y="472" font-family="monospace" font-size="24" fill="#1f2433">2+6= 8</text>
+<text id="sum-6-3" x="482" y="503" font-family="monospace" font-size="24" fill="#1f2433">3+6= 9</text>
+<text id="sum-6-4" x="482" y="534" font-family="monospace" font-size="24" fill="#1f2433">4+6=10</text>
+<text id="sum-7-1" x="66" y="572" font-family="monospace" font-size="24" fill="#1f2433">1+7= 8</text>
+<text id="sum-7-2" x="66" y="603" font-family="monospace" font-size="24" fill="#1f2433">2+7= 9</text>
+<text id="sum-7-3" x="66" y="634" font-family="monospace" font-size="24" fill="#1f2433">3+7=10</text>
+<text id="sum-8-1" x="274" y="603" font-family="monospace" font-size="24" fill="#1f2433">1+8= 9</text>
+<text id="sum-8-2" x="274" y="634" font-family="monospace" font-size="24" fill="#1f2433">2+8=10</text>
+<text id="sum-9-1" x="482" y="634" font-family="monospace" font-size="24" fill="#1f2433">1+9=10</text>
+</svg>

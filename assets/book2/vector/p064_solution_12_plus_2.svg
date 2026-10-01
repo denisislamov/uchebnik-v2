@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="145" viewBox="0 0 190 145">
+<text id="solution-line-0" x="10" y="34" font-family="Andika_700Bold, sans-serif" font-size="25" fill="#1f2433">12+2=</text>
+<text id="solution-line-1" x="10" y="80" font-family="Andika_700Bold, sans-serif" font-size="25" fill="#1f2433">2+2= 4</text>
+<text id="solution-line-2" x="10" y="122" font-family="Andika_700Bold, sans-serif" font-size="25" fill="#1f2433">10+4=14</text>
+<path id="solution-rule" d="M10 47H178" fill="none" stroke="#6b7280" stroke-width="1.6"/>
+</svg>

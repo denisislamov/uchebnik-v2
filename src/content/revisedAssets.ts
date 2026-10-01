@@ -98,4 +98,9 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p055_sewing_workshop_meter': { source: require('../../assets/book2/p055_sewing_workshop_meter.png'), width: 720, height: 435, alt: "взрослая и девочка вместе измеряют ткань метровой линейкой в современном ателье" },
   'p058_girl_setting_table': { source: require('../../assets/book2/p058_girl_setting_table.png'), width: 740, height: 367, alt: "девочка накрывает современный стол; четыре тарелки с дальней стороны и три с ближней, всего семь" },
   'p058_boy_number_cards': { source: require('../../assets/book2/p058_boy_number_cards.png'), width: 348, height: 400, alt: "мальчик в современной одежде держит карточку с цифрой 4 и пустую карточку" },
+  'p077_boy_making_boats': { source: require('../../assets/book2/p077_boy_making_boats.png'), width: 680, height: 570, alt: "мальчик складывает пятую бумажную лодочку; четыре готовые лодочки лежат отдельно на столе" },
+  'p077_boy_gives_boat_sister': { source: require('../../assets/book2/p077_boy_gives_boat_sister.png'), width: 680, height: 569, alt: "мальчик передаёт сестре две бумажные лодочки; три лодочки остаются на столе" },
+  'p078_bandage_1_rub': { source: require('../../assets/book2/p078_bandage_1_rub.png'), width: 500, height: 360, alt: "современная упаковка пластырей и отдельный ценник с числом 1" },
+  'p078_soap_2_rub': { source: require('../../assets/book2/p078_soap_2_rub.png'), width: 500, height: 360, alt: "современное мыло в упаковке и отдельный ценник с числом 2" },
+  'p078_toothbrush_3_rub': { source: require('../../assets/book2/p078_toothbrush_3_rub.png'), width: 500, height: 360, alt: "современная зубная щётка в картонной упаковке и отдельный ценник с числом 3" },
 };

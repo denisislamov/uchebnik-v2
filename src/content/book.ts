@@ -179,13 +179,19 @@ export const pages: BookPage[] = [
       ),
     ],
   ),
-  page(2, "О нашей книге", "Авторы и история", "p002_title_vignette", [
-    read(
-      "Арифметика · 1959",
-      "АКАДЕМИЯ ПЕДАГОГИЧЕСКИХ НАУК РСФСР\n\nА. С. ПЧЁЛКО и Г. Б. ПОЛЯК\n\nАРИФМЕТИКА\nУЧЕБНИК ДЛЯ ПЕРВОГО КЛАССА НАЧАЛЬНОЙ ШКОЛЫ\n\nУТВЕРЖДЁН МИНИСТЕРСТВОМ ПРОСВЕЩЕНИЯ РСФСР\n\nИЗДАНИЕ ПЯТОЕ\n\nГОСУДАРСТВЕННОЕ УЧЕБНО-ПЕДАГОГИЧЕСКОЕ ИЗДАТЕЛЬСТВО МИНИСТЕРСТВА ПРОСВЕЩЕНИЯ РСФСР\nМОСКВА · 1959",
-      [img(2, "title_vignette")],
-    ),
-  ]),
+  page(
+    2,
+    "О нашей книге",
+    "Авторы и история",
+    originalIllustrations ? "p002_title_vignette" : "p001_cover_title_frame",
+    [
+      read(
+        "Арифметика · 1959",
+        "АКАДЕМИЯ ПЕДАГОГИЧЕСКИХ НАУК РСФСР\n\nА. С. ПЧЁЛКО и Г. Б. ПОЛЯК\n\nАРИФМЕТИКА\nУЧЕБНИК ДЛЯ ПЕРВОГО КЛАССА НАЧАЛЬНОЙ ШКОЛЫ\n\nУТВЕРЖДЁН МИНИСТЕРСТВОМ ПРОСВЕЩЕНИЯ РСФСР\n\nИЗДАНИЕ ПЯТОЕ\n\nГОСУДАРСТВЕННОЕ УЧЕБНО-ПЕДАГОГИЧЕСКОЕ ИЗДАТЕЛЬСТВО МИНИСТЕРСТВА ПРОСВЕЩЕНИЯ РСФСР\nМОСКВА · 1959",
+        originalIllustrations ? [img(2, "title_vignette")] : [],
+      ),
+    ],
+  ),
   page(3, "Больше или меньше?", "Сравниваем предметы", "p003_school_children", [
     read(
       "Первый десяток",
@@ -722,6 +728,33 @@ if (!originalIllustrations) {
     block.prompt =
       "У Васи две учебные монеты с числами 2 и 3. Какое число получится, если их сложить?";
   }
+  const page62Prompts: Record<string, string> = {
+    "p062-source07":
+      "У Коли две учебные монеты с числами 10 и 2. Сколько получится вместе?",
+    "p062-source09":
+      "У Нади две учебные монеты с числами 10 и 5. Сколько получится вместе?",
+    "p062-source10":
+      "У брата учебная монета с числом 10, и у сестры такая же. Сколько получится вместе?",
+  };
+  for (const block of pages[61].blocks) {
+    if (page62Prompts[block.id]) block.prompt = page62Prompts[block.id];
+  }
+  const page67Prompts: Record<string, string> = {
+    "p067-source06":
+      "Передвинь на верхнем ряду счётной линейки 7 бусин, а на нижнем — столько же.",
+    "p067-source07":
+      "На верхнем ряду 5 бусин. На нижнем столько же и ещё 1 бусина. Сколько бусин на нижнем ряду?",
+    "p067-source08":
+      "Передвинь на верхнем ряду счётной линейки 6 бусин, а на нижнем — столько же и ещё 2 бусины. На нижнем ряду на 2 бусины больше.",
+  };
+  for (const block of pages[66].blocks) {
+    if (page67Prompts[block.id]) block.prompt = page67Prompts[block.id];
+  }
+  for (const block of pages[77].blocks) {
+    if (block.id !== "p078-source01") continue;
+    block.prompt =
+      "На учебных ценниках зубная щётка стоит 3 жетона, а упаковка пластырей — 1 жетон. Девочка дала кассиру 5 жетонов. Сколько жетонов она получила обратно?";
+  }
   for (const block of pages[28].blocks) {
     if (block.id !== "p029-lesson04") continue;
     block.images = ["p029_bars_10_all"];
@@ -846,24 +879,6 @@ if (!originalIllustrations) {
     }));
   }
 }
-for (const p of pages)
-  for (const b of p.blocks) {
-    if (p.number <= 12) continue;
-    if (!b.images.some((id) => id.includes("abacus_"))) continue;
-    const modern = (text: string) =>
-      text
-        .replace(/на (счётах|счетах|проволоке)/gi, "на карточке")
-        .replace(/бусин/g, "жетон")
-        .replace(/счёты|счеты|абак/gi, "карточка с жетонами");
-    b.prompt = modern(b.prompt);
-    b.title = modern(b.title);
-    if (b.kind === "read") b.body = modern(b.body);
-    if (b.kind === "work")
-      b.fields = b.fields.map((field) => ({
-        ...field,
-        label: modern(field.label),
-      }));
-  }
 export const allBlocks = pages.flatMap((p) => p.blocks);
 
 // Source pages stay addressable by PDF number; only these pages count as lessons.

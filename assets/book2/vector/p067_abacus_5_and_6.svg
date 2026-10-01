@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="404" height="225" viewBox="0 0 404 225">
+<rect id="rail-board" x="12" y="20" width="380" height="185" rx="13" fill="#f7f5ec" stroke="#6b7280" stroke-width="2"/>
+<path id="rod-top" d="M29 77H375" fill="none" stroke="#6b7280" stroke-width="4" stroke-linecap="round"/>
+<circle id="bead-top-0" cx="48" cy="77" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-top-1" cx="79" cy="77" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-top-2" cx="110" cy="77" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-top-3" cx="141" cy="77" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-top-4" cx="172" cy="77" r="17" fill="#b78b79" stroke="#526c6c" stroke-width="1.7"/>
+<path id="rod-bottom" d="M29 150H375" fill="none" stroke="#6b7280" stroke-width="4" stroke-linecap="round"/>
+<circle id="bead-bottom-0" cx="48" cy="150" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-bottom-1" cx="79" cy="150" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-bottom-2" cx="110" cy="150" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-bottom-3" cx="141" cy="150" r="17" fill="#d9e8e9" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-bottom-4" cx="172" cy="150" r="17" fill="#b78b79" stroke="#526c6c" stroke-width="1.7"/>
+<circle id="bead-bottom-5" cx="224" cy="150" r="17" fill="#b78b79" stroke="#526c6c" stroke-width="1.7"/>
+</svg>

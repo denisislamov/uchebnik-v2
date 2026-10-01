@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="378" height="120" viewBox="0 0 378 120">
+<rect id="circle-frame" x="7" y="7" width="364" height="106" rx="3" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<path id="frame-divider" d="M189 7V113" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="frame-circle-0" cx="27" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-1" cx="60" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-2" cx="93" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-3" cx="126" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-4" cx="159" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-5" cx="218" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-6" cx="251" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-7" cx="284" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-8" cx="317" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-9" cx="350" cy="33" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-10" cx="27" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-11" cx="60" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-12" cx="93" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-13" cx="126" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-14" cx="159" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="frame-circle-15" cx="218" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-0" d="M209 97L227 79" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="frame-circle-16" cx="251" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-1" d="M242 97L260 79" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="frame-circle-17" cx="284" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-2" d="M275 97L293 79" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="frame-circle-18" cx="317" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-3" d="M308 97L326 79" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="frame-circle-19" cx="350" cy="88" r="10" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-4" d="M341 97L359 79" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+</svg>

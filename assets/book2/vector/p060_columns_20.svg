@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="67" height="282" viewBox="0 0 67 282">
+<rect id="ten-cell-0" x="8" y="12" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-1" x="8" y="34" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-2" x="8" y="56" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-3" x="8" y="78" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-4" x="8" y="100" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-5" x="8" y="122" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-6" x="8" y="144" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-7" x="8" y="166" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-8" x="8" y="188" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="ten-cell-9" x="8" y="210" width="23" height="22" fill="#d9e8e9" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-0" x="31" y="12" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-1" x="31" y="34" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-2" x="31" y="56" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-3" x="31" y="78" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-4" x="31" y="100" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-5" x="31" y="122" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-6" x="31" y="144" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-7" x="31" y="166" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-8" x="31" y="188" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<rect id="unit-cell-9" x="31" y="210" width="23" height="22" fill="#efdcae" stroke="#4b5961" stroke-width="1.9"/>
+<text id="column-number" x="32" y="266" text-anchor="middle" font-family="Andika_700Bold" font-size="27" fill="#1f2433">20</text>
+</svg>

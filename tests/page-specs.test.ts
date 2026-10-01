@@ -7,6 +7,11 @@ const catalog = JSON.parse(fs.readFileSync("textbook/data/pages.json", "utf8"));
 const source = JSON.parse(
   fs.readFileSync("scripts/content/source_blocks.json", "utf8"),
 );
+const removedInRevised = new Set(
+  JSON.parse(fs.readFileSync("assets/book2/removed.json", "utf8")).map(
+    (item: { id: string }) => item.id,
+  ),
+);
 const normalize = (s: string) =>
   s
     .replace(/[−]/g, "-")
@@ -39,6 +44,7 @@ for (const spec of catalog)
     for (const id of spec.assetIds)
       assert.ok(
         used.has(id) ||
+          removedInRevised.has(id) ||
           (page.number === 11 && id === "p011_balls_row_3_groups") ||
           (page.number === 29 && /^p029_bar_10_\d+_\d+$/.test(id)),
         `${page.number}: missing ${id}`,

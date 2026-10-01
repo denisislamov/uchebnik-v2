@@ -39,8 +39,12 @@ function reportFor(root) {
   const manifest = JSON.parse(
     fs.readFileSync(path.join(root, "assets/book2/manifest.json"), "utf8"),
   );
-  if (!Array.isArray(originals) || !Array.isArray(manifest)) {
-    throw new Error("Original registry and revised manifest must be arrays");
+  const removedPath = path.join(root, "assets/book2/removed.json");
+  const removed = fs.existsSync(removedPath)
+    ? JSON.parse(fs.readFileSync(removedPath, "utf8"))
+    : [];
+  if (!Array.isArray(originals) || !Array.isArray(manifest) || !Array.isArray(removed)) {
+    throw new Error("Original registry, revised manifest and removed list must be arrays");
   }
 
   const errors = [];
@@ -106,7 +110,21 @@ function reportFor(root) {
     }
   }
 
-  const completeIds = [...new Set([...validRaster, ...validVector])].sort();
+  const removedIds = new Set();
+  for (const item of removed) {
+    const id = item && item.id;
+    if (typeof id !== "string" || !id) {
+      errors.push("invalid removed ID");
+      continue;
+    }
+    if (!originalsById.has(id)) errors.push(`unknown removed ID: ${id}`);
+    if (removedIds.has(id)) errors.push(`duplicate removed ID: ${id}`);
+    if (validRaster.has(id) || validVector.has(id))
+      errors.push(`removed ID also has revised asset: ${id}`);
+    if (originalsById.has(id)) removedIds.add(id);
+  }
+
+  const completeIds = [...new Set([...validRaster, ...validVector, ...removedIds])].sort();
   const complete = new Set(completeIds);
   const remainingByPage = {};
   for (const id of [...originalsById.keys()].sort()) {
@@ -125,6 +143,7 @@ function reportFor(root) {
     totalOriginal: originalsById.size,
     revisedRasterIds: [...validRaster].sort(),
     revisedVectorIds: [...validVector].sort(),
+    removedIds: [...removedIds].sort(),
     completeIds,
     remainingCount: originalsById.size - completeIds.length,
     remainingByPage: sortedPages,
@@ -137,6 +156,7 @@ function humanReport(report) {
     `Original: ${report.totalOriginal}`,
     `Revised raster: ${report.revisedRasterIds.length}`,
     `Revised vector: ${report.revisedVectorIds.length}`,
+    `Removed by design: ${report.removedIds.length}`,
     `Complete: ${report.completeIds.length}`,
     `Remaining: ${report.remainingCount}`,
   ];

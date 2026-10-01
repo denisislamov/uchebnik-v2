@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="670" height="75" viewBox="0 0 670 75">
+<path id="notebook-grid" d="M20 4V71 M50 4V71 M80 4V71 M110 4V71 M140 4V71 M170 4V71 M200 4V71 M230 4V71 M260 4V71 M290 4V71 M320 4V71 M350 4V71 M380 4V71 M410 4V71 M440 4V71 M470 4V71 M500 4V71 M530 4V71 M560 4V71 M590 4V71 M620 4V71 M650 4V71 M4 18H666 M4 48H666" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<rect id="square-0" x="80" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-1" x="140" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-2" x="200" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-3" x="260" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-4" x="320" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-5" x="380" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<path id="diagonal-5" d="M380 49L410 19" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-6" x="440" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<path id="diagonal-6" d="M440 49L470 19" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-7" x="500" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<path id="diagonal-7" d="M500 49L530 19" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-8" x="560" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<path id="diagonal-8" d="M560 49L590 19" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<rect id="square-9" x="620" y="19" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+<path id="diagonal-9" d="M620 49L650 19" fill="none" stroke="#1f2433" stroke-width="2.8"/>
+</svg>

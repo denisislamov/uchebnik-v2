@@ -12,6 +12,11 @@ import {
 } from "../src/lib/assessment.ts";
 import type { Answer, Block } from "../src/content/types.ts";
 const by = (kind: string) => allBlocks.find((b) => b.kind === kind)!;
+const removedInRevised = new Set(
+  JSON.parse(fs.readFileSync("assets/book2/removed.json", "utf8")).map(
+    (item: { id: string }) => item.id,
+  ),
+);
 const sourceOnlyAlternatives = new Set([
   "p011_balls_row_3_groups",
   "p029_bar_10_5_5",
@@ -35,7 +40,9 @@ test("all 144 PDF pages and 488 source illustrations are covered", () => {
     // The revised lessons use the individual ball groups and the combined
     // five-row number bar once; alternate crops remain available in original.
     assert.ok(
-      used.has(asset.id) || sourceOnlyAlternatives.has(asset.id),
+      used.has(asset.id) ||
+        sourceOnlyAlternatives.has(asset.id) ||
+        removedInRevised.has(asset.id),
       `Missing source illustration ${asset.id}`,
     );
     assert.ok(fs.existsSync(`assets/book/${asset.id}.jpg`));
@@ -52,6 +59,26 @@ test("all 144 PDF pages and 488 source illustrations are covered", () => {
 test("page 29 shows its five number-bar rows once in revised mode", () => {
   const block = pages[28].blocks.find((item) => item.id === "p029-lesson04");
   assert.deepEqual(block?.images, ["p029_bars_10_all"]);
+});
+test("page 62 educational coins use number-only task wording in revised mode", () => {
+  for (const id of ["p062-source07", "p062-source09", "p062-source10"]) {
+    const block = pages[61].blocks.find((item) => item.id === id);
+    assert.ok(block, id);
+    assert.match(block.prompt, /учебн.*монет/);
+    assert.doesNotMatch(block.prompt, /копе|рубл/i);
+  }
+});
+test("revised prompts match the bead rail and modern pharmacy pictures", () => {
+  for (const id of ["p067-source06", "p067-source07", "p067-source08"]) {
+    const block = pages[66].blocks.find((item) => item.id === id);
+    assert.ok(block, id);
+    assert.match(block.prompt, /бусин/);
+    assert.doesNotMatch(block.prompt, /классных сч|косточк|проволок/);
+  }
+  const pharmacy = pages[77].blocks.find((item) => item.id === "p078-source01");
+  assert.ok(pharmacy);
+  assert.match(pharmacy.prompt, /пластыр/);
+  assert.doesNotMatch(pharmacy.prompt, /бинт|рубл/i);
 });
 test("empty, whitespace, malformed and zero are distinct", () => {
   const b = by("number");

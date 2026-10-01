@@ -58,6 +58,7 @@ test("reports partial raster and vector coverage by source page", () => {
       totalOriginal: 3,
       revisedRasterIds: ["p003_school"],
       revisedVectorIds: ["p003_ball"],
+      removedIds: [],
       completeIds: ["p003_ball", "p003_school"],
       remainingCount: 1,
       remainingByPage: { "004": ["p004_river"] },
@@ -68,6 +69,24 @@ test("reports partial raster and vector coverage by source page", () => {
     assert.equal(human.status, 0, human.stderr);
     assert.match(human.stdout, /Remaining: 1/);
     assert.match(human.stdout, /Page 004 \(1\): p004_river/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("counts an intentionally removed illustration without a replacement asset", () => {
+  const root = fixture([{ id: "p002_vignette", page: 2 }], [], []);
+  try {
+    writeFileSync(
+      join(root, "assets/book2/removed.json"),
+      JSON.stringify([{ id: "p002_vignette", reason: "obsolete ornament" }]),
+    );
+    const result = run(root, "--check", "--json");
+    assert.equal(result.status, 0, result.stderr);
+    const report = JSON.parse(result.stdout);
+    assert.deepEqual(report.removedIds, ["p002_vignette"]);
+    assert.deepEqual(report.completeIds, ["p002_vignette"]);
+    assert.equal(report.remainingCount, 0);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

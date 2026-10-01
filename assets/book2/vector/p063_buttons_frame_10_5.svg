@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="615" height="180" viewBox="0 0 615 180">
+<rect id="button-frame" x="8" y="8" width="599" height="164" rx="6" fill="#fcfbf7" stroke="#6b7280" stroke-width="2"/>
+<path id="frame-divider" d="M307 8V172" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="button-left-0" cx="43" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-1" cx="96" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-2" cx="149" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-3" cx="202" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-4" cx="255" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-5" cx="43" cy="124" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-6" cx="96" cy="124" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-7" cx="149" cy="124" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-8" cx="202" cy="124" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-left-9" cx="255" cy="124" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-right-0" cx="351" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-right-1" cx="404" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-right-2" cx="457" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-right-3" cx="510" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="button-right-4" cx="563" cy="54" r="19" fill="#9ab4b1" stroke="#526c6c" stroke-width="1.8"/>
+</svg>

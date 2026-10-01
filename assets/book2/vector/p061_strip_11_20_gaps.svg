@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="730" height="82" viewBox="0 0 730 82">
+<rect id="number-cell-0" x="5" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<text id="visible-number-0" x="41" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">11</text>
+<rect id="number-cell-1" x="77" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<rect id="number-cell-2" x="149" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<text id="visible-number-2" x="185" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">13</text>
+<rect id="number-cell-3" x="221" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<rect id="number-cell-4" x="293" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<text id="visible-number-4" x="329" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">15</text>
+<rect id="number-cell-5" x="365" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<rect id="number-cell-6" x="437" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<rect id="number-cell-7" x="509" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<text id="visible-number-7" x="545" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">18</text>
+<rect id="number-cell-8" x="581" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<rect id="number-cell-9" x="653" y="10" width="72" height="62" fill="#fbfaf7" stroke="#6b7280" stroke-width="1.7"/>
+<text id="visible-number-9" x="689" y="53" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">20</text>
+</svg>
