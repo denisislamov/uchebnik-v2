@@ -341,6 +341,10 @@ def digit_five_print_svg():
     return printed_digit_svg("p014_digit_5_large", 5, 69, 72)
 
 
+def digit_six_print_svg():
+    return printed_digit_svg("p018_digit_6_large", 6, 72, 75)
+
+
 def digit_one_sample_svg():
     width, height = dimensions("p007_digit_1_sample")
     parts = start_svg(width, height)
@@ -416,6 +420,22 @@ def digit_five_sample_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def digit_six_sample_svg():
+    width, height = dimensions("p018_digit_6_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=24, y0=29))
+    # Exact centerline from the digit-6 trace in handwrittenDigits.ts.
+    parts.append(
+        '<path d="M85 40 C93 39 87 27 79 33 '
+        'C62 44 52 69 57 84 C60 98 75 88 81 70 '
+        'C92 45 62 49 56 70" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def counting_rail_svg(asset_id, active, active_positions=None, parked_start=123):
     width, height = dimensions(asset_id)
     right = width - 16
@@ -464,6 +484,12 @@ def counting_rail_five_svg():
     # Four adjacent source beads, then a visibly separate fifth.
     return counting_rail_svg("p014_abacus_5", 5, (35, 59, 83, 107, 175),
                              parked_start=231)
+
+
+def counting_rail_six_svg():
+    # The source has five together and a sixth bead apart.
+    return counting_rail_svg("p018_abacus_6", 6,
+                             (35, 59, 83, 107, 131, 207), parked_start=247)
 
 
 def mushroom_drawing_svg():
@@ -962,6 +988,58 @@ def addition_cards_svg(asset_id, first, complete):
     return "\n".join(parts) + "\n", width, height
 
 
+def handwritten_sums_plus_one_svg():
+    width, height = dimensions("p017_handwritten_sums_plus_1")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=19, y0=16, step=31))
+    # A four-line copy sample in the same order as the scanned lesson.
+    for row in range(4):
+        for column, (x, glyph) in enumerate(zip(
+            (39, 83, 132, 179, 226),
+            (str(row + 1), "+", "1", "=", str(row + 2)),
+        )):
+            parts.append(
+                f'<text id="sum-{row}-{column}" x="{x}" '
+                f'y="{70+row*90}" text-anchor="middle" '
+                'font-family="Neucha_400Regular" font-size="62" '
+                f'fill="{NOTEBOOK_INK}">{glyph}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def sticks_house_svg():
+    width, height = dimensions("p018_sticks_house")
+    parts = start_svg(width, height)
+    # Four square edges plus the two roof slopes, exactly six sticks.
+    sticks = ((20, 58, 20, 110), (20, 58, 48, 10),
+              (48, 10, 75, 58), (75, 58, 75, 110),
+              (75, 110, 20, 110), (20, 58, 75, 58))
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def sticks_two_triangles_svg():
+    width, height = dimensions("p018_sticks_two_triangles")
+    parts = start_svg(width, height)
+    sticks = ((12, 65, 42, 10), (42, 10, 72, 65), (72, 65, 12, 65),
+              (94, 65, 124, 10), (124, 10, 154, 65), (154, 65, 94, 65))
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -1092,6 +1170,18 @@ def main():
         ("p016_cards_4_plus_1_eq_5",
          lambda: addition_cards_svg("p016_cards_4_plus_1_eq_5", 4, True),
          "Карточки: 4 + 1 = 5"),
+        ("p017_handwritten_sums_plus_1", handwritten_sums_plus_one_svg,
+         "Тетрадный образец: 1 + 1 = 2, 2 + 1 = 3, 3 + 1 = 4, 4 + 1 = 5"),
+        ("p018_abacus_6", counting_rail_six_svg,
+         "Счётная линейка: 6 бусин слева, 5 рядом и ещё 1; 4 справа, всего 10"),
+        ("p018_digit_6_large", digit_six_print_svg,
+         "Крупная печатная цифра 6"),
+        ("p018_digit_6_sample", digit_six_sample_svg,
+         "Образец написания цифры 6 по клеткам"),
+        ("p018_sticks_house", sticks_house_svg,
+         "Дом из шести палочек: квадрат и крыша"),
+        ("p018_sticks_two_triangles", sticks_two_triangles_svg,
+         "Два отдельных треугольника по три палочки"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

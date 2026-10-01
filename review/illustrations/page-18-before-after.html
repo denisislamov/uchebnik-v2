@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 18 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 18 · было / стало</h1>
+      <p>
+        Пять белых и одна тёмная курица, жук с шестью ногами, вишни 3 + 3 и
+        счётная линейка.
+      </p>
+      <div class="items">
+        <article class="hero">
+          <h2>Девочка кормит шесть кур</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_girl_feeding_chickens.jpg"
+                  alt="Исходный: Девочка кормит шесть кур"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p018_girl_feeding_chickens.png"
+                  alt="Новый: Девочка кормит шесть кур"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Жук: шесть ног</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_beetle.jpg"
+                  alt="Исходный: Жук: шесть ног"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p018_beetle.png"
+                  alt="Новый: Жук: шесть ног"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Вишни: 3 + 3</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_cherries_branch.jpg"
+                  alt="Исходный: Вишни: 3 + 3"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p018_cherries_branch.png"
+                  alt="Новый: Вишни: 3 + 3"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Счётная линейка: 6 бусин</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_abacus_6.jpg"
+                  alt="Исходный: Счётная линейка: 6 бусин"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_abacus_6.svg"
+                  alt="Новый: Счётная линейка: 6 бусин"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Шесть кружков</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_circles_6.jpg"
+                  alt="Исходный: Шесть кружков"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_circles_6.svg"
+                  alt="Новый: Шесть кружков"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Крупная цифра 6</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_digit_6_large.jpg"
+                  alt="Исходный: Крупная цифра 6"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_digit_6_large.svg"
+                  alt="Новый: Крупная цифра 6"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Пишем 6</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_digit_6_sample.jpg"
+                  alt="Исходный: Пишем 6"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_digit_6_sample.svg"
+                  alt="Новый: Пишем 6"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Шесть точек</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_domino_6.jpg"
+                  alt="Исходный: Шесть точек"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_domino_6.svg"
+                  alt="Новый: Шесть точек"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Дом из шести палочек</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_sticks_house.jpg"
+                  alt="Исходный: Дом из шести палочек"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_sticks_house.svg"
+                  alt="Новый: Дом из шести палочек"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Два треугольника</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p018_sticks_two_triangles.jpg"
+                  alt="Исходный: Два треугольника"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p018_sticks_two_triangles.svg"
+                  alt="Новый: Два треугольника"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

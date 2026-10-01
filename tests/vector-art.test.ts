@@ -1186,3 +1186,137 @@ test("page 16 arithmetic cards keep all four addition examples and blank forms",
     }
   }
 });
+
+test("page 17 notebook sample keeps four complete plus-one sums", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p017_handwritten_sums_plus_1;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync(
+      "assets/book2/vector/p017_handwritten_sums_plus_1.svg",
+      "utf8",
+    ),
+  );
+  assert.deepEqual([art.width, art.height], [265, 365]);
+  assert.match(art.xml, /id="notebook-grid"/);
+  const glyphs = [
+    ...art.xml.matchAll(/<text id="sum-(\d+)-(\d+)"[^>]*>([^<]+)<\/text>/g),
+  ].map((match) => ({
+    row: Number(match[1]),
+    column: Number(match[2]),
+    text: match[3],
+    y: Number(attributes(match[0]).y),
+  }));
+  assert.equal(glyphs.length, 20);
+  for (let row = 0; row < 4; row++) {
+    const symbols = glyphs.filter((glyph) => glyph.row === row);
+    assert.deepEqual(
+      symbols.map((glyph) => glyph.column),
+      [0, 1, 2, 3, 4],
+    );
+    assert.deepEqual(
+      symbols.map((glyph) => glyph.text),
+      [String(row + 1), "+", "1", "=", String(row + 2)],
+    );
+    assert.ok(symbols.every((glyph) => glyph.y === 70 + row * 90));
+  }
+  assert.match(art.xml, /font-family="Neucha_400Regular"/);
+});
+
+test("page 18 counting rail keeps five close beads and a sixth separate", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p018_abacus_6;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p018_abacus_6.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [365, 80]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  for (let i = 1; i < 5; i++) assert.ok(x[i] - x[i - 1] <= 25);
+  assert.ok(x[5] - x[4] >= 60 && x[6] - x[5] >= 35);
+  assert.match(art.alt, /5 рядом и ещё 1/);
+});
+
+test("page 18 printed and handwritten six use distinct correct forms", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p018_digit_6_large;
+  const sample = vectorAssets.p018_digit_6_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p018_digit_6_large.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p018_digit_6_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [70, 85]);
+  assert.deepEqual([sample.width, sample.height], [145, 115]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>6<\/text>/);
+  assert.equal(digitSamples["6"].asset, "p018_digit_6_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(sample.xml, /M85 40 C93 39 87 27 79 33/);
+  assert.match(sample.xml, /C60 98 75 88 81 70 C92 45 62 49 56 70/);
+});
+
+test("page 18 stick samples keep six-stick house and two three-stick triangles", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const house = vectorAssets.p018_sticks_house;
+  const triangles = vectorAssets.p018_sticks_two_triangles;
+  assert.ok(house && triangles);
+  assert.equal(
+    house.xml,
+    readFileSync("assets/book2/vector/p018_sticks_house.svg", "utf8"),
+  );
+  assert.equal(
+    triangles.xml,
+    readFileSync("assets/book2/vector/p018_sticks_two_triangles.svg", "utf8"),
+  );
+  assert.deepEqual([house.width, house.height], [95, 125]);
+  assert.deepEqual([triangles.width, triangles.height], [170, 75]);
+  const lines = (xml: string) =>
+    [...xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map((match) =>
+      attributes(match[0]),
+    );
+  const houseLines = lines(house.xml);
+  const triangleLines = lines(triangles.xml);
+  assert.equal(houseLines.length, 6);
+  assert.equal(triangleLines.length, 6);
+  assert.deepEqual(
+    houseLines.map((line) => [line.x1, line.y1, line.x2, line.y2]),
+    [
+      ["20", "58", "20", "110"],
+      ["20", "58", "48", "10"],
+      ["48", "10", "75", "58"],
+      ["75", "58", "75", "110"],
+      ["75", "110", "20", "110"],
+      ["20", "58", "75", "58"],
+    ],
+  );
+  assert.deepEqual(
+    triangleLines
+      .slice(0, 3)
+      .map((line) => [line.x1, line.y1, line.x2, line.y2]),
+    [
+      ["12", "65", "42", "10"],
+      ["42", "10", "72", "65"],
+      ["72", "65", "12", "65"],
+    ],
+  );
+  assert.deepEqual(
+    triangleLines.slice(3).map((line) => [line.x1, line.y1, line.x2, line.y2]),
+    [
+      ["94", "65", "124", "10"],
+      ["124", "10", "154", "65"],
+      ["154", "65", "94", "65"],
+    ],
+  );
+});

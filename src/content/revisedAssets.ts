@@ -51,4 +51,9 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p016_three_puppies': { source: require('../../assets/book2/p016_three_puppies.png'), width: 320, height: 241, alt: "три щенка: два играют вместе слева, один сидит отдельно справа" },
   'p016_four_goats': { source: require('../../assets/book2/p016_four_goats.png'), width: 320, height: 256, alt: "четыре козы: три стоят вместе впереди, одна отдельно вдали справа" },
   'p016_five_kittens': { source: require('../../assets/book2/p016_five_kittens.png'), width: 320, height: 273, alt: "пять котят: четыре на полу под современным столом, один на столешнице" },
+  'p017_rabbits': { source: require('../../assets/book2/p017_rabbits.png'), width: 260, height: 296, alt: "четыре кролика: три белых с тёмными ушами впереди и один чёрный отдельно справа" },
+  'p017_carrots': { source: require('../../assets/book2/p017_carrots.png'), width: 240, height: 302, alt: "пять морковок: четыре связаны в пучок слева, одна лежит отдельно справа" },
+  'p018_girl_feeding_chickens': { source: require('../../assets/book2/p018_girl_feeding_chickens.png'), width: 660, height: 428, alt: "девочка в современной одежде кормит шесть кур на даче: пять белых и одна тёмная" },
+  'p018_beetle': { source: require('../../assets/book2/p018_beetle.png'), width: 240, height: 150, alt: "один коричневый жук, у него шесть отчётливо видимых ног, по три с каждой стороны" },
+  'p018_cherries_branch': { source: require('../../assets/book2/p018_cherries_branch.png'), width: 360, height: 134, alt: "ветка с шестью отдельными вишнями: три в грозди слева и три справа" },
 };

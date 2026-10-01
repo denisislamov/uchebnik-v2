@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="265" height="365" viewBox="0 0 265 365">
+<path id="notebook-grid" d="M19 4V361 M50 4V361 M81 4V361 M112 4V361 M143 4V361 M174 4V361 M205 4V361 M236 4V361 M4 16H261 M4 47H261 M4 78H261 M4 109H261 M4 140H261 M4 171H261 M4 202H261 M4 233H261 M4 264H261 M4 295H261 M4 326H261 M4 357H261" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<text id="sum-0-0" x="39" y="70" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">1</text>
+<text id="sum-0-1" x="83" y="70" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">+</text>
+<text id="sum-0-2" x="132" y="70" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">1</text>
+<text id="sum-0-3" x="179" y="70" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">=</text>
+<text id="sum-0-4" x="226" y="70" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">2</text>
+<text id="sum-1-0" x="39" y="160" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">2</text>
+<text id="sum-1-1" x="83" y="160" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">+</text>
+<text id="sum-1-2" x="132" y="160" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">1</text>
+<text id="sum-1-3" x="179" y="160" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">=</text>
+<text id="sum-1-4" x="226" y="160" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">3</text>
+<text id="sum-2-0" x="39" y="250" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">3</text>
+<text id="sum-2-1" x="83" y="250" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">+</text>
+<text id="sum-2-2" x="132" y="250" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">1</text>
+<text id="sum-2-3" x="179" y="250" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">=</text>
+<text id="sum-2-4" x="226" y="250" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">4</text>
+<text id="sum-3-0" x="39" y="340" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">4</text>
+<text id="sum-3-1" x="83" y="340" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">+</text>
+<text id="sum-3-2" x="132" y="340" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">1</text>
+<text id="sum-3-3" x="179" y="340" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">=</text>
+<text id="sum-3-4" x="226" y="340" text-anchor="middle" font-family="Neucha_400Regular" font-size="62" fill="#1f2433">5</text>
+</svg>

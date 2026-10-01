@@ -1,5 +1,6 @@
 import { remainingPages } from "./fullBook.ts";
 import { childInteraction } from "./childInteractions.ts";
+import { originalIllustrations } from "./illustrationMode.ts";
 import type { Block, BookPage } from "./types.ts";
 type WithoutId<T> = T extends unknown ? Omit<T, "id"> : never;
 type BlockDraft = WithoutId<Block>;
@@ -682,6 +683,43 @@ for (const block of pages[14].blocks) {
   if (block.id !== "p015-lesson04" || block.kind !== "activity") continue;
   block.prompt = "Набери число 5 из учебных монет с цифрами.";
   block.activity.unit = "единицы";
+}
+if (!originalIllustrations) {
+  const whiteHens = [
+    [0.17, 0.55, 0.1, 0.16],
+    [0.28, 0.74, 0.1, 0.14],
+    [0.52, 0.65, 0.08, 0.13],
+    [0.66, 0.54, 0.1, 0.13],
+    [0.88, 0.68, 0.1, 0.15],
+  ];
+  const darkHen = [[0.62, 0.75, 0.1, 0.15]];
+  const leftCherries = [
+    [0.38, 0.7, 0.045, 0.17],
+    [0.48, 0.72, 0.045, 0.17],
+    [0.57, 0.62, 0.045, 0.17],
+  ];
+  const rightCherries = [
+    [0.74, 0.68, 0.045, 0.17],
+    [0.84, 0.72, 0.045, 0.17],
+    [0.94, 0.62, 0.045, 0.17],
+  ];
+  for (const block of pages[17].blocks) {
+    if (block.kind !== "work") continue;
+    const groups =
+      block.id === "p018-lesson01"
+        ? [whiteHens, darkHen]
+        : block.id === "p018-cherry-branch"
+          ? [leftCherries, rightCherries]
+          : null;
+    if (!groups) continue;
+    block.fields = block.fields.map((field, index) => ({
+      ...field,
+      marks: {
+        image: block.images[0],
+        shapes: index === 2 ? groups.flat() : groups[index],
+      },
+    }));
+  }
 }
 for (const p of pages)
   for (const b of p.blocks) {
