@@ -180,6 +180,16 @@ PLUS_THREE_LAYOUT = {
         ((146, 29), (116, 56), (146, 56)), ("diagonal", 86, 150)),
 }
 
+FOUR_ADD_DOMINO = {
+    1: ((51, 55),),
+    2: ((80, 34), (33, 79)),
+    3: ((76, 34), (51, 55), (28, 79)),
+    4: ((33, 34), (79, 34), (33, 79), (79, 79)),
+    5: ((33, 34), (79, 34), (55, 55), (33, 79), (79, 79)),
+    6: ((32, 34), (55, 34), (79, 34),
+        (32, 79), (55, 79), (79, 79)),
+}
+
 
 def dimensions(asset_id):
     left, top, right, bottom = BOOK_ASSETS[asset_id]["bbox"]
@@ -445,6 +455,63 @@ def addition_three_domino_svg(asset_id, base_count):
             parts.append(
                 f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
                 f'r="{radius}" fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def subtraction_three_svg(asset_id, count):
+    width, height = dimensions(asset_id)
+    x_positions = (29, 59, 89, 119, 149)
+    top = x_positions[:(count + 1) // 2]
+    bottom = x_positions[:count // 2]
+    top_y, bottom_y = (32, 63) if count == 4 else (30, 59)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="9" y="9" width="{width-18}" height="{height-18}" '
+        f'rx="2" fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (x, y) in enumerate(
+        tuple((x, top_y) for x in top) + tuple((x, bottom_y) for x in bottom)
+    ):
+        parts.append(
+            f'<circle id="circle-{i}" cx="{x}" cy="{y}" r="8" '
+            f'fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+        )
+    crossed = (
+        ((top[-1], top_y), (bottom[-2], bottom_y), (bottom[-1], bottom_y))
+        if count % 2 == 0 else
+        ((top[-2], top_y), (top[-1], top_y), (bottom[-1], bottom_y))
+    )
+    for i, (x, y) in enumerate(crossed):
+        parts.append(
+            f'<line id="cross-{i}" x1="{x-8}" y1="{y+9}" '
+            f'x2="{x+8}" y2="{y-9}" stroke="{TEACHER_RED}" '
+            'stroke-width="2.3" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def filled_domino_four_svg(asset_id, base_count):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="10" y="15" width="{width-20}" height="80" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="97" y1="15" x2="97" y2="95" '
+        f'stroke="{FRAME}" stroke-width="2"/>'
+    )
+    for side, dots in (
+        ("base", FOUR_ADD_DOMINO[base_count]),
+        ("added", ((112, 34), (160, 34), (112, 79), (160, 79))),
+    ):
+        for i, (x, y) in enumerate(dots):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="9" fill="{PEN}"/>'
             )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
@@ -1916,6 +1983,16 @@ def main():
         svg, width, height = addition_three_domino_svg(asset_id, base_count)
         register(asset_id, svg, width, height,
                  f"Карточка: {base_count} исходных кружков и 3 добавленных за разделителем; всего {base_count+3}")
+    for count in range(4, 11):
+        asset_id = f"p038_circles_{count}_minus_3"
+        svg, width, height = subtraction_three_svg(asset_id, count)
+        register(asset_id, svg, width, height,
+                 f"Кружки: {count}; 3 крайних справа перечёркнуты, остаётся {count-3}")
+    for base_count in range(1, 7):
+        asset_id = f"p040_domino_{base_count}_plus_4"
+        svg, width, height = filled_domino_four_svg(asset_id, base_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {base_count} заполненных точек слева и 4 справа; всего {base_count+4}")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (

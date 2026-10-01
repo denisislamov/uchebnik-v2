@@ -2497,3 +2497,140 @@ test("page 34 five buttons remain a single row of five matte buttons", async () 
   );
   assert.match(art.alt, /Пять.*пуговиц/);
 });
+
+test("page 38 subtraction of three crosses the source's final three circles", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const widths: Record<number, number> = {
+    4: 182,
+    5: 175,
+    6: 177,
+    7: 177,
+    8: 175,
+    9: 177,
+    10: 180,
+  };
+  for (const count of [4, 5, 6, 7, 8, 9, 10]) {
+    const id = `p038_circles_${count}_minus_3`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual(
+      [art.width, art.height],
+      [widths[count], count === 4 ? 92 : 85],
+    );
+    const dots = [...art.xml.matchAll(/<circle id="circle-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    const slashes = [...art.xml.matchAll(/<line id="cross-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    assert.equal(dots.length, count);
+    assert.equal(slashes.length, 3);
+    assert.ok(
+      dots.every((dot) => dot.fill === "none" && dot.stroke === "#2b4ba8"),
+    );
+    assert.ok(slashes.every((slash) => slash.stroke === "#c8352e"));
+    const topY = count === 4 ? 32 : 30;
+    const bottomY = count === 4 ? 63 : 59;
+    const top = dots.filter((dot) => Number(dot.cy) === topY);
+    const bottom = dots.filter((dot) => Number(dot.cy) === bottomY);
+    assert.equal(top.length, Math.ceil(count / 2));
+    assert.equal(bottom.length, Math.floor(count / 2));
+    const centers = slashes.map((slash) => [
+      (Number(slash.x1) + Number(slash.x2)) / 2,
+      (Number(slash.y1) + Number(slash.y2)) / 2,
+    ]);
+    const topX = top.map((dot) => Number(dot.cx));
+    const bottomX = bottom.map((dot) => Number(dot.cx));
+    const expected =
+      count % 2 === 0
+        ? [
+            [topX.at(-1), topY],
+            [bottomX.at(-2), bottomY],
+            [bottomX.at(-1), bottomY],
+          ]
+        : [
+            [topX.at(-2), topY],
+            [topX.at(-1), topY],
+            [bottomX.at(-1), bottomY],
+          ];
+    assert.deepEqual(centers, expected, id);
+    assert.match(art.alt, new RegExp(`${count}.*3.*${count - 3}`));
+  }
+});
+
+test("page 40 dominoes retain filled source patterns and four right dots", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const initial: Record<number, number[][]> = {
+    1: [[51, 55]],
+    2: [
+      [80, 34],
+      [33, 79],
+    ],
+    3: [
+      [76, 34],
+      [51, 55],
+      [28, 79],
+    ],
+    4: [
+      [33, 34],
+      [79, 34],
+      [33, 79],
+      [79, 79],
+    ],
+    5: [
+      [33, 34],
+      [79, 34],
+      [55, 55],
+      [33, 79],
+      [79, 79],
+    ],
+    6: [
+      [32, 34],
+      [55, 34],
+      [79, 34],
+      [32, 79],
+      [55, 79],
+      [79, 79],
+    ],
+  };
+  for (const base of [1, 2, 3, 4, 5, 6]) {
+    const id = `p040_domino_${base}_plus_4`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [195, 110]);
+    const left = [
+      ...art.xml.matchAll(/<circle id="base-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    const right = [
+      ...art.xml.matchAll(/<circle id="added-dot-\d+"[^>]*\/>/g),
+    ].map((match) => attributes(match[0]));
+    assert.equal(left.length, base);
+    assert.equal(right.length, 4);
+    assert.deepEqual(
+      left.map((dot) => [Number(dot.cx), Number(dot.cy)]),
+      initial[base],
+    );
+    assert.deepEqual(
+      right.map((dot) => [Number(dot.cx), Number(dot.cy)]),
+      [
+        [112, 34],
+        [160, 34],
+        [112, 79],
+        [160, 79],
+      ],
+    );
+    assert.ok([...left, ...right].every((dot) => dot.fill === "#2b4ba8"));
+    const separator = art.xml.match(/<line id="card-divider"[^>]*\/>/)?.[0];
+    assert.ok(separator);
+    assert.equal(attributes(separator).x1, "97");
+    assert.match(art.alt, new RegExp(`${base}.*4.*${base + 4}`));
+  }
+});
