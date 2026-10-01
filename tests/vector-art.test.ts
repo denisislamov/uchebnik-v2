@@ -38,6 +38,19 @@ test("revised counting rails and educational coins use the current lesson wordin
   }
 });
 
+test("pages 11 and 12 use unitless coins and counting-rail beads", () => {
+  const coins = pages[10].blocks.find((block) => block.id === "p011-lesson04");
+  assert.ok(coins && coins.kind === "activity");
+  assert.equal(coins.activity.unit, "единицы");
+  assert.match(coins.prompt, /учебных монет/);
+  assert.doesNotMatch(coins.prompt, /копеек|рублей/);
+
+  const rail = pages[11].blocks.find((block) => block.id === "p012-lesson01");
+  assert.ok(rail);
+  assert.match(rail.prompt, /бусины/);
+  assert.doesNotMatch(rail.prompt, /жетоны/);
+});
+
 // Row counts were checked against the eighteen cropped textbook originals.
 const diagrams: Record<string, { rows: number[]; color: string }> = {
   p007_domino_1: { rows: [1], color: "#2b4ba8" },
@@ -625,6 +638,198 @@ test("page 10 two triangles each use exactly three separate sticks", async () =>
       ["102", "11", "168", "11"],
       ["168", "11", "135", "68"],
       ["135", "68", "102", "11"],
+    ],
+  );
+});
+
+test("page 11 square composition keeps two green left and one red right", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p011_three_squares_2_1;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p011_three_squares_2_1.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [85, 90]);
+  const squares = [...art.xml.matchAll(/<rect id="square-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(squares.length, 3);
+  assert.deepEqual(
+    squares.map((square) => square.fill),
+    ["#5d863d", "#5d863d", "#c4695c"],
+  );
+  assert.equal(squares[0].x, squares[1].x);
+  assert.ok(Number(squares[0].y) < Number(squares[1].y));
+  assert.equal(squares[1].y, squares[2].y);
+  assert.ok(Number(squares[2].x) > Number(squares[1].x));
+});
+
+test("page 11 composite ball row keeps two plus one and one plus two", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p011_balls_row_3_groups;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p011_balls_row_3_groups.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [780, 160]);
+  const balls = [
+    ...art.xml.matchAll(/<circle id="ball-(left|right)-(\d+)"[^>]*\/>/g),
+  ]
+    .map((match) => ({
+      side: match[1],
+      index: Number(match[2]),
+      x: Number(attributes(match[0]).cx),
+      y: Number(attributes(match[0]).cy),
+      radius: Number(attributes(match[0]).r),
+      color: attributes(match[0]).fill,
+    }))
+    .sort((a, b) => a.side.localeCompare(b.side) || a.index - b.index);
+  assert.deepEqual(
+    balls.map(({ side, index }) => [side, index]),
+    [
+      ["left", 0],
+      ["left", 1],
+      ["left", 2],
+      ["right", 0],
+      ["right", 1],
+      ["right", 2],
+    ],
+  );
+  assert.equal(new Set(balls.map(({ color }) => color)).size, 6);
+  assert.ok(balls.every(({ radius }) => radius >= 35 && radius <= 43));
+  const gap = (a: number, b: number) => balls[b].x - balls[a].x;
+  assert.ok(gap(0, 1) < gap(1, 2));
+  assert.ok(gap(4, 5) < gap(3, 4));
+  assert.ok(gap(2, 3) > gap(1, 2) && gap(2, 3) > gap(3, 4));
+  assert.ok(balls[0].y < balls[1].y);
+  assert.ok(balls[5].y < balls[4].y);
+  assert.match(art.alt, /2 \+ 1.*1 \+ 2/);
+});
+
+test("page 11 writing strip preserves the 1,2,3,3,2,1 cell groups", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p011_writing_strip_squares_rects;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync(
+      "assets/book2/vector/p011_writing_strip_squares_rects.svg",
+      "utf8",
+    ),
+  );
+  assert.deepEqual([art.width, art.height], [640, 130]);
+  assert.match(art.xml, /id="notebook-grid"/);
+  const cells = [
+    ...art.xml.matchAll(/<rect id="p11-cell-(\d+)-(\d+)"[^>]*\/>/g),
+  ].map((m) => ({
+    group: Number(m[1]),
+    y: Number(attributes(m[0]).y),
+  }));
+  assert.equal(cells.length, 12);
+  assert.deepEqual(
+    Array.from(
+      { length: 6 },
+      (_, group) => cells.filter((cell) => cell.group === group).length,
+    ),
+    [1, 2, 3, 3, 2, 1],
+  );
+  assert.deepEqual(
+    cells.filter((cell) => cell.group === 2).map((cell) => cell.y),
+    [80, 80, 80],
+  );
+  assert.deepEqual(
+    cells.filter((cell) => cell.group === 3).map((cell) => cell.y),
+    [20, 50, 80],
+  );
+});
+
+test("page 12 counting rail keeps the source's three plus one grouping", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p012_abacus_4;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p012_abacus_4.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [360, 90]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  assert.ok(x[1] - x[0] < 30 && x[2] - x[1] < 30);
+  assert.ok(x[3] - x[2] >= 45 && x[4] - x[3] >= 60);
+  assert.match(art.alt, /3 рядом и ещё 1/);
+});
+
+test("page 12 printed and handwritten fours match the original trace", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const print = vectorAssets.p012_digit_4_print;
+  const sample = vectorAssets.p012_digit_4_sample;
+  assert.ok(print && sample);
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p012_digit_4_print.svg", "utf8"),
+  );
+  assert.equal(
+    sample.xml,
+    readFileSync("assets/book2/vector/p012_digit_4_sample.svg", "utf8"),
+  );
+  assert.deepEqual([print.width, print.height], [75, 85]);
+  assert.deepEqual([sample.width, sample.height], [125, 95]);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>4<\/text>/);
+  assert.equal(digitSamples["4"].asset, "p012_digit_4_sample");
+  assert.match(sample.xml, /id="notebook-grid"/);
+  assert.match(sample.xml, /d="M63 19 L47 53 L64 53"/);
+  assert.match(sample.xml, /d="M73 37 L57 75"/);
+});
+
+test("page 12 drawing sample has four differently colored flags, last facing left", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p012_flags_draw_sample;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p012_flags_draw_sample.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [425, 140]);
+  assert.match(art.xml, /id="notebook-grid"/);
+  const flags = [...art.xml.matchAll(/<path id="flag-\d+"[^>]*\/>/g)].map((m) =>
+    attributes(m[0]),
+  );
+  assert.equal(flags.length, 4);
+  assert.equal(new Set(flags.map((flag) => flag.fill)).size, 4);
+  assert.equal([...art.xml.matchAll(/id="flag-pole-\d+"/g)].length, 4);
+  assert.match(flags[0].d, /^M45 28H105/);
+  assert.match(flags[1].d, /^M135 28H195/);
+  assert.match(flags[2].d, /^M225 28H285/);
+  assert.match(flags[3].d, /^M405 28H345/);
+});
+
+test("page 12 square uses four connected wooden sticks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p012_sticks_square;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p012_sticks_square.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [70, 75]);
+  const sticks = [...art.xml.matchAll(/<line id="stick-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  assert.equal(sticks.length, 4);
+  assert.deepEqual(
+    sticks.map((s) => [s.x1, s.y1, s.x2, s.y2]),
+    [
+      ["10", "12", "60", "12"],
+      ["60", "12", "60", "62"],
+      ["60", "62", "10", "62"],
+      ["10", "62", "10", "12"],
     ],
   );
 });

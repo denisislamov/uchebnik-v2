@@ -668,9 +668,19 @@ export const pages: BookPage[] = [
   ]),
 ];
 pages.push(...remainingPages);
+for (const block of pages[10].blocks) {
+  if (block.id !== "p011-lesson04" || block.kind !== "activity") continue;
+  block.prompt =
+    "Из каких учебных монет можно составить число 3? Набери 3 из монет с цифрами.";
+  block.activity.unit = "единицы";
+}
+for (const block of pages[11].blocks) {
+  if (block.id !== "p012-lesson01") continue;
+  block.prompt = "Посчитай детей, отодвинутые бусины и точки.";
+}
 for (const p of pages)
   for (const b of p.blocks) {
-    if (p.number <= 10) continue;
+    if (p.number <= 12) continue;
     if (!b.images.some((id) => id.includes("abacus_"))) continue;
     const modern = (text: string) =>
       text

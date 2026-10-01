@@ -34,4 +34,8 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p010_boys_fishing': { source: require('../../assets/book2/p010_boys_fishing.png'), width: 740, height: 400, alt: "трое мальчиков с удочками у реки: двое сидят вместе, третий подходит слева; рядом стоит ведро" },
   'p010_three_fish': { source: require('../../assets/book2/p010_three_fish.png'), width: 240, height: 160, alt: "три отдельные рыбы" },
   'p010_three_strawberries': { source: require('../../assets/book2/p010_three_strawberries.png'), width: 210, height: 150, alt: "три отдельные красные ягоды земляники на одном кустике" },
+  'p011_children_tricycles': { source: require('../../assets/book2/p011_children_tricycles.png'), width: 550, height: 400, alt: "двое мальчиков и девочка едут на трёх современных трёхколёсных велосипедах с одним передним и двумя задними колёсами" },
+  'p011_balls_left_2_and_1': { source: require('../../assets/book2/p011_balls_left_2_and_1.png'), width: 340, height: 116, alt: "три современных мяча: два слева и один справа" },
+  'p011_balls_right_1_and_2': { source: require('../../assets/book2/p011_balls_right_1_and_2.png'), width: 340, height: 113, alt: "три современных мяча: один слева и два справа" },
+  'p012_children_woodwork_table': { source: require('../../assets/book2/p012_children_woodwork_table.png'), width: 680, height: 419, alt: "четверо детей делают поделки из бумаги за столом в современном классе; впереди стоит табурет с четырьмя ножками" },
 };

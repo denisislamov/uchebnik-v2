@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="125" height="95" viewBox="0 0 125 95">
+<path id="notebook-grid" d="M15 4V91 M45 4V91 M75 4V91 M105 4V91 M4 15H121 M4 45H121 M4 75H121" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<path d="M63 19 L47 53 L64 53" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M73 37 L57 75" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

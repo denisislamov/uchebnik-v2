@@ -332,6 +332,10 @@ def digit_three_print_svg():
     return printed_digit_svg("p010_digit_3_print", 3, 74, 78)
 
 
+def digit_four_print_svg():
+    return printed_digit_svg("p012_digit_4_print", 4, 70, 73)
+
+
 def digit_one_sample_svg():
     width, height = dimensions("p007_digit_1_sample")
     parts = start_svg(width, height)
@@ -376,6 +380,21 @@ def digit_three_sample_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def digit_four_sample_svg():
+    width, height = dimensions("p012_digit_4_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=15, y0=15))
+    # The two exact strokes of digit 4 from handwrittenDigits.ts.
+    for path in ("M63 19 L47 53 L64 53", "M73 37 L57 75"):
+        parts.append(
+            f'<path d="{path}" fill="none" stroke="{NOTEBOOK_INK}" '
+            'stroke-width="3.5" stroke-linecap="round" '
+            'stroke-linejoin="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def counting_rail_svg(asset_id, active, active_positions=None, parked_start=123):
     width, height = dimensions(asset_id)
     right = width - 16
@@ -413,6 +432,11 @@ def counting_rail_two_svg():
 def counting_rail_three_svg():
     # Preserve the source's 2 + 1 split inside the active group of three.
     return counting_rail_svg("p010_abacus_3", 3, (35, 59, 111), parked_start=171)
+
+
+def counting_rail_four_svg():
+    # The source groups three beads together and places the fourth apart.
+    return counting_rail_svg("p012_abacus_4", 4, (35, 59, 83, 135), parked_start=195)
 
 
 def mushroom_drawing_svg():
@@ -553,6 +577,119 @@ def stick_triangles_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def squares_two_plus_one_svg():
+    width, height = dimensions("p011_three_squares_2_1")
+    parts = start_svg(width, height)
+    for i, (x, y, color, edge) in enumerate((
+        (15, 12, GREEN, GREEN_EDGE),
+        (15, 50, GREEN, GREEN_EDGE),
+        (50, 50, "#c4695c", "#9c5148"),
+    )):
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="{y}" width="22" '
+            f'height="22" rx="2" fill="{color}" stroke="{edge}" '
+            'stroke-width="1.8"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def balls_composite_row_svg():
+    width, height = dimensions("p011_balls_row_3_groups")
+    parts = start_svg(width, height)
+    # Source centers keep the near pair on the outside of each three-ball set:
+    # (2 + 1) | (1 + 2). Draw the upper right ball behind its lower neighbor.
+    balls = (
+        ("left", 0, 65, 48, "#91ad79", "#6b8e65"),
+        ("left", 1, 111, 101, "#d4ac6d", "#a78053"),
+        ("left", 2, 244, 93, "#78a6aa", "#5e858a"),
+        ("right", 0, 491, 94, "#c59684", "#9f7469"),
+        ("right", 2, 706, 60, "#a4b488", "#788d6b"),
+        ("right", 1, 635, 99, "#b693a8", "#8d7085"),
+    )
+    for _, _, x, y, _, _ in balls:
+        parts.append(
+            f'<ellipse cx="{x+9}" cy="{y+42}" rx="34" ry="7" '
+            'fill="#7f9c9a" opacity="0.16"/>'
+        )
+    for side, index, x, y, fill, edge in balls:
+        parts.append(
+            f'<circle id="ball-{side}-{index}" cx="{x}" cy="{y}" '
+            f'r="39" fill="{fill}" stroke="{edge}" stroke-width="2.3"/>'
+        )
+        parts.append(
+            f'<path d="M{x-27} {y-27} Q{x+4} {y-8} {x+27} {y+27} '
+            f'M{x-37} {y+7} Q{x-2} {y-7} {x+37} {y-7}" '
+            'fill="none" stroke="#f0e9dc" stroke-width="2.8" '
+            'stroke-linecap="round" opacity="0.78"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def writing_strip_eleven_svg():
+    width, height = dimensions("p011_writing_strip_squares_rects")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=20, y0=20))
+    groups = (
+        ((20, 80),),
+        ((110, 80), (140, 80)),
+        ((230, 80), (260, 80), (290, 80)),
+        ((380, 20), (380, 50), (380, 80)),
+        ((470, 50), (470, 80)),
+        ((560, 80),),
+    )
+    for group, cells in enumerate(groups):
+        for i, (x, y) in enumerate(cells):
+            parts.append(
+                f'<rect id="p11-cell-{group}-{i}" x="{x}" y="{y}" '
+                f'width="30" height="30" fill="none" '
+                f'stroke="{NOTEBOOK_INK}" stroke-width="2.5"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def flags_drawing_svg():
+    width, height = dimensions("p012_flags_draw_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=15, y0=20))
+    poles = (45, 135, 225, 405)
+    fills = ("#73a6a4", "#c7a15a", "#9689ae", "#c18478")
+    for i, (x, color) in enumerate(zip(poles, fills)):
+        parts.append(
+            f'<line id="flag-pole-{i}" x1="{x}" y1="28" '
+            f'x2="{x}" y2="114" stroke="{NOTEBOOK_INK}" '
+            'stroke-width="2.8"/>'
+        )
+        if i < 3:
+            path = f"M{x} 28H{x+60}L{x+47} 42.5L{x+60} 57H{x}Z"
+        else:
+            path = "M405 28H345L358 42.5L345 57H405Z"
+        parts.append(
+            f'<path id="flag-{i}" d="{path}" fill="{color}" '
+            f'stroke="{NOTEBOOK_INK}" stroke-width="2" '
+            'stroke-linejoin="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def stick_square_svg():
+    width, height = dimensions("p012_sticks_square")
+    parts = start_svg(width, height)
+    sticks = ((10, 12, 60, 12), (60, 12, 60, 62),
+              (60, 62, 10, 62), (10, 62, 10, 12))
+    for i, (x1, y1, x2, y2) in enumerate(sticks):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -612,6 +749,19 @@ def main():
         ("p010_cherries_draw", cherry_drawing_svg, "Образец: три отдельные вишни с черенками"),
         ("p010_sticks_triangles", stick_triangles_svg,
          "Два треугольника из палочек: первый вершиной вверх, второй вниз, по три палочки"),
+        ("p011_three_squares_2_1", squares_two_plus_one_svg,
+         "Три квадрата: два зелёных слева друг под другом и один красный справа"),
+        ("p011_balls_row_3_groups", balls_composite_row_svg,
+         "Составной ряд из шести мячей: слева 2 + 1, справа 1 + 2; это альтернативный вид двух наборов"),
+        ("p011_writing_strip_squares_rects", writing_strip_eleven_svg,
+         "Пропись: группы клеток по порядку 1, 2, 3, 3, 2, 1; сначала ряды, затем столбики"),
+        ("p012_abacus_4", counting_rail_four_svg,
+         "Счётная линейка: 4 бусины слева, 3 рядом и ещё 1; 6 справа, всего 10"),
+        ("p012_digit_4_print", digit_four_print_svg, "Печатная цифра 4"),
+        ("p012_digit_4_sample", digit_four_sample_svg, "Образец написания цифры 4 по клеткам"),
+        ("p012_flags_draw_sample", flags_drawing_svg,
+         "Четыре разноцветных флажка: три вправо, последний влево"),
+        ("p012_sticks_square", stick_square_svg, "Квадрат из четырёх палочек"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

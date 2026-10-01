@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="130" viewBox="0 0 640 130">
+<path id="notebook-grid" d="M20 4V126 M50 4V126 M80 4V126 M110 4V126 M140 4V126 M170 4V126 M200 4V126 M230 4V126 M260 4V126 M290 4V126 M320 4V126 M350 4V126 M380 4V126 M410 4V126 M440 4V126 M470 4V126 M500 4V126 M530 4V126 M560 4V126 M590 4V126 M620 4V126 M4 20H636 M4 50H636 M4 80H636 M4 110H636" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<rect id="p11-cell-0-0" x="20" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-1-0" x="110" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-1-1" x="140" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-2-0" x="230" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-2-1" x="260" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-2-2" x="290" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-3-0" x="380" y="20" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-3-1" x="380" y="50" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-3-2" x="380" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-4-0" x="470" y="50" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-4-1" x="470" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<rect id="p11-cell-5-0" x="560" y="80" width="30" height="30" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+</svg>

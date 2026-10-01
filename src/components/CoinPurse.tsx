@@ -2,13 +2,10 @@ import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors as c, fonts as f } from "../theme";
 import { CELL } from "../lib/grid";
-import { plural } from "../lib/feedback";
 import { Button } from "./Controls";
 import { Rows } from "./HandDrawn";
 
-const kopecks = (n: number) =>
-  `${n} ${plural(n, "копейка", "копейки", "копеек")}`;
-/** A coin as the child knows it: round, with its number large and «коп.» under it. */
+/** A neutral educational coin with only its value. */
 function Coin({ value, size }: { value: number; size: number }) {
   return (
     <View
@@ -29,7 +26,6 @@ function Coin({ value, size }: { value: number; size: number }) {
         >
           {value}
         </Text>
-        <Text style={s.coinUnit}>коп.</Text>
       </View>
     </View>
   );
@@ -37,7 +33,7 @@ function Coin({ value, size }: { value: number; size: number }) {
 /**
  * Coins to choose from and a purse they are put into. What lies in the purse
  * is seen — every coin, in the order it was put — and written as a sum under
- * it: «1 + 2 = 3 копейки». A press on a coin in the purse takes it back.
+ * it: «1 + 2 = 3». A press on a coin in the purse takes it back.
  */
 export function CoinPurse({
   target,
@@ -64,7 +60,7 @@ export function CoinPurse({
           <Pressable
             key={n}
             accessibilityRole="button"
-            accessibilityLabel={`Монета ${n} копеек`}
+            accessibilityLabel={`Монета с числом ${n}`}
             onPress={() => onAdd(n)}
             style={({ pressed }) => pressed && s.pressed}
           >
@@ -72,7 +68,7 @@ export function CoinPurse({
           </Pressable>
         ))}
       </View>
-      <Text style={s.caption}>Кошелёк · нужно набрать {kopecks(target)}</Text>
+      <Text style={s.caption}>Кошелёк · нужно набрать число {target}</Text>
       <View testID="coin-purse-inside" style={s.inside}>
         {coins.length === 0 ? (
           <Text style={s.empty}>Пусто</Text>
@@ -81,7 +77,7 @@ export function CoinPurse({
             <Pressable
               key={i}
               accessibilityRole="button"
-              accessibilityLabel={`В кошельке монета ${n} копеек. Вернуть`}
+              accessibilityLabel={`В кошельке монета с числом ${n}. Вернуть`}
               onPress={() => onTake(i)}
               style={({ pressed }) => pressed && s.pressed}
             >
@@ -93,10 +89,7 @@ export function CoinPurse({
       {/* The sum as it is written in the book: what was put, and how much
           it makes. */}
       <Text testID="coin-sum" accessibilityLiveRegion="polite" style={s.sum}>
-        В кошельке:{" "}
-        {coins.length > 1
-          ? `${coins.join(" + ")} = ${kopecks(sum)}`
-          : kopecks(sum)}
+        В кошельке: {coins.length > 1 ? `${coins.join(" + ")} = ${sum}` : sum}
       </Text>
       <View style={{ alignSelf: "flex-start" }}>
         <Button small secondary disabled={!coins.length} onPress={onReset}>
@@ -116,31 +109,24 @@ const s = StyleSheet.create({
   },
   row: { flexDirection: "row", flexWrap: "wrap", gap: CELL / 2 },
   pressed: { opacity: 0.7 },
-  // Copper, as the small coins of the book's time were.
   coin: {
-    backgroundColor: "#d9a066",
+    backgroundColor: "#eee9dd",
     borderWidth: 2,
-    borderColor: "#9a6a3a",
+    borderColor: "#8c8578",
     alignItems: "center",
     justifyContent: "center",
   },
   coinRim: {
     borderWidth: 1.5,
-    borderColor: "#b9814b",
+    borderColor: "#aaa293",
     alignItems: "center",
     justifyContent: "center",
   },
   coinValue: {
     fontFamily: f.heavy,
-    color: "#4a2f14",
+    color: "#263443",
     fontSize: 26,
     lineHeight: 28,
-  },
-  coinUnit: {
-    fontFamily: f.bold,
-    color: "#4a2f14",
-    fontSize: 11,
-    lineHeight: 12,
   },
   inside: {
     flexDirection: "row",

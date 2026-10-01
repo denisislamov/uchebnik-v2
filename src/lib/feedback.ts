@@ -60,10 +60,9 @@ export function successLine(block: Block, answer: Answer): string {
           .map(Number);
         const sum = coins.reduce((a, b) => a + b, 0);
         if (!coins.length) return "Задание выполнено.";
-        const said = `${sum} ${plural(sum, "копейка", "копейки", "копеек")}`;
         return coins.length > 1
-          ? `${coins.join(" + ")} = ${said}.`
-          : `В кошельке ${said}.`;
+          ? `${coins.join(" + ")} = ${sum}.`
+          : `В кошельке число ${sum}.`;
       }
       default:
         return "Задание выполнено.";

@@ -86,10 +86,10 @@ test("coins put into the purse are named as the sum they make", () => {
   )!;
   assert.equal(
     successLine(coins, { responses: { "0": "3", "0coins": "1,2" } }),
-    "✓ Верно! 1 + 2 = 3 копейки.",
+    "✓ Верно! 1 + 2 = 3.",
   );
   assert.equal(
     successLine(coins, { responses: { "0": "3", "0coins": "3" } }),
-    "✓ Верно! В кошельке 3 копейки.",
+    "✓ Верно! В кошельке число 3.",
   );
 });
