@@ -5,6 +5,7 @@ preserve the count and arrangement without copying scan noise or paper color.
 """
 
 import json
+from math import cos, pi, sin
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -336,6 +337,10 @@ def digit_four_print_svg():
     return printed_digit_svg("p012_digit_4_print", 4, 70, 73)
 
 
+def digit_five_print_svg():
+    return printed_digit_svg("p014_digit_5_large", 5, 69, 72)
+
+
 def digit_one_sample_svg():
     width, height = dimensions("p007_digit_1_sample")
     parts = start_svg(width, height)
@@ -395,6 +400,22 @@ def digit_four_sample_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def digit_five_sample_svg():
+    width, height = dimensions("p014_digit_5_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=20, y0=26))
+    # Exact centerline from the digit-5 trace in handwrittenDigits.ts.
+    parts.append(
+        '<path d="M88 27 C77 32 76 28 70 27 L59 47 '
+        'C81 36 77 63 60 79 C48 89 44 77 49 74 '
+        'C54 73 50 78 49 76" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="3.5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def counting_rail_svg(asset_id, active, active_positions=None, parked_start=123):
     width, height = dimensions(asset_id)
     right = width - 16
@@ -437,6 +458,12 @@ def counting_rail_three_svg():
 def counting_rail_four_svg():
     # The source groups three beads together and places the fourth apart.
     return counting_rail_svg("p012_abacus_4", 4, (35, 59, 83, 135), parked_start=195)
+
+
+def counting_rail_five_svg():
+    # Four adjacent source beads, then a visibly separate fifth.
+    return counting_rail_svg("p014_abacus_5", 5, (35, 59, 83, 107, 175),
+                             parked_start=231)
 
 
 def mushroom_drawing_svg():
@@ -492,6 +519,10 @@ def educational_coin_two_svg():
 
 def educational_coin_three_svg():
     return educational_coin_svg("p010_coin_3_kopeks", 3)
+
+
+def educational_coin_five_svg():
+    return educational_coin_svg("p014_coin_5_kopeks", 5)
 
 
 def stick_angles_svg():
@@ -690,6 +721,137 @@ def stick_square_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def plums_frame_svg(asset_id, centers):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="plum-frame" x="10" y="12" width="{width-20}" '
+        f'height="{height-24}" rx="3" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="2.5"/>'
+    )
+    parts.append(
+        f'<path id="plum-branch" d="M17 45 Q{width//2} 27 {width-16} 45" '
+        'fill="none" stroke="#8d7560" stroke-width="3" '
+        'stroke-linecap="round"/>'
+    )
+    for leaf, x in enumerate((width//4, width*3//4)):
+        parts.append(
+            f'<path id="plum-leaf-{leaf}" d="M{x} 43 '
+            f'Q{x-23} 30 {x-30} 46 Q{x-14} 57 {x} 43Z" '
+            'fill="#a7b38b" stroke="#788965" stroke-width="1.5"/>'
+        )
+    for i, (x, y) in enumerate(centers):
+        parts.append(
+            f'<path id="plum-stem-{i}" d="M{x} {y-27} Q{x+4} 56 {x+2} 42" '
+            'fill="none" stroke="#8d7560" stroke-width="2.3" '
+            'stroke-linecap="round"/>'
+        )
+        parts.append(
+            f'<ellipse id="plum-{i}" cx="{x}" cy="{y}" rx="18" ry="27" '
+            'fill="#8d778d" stroke="#66596d" stroke-width="2.2"/>'
+        )
+        parts.append(
+            f'<path d="M{x-7} {y-15} Q{x-12} {y} {x-5} {y+15}" '
+            'fill="none" stroke="#c3b3bd" stroke-width="2" '
+            'opacity="0.55" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def plums_frame_one_svg():
+    return plums_frame_svg("p013_plums_frame_1",
+                           ((34, 117), (74, 124), (110, 101), (196, 117)))
+
+
+def plums_frame_two_svg():
+    return plums_frame_svg("p013_plums_frame_2",
+                           ((43, 135), (75, 121), (165, 126), (200, 119)))
+
+
+def plums_frame_three_svg():
+    return plums_frame_svg("p013_plums_frame_3",
+                           ((48, 115), (130, 126), (165, 128), (200, 112)))
+
+
+def squares_two_and_two_svg():
+    width, height = dimensions("p013_squares_2_2")
+    parts = start_svg(width, height)
+    for i, (x, y, fill, edge) in enumerate((
+        (17, 10, GREEN, GREEN_EDGE), (53, 10, "#c4695c", "#9c5148"),
+        (17, 39, GREEN, GREEN_EDGE), (53, 39, "#c4695c", "#9c5148"),
+    )):
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="{y}" width="20" '
+            f'height="20" rx="2" fill="{fill}" stroke="{edge}" '
+            'stroke-width="1.8"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def apples_drawing_svg():
+    width, height = dimensions("p014_apples_draw")
+    parts = start_svg(width, height)
+    for i, x in enumerate((27, 79, 131, 183, 235)):
+        parts.append(
+            f'<path id="apple-{i}" d="M{x} 22 '
+            f'C{x-12} 15 {x-19} 24 {x-16} 38 '
+            f'C{x-14} 52 {x-6} 55 {x} 51 '
+            f'C{x+6} 55 {x+14} 52 {x+16} 38 '
+            f'C{x+19} 24 {x+12} 15 {x} 22Z" '
+            'fill="#c18470" stroke="#956355" stroke-width="2"/>'
+        )
+        parts.append(
+            f'<path id="apple-stem-{i}" d="M{x} 23 Q{x+1} 14 {x+6} 10" '
+            'fill="none" stroke="#746e52" stroke-width="2.2" '
+            'stroke-linecap="round"/>'
+        )
+        parts.append(
+            f'<path d="M{x+3} 16 Q{x+11} 9 {x+15} 12 '
+            f'Q{x+10} 18 {x+3} 16Z" fill="#93a77a"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def star_points(outer, inner):
+    points = []
+    for i in range(10):
+        angle = -pi / 2 + i * pi / 5
+        radius = outer if i % 2 == 0 else inner
+        points.append(f"{radius*cos(angle):.1f},{radius*sin(angle):.1f}")
+    return " ".join(points)
+
+
+def five_stars_svg():
+    width, height = dimensions("p014_five_stars")
+    parts = start_svg(width, height)
+    points = star_points(25, 11)
+    for i, (x, y) in enumerate(((46, 34), (172, 34), (299, 34),
+                                (108, 88), (236, 88))):
+        parts.append(
+            f'<polygon id="star-{i}" points="{points}" '
+            f'transform="translate({x} {y})" fill="#c06b63" '
+            'stroke="#8f514a" stroke-width="2" stroke-linejoin="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def star_outline_svg():
+    width, height = dimensions("p014_star_outline")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<polygon id="star-outline" points="{star_points(42, 19)}" '
+        'transform="translate(60 53)" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="2.8" '
+        'stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -762,6 +924,28 @@ def main():
         ("p012_flags_draw_sample", flags_drawing_svg,
          "Четыре разноцветных флажка: три вправо, последний влево"),
         ("p012_sticks_square", stick_square_svg, "Квадрат из четырёх палочек"),
+        ("p013_plums_frame_1", plums_frame_one_svg,
+         "Четыре одинаковые сливы в рамке: 3 + 1"),
+        ("p013_plums_frame_2", plums_frame_two_svg,
+         "Четыре одинаковые сливы в рамке: 2 + 2"),
+        ("p013_plums_frame_3", plums_frame_three_svg,
+         "Четыре одинаковые сливы в рамке: 1 + 3"),
+        ("p013_squares_2_2", squares_two_and_two_svg,
+         "Четыре квадрата 2 на 2: два зелёных слева, два красных справа"),
+        ("p014_abacus_5", counting_rail_five_svg,
+         "Счётная линейка: 5 бусин слева, 4 рядом и ещё 1; 5 справа, всего 10"),
+        ("p014_apples_draw", apples_drawing_svg,
+         "Образец: пять отдельных яблок в ряд"),
+        ("p014_coin_5_kopeks", educational_coin_five_svg,
+         "Учебная монета с числом 5"),
+        ("p014_digit_5_large", digit_five_print_svg,
+         "Крупная печатная цифра 5"),
+        ("p014_digit_5_sample", digit_five_sample_svg,
+         "Образец написания цифры 5 по клеткам"),
+        ("p014_five_stars", five_stars_svg,
+         "Пять красных звёзд: три сверху, две снизу"),
+        ("p014_star_outline", star_outline_svg,
+         "Контур одной пятиконечной звезды"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

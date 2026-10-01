@@ -38,4 +38,11 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p011_balls_left_2_and_1': { source: require('../../assets/book2/p011_balls_left_2_and_1.png'), width: 340, height: 116, alt: "три современных мяча: два слева и один справа" },
   'p011_balls_right_1_and_2': { source: require('../../assets/book2/p011_balls_right_1_and_2.png'), width: 340, height: 113, alt: "три современных мяча: один слева и два справа" },
   'p012_children_woodwork_table': { source: require('../../assets/book2/p012_children_woodwork_table.png'), width: 680, height: 419, alt: "четверо детей делают поделки из бумаги за столом в современном классе; впереди стоит табурет с четырьмя ножками" },
+  'p013_birds_four_on_branch': { source: require('../../assets/book2/p013_birds_four_on_branch.png'), width: 300, height: 200, alt: "четыре синицы сидят на одной ветке" },
+  'p013_birds_one_flies_away': { source: require('../../assets/book2/p013_birds_one_flies_away.png'), width: 300, height: 200, alt: "три синицы остались на той же ветке, четвёртая улетает вправо" },
+  'p013_butterfly': { source: require('../../assets/book2/p013_butterfly.png'), width: 200, height: 167, alt: "одна оранжевая бабочка с четырьмя отдельными крыльями" },
+  'p013_goat': { source: require('../../assets/book2/p013_goat.png'), width: 200, height: 208, alt: "одна светлая коза с четырьмя видимыми ногами" },
+  'p013_truck': { source: require('../../assets/book2/p013_truck.png'), width: 240, height: 148, alt: "один современный двухосный грузовик: два ближних колеса видны, два дальних подразумеваются" },
+  'p014_boys_queue': { source: require('../../assets/book2/p014_boys_queue.png'), width: 700, height: 431, alt: "пятеро мальчиков в современной школе: четверо стоят в очереди к умывальнику, пятый помогает им справа" },
+  'p014_apple_blossom': { source: require('../../assets/book2/p014_apple_blossom.png'), width: 160, height: 160, alt: "один нежно-розовый цветок яблони с пятью отдельными лепестками" },
 };

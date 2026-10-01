@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 13 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 13 · было / стало</h1>
+      <p>
+        Четыре птицы → три на ветке и одна улетает; четыре ноги, крыла, колеса и
+        состав числа 4.
+      </p>
+      <div class="items">
+        <article class="hero">
+          <h2>Четыре синицы на ветке</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_birds_four_on_branch.jpg"
+                  alt="Исходный: Четыре синицы на ветке"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p013_birds_four_on_branch@2x.png"
+                  alt="Обновлённый: Четыре синицы на ветке"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Одна синица улетает</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_birds_one_flies_away.jpg"
+                  alt="Исходный: Одна синица улетает"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p013_birds_one_flies_away@2x.png"
+                  alt="Обновлённый: Одна синица улетает"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Коза: четыре ноги</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_goat.jpg"
+                  alt="Исходный: Коза: четыре ноги"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p013_goat@2x.png"
+                  alt="Обновлённый: Коза: четыре ноги"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Бабочка: четыре крыла</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_butterfly.jpg"
+                  alt="Исходный: Бабочка: четыре крыла"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p013_butterfly@2x.png"
+                  alt="Обновлённый: Бабочка: четыре крыла"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Современный грузовик</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_truck.jpg"
+                  alt="Исходный: Современный грузовик"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p013_truck@2x.png"
+                  alt="Обновлённый: Современный грузовик"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Квадраты 2 + 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_squares_2_2.jpg"
+                  alt="Исходный: Квадраты 2 + 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p013_squares_2_2.svg"
+                  alt="Обновлённый: Квадраты 2 + 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Сливы 3 + 1</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_plums_frame_1.jpg"
+                  alt="Исходный: Сливы 3 + 1"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p013_plums_frame_1.svg"
+                  alt="Обновлённый: Сливы 3 + 1"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Сливы 2 + 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_plums_frame_2.jpg"
+                  alt="Исходный: Сливы 2 + 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p013_plums_frame_2.svg"
+                  alt="Обновлённый: Сливы 2 + 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Сливы 1 + 3</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p013_plums_frame_3.jpg"
+                  alt="Исходный: Сливы 1 + 3"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p013_plums_frame_3.svg"
+                  alt="Обновлённый: Сливы 1 + 3"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

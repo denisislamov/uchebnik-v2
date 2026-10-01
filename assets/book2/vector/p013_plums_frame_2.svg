@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="180" viewBox="0 0 250 180">
+<rect id="plum-frame" x="10" y="12" width="230" height="156" rx="3" fill="none" stroke="#1f2433" stroke-width="2.5"/>
+<path id="plum-branch" d="M17 45 Q125 27 234 45" fill="none" stroke="#8d7560" stroke-width="3" stroke-linecap="round"/>
+<path id="plum-leaf-0" d="M62 43 Q39 30 32 46 Q48 57 62 43Z" fill="#a7b38b" stroke="#788965" stroke-width="1.5"/>
+<path id="plum-leaf-1" d="M187 43 Q164 30 157 46 Q173 57 187 43Z" fill="#a7b38b" stroke="#788965" stroke-width="1.5"/>
+<path id="plum-stem-0" d="M43 108 Q47 56 45 42" fill="none" stroke="#8d7560" stroke-width="2.3" stroke-linecap="round"/>
+<ellipse id="plum-0" cx="43" cy="135" rx="18" ry="27" fill="#8d778d" stroke="#66596d" stroke-width="2.2"/>
+<path d="M36 120 Q31 135 38 150" fill="none" stroke="#c3b3bd" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+<path id="plum-stem-1" d="M75 94 Q79 56 77 42" fill="none" stroke="#8d7560" stroke-width="2.3" stroke-linecap="round"/>
+<ellipse id="plum-1" cx="75" cy="121" rx="18" ry="27" fill="#8d778d" stroke="#66596d" stroke-width="2.2"/>
+<path d="M68 106 Q63 121 70 136" fill="none" stroke="#c3b3bd" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+<path id="plum-stem-2" d="M165 99 Q169 56 167 42" fill="none" stroke="#8d7560" stroke-width="2.3" stroke-linecap="round"/>
+<ellipse id="plum-2" cx="165" cy="126" rx="18" ry="27" fill="#8d778d" stroke="#66596d" stroke-width="2.2"/>
+<path d="M158 111 Q153 126 160 141" fill="none" stroke="#c3b3bd" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+<path id="plum-stem-3" d="M200 92 Q204 56 202 42" fill="none" stroke="#8d7560" stroke-width="2.3" stroke-linecap="round"/>
+<ellipse id="plum-3" cx="200" cy="119" rx="18" ry="27" fill="#8d778d" stroke="#66596d" stroke-width="2.2"/>
+<path d="M193 104 Q188 119 195 134" fill="none" stroke="#c3b3bd" stroke-width="2" opacity="0.55" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 14 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 14 · было / стало</h1>
+      <p>
+        Пять мальчиков: четверо в очереди и один помогает; учебные монеты без
+        валюты и счётная линейка.
+      </p>
+      <div class="items">
+        <article class="hero">
+          <h2>Четверо в очереди и один у умывальника</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_boys_queue.jpg"
+                  alt="Исходный: Четверо в очереди и один у умывальника"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p014_boys_queue@2x.png"
+                  alt="Обновлённый: Четверо в очереди и один у умывальника"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Цветок яблони: пять лепестков</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_apple_blossom.jpg"
+                  alt="Исходный: Цветок яблони: пять лепестков"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p014_apple_blossom@2x.png"
+                  alt="Обновлённый: Цветок яблони: пять лепестков"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Пять звёзд</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_five_stars.jpg"
+                  alt="Исходный: Пять звёзд"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_five_stars.svg"
+                  alt="Обновлённый: Пять звёзд"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Счётная линейка: пять бусин</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_abacus_5.jpg"
+                  alt="Исходный: Счётная линейка: пять бусин"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_abacus_5.svg"
+                  alt="Обновлённый: Счётная линейка: пять бусин"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Пять точек</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_domino_5.jpg"
+                  alt="Исходный: Пять точек"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_domino_5.svg"
+                  alt="Обновлённый: Пять точек"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Пять кружков</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_circles_5.jpg"
+                  alt="Исходный: Пять кружков"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_circles_5.svg"
+                  alt="Обновлённый: Пять кружков"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Крупная цифра 5</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_digit_5_large.jpg"
+                  alt="Исходный: Крупная цифра 5"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_digit_5_large.svg"
+                  alt="Обновлённый: Крупная цифра 5"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Пишем 5</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_digit_5_sample.jpg"
+                  alt="Исходный: Пишем 5"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_digit_5_sample.svg"
+                  alt="Обновлённый: Пишем 5"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Учебная монета</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_coin_5_kopeks.jpg"
+                  alt="Исходный: Учебная монета"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_coin_5_kopeks.svg"
+                  alt="Обновлённый: Учебная монета"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Контур звезды</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_star_outline.jpg"
+                  alt="Исходный: Контур звезды"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_star_outline.svg"
+                  alt="Обновлённый: Контур звезды"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="">
+          <h2>Рисуем пять яблок</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p014_apples_draw.jpg"
+                  alt="Исходный: Рисуем пять яблок"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p014_apples_draw.svg"
+                  alt="Обновлённый: Рисуем пять яблок"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

@@ -833,3 +833,216 @@ test("page 12 square uses four connected wooden sticks", async () => {
     ],
   );
 });
+
+test("page 13 plum frames keep 3+1, 2+2, and 1+3 with matching fruit", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const expected = [
+    {
+      id: "p013_plums_frame_1",
+      dimensions: [245, 180],
+      groups: [3, 1],
+      gap: 2,
+    },
+    {
+      id: "p013_plums_frame_2",
+      dimensions: [250, 180],
+      groups: [2, 2],
+      gap: 1,
+    },
+    {
+      id: "p013_plums_frame_3",
+      dimensions: [250, 180],
+      groups: [1, 3],
+      gap: 0,
+    },
+  ];
+  const fruitStyles: string[][] = [];
+  for (const { id, dimensions, groups, gap } of expected) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], dimensions);
+    assert.match(art.xml, /<rect id="plum-frame"/);
+    const plums = [...art.xml.matchAll(/<ellipse id="plum-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    assert.equal(plums.length, 4, id);
+    assert.equal([...art.xml.matchAll(/id="plum-stem-\d+"/g)].length, 4);
+    fruitStyles.push(plums.map((plum) => `${plum.rx}/${plum.ry}/${plum.fill}`));
+    const x = plums.map((plum) => Number(plum.cx));
+    const spaces = x.slice(1).map((value, index) => value - x[index]);
+    assert.equal(spaces.indexOf(Math.max(...spaces)), gap, `${id} group split`);
+    assert.ok(Math.max(...spaces) >= Math.min(...spaces) * 1.7);
+    const block = pages[12].blocks.find((candidate) =>
+      candidate.images.includes(id),
+    );
+    if (!block || block.kind !== "work")
+      throw new Error(`${id}: work block missing`);
+    const marks = block.fields.find((field) => field.id === "q3")?.marks
+      ?.shapes;
+    assert.equal(marks?.length, 4, `${id}: four question marks`);
+    for (let i = 0; i < plums.length; i++) {
+      assert.ok(
+        Math.abs(x[i] / art.width - marks![i][0]) < 0.012,
+        `${id}: plum ${i} x`,
+      );
+      assert.ok(
+        Math.abs(Number(plums[i].cy) / art.height - marks![i][1]) < 0.012,
+        `${id}: plum ${i} y`,
+      );
+    }
+    assert.match(art.alt, new RegExp(`${groups[0]} \\+ ${groups[1]}`));
+  }
+  assert.deepEqual(fruitStyles[0], fruitStyles[1]);
+  assert.deepEqual(fruitStyles[1], fruitStyles[2]);
+});
+
+test("page 13 four squares keep green left and muted red right", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p013_squares_2_2;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p013_squares_2_2.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [90, 70]);
+  const squares = [...art.xml.matchAll(/<rect id="square-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(squares.length, 4);
+  assert.deepEqual(
+    squares.map((square) => square.fill),
+    ["#5d863d", "#c4695c", "#5d863d", "#c4695c"],
+  );
+  assert.equal(squares[0].x, squares[2].x);
+  assert.equal(squares[1].x, squares[3].x);
+  assert.equal(squares[0].y, squares[1].y);
+  assert.equal(squares[2].y, squares[3].y);
+});
+
+test("page 14 rail has four close beads then a fifth separate bead", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p014_abacus_5;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p014_abacus_5.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [370, 80]);
+  const beads = [...art.xml.matchAll(/<circle id="bead-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(beads.length, 10);
+  assert.equal(beads.filter((bead) => bead.fill === "#c8352e").length, 5);
+  assert.equal(beads.filter((bead) => bead.fill === "#ffffff").length, 5);
+  const x = beads.map((bead) => Number(bead.cx));
+  assert.ok(x[1] - x[0] <= 25 && x[2] - x[1] <= 25 && x[3] - x[2] <= 25);
+  assert.ok(x[4] - x[3] >= 60 && x[5] - x[4] >= 45);
+  assert.match(art.alt, /4 рядом и ещё 1/);
+});
+
+test("page 14 drawing has five separately countable apples", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p014_apples_draw;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p014_apples_draw.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [270, 60]);
+  const apples = [...art.xml.matchAll(/<path id="apple-(\d+)"[^>]*\/>/g)].map(
+    (match) => ({
+      index: Number(match[1]),
+      fill: attributes(match[0]).fill,
+    }),
+  );
+  assert.deepEqual(
+    apples.map((apple) => apple.index),
+    [0, 1, 2, 3, 4],
+  );
+  assert.equal([...art.xml.matchAll(/id="apple-stem-\d+"/g)].length, 5);
+  assert.deepEqual(
+    apples.map((apple) => apple.fill),
+    Array(5).fill("#c18470"),
+  );
+});
+
+test("page 14 coin and printed five show denomination without currency", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const coin = vectorAssets.p014_coin_5_kopeks;
+  const print = vectorAssets.p014_digit_5_large;
+  assert.ok(coin && print);
+  assert.equal(
+    coin.xml,
+    readFileSync("assets/book2/vector/p014_coin_5_kopeks.svg", "utf8"),
+  );
+  assert.equal(
+    print.xml,
+    readFileSync("assets/book2/vector/p014_digit_5_large.svg", "utf8"),
+  );
+  assert.deepEqual([coin.width, coin.height], [150, 150]);
+  assert.deepEqual([print.width, print.height], [75, 80]);
+  assert.match(coin.xml, /id="coin-body"/);
+  assert.match(coin.xml, /font-family="Andika_700Bold"[^>]*>5<\/text>/);
+  assert.match(print.xml, /font-family="Andika_700Bold"[^>]*>5<\/text>/);
+  assert.doesNotMatch(coin.xml, /коп|руб|1953|СССР|герб/i);
+});
+
+test("page 14 handwritten five uses the lesson's exact trace", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p014_digit_5_sample;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p014_digit_5_sample.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [125, 105]);
+  assert.equal(digitSamples["5"].asset, "p014_digit_5_sample");
+  assert.match(art.xml, /id="notebook-grid"/);
+  assert.match(art.xml, /M88 27 C77 32 76 28 70 27 L59 47/);
+  assert.match(art.xml, /C48 89 44 77 49 74 C54 73 50 78 49 76/);
+});
+
+test("page 14 stars preserve three above two and one five-point outline", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const five = vectorAssets.p014_five_stars;
+  const outline = vectorAssets.p014_star_outline;
+  assert.ok(five && outline);
+  assert.equal(
+    five.xml,
+    readFileSync("assets/book2/vector/p014_five_stars.svg", "utf8"),
+  );
+  assert.equal(
+    outline.xml,
+    readFileSync("assets/book2/vector/p014_star_outline.svg", "utf8"),
+  );
+  assert.deepEqual([five.width, five.height], [345, 125]);
+  assert.deepEqual([outline.width, outline.height], [120, 105]);
+  const stars = [...five.xml.matchAll(/<polygon id="star-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(stars.length, 5);
+  assert.ok(stars.every((star) => star.points.split(" ").length === 10));
+  const centers = stars.map((star) => {
+    const match = /^translate\((\d+) (\d+)\)$/.exec(star.transform);
+    assert.ok(match);
+    return [Number(match[1]), Number(match[2])];
+  });
+  assert.deepEqual(
+    centers.slice(0, 3).map((point) => point[1]),
+    [34, 34, 34],
+  );
+  assert.deepEqual(
+    centers.slice(3).map((point) => point[1]),
+    [88, 88],
+  );
+  assert.ok(centers[0][0] < centers[1][0] && centers[1][0] < centers[2][0]);
+  const single = /<polygon id="star-outline"[^>]*\/>/.exec(outline.xml);
+  assert.ok(single);
+  const shape = attributes(single[0]);
+  assert.equal(shape.points.split(" ").length, 10);
+  assert.equal(shape.fill, "none");
+});

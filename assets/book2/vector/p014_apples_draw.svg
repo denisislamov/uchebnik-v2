@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="60" viewBox="0 0 270 60">
+<path id="apple-0" d="M27 22 C15 15 8 24 11 38 C13 52 21 55 27 51 C33 55 41 52 43 38 C46 24 39 15 27 22Z" fill="#c18470" stroke="#956355" stroke-width="2"/>
+<path id="apple-stem-0" d="M27 23 Q28 14 33 10" fill="none" stroke="#746e52" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M30 16 Q38 9 42 12 Q37 18 30 16Z" fill="#93a77a"/>
+<path id="apple-1" d="M79 22 C67 15 60 24 63 38 C65 52 73 55 79 51 C85 55 93 52 95 38 C98 24 91 15 79 22Z" fill="#c18470" stroke="#956355" stroke-width="2"/>
+<path id="apple-stem-1" d="M79 23 Q80 14 85 10" fill="none" stroke="#746e52" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M82 16 Q90 9 94 12 Q89 18 82 16Z" fill="#93a77a"/>
+<path id="apple-2" d="M131 22 C119 15 112 24 115 38 C117 52 125 55 131 51 C137 55 145 52 147 38 C150 24 143 15 131 22Z" fill="#c18470" stroke="#956355" stroke-width="2"/>
+<path id="apple-stem-2" d="M131 23 Q132 14 137 10" fill="none" stroke="#746e52" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M134 16 Q142 9 146 12 Q141 18 134 16Z" fill="#93a77a"/>
+<path id="apple-3" d="M183 22 C171 15 164 24 167 38 C169 52 177 55 183 51 C189 55 197 52 199 38 C202 24 195 15 183 22Z" fill="#c18470" stroke="#956355" stroke-width="2"/>
+<path id="apple-stem-3" d="M183 23 Q184 14 189 10" fill="none" stroke="#746e52" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M186 16 Q194 9 198 12 Q193 18 186 16Z" fill="#93a77a"/>
+<path id="apple-4" d="M235 22 C223 15 216 24 219 38 C221 52 229 55 235 51 C241 55 249 52 251 38 C254 24 247 15 235 22Z" fill="#c18470" stroke="#956355" stroke-width="2"/>
+<path id="apple-stem-4" d="M235 23 Q236 14 241 10" fill="none" stroke="#746e52" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M238 16 Q246 9 250 12 Q245 18 238 16Z" fill="#93a77a"/>
+</svg>
