@@ -1320,3 +1320,89 @@ test("page 18 stick samples keep six-stick house and two three-stick triangles",
     ],
   );
 });
+
+test("page 19 number strip keeps only 1, 4, 6 printed and three gaps empty", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p019_number_cards_1_6;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p019_number_cards_1_6.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [495, 95]);
+  const boxes = [
+    ...art.xml.matchAll(/<rect id="number-card-(\d+)"[^>]*\/>/g),
+  ].map((match) => ({
+    index: Number(match[1]),
+    x: Number(attributes(match[0]).x),
+  }));
+  assert.deepEqual(
+    boxes.map((box) => box.index),
+    [0, 1, 2, 3, 4, 5],
+  );
+  assert.ok(
+    boxes.every((box, index) => index === 0 || box.x > boxes[index - 1].x),
+  );
+  const labels = [
+    ...art.xml.matchAll(/<text id="number-label-(\d+)"[^>]*>([^<]+)<\/text>/g),
+  ].map((match) => [Number(match[1]), match[2]]);
+  assert.deepEqual(labels, [
+    [0, "1"],
+    [3, "4"],
+    [5, "6"],
+  ]);
+  assert.match(pages[18].blocks[8].prompt, /1, □, □, 4, □, 6/);
+  assert.match(art.alt, /пустые/);
+});
+
+test("page 19 composition keeps four green squares and two red vertically", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p019_squares_4_2;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p019_squares_4_2.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [155, 80]);
+  const squares = [...art.xml.matchAll(/<rect id="square-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(squares.length, 6);
+  assert.deepEqual(
+    squares.map((square) => square.fill),
+    ["#5d863d", "#5d863d", "#5d863d", "#5d863d", "#c4695c", "#c4695c"],
+  );
+  assert.equal(squares[0].x, squares[2].x);
+  assert.equal(squares[1].x, squares[3].x);
+  assert.equal(squares[0].y, squares[1].y);
+  assert.equal(squares[2].y, squares[3].y);
+  assert.equal(squares[4].x, squares[5].x);
+  assert.ok(Number(squares[4].x) > Number(squares[1].x) + 40);
+});
+
+test("page 20 subtraction cards preserve 2−1=1, 3−1=2, 4−1=3", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [first, size] of [
+    [2, [269, 78]],
+    [3, [269, 82]],
+    [4, [266, 84]],
+  ] as const) {
+    const id = `p020_cards_${first}_minus_1`;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], size);
+    assert.equal(
+      [...art.xml.matchAll(/<rect id="card-\d+"[^>]*\/>/g)].length,
+      5,
+    );
+    const glyphs = [
+      ...art.xml.matchAll(/<text id="card-label-\d+"[^>]*>([^<]+)<\/text>/g),
+    ].map((match) => match[1]);
+    assert.deepEqual(glyphs, [String(first), "−", "1", "=", String(first - 1)]);
+    assert.match(art.xml, /font-family="Andika_700Bold"/);
+  }
+});

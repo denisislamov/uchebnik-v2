@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 19 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 19 · было / стало</h1>
+      <p>
+        Рыбки 4 + 1 и горшки 5 + 1; учебные монеты без валюты и чистые карточки
+        чисел.
+      </p>
+      <div class="items">
+        <article class="hero">
+          <h2>Четыре рыбки и одна добавляется</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_boy_aquarium.jpg"
+                  alt="Исходный: Четыре рыбки и одна добавляется"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p019_boy_aquarium.png"
+                  alt="Новый: Четыре рыбки и одна добавляется"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article class="hero">
+          <h2>Пять горшков и шестой в руках</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_girl_flowerpots.jpg"
+                  alt="Исходный: Пять горшков и шестой в руках"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p019_girl_flowerpots.png"
+                  alt="Новый: Пять горшков и шестой в руках"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Квадраты 4 + 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_squares_4_2.jpg"
+                  alt="Исходный: Квадраты 4 + 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p019_squares_4_2.svg"
+                  alt="Новый: Квадраты 4 + 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Домино 5 + 1</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_domino_5_1.jpg"
+                  alt="Исходный: Домино 5 + 1"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p019_domino_5_1.svg"
+                  alt="Новый: Домино 5 + 1"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Домино 4 + 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_domino_4_2.jpg"
+                  alt="Исходный: Домино 4 + 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p019_domino_4_2.svg"
+                  alt="Новый: Домино 4 + 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Домино 3 + 3</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_domino_3_3.jpg"
+                  alt="Исходный: Домино 3 + 3"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p019_domino_3_3.svg"
+                  alt="Новый: Домино 3 + 3"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточки чисел 1–6</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p019_number_cards_1_6.jpg"
+                  alt="Исходный: Карточки чисел 1–6"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p019_number_cards_1_6.svg"
+                  alt="Новый: Карточки чисел 1–6"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

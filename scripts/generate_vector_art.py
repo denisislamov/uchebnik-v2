@@ -964,12 +964,12 @@ def squares_four_plus_one_svg():
     return "\n".join(parts) + "\n", width, height
 
 
-def addition_cards_svg(asset_id, first, complete):
+def arithmetic_cards_svg(asset_id, first, operation, complete):
     width, height = dimensions(asset_id)
-    labels = [str(first), "+", "1", "="]
+    labels = [str(first), operation, "1", "="]
     positions = [12, 64, 116, 168]
     if complete:
-        labels.append(str(first + 1))
+        labels.append(str(first + (1 if operation == "+" else -1)))
         positions = [9, 62, 115, 168, 221]
     y = (height - 40) // 2
     parts = start_svg(width, height)
@@ -986,6 +986,14 @@ def addition_cards_svg(asset_id, first, complete):
         )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
+
+
+def addition_cards_svg(asset_id, first, complete):
+    return arithmetic_cards_svg(asset_id, first, "+", complete)
+
+
+def subtraction_cards_svg(asset_id, first):
+    return arithmetic_cards_svg(asset_id, first, "−", True)
 
 
 def handwritten_sums_plus_one_svg():
@@ -1035,6 +1043,47 @@ def sticks_two_triangles_svg():
             f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
             f'x2="{x2}" y2="{y2}" stroke="#a78665" '
             'stroke-width="5.5" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def number_cards_one_to_six_svg():
+    width, height = dimensions("p019_number_cards_1_6")
+    parts = start_svg(width, height)
+    # The source's pencil answers 2, 3, 5 are intentionally cleared: these
+    # three numbers are the actual answers to the adjacent exercise.
+    labels = {0: "1", 3: "4", 5: "6"}
+    for i, x in enumerate((10, 94, 177, 260, 343, 426)):
+        parts.append(
+            f'<rect id="number-card-{i}" x="{x}" y="7" width="56" '
+            'height="80" rx="3" fill="#faf8f2" '
+            f'stroke="{FRAME}" stroke-width="2.3"/>'
+        )
+        if i in labels:
+            parts.append(
+                f'<text id="number-label-{i}" x="{x+28}" y="73" '
+                'text-anchor="middle" font-family="Andika_700Bold" '
+                f'font-size="61" fill="{NOTEBOOK_INK}">{labels[i]}</text>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def squares_four_and_two_svg():
+    width, height = dimensions("p019_squares_4_2")
+    parts = start_svg(width, height)
+    squares = (
+        (14, 10, GREEN, GREEN_EDGE), (53, 10, GREEN, GREEN_EDGE),
+        (14, 46, GREEN, GREEN_EDGE), (53, 46, GREEN, GREEN_EDGE),
+        (118, 10, "#c4695c", "#9c5148"),
+        (118, 46, "#c4695c", "#9c5148"),
+    )
+    for i, (x, y, fill, edge) in enumerate(squares):
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="{y}" width="20" '
+            f'height="20" rx="2" fill="{fill}" stroke="{edge}" '
+            'stroke-width="1.8"/>'
         )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
@@ -1182,6 +1231,19 @@ def main():
          "Дом из шести палочек: квадрат и крыша"),
         ("p018_sticks_two_triangles", sticks_two_triangles_svg,
          "Два отдельных треугольника по три палочки"),
+        ("p019_number_cards_1_6", number_cards_one_to_six_svg,
+         "Числовой ряд от 1 до 6: напечатаны 1, 4, 6; три клетки пустые"),
+        ("p019_squares_4_2", squares_four_and_two_svg,
+         "Шесть квадратов: четыре зелёных 2 на 2 и два красных столбиком справа"),
+        ("p020_cards_2_minus_1",
+         lambda: subtraction_cards_svg("p020_cards_2_minus_1", 2),
+         "Карточки: 2 − 1 = 1"),
+        ("p020_cards_3_minus_1",
+         lambda: subtraction_cards_svg("p020_cards_3_minus_1", 3),
+         "Карточки: 3 − 1 = 2"),
+        ("p020_cards_4_minus_1",
+         lambda: subtraction_cards_svg("p020_cards_4_minus_1", 4),
+         "Карточки: 4 − 1 = 3"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

@@ -684,6 +684,21 @@ for (const block of pages[14].blocks) {
   block.prompt = "Набери число 5 из учебных монет с цифрами.";
   block.activity.unit = "единицы";
 }
+for (const block of pages[18].blocks) {
+  if (block.id === "p019-lesson04" && block.kind === "activity") {
+    block.prompt = "Набери число 6 из учебных монет с цифрами.";
+    block.activity.unit = "единицы";
+  }
+  if (block.id === "p019-lesson01" && block.kind === "work") {
+    block.fields = block.fields.map((field) => ({
+      ...field,
+      label:
+        field.id === "q1"
+          ? "Мальчик добавляет рыбку. Сколько рыбок станет в аквариуме?"
+          : "Девочка добавляет горшок. Сколько горшков с растениями станет на подоконнике?",
+    }));
+  }
+}
 if (!originalIllustrations) {
   const whiteHens = [
     [0.17, 0.55, 0.1, 0.16],
