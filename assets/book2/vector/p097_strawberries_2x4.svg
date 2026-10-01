@@ -1,38 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="345" height="85" viewBox="0 0 345 85">
 <g id="pair-0">
-<path id="twig-0" d="M17.1 17 Q43.1 8 69.1 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
-<path d="M30.1 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-0-0" d="M30.1 36 C22.1 31 14.1 37 15.1 47 C16.1 56 25.1 68 30.1 72 C35.1 68 44.1 56 45.1 47 C46.1 37 38.1 31 30.1 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-0-0" d="M19.1 38L25.1 34L30.1 37 L35.1 34L41.1 38L35.1 41 L30.1 38L25.1 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
-<path d="M56.1 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-0-1" d="M56.1 36 C48.1 31 40.1 37 41.1 47 C42.1 56 51.1 68 56.1 72 C61.1 68 70.1 56 71.1 47 C72.1 37 64.1 31 56.1 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-0-1" d="M45.1 38L51.1 34L56.1 37 L61.1 34L67.1 38L61.1 41 L56.1 38L51.1 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path id="twig-0" d="M17.1 17 Q46.1 7 69.1 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M29.1 19V32" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-0-0" d="M29.1 33 C21.1 28 13.1 34 14.1 44 C15.1 53 24.1 65 29.1 69 C34.1 65 43.1 53 44.1 44 C45.1 34 37.1 28 29.1 33Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-0-0" d="M18.1 35L24.1 31L29.1 34 L34.1 31L40.1 35L34.1 38 L29.1 35L24.1 38Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path d="M56.1 19V37" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-0-1" d="M56.1 38 C48.1 33 40.1 39 41.1 49 C42.1 58 51.1 70 56.1 74 C61.1 70 70.1 58 71.1 49 C72.1 39 64.1 33 56.1 38Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-0-1" d="M45.1 40L51.1 36L56.1 39 L61.1 36L67.1 40L61.1 43 L56.1 40L51.1 43Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
 </g>
 <g id="pair-1">
-<path id="twig-1" d="M103.4 17 Q129.4 8 155.4 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
-<path d="M116.4 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-1-0" d="M116.4 36 C108.4 31 100.4 37 101.4 47 C102.4 56 111.4 68 116.4 72 C121.4 68 130.4 56 131.4 47 C132.4 37 124.4 31 116.4 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-1-0" d="M105.4 38L111.4 34L116.4 37 L121.4 34L127.4 38L121.4 41 L116.4 38L111.4 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
-<path d="M142.4 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-1-1" d="M142.4 36 C134.4 31 126.4 37 127.4 47 C128.4 56 137.4 68 142.4 72 C147.4 68 156.4 56 157.4 47 C158.4 37 150.4 31 142.4 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-1-1" d="M131.4 38L137.4 34L142.4 37 L147.4 34L153.4 38L147.4 41 L142.4 38L137.4 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path id="twig-1" d="M100.4 20 Q129.4 10 152.4 22" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M112.4 22V35" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-1-0" d="M112.4 36 C104.4 31 96.4 37 97.4 47 C98.4 56 107.4 68 112.4 72 C117.4 68 126.4 56 127.4 47 C128.4 37 120.4 31 112.4 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-1-0" d="M101.4 38L107.4 34L112.4 37 L117.4 34L123.4 38L117.4 41 L112.4 38L107.4 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path d="M139.4 22V33" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-1-1" d="M139.4 34 C131.4 29 123.4 35 124.4 45 C125.4 54 134.4 66 139.4 70 C144.4 66 153.4 54 154.4 45 C155.4 35 147.4 29 139.4 34Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-1-1" d="M128.4 36L134.4 32L139.4 35 L144.4 32L150.4 36L144.4 39 L139.4 36L134.4 39Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
 </g>
 <g id="pair-2">
-<path id="twig-2" d="M189.6 17 Q215.6 8 241.6 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
-<path d="M202.6 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-2-0" d="M202.6 36 C194.6 31 186.6 37 187.6 47 C188.6 56 197.6 68 202.6 72 C207.6 68 216.6 56 217.6 47 C218.6 37 210.6 31 202.6 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-2-0" d="M191.6 38L197.6 34L202.6 37 L207.6 34L213.6 38L207.6 41 L202.6 38L197.6 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
-<path d="M228.6 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-2-1" d="M228.6 36 C220.6 31 212.6 37 213.6 47 C214.6 56 223.6 68 228.6 72 C233.6 68 242.6 56 243.6 47 C244.6 37 236.6 31 228.6 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-2-1" d="M217.6 38L223.6 34L228.6 37 L233.6 34L239.6 38L233.6 41 L228.6 38L223.6 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path id="twig-2" d="M193.6 16 Q222.6 6 245.6 18" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M205.6 18V38" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-2-0" d="M205.6 39 C197.6 34 189.6 40 190.6 50 C191.6 59 200.6 71 205.6 75 C210.6 71 219.6 59 220.6 50 C221.6 40 213.6 34 205.6 39Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-2-0" d="M194.6 41L200.6 37L205.6 40 L210.6 37L216.6 41L210.6 44 L205.6 41L200.6 44Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path d="M232.6 18V36" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-2-1" d="M232.6 37 C224.6 32 216.6 38 217.6 48 C218.6 57 227.6 69 232.6 73 C237.6 69 246.6 57 247.6 48 C248.6 38 240.6 32 232.6 37Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-2-1" d="M221.6 39L227.6 35L232.6 38 L237.6 35L243.6 39L237.6 42 L232.6 39L227.6 42Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
 </g>
 <g id="pair-3">
-<path id="twig-3" d="M275.9 17 Q301.9 8 327.9 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
-<path d="M288.9 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-3-0" d="M288.9 36 C280.9 31 272.9 37 273.9 47 C274.9 56 283.9 68 288.9 72 C293.9 68 302.9 56 303.9 47 C304.9 37 296.9 31 288.9 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-3-0" d="M277.9 38L283.9 34L288.9 37 L293.9 34L299.9 38L293.9 41 L288.9 38L283.9 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
-<path d="M314.9 19V35" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="berry-3-1" d="M314.9 36 C306.9 31 298.9 37 299.9 47 C300.9 56 309.9 68 314.9 72 C319.9 68 328.9 56 329.9 47 C330.9 37 322.9 31 314.9 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
-<path id="berry-calyx-3-1" d="M303.9 38L309.9 34L314.9 37 L319.9 34L325.9 38L319.9 41 L314.9 38L309.9 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path id="twig-3" d="M273.9 18 Q302.9 8 325.9 20" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M285.9 20V34" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-3-0" d="M285.9 35 C277.9 30 269.9 36 270.9 46 C271.9 55 280.9 67 285.9 71 C290.9 67 299.9 55 300.9 46 C301.9 36 293.9 30 285.9 35Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-3-0" d="M274.9 37L280.9 33L285.9 36 L290.9 33L296.9 37L290.9 40 L285.9 37L280.9 40Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path d="M312.9 20V32" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-3-1" d="M312.9 33 C304.9 28 296.9 34 297.9 44 C298.9 53 307.9 65 312.9 69 C317.9 65 326.9 53 327.9 44 C328.9 34 320.9 28 312.9 33Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-3-1" d="M301.9 35L307.9 31L312.9 34 L317.9 31L323.9 35L317.9 38 L312.9 35L307.9 38Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
 </g>
 </svg>

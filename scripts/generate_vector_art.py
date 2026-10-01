@@ -1670,32 +1670,34 @@ def paired_berries_svg(asset_id, pairs):
     parts = start_svg(width, height)
     step = width / pairs
     for i in range(pairs):
-        center = step * (i + 0.5)
+        center = step * (i + 0.5) + (0, -3, 4, -2, 2)[i % 5]
+        twig_y = (17, 20, 16, 18, 19)[i % 5]
         parts.append(f'<g id="pair-{i}">')
         parts.append(
-            f'<path id="twig-{i}" d="M{center-26:.1f} 17 '
-            f'Q{center:.1f} 8 {center+26:.1f} 19" '
+            f'<path id="twig-{i}" d="M{center-26:.1f} {twig_y} '
+            f'Q{center+3:.1f} {twig_y-10} {center+26:.1f} {twig_y+2}" '
             f'fill="none" stroke="{GREEN_EDGE}" '
             'stroke-width="2.2" stroke-linecap="round"/>'
         )
-        for j, x in enumerate((center-13, center+13)):
+        for j, x in enumerate((center-14, center+13)):
+            top = 36 + ((i * 3 + j * 5) % 7) - 3
             parts.append(
-                f'<path d="M{x:.1f} 19V35" fill="none" '
+                f'<path d="M{x:.1f} {twig_y+2}V{top-1}" fill="none" '
                 f'stroke="{GREEN_EDGE}" stroke-width="2"/>'
             )
             parts.append(
-                f'<path id="berry-{i}-{j}" d="M{x:.1f} 36 '
-                f'C{x-8:.1f} 31 {x-16:.1f} 37 {x-15:.1f} 47 '
-                f'C{x-14:.1f} 56 {x-5:.1f} 68 {x:.1f} 72 '
-                f'C{x+5:.1f} 68 {x+14:.1f} 56 {x+15:.1f} 47 '
-                f'C{x+16:.1f} 37 {x+8:.1f} 31 {x:.1f} 36Z" '
+                f'<path id="berry-{i}-{j}" d="M{x:.1f} {top} '
+                f'C{x-8:.1f} {top-5} {x-16:.1f} {top+1} {x-15:.1f} {top+11} '
+                f'C{x-14:.1f} {top+20} {x-5:.1f} {top+32} {x:.1f} {top+36} '
+                f'C{x+5:.1f} {top+32} {x+14:.1f} {top+20} {x+15:.1f} {top+11} '
+                f'C{x+16:.1f} {top+1} {x+8:.1f} {top-5} {x:.1f} {top}Z" '
                 'fill="#c97475" stroke="#965c60" stroke-width="1.4"/>'
             )
             parts.append(
                 f'<path id="berry-calyx-{i}-{j}" '
-                f'd="M{x-11:.1f} 38L{x-5:.1f} 34L{x:.1f} 37 '
-                f'L{x+5:.1f} 34L{x+11:.1f} 38L{x+5:.1f} 41 '
-                f'L{x:.1f} 38L{x-5:.1f} 41Z" '
+                f'd="M{x-11:.1f} {top+2}L{x-5:.1f} {top-2}L{x:.1f} {top+1} '
+                f'L{x+5:.1f} {top-2}L{x+11:.1f} {top+2}L{x+5:.1f} {top+5} '
+                f'L{x:.1f} {top+2}L{x-5:.1f} {top+5}Z" '
                 f'fill="{GREEN}" stroke="{GREEN_EDGE}" stroke-width="1"/>'
             )
         parts.append('</g>')
@@ -1708,23 +1710,25 @@ def paired_acorns_svg(asset_id, pairs):
     parts = start_svg(width, height)
     step = width / pairs
     for i in range(pairs):
-        center = step * (i + 0.5)
+        center = step * (i + 0.5) + (0, 3, -4, 2, -2)[i % 5]
+        twig_y = (22, 19, 24, 20, 23)[i % 5]
         parts.append(f'<g id="pair-{i}">')
         parts.append(
-            f'<path d="M{center-21:.1f} 22Q{center:.1f} 9 '
-            f'{center+21:.1f} 22" fill="none" stroke="{GREEN_EDGE}" '
+            f'<path d="M{center-21:.1f} {twig_y}Q{center-2:.1f} {twig_y-13} '
+            f'{center+21:.1f} {twig_y+1}" fill="none" stroke="{GREEN_EDGE}" '
             'stroke-width="2" stroke-linecap="round"/>'
         )
-        for j, x in enumerate((center-12, center+12)):
+        for j, x in enumerate((center-13, center+12)):
+            top = 37 + ((i * 4 + j * 5) % 7) - 3
             parts.append(
-                f'<path id="acorn-{i}-{j}" d="M{x-8:.1f} 37 '
-                f'Q{x:.1f} 32 {x+8:.1f} 37 '
-                f'Q{x+9:.1f} 56 {x:.1f} 66 '
-                f'Q{x-9:.1f} 56 {x-8:.1f} 37Z" '
+                f'<path id="acorn-{i}-{j}" d="M{x-8:.1f} {top} '
+                f'Q{x:.1f} {top-5} {x+8:.1f} {top} '
+                f'Q{x+9:.1f} {top+19} {x:.1f} {top+29} '
+                f'Q{x-9:.1f} {top+19} {x-8:.1f} {top}Z" '
                 'fill="#b69572" stroke="#7c654f" stroke-width="1.3"/>'
             )
             parts.append(
-                f'<path d="M{x-10:.1f} 39Q{x:.1f} 22 {x+10:.1f} 39" '
+                f'<path d="M{x-10:.1f} {top+2}Q{x:.1f} {top-15} {x+10:.1f} {top+2}" '
                 'fill="#879b75" stroke="#617751" stroke-width="1.2"/>'
             )
         parts.append('</g>')
@@ -1905,15 +1909,19 @@ def carrot_bunches_svg(asset_id, groups):
     for group in range(groups):
         center = step * (group + 0.5)
         parts.append(f'<g id="bunch-{group}">')
-        for i, dx in enumerate((-28, -14, 0, 14, 28)):
+        for i, (dx, top, lean) in enumerate((
+            (-28, 45, -7), (-15, 49, -3), (-1, 42, 2),
+            (14, 47, 6), (28, 44, 9),
+        )):
             x = center + dx
-            top = 47 + (i % 2) * 3
+            tip = x + lean
             parts.append(
                 f'<path id="carrot-{group}-{i}" d="M{x-9:.1f} {top} '
                 f'Q{x:.1f} {top-5} {x+9:.1f} {top} '
-                f'L{x+5:.1f} {height-32} Q{x+3:.1f} {height-17} '
-                f'{x:.1f} {height-8} Q{x-3:.1f} {height-17} '
-                f'{x-5:.1f} {height-32}Z" fill="#df985e" '
+                f'L{tip+5:.1f} {height-32} Q{tip+3:.1f} {height-17} '
+                f'{tip:.1f} {height-8-(i%3)} Q{tip-3:.1f} {height-17} '
+                f'{tip-5:.1f} {height-32}Z" '
+                f'fill="{("#df985e", "#d88b56", "#e2a267")[i%3]}" '
                 'stroke="#a77856" stroke-width="1.5"/>'
             )
             parts.append(

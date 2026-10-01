@@ -1,57 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="395" height="135" viewBox="0 0 395 135">
 <g id="bunch-0">
-<path id="carrot-0-0" d="M12.4 47 Q21.4 42 30.4 47 L26.4 103 Q24.4 118 21.4 127 Q18.4 118 16.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M21.4 44Q49.4 25 35.4 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-0-1" d="M26.4 50 Q35.4 45 44.4 50 L40.4 103 Q38.4 118 35.4 127 Q32.4 118 30.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M35.4 47Q49.4 25 42.4 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-0-2" d="M40.4 47 Q49.4 42 58.4 47 L54.4 103 Q52.4 118 49.4 127 Q46.4 118 44.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M49.4 44Q49.4 25 49.4 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-0-3" d="M54.4 50 Q63.4 45 72.4 50 L68.4 103 Q66.4 118 63.4 127 Q60.4 118 58.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M63.4 47Q49.4 25 56.4 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-0-4" d="M68.4 47 Q77.4 42 86.4 47 L82.4 103 Q80.4 118 77.4 127 Q74.4 118 72.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M77.4 44Q49.4 25 63.4 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-0-0" d="M12.4 45 Q21.4 40 30.4 45 L19.4 103 Q17.4 118 14.4 127 Q11.4 118 9.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M21.4 42Q49.4 25 35.4 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-0-1" d="M25.4 49 Q34.4 44 43.4 49 L36.4 103 Q34.4 118 31.4 126 Q28.4 118 26.4 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M34.4 46Q49.4 25 41.9 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-0-2" d="M39.4 42 Q48.4 37 57.4 42 L55.4 103 Q53.4 118 50.4 125 Q47.4 118 45.4 103Z" fill="#e2a267" stroke="#a77856" stroke-width="1.5"/>
+<path d="M48.4 39Q49.4 25 48.9 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-0-3" d="M54.4 47 Q63.4 42 72.4 47 L74.4 103 Q72.4 118 69.4 127 Q66.4 118 64.4 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M63.4 44Q49.4 25 56.4 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-0-4" d="M68.4 44 Q77.4 39 86.4 44 L91.4 103 Q89.4 118 86.4 126 Q83.4 118 81.4 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M77.4 41Q49.4 25 63.4 16" fill="none" stroke="#486537" stroke-width="2"/>
 <path id="bunch-greens-0" d="M44.4 43Q26.4 29 20.4 17Q35.4 14 45.4 35Q36.4 14 44.4 9Q53.4 18 50.4 38Q62.4 14 72.4 18Q67.4 31 56.4 43Z" fill="#a0b394" stroke="#486537" stroke-width="1.3"/>
 <path id="bunch-tie-0" d="M15.4 44 Q49.4 39 83.4 44" fill="none" stroke="#1f2433" stroke-width="3"/>
 </g>
 <g id="bunch-1">
-<path id="carrot-1-0" d="M111.1 47 Q120.1 42 129.1 47 L125.1 103 Q123.1 118 120.1 127 Q117.1 118 115.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M120.1 44Q148.1 25 134.1 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-1-1" d="M125.1 50 Q134.1 45 143.1 50 L139.1 103 Q137.1 118 134.1 127 Q131.1 118 129.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M134.1 47Q148.1 25 141.1 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-1-2" d="M139.1 47 Q148.1 42 157.1 47 L153.1 103 Q151.1 118 148.1 127 Q145.1 118 143.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M148.1 44Q148.1 25 148.1 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-1-3" d="M153.1 50 Q162.1 45 171.1 50 L167.1 103 Q165.1 118 162.1 127 Q159.1 118 157.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M162.1 47Q148.1 25 155.1 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-1-4" d="M167.1 47 Q176.1 42 185.1 47 L181.1 103 Q179.1 118 176.1 127 Q173.1 118 171.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M176.1 44Q148.1 25 162.1 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-1-0" d="M111.1 45 Q120.1 40 129.1 45 L118.1 103 Q116.1 118 113.1 127 Q110.1 118 108.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M120.1 42Q148.1 25 134.1 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-1-1" d="M124.1 49 Q133.1 44 142.1 49 L135.1 103 Q133.1 118 130.1 126 Q127.1 118 125.1 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M133.1 46Q148.1 25 140.6 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-1-2" d="M138.1 42 Q147.1 37 156.1 42 L154.1 103 Q152.1 118 149.1 125 Q146.1 118 144.1 103Z" fill="#e2a267" stroke="#a77856" stroke-width="1.5"/>
+<path d="M147.1 39Q148.1 25 147.6 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-1-3" d="M153.1 47 Q162.1 42 171.1 47 L173.1 103 Q171.1 118 168.1 127 Q165.1 118 163.1 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M162.1 44Q148.1 25 155.1 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-1-4" d="M167.1 44 Q176.1 39 185.1 44 L190.1 103 Q188.1 118 185.1 126 Q182.1 118 180.1 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M176.1 41Q148.1 25 162.1 16" fill="none" stroke="#486537" stroke-width="2"/>
 <path id="bunch-greens-1" d="M143.1 43Q125.1 29 119.1 17Q134.1 14 144.1 35Q135.1 14 143.1 9Q152.1 18 149.1 38Q161.1 14 171.1 18Q166.1 31 155.1 43Z" fill="#a0b394" stroke="#486537" stroke-width="1.3"/>
 <path id="bunch-tie-1" d="M114.1 44 Q148.1 39 182.1 44" fill="none" stroke="#1f2433" stroke-width="3"/>
 </g>
 <g id="bunch-2">
-<path id="carrot-2-0" d="M209.9 47 Q218.9 42 227.9 47 L223.9 103 Q221.9 118 218.9 127 Q215.9 118 213.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M218.9 44Q246.9 25 232.9 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-2-1" d="M223.9 50 Q232.9 45 241.9 50 L237.9 103 Q235.9 118 232.9 127 Q229.9 118 227.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M232.9 47Q246.9 25 239.9 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-2-2" d="M237.9 47 Q246.9 42 255.9 47 L251.9 103 Q249.9 118 246.9 127 Q243.9 118 241.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M246.9 44Q246.9 25 246.9 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-2-3" d="M251.9 50 Q260.9 45 269.9 50 L265.9 103 Q263.9 118 260.9 127 Q257.9 118 255.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M260.9 47Q246.9 25 253.9 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-2-4" d="M265.9 47 Q274.9 42 283.9 47 L279.9 103 Q277.9 118 274.9 127 Q271.9 118 269.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M274.9 44Q246.9 25 260.9 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-2-0" d="M209.9 45 Q218.9 40 227.9 45 L216.9 103 Q214.9 118 211.9 127 Q208.9 118 206.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M218.9 42Q246.9 25 232.9 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-2-1" d="M222.9 49 Q231.9 44 240.9 49 L233.9 103 Q231.9 118 228.9 126 Q225.9 118 223.9 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M231.9 46Q246.9 25 239.4 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-2-2" d="M236.9 42 Q245.9 37 254.9 42 L252.9 103 Q250.9 118 247.9 125 Q244.9 118 242.9 103Z" fill="#e2a267" stroke="#a77856" stroke-width="1.5"/>
+<path d="M245.9 39Q246.9 25 246.4 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-2-3" d="M251.9 47 Q260.9 42 269.9 47 L271.9 103 Q269.9 118 266.9 127 Q263.9 118 261.9 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M260.9 44Q246.9 25 253.9 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-2-4" d="M265.9 44 Q274.9 39 283.9 44 L288.9 103 Q286.9 118 283.9 126 Q280.9 118 278.9 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M274.9 41Q246.9 25 260.9 16" fill="none" stroke="#486537" stroke-width="2"/>
 <path id="bunch-greens-2" d="M241.9 43Q223.9 29 217.9 17Q232.9 14 242.9 35Q233.9 14 241.9 9Q250.9 18 247.9 38Q259.9 14 269.9 18Q264.9 31 253.9 43Z" fill="#a0b394" stroke="#486537" stroke-width="1.3"/>
 <path id="bunch-tie-2" d="M212.9 44 Q246.9 39 280.9 44" fill="none" stroke="#1f2433" stroke-width="3"/>
 </g>
 <g id="bunch-3">
-<path id="carrot-3-0" d="M308.6 47 Q317.6 42 326.6 47 L322.6 103 Q320.6 118 317.6 127 Q314.6 118 312.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M317.6 44Q345.6 25 331.6 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-3-1" d="M322.6 50 Q331.6 45 340.6 50 L336.6 103 Q334.6 118 331.6 127 Q328.6 118 326.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M331.6 47Q345.6 25 338.6 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-3-2" d="M336.6 47 Q345.6 42 354.6 47 L350.6 103 Q348.6 118 345.6 127 Q342.6 118 340.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M345.6 44Q345.6 25 345.6 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-3-3" d="M350.6 50 Q359.6 45 368.6 50 L364.6 103 Q362.6 118 359.6 127 Q356.6 118 354.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M359.6 47Q345.6 25 352.6 16" fill="none" stroke="#486537" stroke-width="2"/>
-<path id="carrot-3-4" d="M364.6 47 Q373.6 42 382.6 47 L378.6 103 Q376.6 118 373.6 127 Q370.6 118 368.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
-<path d="M373.6 44Q345.6 25 359.6 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-3-0" d="M308.6 45 Q317.6 40 326.6 45 L315.6 103 Q313.6 118 310.6 127 Q307.6 118 305.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M317.6 42Q345.6 25 331.6 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-3-1" d="M321.6 49 Q330.6 44 339.6 49 L332.6 103 Q330.6 118 327.6 126 Q324.6 118 322.6 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M330.6 46Q345.6 25 338.1 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-3-2" d="M335.6 42 Q344.6 37 353.6 42 L351.6 103 Q349.6 118 346.6 125 Q343.6 118 341.6 103Z" fill="#e2a267" stroke="#a77856" stroke-width="1.5"/>
+<path d="M344.6 39Q345.6 25 345.1 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-3-3" d="M350.6 47 Q359.6 42 368.6 47 L370.6 103 Q368.6 118 365.6 127 Q362.6 118 360.6 103Z" fill="#df985e" stroke="#a77856" stroke-width="1.5"/>
+<path d="M359.6 44Q345.6 25 352.6 16" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="carrot-3-4" d="M364.6 44 Q373.6 39 382.6 44 L387.6 103 Q385.6 118 382.6 126 Q379.6 118 377.6 103Z" fill="#d88b56" stroke="#a77856" stroke-width="1.5"/>
+<path d="M373.6 41Q345.6 25 359.6 16" fill="none" stroke="#486537" stroke-width="2"/>
 <path id="bunch-greens-3" d="M340.6 43Q322.6 29 316.6 17Q331.6 14 341.6 35Q332.6 14 340.6 9Q349.6 18 346.6 38Q358.6 14 368.6 18Q363.6 31 352.6 43Z" fill="#a0b394" stroke="#486537" stroke-width="1.3"/>
 <path id="bunch-tie-3" d="M311.6 44 Q345.6 39 379.6 44" fill="none" stroke="#1f2433" stroke-width="3"/>
 </g>
