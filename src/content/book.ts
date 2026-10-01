@@ -678,6 +678,11 @@ for (const block of pages[11].blocks) {
   if (block.id !== "p012-lesson01") continue;
   block.prompt = "Посчитай детей, отодвинутые бусины и точки.";
 }
+for (const block of pages[14].blocks) {
+  if (block.id !== "p015-lesson04" || block.kind !== "activity") continue;
+  block.prompt = "Набери число 5 из учебных монет с цифрами.";
+  block.activity.unit = "единицы";
+}
 for (const p of pages)
   for (const b of p.blocks) {
     if (p.number <= 12) continue;

@@ -852,6 +852,116 @@ def star_outline_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def nut_body_svg(identity, x, y, with_husk=False, radius=(14, 17)):
+    rx, ry = radius
+    parts = [
+        f'<ellipse id="{identity}" cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" '
+        'fill="#b18a66" stroke="#806248" stroke-width="2"/>'
+    ]
+    if with_husk:
+        parts.append(
+            f'<path id="nut-husk-{identity.split("-")[-1]}" '
+            f'd="M{x-14} {y-9} Q{x-14} {y-21} {x-3} {y-14} '
+            f'Q{x} {y-24} {x+5} {y-14} '
+            f'Q{x+16} {y-20} {x+14} {y-7} '
+            f'Q{x} {y-15} {x-14} {y-9}Z" '
+            'fill="#9baa7d" stroke="#718366" stroke-width="1.5"/>'
+        )
+    return parts
+
+
+def nuts_frame_svg(asset_id, centers):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="nut-frame" x="8" y="8" width="{width-16}" '
+        f'height="{height-16}" rx="3" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="2.4"/>'
+    )
+    for i, (x, y) in enumerate(centers):
+        parts.extend(nut_body_svg(f"nut-{i}", x, y, with_husk=True))
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def nuts_frame_one_svg():
+    return nuts_frame_svg("p015_nuts_frame_1",
+                          ((33, 60), (66, 45), (47, 102), (123, 71), (140, 108)))
+
+
+def nuts_frame_two_svg():
+    return nuts_frame_svg("p015_nuts_frame_2",
+                          ((30, 60), (67, 42), (135, 68), (103, 108), (146, 108)))
+
+
+def nuts_frame_three_svg():
+    return nuts_frame_svg("p015_nuts_frame_3",
+                          ((53, 38), (34, 75), (76, 65), (57, 108), (148, 93)))
+
+
+def nuts_frame_four_svg():
+    return nuts_frame_svg("p015_nuts_frame_4",
+                          ((48, 113), (90, 53), (140, 38), (100, 86), (140, 111)))
+
+
+def nuts_columns_svg():
+    width, height = dimensions("p015_nuts_columns_1_5")
+    parts = start_svg(width, height)
+    # Five bottom-aligned columns of 1, 2, 3, 4, 5 (15 nuts in all).
+    for col, x in enumerate((44, 102, 160, 226, 292)):
+        count = col + 1
+        for row in range(count):
+            y = 184 - (count - row - 1) * 37
+            parts.extend(nut_body_svg(f"column-nut-{col}-{row}", x, y,
+                                      radius=(12, 14)))
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def squares_four_plus_one_svg():
+    width, height = dimensions("p015_squares_4_1")
+    parts = start_svg(width, height)
+    squares = (
+        (16, 10, "#c18470", "#946555"),
+        (54, 10, "#c18470", "#946555"),
+        (16, 45, "#c18470", "#946555"),
+        (54, 45, "#c18470", "#946555"),
+        (113, 45, GREEN, GREEN_EDGE),
+    )
+    for i, (x, y, fill, edge) in enumerate(squares):
+        parts.append(
+            f'<rect id="square-{i}" x="{x}" y="{y}" width="20" '
+            f'height="20" rx="2" fill="{fill}" stroke="{edge}" '
+            'stroke-width="1.8"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def addition_cards_svg(asset_id, first, complete):
+    width, height = dimensions(asset_id)
+    labels = [str(first), "+", "1", "="]
+    positions = [12, 64, 116, 168]
+    if complete:
+        labels.append(str(first + 1))
+        positions = [9, 62, 115, 168, 221]
+    y = (height - 40) // 2
+    parts = start_svg(width, height)
+    for i, (x, label) in enumerate(zip(positions, labels)):
+        parts.append(
+            f'<rect id="card-{i}" x="{x}" y="{y}" width="40" '
+            'height="40" rx="3" fill="#faf8f2" '
+            f'stroke="{FRAME}" stroke-width="1.8"/>'
+        )
+        parts.append(
+            f'<text id="card-label-{i}" x="{x+20}" y="{y+31}" '
+            'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="31" fill="{NOTEBOOK_INK}">{label}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -946,6 +1056,42 @@ def main():
          "Пять красных звёзд: три сверху, две снизу"),
         ("p014_star_outline", star_outline_svg,
          "Контур одной пятиконечной звезды"),
+        ("p015_nuts_columns_1_5", nuts_columns_svg,
+         "Лесенка из пяти столбиков орехов: 1, 2, 3, 4, 5; всего 15"),
+        ("p015_nuts_frame_1", nuts_frame_one_svg,
+         "Пять орехов в рамке: 3 + 2"),
+        ("p015_nuts_frame_2", nuts_frame_two_svg,
+         "Пять орехов в рамке: 2 + 3"),
+        ("p015_nuts_frame_3", nuts_frame_three_svg,
+         "Пять орехов в рамке: 4 + 1"),
+        ("p015_nuts_frame_4", nuts_frame_four_svg,
+         "Пять орехов в рамке: 1 + 4"),
+        ("p015_squares_4_1", squares_four_plus_one_svg,
+         "Четыре коралловых квадрата и один зелёный: 4 + 1"),
+        ("p016_cards_1_plus_1_blank",
+         lambda: addition_cards_svg("p016_cards_1_plus_1_blank", 1, False),
+         "Карточки: 1 + 1 =, без результата"),
+        ("p016_cards_1_plus_1_eq_2",
+         lambda: addition_cards_svg("p016_cards_1_plus_1_eq_2", 1, True),
+         "Карточки: 1 + 1 = 2"),
+        ("p016_cards_2_plus_1_blank",
+         lambda: addition_cards_svg("p016_cards_2_plus_1_blank", 2, False),
+         "Карточки: 2 + 1 =, без результата"),
+        ("p016_cards_2_plus_1_eq_3",
+         lambda: addition_cards_svg("p016_cards_2_plus_1_eq_3", 2, True),
+         "Карточки: 2 + 1 = 3"),
+        ("p016_cards_3_plus_1_blank",
+         lambda: addition_cards_svg("p016_cards_3_plus_1_blank", 3, False),
+         "Карточки: 3 + 1 =, без результата"),
+        ("p016_cards_3_plus_1_eq_4",
+         lambda: addition_cards_svg("p016_cards_3_plus_1_eq_4", 3, True),
+         "Карточки: 3 + 1 = 4"),
+        ("p016_cards_4_plus_1_blank",
+         lambda: addition_cards_svg("p016_cards_4_plus_1_blank", 4, False),
+         "Карточки: 4 + 1 =, без результата"),
+        ("p016_cards_4_plus_1_eq_5",
+         lambda: addition_cards_svg("p016_cards_4_plus_1_eq_5", 4, True),
+         "Карточки: 4 + 1 = 5"),
     ):
         svg, width, height = draw()
         register(asset_id, svg, width, height, alt)

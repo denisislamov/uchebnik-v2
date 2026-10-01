@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 16 — было / стало</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #263443;
+        background: #eef1ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px 20px 48px;
+      }
+      main {
+        max-width: 1180px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font:
+          600 32px/1.2 Georgia,
+          serif;
+      }
+      p {
+        margin: 0 0 22px;
+        color: #5b6872;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .items {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      article {
+        background: white;
+        border: 1px solid #dce2e0;
+        border-radius: 12px;
+        padding: 16px;
+      }
+      article.hero {
+        grid-column: 1/-1;
+      }
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      figure {
+        margin: 0;
+        min-width: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        color: #526169;
+      }
+      .frame {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 180px;
+        padding: 8px;
+        background: #fcfaf5;
+        border: 1px solid #e6e0d4;
+        border-radius: 8px;
+      }
+      .hero .frame {
+        height: 340px;
+      }
+      .frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      @media (max-width: 860px) {
+        .items {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 18px 12px;
+        }
+        .items {
+          grid-template-columns: 1fr;
+        }
+        .hero .frame {
+          height: 220px;
+        }
+      }
+
+      .items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .frame {
+        height: 260px;
+      }
+      @media (max-width: 600px) {
+        .items {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 16 · было / стало</h1>
+      <p>
+        Современные куклы и мебель; все группы животных и равенства 1 + 1 … 4 +
+        1 сохраняются.
+      </p>
+      <div class="items">
+        <article>
+          <h2>Две куклы: 1 + 1</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_two_dolls.jpg"
+                  alt="Исходный: Две куклы: 1 + 1"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p016_two_dolls.png"
+                  alt="Новый: Две куклы: 1 + 1"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Три щенка: 2 + 1</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_three_puppies.jpg"
+                  alt="Исходный: Три щенка: 2 + 1"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p016_three_puppies.png"
+                  alt="Новый: Три щенка: 2 + 1"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Четыре козы: 3 + 1</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_four_goats.jpg"
+                  alt="Исходный: Четыре козы: 3 + 1"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p016_four_goats.png"
+                  alt="Новый: Четыре козы: 3 + 1"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Пять котят: 4 + 1</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_five_kittens.jpg"
+                  alt="Исходный: Пять котят: 4 + 1"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/p016_five_kittens.png"
+                  alt="Новый: Пять котят: 4 + 1"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 1 + 1 = 2</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_1_plus_1_eq_2.jpg"
+                  alt="Исходный: Карточка 1 + 1 = 2"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_1_plus_1_eq_2.svg"
+                  alt="Новый: Карточка 1 + 1 = 2"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 2 + 1 = 3</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_2_plus_1_eq_3.jpg"
+                  alt="Исходный: Карточка 2 + 1 = 3"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_2_plus_1_eq_3.svg"
+                  alt="Новый: Карточка 2 + 1 = 3"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 3 + 1 = 4</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_3_plus_1_eq_4.jpg"
+                  alt="Исходный: Карточка 3 + 1 = 4"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_3_plus_1_eq_4.svg"
+                  alt="Новый: Карточка 3 + 1 = 4"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 4 + 1 = 5</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_4_plus_1_eq_5.jpg"
+                  alt="Исходный: Карточка 4 + 1 = 5"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_4_plus_1_eq_5.svg"
+                  alt="Новый: Карточка 4 + 1 = 5"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 1 + 1 = …</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_1_plus_1_blank.jpg"
+                  alt="Исходный: Карточка 1 + 1 = …"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_1_plus_1_blank.svg"
+                  alt="Новый: Карточка 1 + 1 = …"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 2 + 1 = …</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_2_plus_1_blank.jpg"
+                  alt="Исходный: Карточка 2 + 1 = …"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_2_plus_1_blank.svg"
+                  alt="Новый: Карточка 2 + 1 = …"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 3 + 1 = …</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_3_plus_1_blank.jpg"
+                  alt="Исходный: Карточка 3 + 1 = …"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_3_plus_1_blank.svg"
+                  alt="Новый: Карточка 3 + 1 = …"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+        <article>
+          <h2>Карточка 4 + 1 = …</h2>
+          <div class="pair">
+            <figure>
+              <figcaption>Было</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book/p016_cards_4_plus_1_blank.jpg"
+                  alt="Исходный: Карточка 4 + 1 = …"
+                />
+              </div>
+            </figure>
+            <figure>
+              <figcaption>Стало</figcaption>
+              <div class="frame">
+                <img
+                  src="../../assets/book2/vector/p016_cards_4_plus_1_blank.svg"
+                  alt="Новый: Карточка 4 + 1 = …"
+                />
+              </div>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </main>
+  </body>
+</html>

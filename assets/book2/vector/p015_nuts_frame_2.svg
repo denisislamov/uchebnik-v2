@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="187" height="150" viewBox="0 0 187 150">
+<rect id="nut-frame" x="8" y="8" width="171" height="134" rx="3" fill="none" stroke="#1f2433" stroke-width="2.4"/>
+<ellipse id="nut-0" cx="30" cy="60" rx="14" ry="17" fill="#b18a66" stroke="#806248" stroke-width="2"/>
+<path id="nut-husk-0" d="M16 51 Q16 39 27 46 Q30 36 35 46 Q46 40 44 53 Q30 45 16 51Z" fill="#9baa7d" stroke="#718366" stroke-width="1.5"/>
+<ellipse id="nut-1" cx="67" cy="42" rx="14" ry="17" fill="#b18a66" stroke="#806248" stroke-width="2"/>
+<path id="nut-husk-1" d="M53 33 Q53 21 64 28 Q67 18 72 28 Q83 22 81 35 Q67 27 53 33Z" fill="#9baa7d" stroke="#718366" stroke-width="1.5"/>
+<ellipse id="nut-2" cx="135" cy="68" rx="14" ry="17" fill="#b18a66" stroke="#806248" stroke-width="2"/>
+<path id="nut-husk-2" d="M121 59 Q121 47 132 54 Q135 44 140 54 Q151 48 149 61 Q135 53 121 59Z" fill="#9baa7d" stroke="#718366" stroke-width="1.5"/>
+<ellipse id="nut-3" cx="103" cy="108" rx="14" ry="17" fill="#b18a66" stroke="#806248" stroke-width="2"/>
+<path id="nut-husk-3" d="M89 99 Q89 87 100 94 Q103 84 108 94 Q119 88 117 101 Q103 93 89 99Z" fill="#9baa7d" stroke="#718366" stroke-width="1.5"/>
+<ellipse id="nut-4" cx="146" cy="108" rx="14" ry="17" fill="#b18a66" stroke="#806248" stroke-width="2"/>
+<path id="nut-husk-4" d="M132 99 Q132 87 143 94 Q146 84 151 94 Q162 88 160 101 Q146 93 132 99Z" fill="#9baa7d" stroke="#718366" stroke-width="1.5"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="215" height="75" viewBox="0 0 215 75">
+<rect id="card-0" x="12" y="17" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-0" x="32" y="48" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">4</text>
+<rect id="card-1" x="64" y="17" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-1" x="84" y="48" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">+</text>
+<rect id="card-2" x="116" y="17" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-2" x="136" y="48" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">1</text>
+<rect id="card-3" x="168" y="17" width="40" height="40" rx="3" fill="#faf8f2" stroke="#6b7280" stroke-width="1.8"/>
+<text id="card-label-3" x="188" y="48" text-anchor="middle" font-family="Andika_700Bold" font-size="31" fill="#1f2433">=</text>
+</svg>

@@ -45,4 +45,10 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p013_truck': { source: require('../../assets/book2/p013_truck.png'), width: 240, height: 148, alt: "один современный двухосный грузовик: два ближних колеса видны, два дальних подразумеваются" },
   'p014_boys_queue': { source: require('../../assets/book2/p014_boys_queue.png'), width: 700, height: 431, alt: "пятеро мальчиков в современной школе: четверо стоят в очереди к умывальнику, пятый помогает им справа" },
   'p014_apple_blossom': { source: require('../../assets/book2/p014_apple_blossom.png'), width: 160, height: 160, alt: "один нежно-розовый цветок яблони с пятью отдельными лепестками" },
+  'p015_girl_daisies_1': { source: require('../../assets/book2/p015_girl_daisies_1.png'), width: 320, height: 380, alt: "девочка в современной одежде стоит у куста с пятью ромашками" },
+  'p015_girl_daisies_2': { source: require('../../assets/book2/p015_girl_daisies_2.png'), width: 320, height: 380, alt: "та же девочка держит одну сорванную ромашку, четыре остаются на кусте" },
+  'p016_two_dolls': { source: require('../../assets/book2/p016_two_dolls.png'), width: 320, height: 253, alt: "две современные мягкие куклы сидят по одной на двух отдельных деревянных стульях" },
+  'p016_three_puppies': { source: require('../../assets/book2/p016_three_puppies.png'), width: 320, height: 241, alt: "три щенка: два играют вместе слева, один сидит отдельно справа" },
+  'p016_four_goats': { source: require('../../assets/book2/p016_four_goats.png'), width: 320, height: 256, alt: "четыре козы: три стоят вместе впереди, одна отдельно вдали справа" },
+  'p016_five_kittens': { source: require('../../assets/book2/p016_five_kittens.png'), width: 320, height: 273, alt: "пять котят: четыре на полу под современным столом, один на столешнице" },
 };

@@ -1046,3 +1046,143 @@ test("page 14 stars preserve three above two and one five-point outline", async 
   assert.equal(shape.points.split(" ").length, 10);
   assert.equal(shape.fill, "none");
 });
+
+test("page 15 nut frames keep 3+2, 2+3, 4+1, 1+4 at existing question marks", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const frames = [
+    { id: "p015_nuts_frame_1", size: [195, 150], groups: [3, 2] },
+    { id: "p015_nuts_frame_2", size: [187, 150], groups: [2, 3] },
+    { id: "p015_nuts_frame_3", size: [190, 150], groups: [4, 1] },
+    { id: "p015_nuts_frame_4", size: [192, 150], groups: [1, 4] },
+  ];
+  const styles: string[][] = [];
+  for (const { id, size, groups } of frames) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], size);
+    assert.match(art.xml, /<rect id="nut-frame"/);
+    const nuts = [...art.xml.matchAll(/<ellipse id="nut-\d+"[^>]*\/>/g)].map(
+      (match) => attributes(match[0]),
+    );
+    assert.equal(nuts.length, 5);
+    assert.equal([...art.xml.matchAll(/id="nut-husk-\d+"/g)].length, 5);
+    styles.push(nuts.map((nut) => `${nut.rx}/${nut.ry}/${nut.fill}`));
+    const block = pages[14].blocks.find((candidate) =>
+      candidate.images.includes(id),
+    );
+    if (!block || block.kind !== "work")
+      throw new Error(`${id}: work block missing`);
+    const marks = block.fields.find((field) => field.id === "q3")?.marks
+      ?.shapes;
+    assert.equal(marks?.length, 5);
+    for (let i = 0; i < nuts.length; i++) {
+      assert.ok(
+        Math.abs(Number(nuts[i].cx) / art.width - marks![i][0]) < 0.012,
+      );
+      assert.ok(
+        Math.abs(Number(nuts[i].cy) / art.height - marks![i][1]) < 0.012,
+      );
+    }
+    assert.match(art.alt, new RegExp(`${groups[0]} \\+ ${groups[1]}`));
+  }
+  for (const style of styles.slice(1)) assert.deepEqual(style, styles[0]);
+});
+
+test("page 15 nut ladder has columns of one through five, fifteen total", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p015_nuts_columns_1_5;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p015_nuts_columns_1_5.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [395, 218]);
+  const nuts = [
+    ...art.xml.matchAll(/<ellipse id="column-nut-(\d+)-(\d+)"[^>]*\/>/g),
+  ].map((match) => ({
+    col: Number(match[1]),
+    row: Number(match[2]),
+    x: Number(attributes(match[0]).cx),
+    y: Number(attributes(match[0]).cy),
+  }));
+  assert.equal(nuts.length, 15);
+  assert.deepEqual(
+    Array.from(
+      { length: 5 },
+      (_, col) => nuts.filter((nut) => nut.col === col).length,
+    ),
+    [1, 2, 3, 4, 5],
+  );
+  for (let col = 0; col < 5; col++) {
+    const column = nuts.filter((nut) => nut.col === col);
+    assert.deepEqual(
+      column.map((nut) => nut.row),
+      Array.from({ length: col + 1 }, (_, row) => row),
+    );
+    assert.ok(column.every((nut) => nut.x === column[0].x));
+    assert.equal(column.at(-1)?.y, 184);
+    assert.ok(
+      col === 0 || column[0].x > nuts.find((nut) => nut.col === col - 1)!.x,
+    );
+  }
+  assert.doesNotMatch(art.xml, /pencil|карандаш|scribble/i);
+});
+
+test("page 15 squares show four coral squares and one green square", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const art = vectorAssets.p015_squares_4_1;
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p015_squares_4_1.svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [145, 80]);
+  const squares = [...art.xml.matchAll(/<rect id="square-\d+"[^>]*\/>/g)].map(
+    (match) => attributes(match[0]),
+  );
+  assert.equal(squares.length, 5);
+  assert.deepEqual(
+    squares.map((square) => square.fill),
+    ["#c18470", "#c18470", "#c18470", "#c18470", "#5d863d"],
+  );
+  assert.equal(squares[0].x, squares[2].x);
+  assert.equal(squares[1].x, squares[3].x);
+  assert.equal(squares[0].y, squares[1].y);
+  assert.equal(squares[2].y, squares[3].y);
+  assert.ok(Number(squares[4].x) > Number(squares[3].x) + 40);
+});
+
+test("page 16 arithmetic cards keep all four addition examples and blank forms", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (let first = 1; first <= 4; first++) {
+    for (const complete of [false, true]) {
+      const id = `p016_cards_${first}_plus_1_${complete ? `eq_${first + 1}` : "blank"}`;
+      const art = vectorAssets[id];
+      assert.ok(art, id);
+      assert.equal(
+        art.xml,
+        readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+      );
+      assert.deepEqual(
+        [art.width, art.height],
+        [complete ? (first < 3 ? 270 : 265) : 215, complete ? 80 : 75],
+      );
+      const cards = [...art.xml.matchAll(/<rect id="card-\d+"[^>]*\/>/g)];
+      const glyphs = [
+        ...art.xml.matchAll(/<text id="card-label-\d+"[^>]*>([^<]+)<\/text>/g),
+      ].map((match) => match[1]);
+      assert.equal(cards.length, complete ? 5 : 4, id);
+      assert.deepEqual(
+        glyphs,
+        complete
+          ? [String(first), "+", "1", "=", String(first + 1)]
+          : [String(first), "+", "1", "="],
+      );
+      assert.match(art.xml, /font-family="Andika_700Bold"/);
+    }
+  }
+});
