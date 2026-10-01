@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import type { Block, Hotspot } from "../content/types";
 import { assets } from "../content/assetSet";
+import { usesLegacyCountingCard } from "../content/selectBookArt";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
 import { useCoachAnchor } from "./GestureCoach";
@@ -42,7 +43,10 @@ function MeaningCard({
           gap: 12,
         }}
       >
-        {block.images[target.image].includes("abacus_") ? (
+        {usesLegacyCountingCard(
+          block.images[target.image],
+          assets[block.images[target.image]],
+        ) ? (
           <View
             testID="modern-meaning-tokens"
             style={{

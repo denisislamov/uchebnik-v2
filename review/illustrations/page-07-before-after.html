@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 7 — было / стало</title>
+    <style>
+      :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #263443; background: #eef1ef; }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 32px 20px 48px; }
+      main { max-width: 1180px; margin: auto; }
+      h1 { margin: 0 0 8px; font: 600 32px/1.2 Georgia, serif; }
+      p { margin: 0 0 22px; color: #5b6872; font-size: 15px; line-height: 1.5; }
+      .items { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+      article { background: white; border: 1px solid #dce2e0; border-radius: 12px; padding: 16px; }
+      article.hero { grid-column: 1 / -1; }
+      h2 { margin: 0 0 12px; font-size: 18px; }
+      .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      figure { margin: 0; min-width: 0; }
+      figcaption { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: #526169; }
+      .frame { display: flex; align-items: center; justify-content: center; height: 180px; padding: 8px; background: #fcfaf5; border: 1px solid #e6e0d4; border-radius: 8px; }
+      .hero .frame { height: 340px; }
+      .frame img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
+      @media (max-width: 860px) { .items { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 600px) { body { padding: 18px 12px; } .items { grid-template-columns: 1fr; } .hero .frame { height: 220px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 7 · было / стало</h1>
+      <p>Один ребёнок на переднем плане, группа вдали, один гриб и современные учебные счётные предметы.</p>
+      <div class="items" id="items"></div>
+    </main>
+    <script>
+      const items = [
+        ["Один и много", "p007_boy_one_mushroom_forest", "png", true],
+        ["Один гриб", "p007_one_mushroom", "png"],
+        ["Одна белка", "p007_one_squirrel", "png"],
+        ["Один ёж", "p007_one_hedgehog", "png"],
+        ["Счётная линейка", "p007_abacus_1", "svg"],
+        ["Одна точка", "p007_domino_1", "svg"],
+        ["Зелёный кружок", "p007_one_green_dot", "svg"],
+        ["Цифра 1", "p007_digit_1_print", "svg"],
+        ["Учебная монета", "p007_coin_1_kopek", "svg"],
+        ["Пишем 1", "p007_digit_1_sample", "svg"],
+        ["Рисуем гриб", "p007_mushroom_draw", "svg"],
+      ];
+      document.getElementById("items").innerHTML = items.map(([label, id, ext, hero]) => `
+        <article class="${hero ? "hero" : ""}"><h2>${label}</h2><div class="pair">
+          <figure><figcaption>Было</figcaption><div class="frame"><img src="../../assets/book/${id}.jpg" alt="Исходный ${label}" /></div></figure>
+          <figure><figcaption>Стало</figcaption><div class="frame"><img src="../../assets/book2/${ext === "svg" ? "vector/" : ""}${id}${ext === "svg" ? ".svg" : "@2x.png"}" alt="Обновлённый ${label}" /></div></figure>
+        </div></article>`).join("");
+    </script>
+  </body>
+</html>

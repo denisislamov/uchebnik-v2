@@ -15,4 +15,11 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p005_field_harvest_sacks': { source: require('../../assets/book2/p005_field_harvest_sacks.png'), width: 795, height: 550, alt: "современный огород: дети и взрослые собирают овощи; вдоль дорожки стоят ровно шесть отдельных ящиков с урожаем" },
   'p005_bowl_cucumbers': { source: require('../../assets/book2/p005_bowl_cucumbers.png'), width: 345, height: 200, alt: "семь отдельных огурцов перед пустой миской: три сзади и четыре спереди" },
   'p005_basket_tomatoes': { source: require('../../assets/book2/p005_basket_tomatoes.png'), width: 340, height: 200, alt: "восемь отдельных помидоров перед пустым ящиком: четыре сзади и четыре спереди" },
+  'p006_children_planting_garden': { source: require('../../assets/book2/p006_children_planting_garden.png'), width: 768, height: 512, alt: "шесть детей в трёх парах работают в саду у современной школы: сажают деревце, поливают клумбу и несут лоток с рассадой" },
+  'p006_blackboard_flag_star': { source: require('../../assets/book2/p006_blackboard_flag_star.png'), width: 400, height: 375, alt: "ребёнок у современной школьной доски: флажок нарисован вверху слева, жёлтая звезда — вверху справа" },
+  'p006_blackboard_house_tree': { source: require('../../assets/book2/p006_blackboard_house_tree.png'), width: 375, height: 375, alt: "девочка у современной школьной доски: домик нарисован внизу слева, ёлочка — внизу справа" },
+  'p007_boy_one_mushroom_forest': { source: require('../../assets/book2/p007_boy_one_mushroom_forest.png'), width: 760, height: 555, alt: "один мальчик и один гриб у дерева на переднем плане; в глубине леса вместе идут четверо детей" },
+  'p007_one_mushroom': { source: require('../../assets/book2/p007_one_mushroom.png'), width: 210, height: 220, alt: "один коричневый гриб с широкой шляпкой на небольшом пятне травы" },
+  'p007_one_squirrel': { source: require('../../assets/book2/p007_one_squirrel.png'), width: 210, height: 150, alt: "одна рыжая белка с пушистым хвостом сидит на ветке" },
+  'p007_one_hedgehog': { source: require('../../assets/book2/p007_one_hedgehog.png'), width: 220, height: 160, alt: "один серо-коричневый ёж идёт по небольшому пятну травы" },
 };

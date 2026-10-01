@@ -3,6 +3,7 @@ import { useCoachAnchor } from "./GestureCoach";
 import { View } from "react-native";
 import Svg, { Ellipse } from "react-native-svg";
 import { assets } from "../content/assetSet";
+import { usesLegacyCountingCard } from "../content/selectBookArt";
 import { BookArtwork } from "./BookArtwork";
 import { CELL } from "../lib/grid";
 import { colors as c } from "../theme";
@@ -30,9 +31,10 @@ export function BookImage({
   // ratio's; in a narrow column that left white bands above and below.
   const [frameWidth, setFrameWidth] = useState(0);
   useCoachAnchor(`image:${id}`, frame);
-  const count = /abacus_(\d+)$/.exec(id);
-  if (count) {
-    const n = Number(count[1]);
+  const a = assets[id];
+  if (!a) return null;
+  if (usesLegacyCountingCard(id, a)) {
+    const n = Number(/abacus_(\d+)$/.exec(id)![1]);
     return (
       <View
         ref={frame}
@@ -84,8 +86,6 @@ export function BookImage({
       </View>
     );
   }
-  const a = assets[id];
-  if (!a) return null;
   // Scans blur when enlarged; vector diagrams stay sharp at task size.
   if (!("xml" in a)) maxHeight = Math.min(maxHeight, a.height * MAX_SCALE);
   return (

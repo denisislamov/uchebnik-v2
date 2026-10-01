@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="790" height="170" viewBox="0 0 790 170">
+<path id="notebook-grid" d="M18 4V166 M48 4V166 M78 4V166 M108 4V166 M138 4V166 M168 4V166 M198 4V166 M228 4V166 M258 4V166 M288 4V166 M318 4V166 M348 4V166 M378 4V166 M408 4V166 M438 4V166 M468 4V166 M498 4V166 M528 4V166 M558 4V166 M588 4V166 M618 4V166 M648 4V166 M678 4V166 M708 4V166 M738 4V166 M768 4V166 M4 20H786 M4 50H786 M4 80H786 M4 110H786 M4 140H786" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<path id="p5-dash-0" d="M48 32h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-0" cx="291" cy="32" r="3.4" fill="#1f2433"/>
+<path id="p5-dash-1" d="M48 86h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-1" cx="291" cy="86" r="3.4" fill="#1f2433"/>
+<path id="p5-slash-0" d="M527 87l23 -57" fill="none" stroke="#1f2433" stroke-width="3.1" stroke-linecap="round"/>
+<path id="p5-dash-2" d="M108 32h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-2" cx="351" cy="32" r="3.4" fill="#1f2433"/>
+<path id="p5-dash-3" d="M108 86h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-3" cx="351" cy="86" r="3.4" fill="#1f2433"/>
+<path id="p5-slash-1" d="M587 87l23 -57" fill="none" stroke="#1f2433" stroke-width="3.1" stroke-linecap="round"/>
+<path id="p5-dash-4" d="M168 32h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-4" cx="411" cy="32" r="3.4" fill="#1f2433"/>
+<path id="p5-dash-5" d="M168 86h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-5" cx="411" cy="86" r="3.4" fill="#1f2433"/>
+<path id="p5-slash-2" d="M647 87l23 -57" fill="none" stroke="#1f2433" stroke-width="3.1" stroke-linecap="round"/>
+<path id="p5-dash-6" d="M228 32h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-6" cx="471" cy="32" r="3.4" fill="#1f2433"/>
+<path id="p5-dash-7" d="M228 86h29" fill="none" stroke="#1f2433" stroke-width="3.2" stroke-linecap="round"/>
+<circle id="p5-black-dot-7" cx="471" cy="86" r="3.4" fill="#1f2433"/>
+<path id="p5-slash-3" d="M707 87l23 -57" fill="none" stroke="#1f2433" stroke-width="3.1" stroke-linecap="round"/>
+<path id="p5-wave-0" d="M48 145 C56 136 64 137 71 141 S85 146 96 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-0" cx="92" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-1" d="M108 145 C116 136 124 137 131 141 S145 146 156 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-1" cx="152" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-2" d="M168 145 C176 136 184 137 191 141 S205 146 216 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-2" cx="212" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-3" d="M228 145 C236 136 244 137 251 141 S265 146 276 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-3" cx="272" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-4" d="M288 145 C296 136 304 137 311 141 S325 146 336 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-4" cx="332" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-5" d="M348 145 C356 136 364 137 371 141 S385 146 396 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-5" cx="392" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-6" d="M408 145 C416 136 424 137 431 141 S445 146 456 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-6" cx="452" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-7" d="M468 145 C476 136 484 137 491 141 S505 146 516 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-7" cx="512" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-8" d="M528 145 C536 136 544 137 551 141 S565 146 576 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-8" cx="572" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-9" d="M588 145 C596 136 604 137 611 141 S625 146 636 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-9" cx="632" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-10" d="M648 145 C656 136 664 137 671 141 S685 146 696 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+<circle id="p5-red-dot-10" cx="692" cy="144" r="3.4" fill="#c8352e"/>
+<path id="p5-wave-11" d="M708 145 C716 136 724 137 731 141 S745 146 756 140" fill="none" stroke="#1f2433" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

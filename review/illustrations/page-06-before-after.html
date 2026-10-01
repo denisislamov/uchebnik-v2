@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Страница 5 — было / стало</title>
+    <title>Страница 6 — было / стало</title>
     <style>
       :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #263443; background: #eef1ef; }
       * { box-sizing: border-box; }
@@ -16,23 +16,23 @@
       .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
       figure { margin: 0; min-width: 0; }
       figcaption { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; color: #526169; }
-      .frame { display: flex; align-items: center; justify-content: center; height: 360px; padding: 16px; background: #fcfaf5; border: 1px solid #e6e0d4; border-radius: 8px; }
+      .frame { display: flex; align-items: center; justify-content: center; height: 400px; padding: 16px; background: #fcfaf5; border: 1px solid #e6e0d4; border-radius: 8px; }
       .frame img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
-      @media (max-width: 680px) { body { padding: 18px 12px; } .pair { grid-template-columns: 1fr; } .frame { height: 250px; } }
+      @media (max-width: 680px) { body { padding: 18px 12px; } .pair { grid-template-columns: 1fr; } .frame { height: 280px; } }
     </style>
   </head>
   <body>
     <main>
-      <h1>Страница 5 · было / стало</h1>
-      <p>Современный огород и отдельные предметы для счёта. Новая сцена задаёт проверяемый ответ: 6 ящиков.</p>
+      <h1>Страница 6 · было / стало</h1>
+      <p>Та же современная школа, шесть детей и четыре символа в исходных четвертях досок.</p>
       <div id="items"></div>
     </main>
     <script>
       const items = [
-        ["Огород", "Шесть отдельных ящиков с урожаем", "p005_field_harvest_sacks", "png"],
-        ["Огурцы", "Семь отдельных огурцов", "p005_bowl_cucumbers", "png"],
-        ["Помидоры", "Восемь отдельных помидоров", "p005_basket_tomatoes", "png"],
-        ["Пропись", "Штрихи, точки и волны на чистой сетке", "p005_writing_strip_dashes_dots_slashes", "svg"],
+        ["Школьный сад", "Шесть детей в трёх парах", "p006_children_planting_garden", "png"],
+        ["Верх доски", "Флажок слева, звезда справа", "p006_blackboard_flag_star", "png"],
+        ["Низ доски", "Домик слева, ёлочка справа", "p006_blackboard_house_tree", "png"],
+        ["Пропись", "12 колец с точками, 12 крючков, 12 волн и 11 точек между ними", "p006_writing_strip_circles_hooks_waves", "svg"],
       ];
       document.getElementById("items").innerHTML = items.map(([label, note, id, ext]) => `
         <article><h2>${label}</h2><p>${note}</p><div class="pair">

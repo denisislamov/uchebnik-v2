@@ -3,6 +3,8 @@ import type { View } from "react-native";
 import type { Block } from "../content/types";
 import { taskTeaching } from "../lib/taskTeaching";
 import { countingTutorials } from "../content/countingTutorials";
+import { assets } from "../content/assetSet";
+import { usesLegacyCountingCard } from "../content/selectBookArt";
 import { useGestureCoach, type CoachTarget } from "./GestureCoach";
 
 export function useTaskCoach(
@@ -28,7 +30,7 @@ export function useTaskCoach(
       example: s.example,
       ...(imageFocus &&
       block.images.length === 1 &&
-      !/abacus_\d+$/.test(block.images[0]) &&
+      !usesLegacyCountingCard(block.images[0], assets[block.images[0]]) &&
       block.images[0] !== "p011_balls_row_3_groups"
         ? {
             ref: undefined,
@@ -46,7 +48,10 @@ export function useTaskCoach(
       },
       ...block.targets.map((t) => ({
         anchor: `meaning:${block.id}:${t.id}`,
-        surface: block.images[t.image].includes("abacus_")
+        surface: usesLegacyCountingCard(
+          block.images[t.image],
+          assets[block.images[t.image]],
+        )
           ? undefined
           : { kind: "image" as const, imageId: block.images[t.image] },
         text: `${t.label}. ${t.label.startsWith("Цифра") ? "Так записывают это число." : `Это тоже ${block.quantityMeaning!.number}.`}`,

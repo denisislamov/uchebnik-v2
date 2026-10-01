@@ -20,6 +20,9 @@ GREEN = "#5d863d"
 GREEN_EDGE = "#486537"
 FRAME = "#6b7280"
 TEACHER_RED = "#c8352e"
+NOTEBOOK_GRID = "#c7dadd"
+NOTEBOOK_INK = "#1f2433"
+NOTEBOOK_TEAL = "#73a8a6"
 
 # Coordinates are fractions of each crop's width/height, read from the source.
 # An inner list is one visible row of separate countable dots.
@@ -202,6 +205,195 @@ def title_svg():
     return "\n".join(parts) + "\n", width, height
 
 
+def notebook_grid(width, height, x0=18, y0=20, step=30):
+    lines = []
+    for x in range(x0, width, step):
+        lines.append(f"M{x} 4V{height-4}")
+    for y in range(y0, height, step):
+        lines.append(f"M4 {y}H{width-4}")
+    return (
+        f'<path id="notebook-grid" d="{" ".join(lines)}" '
+        f'fill="none" stroke="{NOTEBOOK_GRID}" stroke-width="1"/>'
+    )
+
+
+def writing_strip_five_svg():
+    asset_id = "p005_writing_strip_dashes_dots_slashes"
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height))
+    # The source's first two rows: four paired dashes, four paired dots,
+    # followed by four slanted strokes spanning both rows.
+    for i in range(4):
+        x = 48 + i * 60
+        for row, y in enumerate((32, 86)):
+            parts.append(
+                f'<path id="p5-dash-{i*2+row}" d="M{x} {y}h29" '
+                f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.2" '
+                'stroke-linecap="round"/>'
+            )
+            parts.append(
+                f'<circle id="p5-black-dot-{i*2+row}" cx="{291+i*60}" '
+                f'cy="{y}" r="3.4" fill="{NOTEBOOK_INK}"/>'
+            )
+        x = 527 + i * 60
+        parts.append(
+            f'<path id="p5-slash-{i}" d="M{x} 87l23 -57" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.1" '
+            'stroke-linecap="round"/>'
+        )
+    for i in range(12):
+        x = 48 + i * 60
+        parts.append(
+            f'<path id="p5-wave-{i}" d="M{x} 145 '
+            f'C{x+8} 136 {x+16} 137 {x+23} 141 '
+            f'S{x+37} 146 {x+48} 140" fill="none" '
+            f'stroke="{NOTEBOOK_INK}" stroke-width="2.5" '
+            'stroke-linecap="round"/>'
+        )
+        if i < 11:
+            parts.append(
+                f'<circle id="p5-red-dot-{i}" cx="{x+44}" cy="144" '
+                f'r="3.4" fill="{TEACHER_RED}"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def hook_path(x, y):
+    """Five curves from the existing page-six tracing hook, in 30 px cells."""
+    return (
+        f"M{x+15:.2f} {y+12.6:.2f} "
+        f"C{x+16.2:.2f} {y+7.2:.2f} {x+21.9:.2f} {y+8.4:.2f} {x+19.8:.2f} {y+14.4:.2f} "
+        f"C{x+17.1:.2f} {y+21.6:.2f} {x+5.4:.2f} {y+21.6:.2f} {x+4.8:.2f} {y+12.6:.2f} "
+        f"C{x+3.6:.2f} {y+4.2:.2f} {x+12.6:.2f} {y:.2f} {x+18.6:.2f} {y:.2f} "
+        f"C{x+31.5:.2f} {y:.2f} {x+30:.2f} {y+12.6:.2f} {x+24:.2f} {y+22.5:.2f} "
+        f"C{x+18:.2f} {y+33:.2f} {x+5.1:.2f} {y+46.5:.2f} {x:.2f} {y+60:.2f}"
+    )
+
+
+def writing_strip_six_svg():
+    asset_id = "p006_writing_strip_circles_hooks_waves"
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height))
+    for i in range(12):
+        x = 72 + i * 60
+        parts.append(
+            f'<circle id="p6-ring-{i}" cx="{x}" cy="38" r="15" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.4"/>'
+        )
+        parts.append(
+            f'<circle id="p6-red-dot-{i}" cx="{x}" cy="38" r="3.3" '
+            f'fill="{TEACHER_RED}"/>'
+        )
+        parts.append(
+            f'<path id="p6-hook-{i}" d="{hook_path(x-15, 80)}" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.3" '
+            'stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+        parts.append(
+            f'<path id="p6-wave-{i}" d="M{x-14} 166 '
+            f'C{x-5} 158 {x+2} 160 {x+9} 165 '
+            f'S{x+21} 168 {x+28} 162" fill="none" '
+            f'stroke="{NOTEBOOK_INK}" stroke-width="2.2" '
+            'stroke-linecap="round"/>'
+        )
+        if i < 11:
+            parts.append(
+                f'<circle id="p6-teal-dot-{i}" cx="{x+36}" cy="165" '
+                f'r="3.1" fill="{NOTEBOOK_TEAL}"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def digit_one_print_svg():
+    width, height = dimensions("p007_digit_1_print")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<text x="{width/2}" y="73" text-anchor="middle" '
+        'font-family="Andika_700Bold" font-size="70" '
+        f'fill="{NOTEBOOK_INK}">1</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def digit_one_sample_svg():
+    width, height = dimensions("p007_digit_1_sample")
+    parts = start_svg(width, height)
+    parts.append(notebook_grid(width, height, x0=24, y0=13))
+    # Exact centerline from src/content/handwrittenDigits.ts, the trace target.
+    parts.append(
+        f'<polyline points="56,43 79,23 58,83" fill="none" '
+        f'stroke="{NOTEBOOK_INK}" stroke-width="3.8" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def counting_rail_one_svg():
+    width, height = dimensions("p007_abacus_1")
+    parts = start_svg(width, height)
+    parts.append(
+        '<path d="M16 37.5H354 M16 28v19 M354 28v19" '
+        f'fill="none" stroke="{FRAME}" stroke-width="2.4" '
+        'stroke-linecap="round"/>'
+    )
+    # One red bead is moved left; the other nine stay right in a group.
+    # All ten beads remain visible, as required by the approved counting rail.
+    for i in range(10):
+        x = 35 if i == 0 else 123 + (i - 1) * 24
+        color = TEACHER_RED if i < 5 else "#ffffff"
+        edge = "#a82f2a" if i < 5 else FRAME
+        parts.append(
+            f'<circle id="bead-{i}" cx="{x}" cy="37.5" r="12" '
+            f'fill="{color}" stroke="{edge}" stroke-width="1.7"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def mushroom_drawing_svg():
+    width, height = dimensions("p007_mushroom_draw")
+    parts = start_svg(width, height)
+    # One cap and one stem, based on the simple geometry of the drawing task.
+    parts.append(
+        '<path id="mushroom-stem" d="M41.2 35V57H58.8V35Z" '
+        'fill="#f1efe9" stroke="#5a4739" stroke-width="2.4" '
+        'stroke-linejoin="round"/>'
+    )
+    parts.append(
+        '<path id="mushroom-cap" d="M23.6 35C27 6 73 6 76.4 35Z" '
+        'fill="#d8b78e" stroke="#5a4739" stroke-width="2.4" '
+        'stroke-linejoin="round"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def educational_coin_one_svg():
+    width, height = dimensions("p007_coin_1_kopek")
+    parts = start_svg(width, height)
+    parts.append(
+        '<circle id="coin-body" cx="55" cy="57.5" r="43" '
+        'fill="#eee8db" stroke="#8c8070" stroke-width="2.6"/>'
+    )
+    parts.append(
+        '<circle cx="55" cy="57.5" r="37" fill="none" '
+        'stroke="#c6bbaa" stroke-width="1.5"/>'
+    )
+    parts.append(
+        '<text x="55" y="79" text-anchor="middle" '
+        'font-family="Andika_700Bold" font-size="62" '
+        f'fill="{NOTEBOOK_INK}">1</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -233,6 +425,20 @@ def main():
                  f"Кружки: {count}; крайний справа перечёркнут, остаётся {count-1}")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
+    for asset_id, draw, alt in (
+        ("p005_writing_strip_dashes_dots_slashes", writing_strip_five_svg,
+         "Пропись: по четыре пары штрихов и точек, четыре косых линии; ниже 12 волн и 11 красных точек"),
+        ("p006_writing_strip_circles_hooks_waves", writing_strip_six_svg,
+         "Пропись: 12 колец с точками, 12 крючков, 12 волн и 11 бирюзовых точек"),
+        ("p007_digit_1_print", digit_one_print_svg, "Печатная цифра 1"),
+        ("p007_digit_1_sample", digit_one_sample_svg, "Образец написания цифры 1 по клеткам"),
+        ("p007_abacus_1", counting_rail_one_svg,
+         "Счётная линейка: 1 бусина слева, 9 справа; всего 10, первые 5 красные"),
+        ("p007_mushroom_draw", mushroom_drawing_svg, "Образец: один гриб с простой шляпкой и ножкой"),
+        ("p007_coin_1_kopek", educational_coin_one_svg, "Учебная монета с числом 1"),
+    ):
+        svg, width, height = draw()
+        register(asset_id, svg, width, height, alt)
     REGISTRY.write_text(
         "// Generated by scripts/generate_vector_art.py. Edit its templates, not this file.\n"
         "export type VectorAsset = { kind: 'vector'; xml: string; width: number; height: number; alt: string };\n"
