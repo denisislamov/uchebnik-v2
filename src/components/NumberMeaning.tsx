@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import type { Block, Hotspot } from "../content/types";
 import { assets } from "../content/assetSet";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
 import { useCoachAnchor } from "./GestureCoach";
+import { BookArtwork } from "./BookArtwork";
 
 type PictureBlock = Extract<Block, { kind: "picture" }>;
 function MeaningCard({
@@ -65,11 +66,11 @@ function MeaningCard({
             ))}
           </View>
         ) : (
-          <Image
-            source={assets[block.images[target.image]].source}
+          <BookArtwork
+            art={assets[block.images[target.image]]}
+            width="100%"
+            height={120}
             resizeMode="contain"
-            accessible={false}
-            style={{ height: 120, width: "100%" }}
           />
         )}
         <Text

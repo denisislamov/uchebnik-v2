@@ -2,7 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { allBlocks } from "../src/content/book.ts";
-import { countingTutorials } from "../src/content/countingTutorials.ts";
+import {
+  countingTutorials,
+  countingTutorialsForMode,
+} from "../src/content/countingTutorials.ts";
 
 test("counting tutorials match source counts and the actual lesson image and answer", () => {
   const counts = {
@@ -65,27 +68,98 @@ test("placement demonstrates the same objects in the same order as counting", ()
   );
 });
 
-test("the four partly submerged swimmers each have their own source region", () => {
-  const children = countingTutorials["p004-block02"].objects;
-  const swimmers = children.filter((object) =>
-    object.id.startsWith("child-swimmer-"),
-  );
-  assert.equal(swimmers.length, 4);
-  // Known visible heads in original 810 × 615 pixels, independently checked in the scan.
-  const heads = [
-    [662, 330],
-    [714, 328],
-    [745, 357],
-    [698, 396],
+test("the four swimmers have separate regions in both illustration modes", () => {
+  const examples = [
+    {
+      scenes: countingTutorialsForMode(true),
+      width: 810,
+      height: 615,
+      heads: [
+        [662, 330],
+        [714, 328],
+        [745, 357],
+        [698, 396],
+      ],
+    },
+    {
+      scenes: countingTutorialsForMode(false),
+      width: 1448,
+      height: 1086,
+      heads: [
+        [1046, 484],
+        [1293, 480],
+        [1126, 579],
+        [1350, 597],
+      ],
+    },
   ];
-  for (const [x, y] of heads) {
-    const covering = swimmers.filter(
-      (object) =>
-        x / 810 >= object.x &&
-        x / 810 <= object.x + object.w &&
-        y / 615 >= object.y &&
-        y / 615 <= object.y + object.h,
+  for (const { scenes, width, height, heads } of examples) {
+    const swimmers = scenes["p004-block02"].objects.filter((object) =>
+      object.id.startsWith("child-swimmer-"),
     );
-    assert.equal(covering.length, 1, `head at ${x},${y}`);
+    assert.equal(swimmers.length, 4);
+    for (const [x, y] of heads) {
+      const covering = swimmers.filter(
+        (object) =>
+          x / width >= object.x &&
+          x / width <= object.x + object.w &&
+          y / height >= object.y &&
+          y / height <= object.y + object.h,
+      );
+      assert.equal(covering.length, 1, `head at ${x},${y}`);
+    }
+  }
+});
+
+test("the revised lesson uses its own counting regions", () => {
+  assert.deepEqual(countingTutorials, countingTutorialsForMode(false));
+  assert.notDeepEqual(
+    countingTutorialsForMode(false)["p004-block02"],
+    countingTutorialsForMode(true)["p004-block02"],
+  );
+});
+
+test("every countable subject in the revised painting has one guide region", () => {
+  const scenes = countingTutorialsForMode(false);
+  const samples = [
+    [
+      "p004-block02",
+      [
+        [245, 330],
+        [583, 470],
+        [682, 500],
+        [217, 711],
+        [413, 738],
+        [566, 758],
+        [1047, 493],
+        [1278, 487],
+        [1122, 588],
+        [1360, 614],
+      ],
+    ],
+    [
+      "p004-block03",
+      [
+        [174, 285],
+        [524, 267],
+        [1072, 292],
+        [1214, 290],
+        [1331, 300],
+      ],
+    ],
+    ["p004-block04", [[751, 565]]],
+  ] as const;
+  for (const [id, points] of samples) {
+    const objects = scenes[id].objects;
+    for (const [x, y] of points) {
+      const covering = objects.filter(
+        (object) =>
+          x / 1448 >= object.x &&
+          x / 1448 <= object.x + object.w &&
+          y / 1086 >= object.y &&
+          y / 1086 <= object.y + object.h,
+      );
+      assert.equal(covering.length, 1, `${id}: ${x},${y}`);
+    }
   }
 });

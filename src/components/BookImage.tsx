@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
-import { Image, View } from "react-native";
+import { View } from "react-native";
 import Svg, { Ellipse } from "react-native-svg";
 import { assets } from "../content/assetSet";
+import { BookArtwork } from "./BookArtwork";
 import { CELL } from "../lib/grid";
 import { colors as c } from "../theme";
 /** How many times its own size a scan from the book may be shown. */
@@ -85,8 +86,8 @@ export function BookImage({
   }
   const a = assets[id];
   if (!a) return null;
-  // A scan is enlarged no more than three times: beyond that it is a blur.
-  maxHeight = Math.min(maxHeight, a.height * MAX_SCALE);
+  // Scans blur when enlarged; vector diagrams stay sharp at task size.
+  if (!("xml" in a)) maxHeight = Math.min(maxHeight, a.height * MAX_SCALE);
   return (
     <View
       ref={frame}
@@ -98,10 +99,10 @@ export function BookImage({
         maxWidth: (maxHeight * a.width) / a.height,
       }}
     >
-      <Image
+      <View
+        accessible
+        accessibilityRole="image"
         accessibilityLabel={a.alt}
-        source={a.source}
-        resizeMode="contain"
         style={{
           width: "100%",
           aspectRatio: a.width / a.height,
@@ -116,7 +117,9 @@ export function BookImage({
           }),
           borderRadius: 4,
         }}
-      />
+      >
+        <BookArtwork art={a} width="100%" height="100%" borderRadius={4} />
+      </View>
       {!!marks?.length && (
         // Drawn in the picture's own pixels and scaled with it: a pen line
         // around each thing, and a lighter one under it, so that it is seen

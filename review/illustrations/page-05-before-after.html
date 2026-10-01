@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Страница 5 — было / стало</title>
+    <style>
+      :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #263443; background: #eef1ef; }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 32px 20px 48px; }
+      main { max-width: 1160px; margin: auto; }
+      h1 { margin: 0 0 8px; font: 600 32px/1.2 Georgia, serif; }
+      p { margin: 0; color: #5b6872; font-size: 15px; line-height: 1.5; }
+      article { background: white; border: 1px solid #dce2e0; border-radius: 12px; margin-top: 22px; padding: 20px; }
+      h2 { margin: 0 0 5px; font-size: 20px; }
+      .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+      figure { margin: 0; min-width: 0; }
+      figcaption { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; color: #526169; }
+      .frame { display: flex; align-items: center; justify-content: center; height: 360px; padding: 16px; background: #fcfaf5; border: 1px solid #e6e0d4; border-radius: 8px; }
+      .frame img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
+      @media (max-width: 680px) { body { padding: 18px 12px; } .pair { grid-template-columns: 1fr; } .frame { height: 250px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Страница 5 · было / стало</h1>
+      <p>Современный огород и отдельные предметы для счёта. Новая сцена задаёт проверяемый ответ: 6 ящиков.</p>
+      <div id="items"></div>
+    </main>
+    <script>
+      const items = [
+        ["Огород", "Шесть отдельных ящиков с урожаем", "p005_field_harvest_sacks"],
+        ["Огурцы", "Семь отдельных огурцов", "p005_bowl_cucumbers"],
+        ["Помидоры", "Восемь отдельных помидоров", "p005_basket_tomatoes"],
+      ];
+      document.getElementById("items").innerHTML = items.map(([label, note, id]) => `
+        <article><h2>${label}</h2><p>${note}</p><div class="pair">
+          <figure><figcaption>Было</figcaption><div class="frame"><img src="../../assets/book/${id}.jpg" alt="Исходный рисунок: ${label}" /></div></figure>
+          <figure><figcaption>Стало</figcaption><div class="frame"><img src="../../assets/book2/${id}@2x.png" alt="Новый рисунок: ${label}" /></div></figure>
+        </div></article>`).join("");
+    </script>
+  </body>
+</html>

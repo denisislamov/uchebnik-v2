@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Text } from "react-native";
+import { View, Text } from "react-native";
 import Svg, {
   Line,
   Path,
@@ -10,6 +10,7 @@ import Svg, {
 import type { Point, TraceTarget } from "../content/types";
 import { shapeDemoPoint } from "../lib/coachGeometry";
 import { assets } from "../content/assetSet";
+import { BookArtwork } from "./BookArtwork";
 export type DemoSurface =
   | { kind: "image"; imageId: string }
   | { kind: "trace"; columns: number; rows: number; targets: TraceTarget[] }
@@ -38,9 +39,10 @@ export function CoachSurface({
 }) {
   if (surface.kind === "image")
     return (
-      <Image
-        source={assets[surface.imageId].source}
-        style={{ width, height }}
+      <BookArtwork
+        art={assets[surface.imageId]}
+        width={width}
+        height={height}
         resizeMode="stretch"
       />
     );

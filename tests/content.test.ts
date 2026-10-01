@@ -102,14 +102,12 @@ test("tracing is assessed geometrically, not by an adult completion flag", () =>
   assert.equal(isDone(b, { strokes }), true);
   assert.equal(isDone(b, { strokes: strokes.slice(0, -1) }), false);
 });
-test("ambiguous sacks have no forced numeric answer", () => {
+test("six separate harvest crates have an exact numeric answer", () => {
   const b = pages[4].blocks[0];
   assert.ok(b.kind === "counters");
-  assert.equal(b.expected, undefined);
-  assert.equal(isDone(b, { value: 6, checked: true }), false);
-  assert.equal(isDone(b, { value: 6, reviewed: true }), true);
-  assert.equal(isDone(b, { value: 7, reviewed: true }), true);
-  assert.equal(isDone(b, { value: 0, reviewed: true }), false);
+  assert.equal(b.expected, 6);
+  assert.equal(isDone(b, { value: 6, checked: true }), true);
+  assert.equal(isDone(b, { value: 7, checked: true }), false);
 });
 test("skipping or partially completing a page does not finish it", () => {
   const p = pages[2];

@@ -15,9 +15,10 @@ test("«Дальше» opens only after the step is solved", () => {
 test("reading and free practice are finished by pressing «Дальше»", () => {
   const read = allBlocks.find((b) => b.kind === "read")!;
   assert.ok(canAdvance(read, undefined));
-  const free = allBlocks.find(
-    (b) => b.kind === "counters" && b.expected === undefined,
-  )!;
+  const crates = pages[4].blocks[0];
+  assert.equal(crates.kind, "counters");
+  if (crates.kind !== "counters") return;
+  const free = { ...crates, expected: undefined };
   assert.equal(canAdvance(free, undefined), false);
   assert.ok(canAdvance(free, { value: 2 }));
 });

@@ -1,6 +1,6 @@
 # Source evidence for the first counting tutorials
 
-The regions in `src/content/countingTutorials.ts` were visually checked against
+The original-mode regions in `src/content/countingTutorials.ts` were visually checked against
 both `textbook/images/p004_boys_river_bathing.png` and the displayed
 `assets/book/p004_boys_river_bathing.jpg` (810 × 615). Neither source image was
 edited. Coordinates are normalized **top-left x/y and width/height** relative to
@@ -49,3 +49,13 @@ answer, unique IDs, finite in-bounds regions, and the four swimmer heads.
 
 This artifact verifies source annotations only. Browser playback and physical
 device acceptance belong to the tutorial integration checks.
+
+## Revised illustration
+
+The default lesson now uses [a new painted river scene](../review/illustrations/page-04-before-after.html)
+at 1448 × 1086, while `?illustrations=original` keeps the source image and its
+original regions. The revised scene retains ten children in the same four
+groups, five trees, one dog and one toy boat. Its child, tree and boat regions
+are normalized to the new image dimensions. The test checks one visible point
+for every countable subject in the new scene and keeps the four original
+swimmer-head checks.

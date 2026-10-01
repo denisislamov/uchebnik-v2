@@ -1,7 +1,7 @@
 import { useGestureCoach, useCoachAnchor } from "./GestureCoach";
 import { hotspotTouchPoint, pickTarget } from "../lib/hitTesting";
 import React, { useState, useRef } from "react";
-import { View, Image, Pressable, Text } from "react-native";
+import { View, Pressable, Text } from "react-native";
 import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
 import type { Block, Hotspot, Point } from "../content/types";
 import { assets } from "../content/assetSet";
@@ -10,6 +10,7 @@ import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";
 import { NumberMeaning } from "./NumberMeaning";
 import { MAX_SCALE } from "./BookImage";
+import { BookArtwork } from "./BookArtwork";
 function Picture({
   id,
   targets,
@@ -84,9 +85,13 @@ function Picture({
         ref={frame}
         style={{
           width: "100%",
-          // A scan is enlarged no more than three times.
+          // A vector can fill the task; only scans need the blur limit.
           maxWidth:
-            (Math.min(size.target, a.height * MAX_SCALE) * a.width) / a.height,
+            (Math.min(
+              size.target,
+              "xml" in a ? size.target : a.height * MAX_SCALE,
+            ) * a.width) /
+            a.height,
           alignSelf: "center",
         }}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
@@ -97,11 +102,12 @@ function Picture({
           onPress={(e) => press(e)}
           style={{ width: "100%", aspectRatio: a.width / a.height }}
         >
-          <Image
-            accessible={false}
-            source={a.source}
+          <BookArtwork
+            art={a}
+            width="100%"
+            height="100%"
             resizeMode="stretch"
-            style={{ width: "100%", height: "100%", borderRadius: 4 }}
+            borderRadius={4}
           />
           <View pointerEvents="none" style={{ position: "absolute", inset: 0 }}>
             {/* Drawn in the picture's own pixels and scaled with it, so a
