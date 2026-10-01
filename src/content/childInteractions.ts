@@ -29,7 +29,7 @@ const revisedIllustrations = !originalIllustrations;
 const balls = revisedIllustrations
   ? [
       { ...area("left", 0.08, 0.09, 0.44, 0.81, "Левый мяч"), ellipse: true },
-      { ...area("right", 0.67, 0.35, 0.26, 0.54, "Правый мяч"), ellipse: true },
+      { ...area("right", 0.68, 0.42, 0.24, 0.48, "Правый мяч"), ellipse: true },
     ]
   : [
       { ...area("left", 0.055, 0.08, 0.39, 0.82, "Левый мяч"), ellipse: true },
@@ -117,7 +117,7 @@ const maps: Record<
     prompt: "Где много детей? Нажми на группу.",
   },
 };
-const digitRects = [
+const originalDigitRects = [
   [0.04, 0.6, 0.19, 0.35],
   [0.35, 0.59, 0.27, 0.29],
   [0.6, 0.64, 0.26, 0.3],
@@ -126,6 +126,18 @@ const digitRects = [
   [0.055, 0.68, 0.18, 0.28],
   [0.74, 0.65, 0.2, 0.31],
 ];
+const revisedDigitRects = [
+  [0.09, 0.49, 0.25, 0.43],
+  originalDigitRects[1],
+  originalDigitRects[2],
+  [0.13, 0.61, 0.25, 0.34],
+  originalDigitRects[4],
+  [0.065, 0.64, 0.25, 0.32],
+  originalDigitRects[6],
+];
+const digitRects = revisedIllustrations
+  ? revisedDigitRects
+  : originalDigitRects;
 for (let n = 1; n <= 7; n++) {
   maps[`p001-block${String(n + 1).padStart(2, "0")}`] = {
     targets: [
@@ -144,9 +156,21 @@ for (const [id, n, rect] of [
   ["p008-block09", 2, [0.35, 0.1, 0.38, 0.4]],
   ["p010-block07", 3, [0.3, 0.1, 0.35, 0.4]],
 ] as const) {
+  const digitRect: readonly number[] = revisedIllustrations
+    ? n === 1
+      ? [0.39, 0.25, 0.22, 0.48]
+      : [0.32, 0.24, 0.36, 0.5]
+    : rect;
   maps[id] = {
     targets: [
-      area("digit", rect[0], rect[1], rect[2], rect[3], `Цифра ${n} на монете`),
+      area(
+        "digit",
+        digitRect[0],
+        digitRect[1],
+        digitRect[2],
+        digitRect[3],
+        `Цифра ${n} на монете`,
+      ),
     ],
     expected: ["digit"],
     prompt: `Найди цифру ${n} на монете. Нажми на неё.`,
@@ -205,7 +229,10 @@ const numberMeanings: Record<
     conclusion: "Предметы разные, а на каждом рисунке их по три. Это число 3.",
   },
 };
-const counts: Record<string, { label: string; rects: number[][] }> = {
+const counts: Record<
+  string,
+  { label: string; rects: number[][]; ellipse?: boolean }
+> = {
   "p007-block03": { label: "гриб", rects: [[0.21, 0.17, 0.53, 0.65]] },
   "p007-block04": { label: "белку", rects: [[0.21, 0.08, 0.53, 0.74]] },
   "p007-block05": { label: "ежа", rects: [[0.16, 0.12, 0.75, 0.72]] },
@@ -284,26 +311,94 @@ const counts: Record<string, { label: string; rects: number[][] }> = {
   },
   "p010-block04": {
     label: "ягоду",
-    rects: [
-      [0.68, 0.375, 0.115, 0.195],
-      [0.865, 0.36, 0.083, 0.19],
-      [0.56, 0.63, 0.15, 0.31],
-    ],
+    ellipse: revisedIllustrations,
+    rects: revisedIllustrations
+      ? [
+          [0.64, 0.21, 0.17, 0.29],
+          [0.8, 0.29, 0.18, 0.3],
+          [0.54, 0.57, 0.19, 0.3],
+        ]
+      : [
+          [0.68, 0.375, 0.115, 0.195],
+          [0.865, 0.36, 0.083, 0.19],
+          [0.56, 0.63, 0.15, 0.31],
+        ],
   },
 };
-for (const [id, { label, rects }] of Object.entries(counts)) {
-  const targets = rects.map((r, i) =>
-    area(
+for (const [id, { label, rects, ellipse }] of Object.entries(counts)) {
+  const targets = rects.map((r, i) => ({
+    ...area(
       `object-${i}`,
       ...(r as [number, number, number, number]),
       `${label} ${i + 1}`,
     ),
-  );
+    ...(ellipse ? { ellipse: true } : {}),
+  }));
   maps[id] = {
     targets,
     expected: targets.map((t) => t.id),
     prompt: `Нажимай по одному: найди ${({ гриб: "гриб", белку: "белку", ежа: "ежа", конёк: "оба конька", колесо: "оба колеса", птичку: "обеих птичек", ухо: "оба уха", крыло: "оба крыла", мальчика: "всех мальчиков", рыбу: "всех рыб", ягоду: "все красные ягоды" } as Record<string, string>)[label]}.`,
   };
+}
+if (revisedIllustrations) {
+  maps["p007-block03"].targets = [
+    polygon(
+      "object-0",
+      [
+        [0.08, 0.37],
+        [0.13, 0.26],
+        [0.28, 0.16],
+        [0.5, 0.12],
+        [0.75, 0.17],
+        [0.9, 0.29],
+        [0.93, 0.4],
+        [0.82, 0.46],
+        [0.68, 0.49],
+        [0.69, 0.8],
+        [0.59, 0.86],
+        [0.35, 0.85],
+        [0.3, 0.51],
+        [0.13, 0.47],
+      ],
+      "Гриб 1",
+    ),
+  ];
+  maps["p007-block04"].targets = [
+    polygon(
+      "object-0",
+      [
+        [0.07, 0.2],
+        [0.16, 0.04],
+        [0.37, 0.02],
+        [0.48, 0.16],
+        [0.52, 0.28],
+        [0.67, 0.28],
+        [0.72, 0.1],
+        [0.82, 0.09],
+        [0.89, 0.27],
+        [0.98, 0.35],
+        [0.98, 0.48],
+        [0.86, 0.58],
+        [0.79, 0.84],
+        [0.62, 0.87],
+        [0.39, 0.82],
+        [0.21, 0.63],
+        [0.08, 0.48],
+      ],
+      "Белка 1",
+    ),
+  ];
+  maps["p007-block05"].targets = [
+    { ...area("object-0", 0.04, 0.12, 0.9, 0.8, "Ёж 1"), ellipse: true },
+  ];
+  maps["p008-block02"].targets = [
+    area("object-0", 0.02, 0.1, 0.49, 0.82, "Конёк 1"),
+    area("object-1", 0.49, 0.06, 0.5, 0.87, "Конёк 2"),
+  ];
+  maps["p009-block01"].targets = [
+    area("object-0", 0.04, 0.2, 0.42, 0.67, "Птичка 1"),
+    area("object-1", 0.47, 0.04, 0.51, 0.64, "Птичка 2"),
+  ];
 }
 // Inclined skis require polygons: rectangular hit boxes would overlap.
 maps["p008-block03"] = {

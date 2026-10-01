@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { pages } from "../src/content/book.ts";
-import { pickTarget } from "../src/lib/hitTesting.ts";
+import { containsPoint, pickTarget } from "../src/lib/hitTesting.ts";
 import { spawnSync } from "node:child_process";
 
 const picture = (id: string) => {
@@ -42,6 +42,59 @@ test("redrawn balls, chairs and skis keep separate tappable areas", () => {
     ["p008-block03", 0.75, 0.53, "ski2"],
   ] as const) {
     assert.equal(tap(block, x, y), expected, `${block} at ${x}, ${y}`);
+  }
+});
+
+test("revised outlines follow the painted ball and the complete coin digits", () => {
+  const smallBall = picture("p003-block02").targets.find(
+    (target) => target.id === "right",
+  );
+  assert.ok(smallBall);
+  assert.equal(containsPoint(smallBall, { x: 0.8, y: 0.39 }), false);
+  assert.equal(containsPoint(smallBall, { x: 0.8, y: 0.45 }), true);
+
+  for (const blockId of ["p007-block08", "p008-block09", "p010-block07"]) {
+    const digit = picture(blockId).targets[0];
+    assert.equal(
+      containsPoint(digit, { x: 0.5, y: 0.65 }),
+      true,
+      `${blockId}: lower half of the new numeral`,
+    );
+  }
+});
+
+test("revised strawberry targets include each painted berry without old empty regions", () => {
+  const targets = picture("p010-block04").targets;
+  for (const [index, point] of [
+    [0, { x: 0.72, y: 0.3 }],
+    [1, { x: 0.86, y: 0.45 }],
+    [2, { x: 0.63, y: 0.61 }],
+  ] as const) {
+    assert.equal(containsPoint(targets[index], point), true, `berry ${index}`);
+    assert.equal(
+      pickTarget(targets, point, 420, 300)?.id,
+      `object-${index}`,
+      `berry ${index} is selectable`,
+    );
+  }
+});
+
+test("revised cover numerals and animal silhouettes are fully selectable", () => {
+  for (const [blockId, targetIndex, point] of [
+    ["p001-block02", 0, { x: 0.3, y: 0.7 }],
+    ["p001-block05", 0, { x: 0.32, y: 0.78 }],
+    ["p001-block07", 0, { x: 0.28, y: 0.8 }],
+    ["p007-block03", 0, { x: 0.135, y: 0.35 }],
+    ["p007-block04", 0, { x: 0.83, y: 0.42 }],
+    ["p007-block05", 0, { x: 0.12, y: 0.6 }],
+    ["p008-block02", 1, { x: 0.95, y: 0.82 }],
+    ["p009-block01", 0, { x: 0.39, y: 0.5 }],
+  ] as const) {
+    assert.equal(
+      containsPoint(picture(blockId).targets[targetIndex], point),
+      true,
+      `${blockId} visibly painted edge`,
+    );
   }
 });
 
@@ -146,7 +199,10 @@ test("original illustration mode keeps the source hit zones and composite ball r
     console.log(JSON.stringify({
       forest: pick("p007-block02"), windows: pick("p008-block01").filter(t => t[0].startsWith("window")),
       ears: pick("p009-block04"), wings: pick("p009-block05"),
-      boys: pick("p010-block02"), fish: pick("p010-block03"), balls, ballMarks, beadQuestion,
+      boys: pick("p010-block02"), fish: pick("p010-block03"),
+      coinDigits: ["p007-block08", "p008-block09", "p010-block07"].map(pick),
+      berries: pick("p010-block04"), firstBalls: pick("p003-block02"),
+      balls, ballMarks, beadQuestion,
     }));
   `;
   const result = spawnSync(
@@ -184,6 +240,20 @@ test("original illustration mode keeps the source hit zones and composite ball r
       ["object-0", 0.04, 0.04, 0.41, 0.55],
       ["object-1", 0.64, 0.05, 0.3, 0.6],
       ["object-2", 0.23, 0.53, 0.49, 0.39],
+    ],
+    coinDigits: [
+      [["digit", 0.37, 0.15, 0.24, 0.32]],
+      [["digit", 0.35, 0.1, 0.38, 0.4]],
+      [["digit", 0.3, 0.1, 0.35, 0.4]],
+    ],
+    berries: [
+      ["object-0", 0.68, 0.375, 0.115, 0.195],
+      ["object-1", 0.865, 0.36, 0.083, 0.19],
+      ["object-2", 0.56, 0.63, 0.15, 0.31],
+    ],
+    firstBalls: [
+      ["left", 0.055, 0.08, 0.39, 0.82],
+      ["right", 0.69, 0.34, 0.235, 0.5],
     ],
     balls: ["p011_balls_left_2_and_1", "p011_balls_row_3_groups"],
     ballMarks: [
