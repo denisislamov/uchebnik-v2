@@ -1,7 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { pages } from "../src/content/book.ts";
-import { containsPoint, pickTarget } from "../src/lib/hitTesting.ts";
+import {
+  containsPoint,
+  hotspotTouchPoint,
+  pickTarget,
+} from "../src/lib/hitTesting.ts";
 import { spawnSync } from "node:child_process";
 
 const picture = (id: string) => {
@@ -15,6 +19,86 @@ const picture = (id: string) => {
 
 const tap = (id: string, x: number, y: number) =>
   pickTarget(picture(id).targets, { x, y }, 1000, 600)?.id;
+
+const paintedPoint = (x: number, y: number, width: number, height: number) => ({
+  x: x / width,
+  y: y / height,
+});
+
+test("every object target selects itself within its own illustration", () => {
+  for (const block of pages.flatMap((page) => page.blocks)) {
+    if (block.kind !== "picture" || block.quantityMeaning) continue;
+    for (const target of block.targets) {
+      const sameImageTargets = block.targets.filter(
+        (item) => item.image === target.image,
+      );
+      const hit = pickTarget(
+        sameImageTargets,
+        hotspotTouchPoint(target),
+        1000,
+        600,
+      );
+      assert.equal(hit?.id, target.id, `${block.id}: ${target.id}`);
+    }
+  }
+});
+
+test("revised room outlines follow both chairs, windows and wall pictures", () => {
+  const targets = picture("p008-block01").targets;
+  const samples = [
+    ["chair-left", [158, 230], [200, 240]],
+    ["chair-right", [555, 230], [510, 240]],
+    ["window-left", [272, 90], [416, 90]],
+    ["window-right", [595, 90], [615, 90]],
+    ["frame-top", [145, 100], [100, 8]],
+    ["frame-bottom", [90, 185], [90, 120]],
+  ] as const;
+  for (const [id, onObject, offObject] of samples) {
+    const target = targets.find((item) => item.id === id);
+    assert.ok(target, id);
+    assert.equal(
+      containsPoint(target, paintedPoint(onObject[0], onObject[1], 715, 440)),
+      true,
+      `${id}: painted point`,
+    );
+    assert.equal(
+      containsPoint(target, paintedPoint(offObject[0], offObject[1], 715, 440)),
+      false,
+      `${id}: empty or different object`,
+    );
+  }
+});
+
+test("other revised object outlines cover painted edges without old empty corners", () => {
+  for (const [block, id, width, height, onObject, offObject] of [
+    ["p001-block08", "digit", 310, 249, [250, 243], [225, 220]],
+    ["p008-block04", "object-0", 170, 105, [6, 72], [6, 45]],
+    ["p008-block04", "object-1", 170, 105, [160, 75], [115, 42]],
+    ["p009-block01", "object-1", 300, 200, [244, 5], [291, 45]],
+    ["p009-block04", "object-0", 220, 147, [108, 20], [105, 50]],
+    ["p009-block05", "object-0", 230, 153, [35, 20], [30, 75]],
+    ["p010-block03", "object-0", 240, 160, [166, 45], [164, 78]],
+  ] as const) {
+    const target = picture(block).targets.find((item) => item.id === id);
+    assert.ok(target, `${block} ${id}`);
+    assert.equal(
+      containsPoint(
+        target,
+        paintedPoint(onObject[0], onObject[1], width, height),
+      ),
+      true,
+      `${block} ${id}: painted`,
+    );
+    assert.equal(
+      containsPoint(
+        target,
+        paintedPoint(offObject[0], offObject[1], width, height),
+      ),
+      false,
+      `${block} ${id}: empty`,
+    );
+  }
+});
 
 test("the revised page 3 pencils can be tapped where the painted barrels are", () => {
   const pencil = pages[2].blocks[3];
@@ -36,7 +120,7 @@ test("redrawn balls, chairs and skis keep separate tappable areas", () => {
   for (const [block, x, y, expected] of [
     ["p003-block02", 0.28, 0.46, "left"],
     ["p003-block03", 0.81, 0.63, "right"],
-    ["p008-block01", 0.27, 0.52, "chair-left"],
+    ["p008-block01", 0.22, 0.52, "chair-left"],
     ["p008-block01", 0.7, 0.68, "chair-right"],
     ["p008-block03", 0.7, 0.23, "ski1"],
     ["p008-block03", 0.75, 0.53, "ski2"],
