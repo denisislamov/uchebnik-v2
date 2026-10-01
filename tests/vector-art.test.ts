@@ -294,6 +294,43 @@ test("pages 5 and 6 writing strips keep the original practice counts", async () 
   assert.equal([...page6.matchAll(/id="p6-teal-dot-\d+"/g)].length, 11);
 });
 
+test("copybook waves occupy one grid cell and leave the following dot between waves", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [assetId, wavePrefix, dotPrefix] of [
+    ["p005_writing_strip_dashes_dots_slashes", "p5-wave", "p5-red-dot"],
+    ["p006_writing_strip_circles_hooks_waves", "p6-wave", "p6-teal-dot"],
+  ] as const) {
+    const xml = vectorAssets[assetId].xml;
+    const waves = [...xml.matchAll(new RegExp(`<path id="${wavePrefix}-\\d+"[^>]*\/>`, "g"))]
+      .map((match) => attributes(match[0]).d)
+      .map((d) => [...d.matchAll(/-?\d+(?:\.\d+)?/g)].map((n) => Number(n[0])));
+    const dots = [...xml.matchAll(new RegExp(`<circle id="${dotPrefix}-\\d+"[^>]*\/>`, "g"))]
+      .map((match) => Number(attributes(match[0]).cx));
+    assert.equal(waves.length, 12, assetId);
+    assert.equal(dots.length, 11, assetId);
+    for (let i = 0; i < waves.length; i++) {
+      const start = waves[i][0];
+      const end = waves[i].at(-2)!;
+      assert.equal(end - start, 30, `${assetId}: wave ${i} spans one source cell`);
+      if (i < dots.length) {
+        assert.ok(dots[i] - end >= 10, `${assetId}: dot ${i} clears the wave`);
+        assert.ok(waves[i + 1][0] - dots[i] >= 10, `${assetId}: dot ${i} clears the next wave`);
+      }
+    }
+  }
+});
+
+test("copybook grids and start arrow follow the scanned practice strips", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const page3 = vectorAssets.p003_writing_strip_dashes_dots.xml;
+  const page5 = vectorAssets.p005_writing_strip_dashes_dots_slashes.xml;
+  const grid3 = attributes(page3.match(/<path id="notebook-grid"[^>]*\/>/)![0]).d;
+  const grid5 = attributes(page5.match(/<path id="notebook-grid"[^>]*\/>/)![0]).d;
+  for (const y of [23, 53, 83]) assert.match(grid3, new RegExp(`M4 ${y}H`));
+  for (const y of [29, 59, 89, 119, 149]) assert.match(grid5, new RegExp(`M4 ${y}H`));
+  assert.match(page5, /id="p5-start-arrow"/);
+});
+
 test("page 7 printed and handwritten ones retain their distinct forms", async () => {
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const print = vectorAssets.p007_digit_1_print;
@@ -788,7 +825,7 @@ test("page 12 printed and handwritten fours match the original trace", async () 
   assert.match(sample.xml, /d="M73 37 L57 75"/);
 });
 
-test("page 12 drawing sample has four differently colored flags, last facing left", async () => {
+test("page 12 drawing sample keeps four red flags, last facing left", async () => {
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const art = vectorAssets.p012_flags_draw_sample;
   assert.ok(art);
@@ -802,7 +839,7 @@ test("page 12 drawing sample has four differently colored flags, last facing lef
     attributes(m[0]),
   );
   assert.equal(flags.length, 4);
-  assert.equal(new Set(flags.map((flag) => flag.fill)).size, 4);
+  assert.ok(flags.every((flag) => flag.fill === "#c4695c"));
   assert.equal([...art.xml.matchAll(/id="flag-pole-\d+"/g)].length, 4);
   assert.match(flags[0].d, /^M45 28H105/);
   assert.match(flags[1].d, /^M135 28H195/);

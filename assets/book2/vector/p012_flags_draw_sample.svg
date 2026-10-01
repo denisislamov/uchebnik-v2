@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="425" height="140" viewBox="0 0 425 140">
 <path id="notebook-grid" d="M15 4V136 M45 4V136 M75 4V136 M105 4V136 M135 4V136 M165 4V136 M195 4V136 M225 4V136 M255 4V136 M285 4V136 M315 4V136 M345 4V136 M375 4V136 M405 4V136 M4 20H421 M4 50H421 M4 80H421 M4 110H421" fill="none" stroke="#c7dadd" stroke-width="1"/>
 <line id="flag-pole-0" x1="45" y1="28" x2="45" y2="114" stroke="#1f2433" stroke-width="2.8"/>
-<path id="flag-0" d="M45 28H105L92 42.5L105 57H45Z" fill="#73a6a4" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
+<path id="flag-0" d="M45 28H105L92 42.5L105 57H45Z" fill="#c4695c" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
 <line id="flag-pole-1" x1="135" y1="28" x2="135" y2="114" stroke="#1f2433" stroke-width="2.8"/>
-<path id="flag-1" d="M135 28H195L182 42.5L195 57H135Z" fill="#c7a15a" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
+<path id="flag-1" d="M135 28H195L182 42.5L195 57H135Z" fill="#c4695c" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
 <line id="flag-pole-2" x1="225" y1="28" x2="225" y2="114" stroke="#1f2433" stroke-width="2.8"/>
-<path id="flag-2" d="M225 28H285L272 42.5L285 57H225Z" fill="#9689ae" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
+<path id="flag-2" d="M225 28H285L272 42.5L285 57H225Z" fill="#c4695c" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
 <line id="flag-pole-3" x1="405" y1="28" x2="405" y2="114" stroke="#1f2433" stroke-width="2.8"/>
-<path id="flag-3" d="M405 28H345L358 42.5L345 57H405Z" fill="#c18478" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
+<path id="flag-3" d="M405 28H345L358 42.5L345 57H405Z" fill="#c4695c" stroke="#1f2433" stroke-width="2" stroke-linejoin="round"/>
 </svg>

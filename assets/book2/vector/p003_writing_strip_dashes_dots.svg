@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="770" height="95" viewBox="0 0 770 95">
-<path id="notebook-grid" d="M20 4V91 M50 4V91 M80 4V91 M110 4V91 M140 4V91 M170 4V91 M200 4V91 M230 4V91 M260 4V91 M290 4V91 M320 4V91 M350 4V91 M380 4V91 M410 4V91 M440 4V91 M470 4V91 M500 4V91 M530 4V91 M560 4V91 M590 4V91 M620 4V91 M650 4V91 M680 4V91 M710 4V91 M740 4V91 M4 47H766 M4 77H766" fill="none" stroke="#c7dadd" stroke-width="1"/>
+<path id="notebook-grid" d="M20 4V91 M50 4V91 M80 4V91 M110 4V91 M140 4V91 M170 4V91 M200 4V91 M230 4V91 M260 4V91 M290 4V91 M320 4V91 M350 4V91 M380 4V91 M410 4V91 M440 4V91 M470 4V91 M500 4V91 M530 4V91 M560 4V91 M590 4V91 M620 4V91 M650 4V91 M680 4V91 M710 4V91 M740 4V91 M4 23H766 M4 53H766 M4 83H766" fill="none" stroke="#c7dadd" stroke-width="1"/>
 <path id="dash-0" d="M50 50h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>
 <circle id="red-dot-0" cx="93" cy="50" r="3.4" fill="#c8352e"/>
 <path id="dash-1" d="M110 50h27" fill="none" stroke="#1f2433" stroke-width="3.5" stroke-linecap="round"/>

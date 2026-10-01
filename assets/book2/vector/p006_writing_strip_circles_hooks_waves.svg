@@ -3,60 +3,60 @@
 <circle id="p6-ring-0" cx="72" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-0" cx="72" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-0" d="M72.00 92.60 C73.20 87.20 78.90 88.40 76.80 94.40 C74.10 101.60 62.40 101.60 61.80 92.60 C60.60 84.20 69.60 80.00 75.60 80.00 C88.50 80.00 87.00 92.60 81.00 102.50 C75.00 113.00 62.10 126.50 57.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-0" d="M58 166 C67 158 74 160 81 165 S93 168 100 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-0" cx="108" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-0" d="M58 166 C63 158 68 160 73 165 S81 168 88 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-0" cx="102" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-1" cx="132" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-1" cx="132" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-1" d="M132.00 92.60 C133.20 87.20 138.90 88.40 136.80 94.40 C134.10 101.60 122.40 101.60 121.80 92.60 C120.60 84.20 129.60 80.00 135.60 80.00 C148.50 80.00 147.00 92.60 141.00 102.50 C135.00 113.00 122.10 126.50 117.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-1" d="M118 166 C127 158 134 160 141 165 S153 168 160 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-1" cx="168" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-1" d="M118 166 C123 158 128 160 133 165 S141 168 148 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-1" cx="162" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-2" cx="192" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-2" cx="192" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-2" d="M192.00 92.60 C193.20 87.20 198.90 88.40 196.80 94.40 C194.10 101.60 182.40 101.60 181.80 92.60 C180.60 84.20 189.60 80.00 195.60 80.00 C208.50 80.00 207.00 92.60 201.00 102.50 C195.00 113.00 182.10 126.50 177.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-2" d="M178 166 C187 158 194 160 201 165 S213 168 220 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-2" cx="228" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-2" d="M178 166 C183 158 188 160 193 165 S201 168 208 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-2" cx="222" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-3" cx="252" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-3" cx="252" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-3" d="M252.00 92.60 C253.20 87.20 258.90 88.40 256.80 94.40 C254.10 101.60 242.40 101.60 241.80 92.60 C240.60 84.20 249.60 80.00 255.60 80.00 C268.50 80.00 267.00 92.60 261.00 102.50 C255.00 113.00 242.10 126.50 237.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-3" d="M238 166 C247 158 254 160 261 165 S273 168 280 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-3" cx="288" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-3" d="M238 166 C243 158 248 160 253 165 S261 168 268 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-3" cx="282" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-4" cx="312" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-4" cx="312" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-4" d="M312.00 92.60 C313.20 87.20 318.90 88.40 316.80 94.40 C314.10 101.60 302.40 101.60 301.80 92.60 C300.60 84.20 309.60 80.00 315.60 80.00 C328.50 80.00 327.00 92.60 321.00 102.50 C315.00 113.00 302.10 126.50 297.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-4" d="M298 166 C307 158 314 160 321 165 S333 168 340 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-4" cx="348" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-4" d="M298 166 C303 158 308 160 313 165 S321 168 328 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-4" cx="342" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-5" cx="372" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-5" cx="372" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-5" d="M372.00 92.60 C373.20 87.20 378.90 88.40 376.80 94.40 C374.10 101.60 362.40 101.60 361.80 92.60 C360.60 84.20 369.60 80.00 375.60 80.00 C388.50 80.00 387.00 92.60 381.00 102.50 C375.00 113.00 362.10 126.50 357.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-5" d="M358 166 C367 158 374 160 381 165 S393 168 400 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-5" cx="408" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-5" d="M358 166 C363 158 368 160 373 165 S381 168 388 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-5" cx="402" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-6" cx="432" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-6" cx="432" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-6" d="M432.00 92.60 C433.20 87.20 438.90 88.40 436.80 94.40 C434.10 101.60 422.40 101.60 421.80 92.60 C420.60 84.20 429.60 80.00 435.60 80.00 C448.50 80.00 447.00 92.60 441.00 102.50 C435.00 113.00 422.10 126.50 417.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-6" d="M418 166 C427 158 434 160 441 165 S453 168 460 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-6" cx="468" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-6" d="M418 166 C423 158 428 160 433 165 S441 168 448 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-6" cx="462" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-7" cx="492" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-7" cx="492" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-7" d="M492.00 92.60 C493.20 87.20 498.90 88.40 496.80 94.40 C494.10 101.60 482.40 101.60 481.80 92.60 C480.60 84.20 489.60 80.00 495.60 80.00 C508.50 80.00 507.00 92.60 501.00 102.50 C495.00 113.00 482.10 126.50 477.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-7" d="M478 166 C487 158 494 160 501 165 S513 168 520 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-7" cx="528" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-7" d="M478 166 C483 158 488 160 493 165 S501 168 508 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-7" cx="522" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-8" cx="552" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-8" cx="552" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-8" d="M552.00 92.60 C553.20 87.20 558.90 88.40 556.80 94.40 C554.10 101.60 542.40 101.60 541.80 92.60 C540.60 84.20 549.60 80.00 555.60 80.00 C568.50 80.00 567.00 92.60 561.00 102.50 C555.00 113.00 542.10 126.50 537.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-8" d="M538 166 C547 158 554 160 561 165 S573 168 580 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-8" cx="588" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-8" d="M538 166 C543 158 548 160 553 165 S561 168 568 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-8" cx="582" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-9" cx="612" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-9" cx="612" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-9" d="M612.00 92.60 C613.20 87.20 618.90 88.40 616.80 94.40 C614.10 101.60 602.40 101.60 601.80 92.60 C600.60 84.20 609.60 80.00 615.60 80.00 C628.50 80.00 627.00 92.60 621.00 102.50 C615.00 113.00 602.10 126.50 597.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-9" d="M598 166 C607 158 614 160 621 165 S633 168 640 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-9" cx="648" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-9" d="M598 166 C603 158 608 160 613 165 S621 168 628 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-9" cx="642" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-10" cx="672" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-10" cx="672" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-10" d="M672.00 92.60 C673.20 87.20 678.90 88.40 676.80 94.40 C674.10 101.60 662.40 101.60 661.80 92.60 C660.60 84.20 669.60 80.00 675.60 80.00 C688.50 80.00 687.00 92.60 681.00 102.50 C675.00 113.00 662.10 126.50 657.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-10" d="M658 166 C667 158 674 160 681 165 S693 168 700 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
-<circle id="p6-teal-dot-10" cx="708" cy="165" r="3.1" fill="#73a8a6"/>
+<path id="p6-wave-10" d="M658 166 C663 158 668 160 673 165 S681 168 688 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<circle id="p6-teal-dot-10" cx="702" cy="165" r="3.1" fill="#73a8a6"/>
 <circle id="p6-ring-11" cx="732" cy="38" r="15" fill="none" stroke="#1f2433" stroke-width="2.4"/>
 <circle id="p6-red-dot-11" cx="732" cy="38" r="3.3" fill="#c8352e"/>
 <path id="p6-hook-11" d="M732.00 92.60 C733.20 87.20 738.90 88.40 736.80 94.40 C734.10 101.60 722.40 101.60 721.80 92.60 C720.60 84.20 729.60 80.00 735.60 80.00 C748.50 80.00 747.00 92.60 741.00 102.50 C735.00 113.00 722.10 126.50 717.00 140.00" fill="none" stroke="#1f2433" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="p6-wave-11" d="M718 166 C727 158 734 160 741 165 S753 168 760 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
+<path id="p6-wave-11" d="M718 166 C723 158 728 160 733 165 S741 168 748 162" fill="none" stroke="#1f2433" stroke-width="2.2" stroke-linecap="round"/>
 </svg>

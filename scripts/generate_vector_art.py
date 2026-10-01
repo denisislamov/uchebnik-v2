@@ -2483,7 +2483,7 @@ def notebook_grid(width, height, x0=18, y0=20, step=30):
 def dashes_dots_svg(asset_id):
     width, height = dimensions(asset_id)
     parts = start_svg(width, height)
-    parts.append(notebook_grid(width, height, x0=20, y0=height // 2))
+    parts.append(notebook_grid(width, height, x0=20, y0=23 if height == 95 else height // 2))
     baseline = 50 if height == 95 else 25
     # Each dash occupies one 30 px notebook cell, followed by a dot cell.
     # The last dash intentionally has no following dot, as in both scans.
@@ -2583,7 +2583,7 @@ def writing_strip_five_svg():
     asset_id = "p005_writing_strip_dashes_dots_slashes"
     width, height = dimensions(asset_id)
     parts = start_svg(width, height)
-    parts.append(notebook_grid(width, height))
+    parts.append(notebook_grid(width, height, y0=29))
     # The source's first two rows: four paired dashes, four paired dots,
     # followed by four slanted strokes spanning both rows.
     for i in range(4):
@@ -2604,12 +2604,17 @@ def writing_strip_five_svg():
             f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="3.1" '
             'stroke-linecap="round"/>'
         )
+    parts.append(
+        '<path id="p5-start-arrow" d="M291 6V22 M286 17L291 22L296 17" '
+        'fill="none" stroke="#6e9d77" stroke-width="2.2" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
     for i in range(12):
         x = 48 + i * 60
         parts.append(
             f'<path id="p5-wave-{i}" d="M{x} 145 '
-            f'C{x+8} 136 {x+16} 137 {x+23} 141 '
-            f'S{x+37} 146 {x+48} 140" fill="none" '
+            f'C{x+5} 136 {x+10} 137 {x+15} 141 '
+            f'S{x+23} 146 {x+30} 140" fill="none" '
             f'stroke="{NOTEBOOK_INK}" stroke-width="2.5" '
             'stroke-linecap="round"/>'
         )
@@ -2656,14 +2661,14 @@ def writing_strip_six_svg():
         )
         parts.append(
             f'<path id="p6-wave-{i}" d="M{x-14} 166 '
-            f'C{x-5} 158 {x+2} 160 {x+9} 165 '
-            f'S{x+21} 168 {x+28} 162" fill="none" '
+            f'C{x-9} 158 {x-4} 160 {x+1} 165 '
+            f'S{x+9} 168 {x+16} 162" fill="none" '
             f'stroke="{NOTEBOOK_INK}" stroke-width="2.2" '
             'stroke-linecap="round"/>'
         )
         if i < 11:
             parts.append(
-                f'<circle id="p6-teal-dot-{i}" cx="{x+36}" cy="165" '
+                f'<circle id="p6-teal-dot-{i}" cx="{x+30}" cy="165" '
                 f'r="3.1" fill="{NOTEBOOK_TEAL}"/>'
             )
     parts.append("</svg>")
@@ -3197,8 +3202,7 @@ def flags_drawing_svg():
     parts = start_svg(width, height)
     parts.append(notebook_grid(width, height, x0=15, y0=20))
     poles = (45, 135, 225, 405)
-    fills = ("#73a6a4", "#c7a15a", "#9689ae", "#c18478")
-    for i, (x, color) in enumerate(zip(poles, fills)):
+    for i, x in enumerate(poles):
         parts.append(
             f'<line id="flag-pole-{i}" x1="{x}" y1="28" '
             f'x2="{x}" y2="114" stroke="{NOTEBOOK_INK}" '
@@ -3209,7 +3213,7 @@ def flags_drawing_svg():
         else:
             path = "M405 28H345L358 42.5L345 57H405Z"
         parts.append(
-            f'<path id="flag-{i}" d="{path}" fill="{color}" '
+            f'<path id="flag-{i}" d="{path}" fill="#c4695c" '
             f'stroke="{NOTEBOOK_INK}" stroke-width="2" '
             'stroke-linejoin="round"/>'
         )
