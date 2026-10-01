@@ -78,7 +78,7 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p026_roses_vase': { source: require('../../assets/book2/p026_roses_vase.png'), width: 320, height: 179, alt: "девять роз на разной высоте в простой синей вазе" },
   'p027_pigs_grazing': { source: require('../../assets/book2/p027_pigs_grazing.png'), width: 450, height: 300, alt: "девять отдельных поросят на современной ферме: восемь светлых и один тёмный" },
   'p027_ducks_pond': { source: require('../../assets/book2/p027_ducks_pond.png'), width: 450, height: 321, alt: "девять уток у пруда: восемь плавают отдельно на воде, одна стоит на берегу" },
-  'p028_kids_gymnastics': { source: require('../../assets/book2/p028_kids_gymnastics.png'), width: 730, height: 314, alt: "один взрослый учитель и девять детей делают зарядку в современном школьном спортзале" },
+  'p028_kids_gymnastics': { source: require('../../assets/book2/p028_kids_gymnastics.png'), width: 730, height: 314, alt: "один учитель и девять детей выполняют наклоны вбок в современном школьном спортзале" },
   'p029_boy_toy_train': { source: require('../../assets/book2/p029_boy_toy_train.png'), width: 780, height: 317, alt: "мальчик с современной деревянной игрушечной железной дорогой: девять вагонов уже соединены с локомотивом, десятый вагон у него в руке" },
   'p031_apples_pair_1': { source: require('../../assets/book2/p031_apples_pair_1.png'), width: 220, height: 146, alt: "два яблока на веточке: красное и жёлто-зелёное" },
   'p031_apples_pair_2': { source: require('../../assets/book2/p031_apples_pair_2.png'), width: 212, height: 220, alt: "два яблока на веточке: зелёное и красное" },
