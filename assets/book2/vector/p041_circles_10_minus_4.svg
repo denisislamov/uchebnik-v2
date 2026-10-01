@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="95" viewBox="0 0 180 95">
+<rect x="9" y="8" width="162" height="79" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="dot-0" cx="26" cy="24" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-1" cx="51" cy="24" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-2" cx="77" cy="24" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-3" cx="26" cy="69" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-4" cx="51" cy="69" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-5" cx="77" cy="69" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-6" cx="109" cy="24" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-7" cx="153" cy="24" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-8" cx="109" cy="69" r="8.5" fill="#2b4ba8"/>
+<circle id="dot-9" cx="153" cy="69" r="8.5" fill="#2b4ba8"/>
+<line id="cross-0" x1="100" y1="34" x2="118" y2="14" stroke="#c8352e" stroke-width="2.4" stroke-linecap="round"/>
+<line id="cross-1" x1="144" y1="34" x2="162" y2="14" stroke="#c8352e" stroke-width="2.4" stroke-linecap="round"/>
+<line id="cross-2" x1="100" y1="79" x2="118" y2="59" stroke="#c8352e" stroke-width="2.4" stroke-linecap="round"/>
+<line id="cross-3" x1="144" y1="79" x2="162" y2="59" stroke="#c8352e" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="130" viewBox="0 0 280 130">
+<rect x="10" y="8" width="184" height="114" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<text id="cell-0-0" x="46" y="51" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">4</text>
+<text id="cell-0-1" x="101" y="51" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">2</text>
+<text id="cell-0-2" x="157" y="51" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">6</text>
+<text id="cell-1-0" x="46" y="99" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">1</text>
+<text id="cell-1-1" x="101" y="99" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">5</text>
+<text id="cell-1-2" x="157" y="99" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">3</text>
+<text id="operation" x="218" y="79" font-family="Andika_700Bold" font-size="34" fill="#2b4ba8">+4</text>
+</svg>

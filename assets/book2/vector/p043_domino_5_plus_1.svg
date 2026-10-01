@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="187" height="106" viewBox="0 0 187 106">
+<rect x="9" y="11" width="168" height="82" rx="3" fill="none" stroke="#6b7280" stroke-width="2"/>
+<line id="card-divider" x1="93" y1="11" x2="93" y2="93" stroke="#6b7280" stroke-width="2"/>
+<circle id="left-dot-0" cx="30" cy="32" r="8.5" fill="#2b4ba8"/>
+<circle id="left-dot-1" cx="74" cy="32" r="8.5" fill="#2b4ba8"/>
+<circle id="left-dot-2" cx="51" cy="52" r="8.5" fill="#2b4ba8"/>
+<circle id="left-dot-3" cx="30" cy="75" r="8.5" fill="#2b4ba8"/>
+<circle id="left-dot-4" cx="74" cy="75" r="8.5" fill="#2b4ba8"/>
+<circle id="right-dot-0" cx="134" cy="52" r="8.5" fill="#2b4ba8"/>
+</svg>

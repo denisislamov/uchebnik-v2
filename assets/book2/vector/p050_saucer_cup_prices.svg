@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="172" viewBox="0 0 400 172">
+<path id="saucer" d="M18 65 C19 88 53 110 106 110 C158 110 192 88 193 65 Z" fill="#c8dedb" stroke="#587f84" stroke-width="2.4"/>
+<ellipse cx="105.5" cy="65" rx="88" ry="20" fill="#edf5f2" stroke="#587f84" stroke-width="2.4"/>
+<ellipse cx="105.5" cy="65" rx="66" ry="11" fill="none" stroke="#9dbbb8" stroke-width="2"/>
+<path id="cup-body" d="M244 37 C247 78 254 109 276 115 Q295 123 315 115 C337 109 344 78 347 37 Z" fill="#d8e8e3" stroke="#587f84" stroke-width="2.5"/>
+<path id="cup-handle" d="M346 48 C385 37 389 88 347 94" fill="none" stroke="#587f84" stroke-width="8" stroke-linecap="round"/>
+<path d="M346 48 C375 42 377 83 347 86" fill="none" stroke="#edf5f2" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="295.5" cy="37" rx="51.5" ry="16" fill="#edf5f2" stroke="#587f84" stroke-width="2.5"/>
+<ellipse cx="295.5" cy="38" rx="37" ry="8" fill="none" stroke="#9dbbb8" stroke-width="1.8"/>
+<rect x="73" y="126" width="65" height="39" rx="9" fill="#f7f0e3" stroke="#b7a78d" stroke-width="1.7"/>
+<rect x="263" y="126" width="65" height="39" rx="9" fill="#f7f0e3" stroke="#b7a78d" stroke-width="1.7"/>
+<text id="price-saucer" x="105.5" y="156" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">3</text>
+<text id="price-cup" x="295.5" y="156" text-anchor="middle" font-family="Andika_700Bold" font-size="32" fill="#1f2433">7</text>
+</svg>

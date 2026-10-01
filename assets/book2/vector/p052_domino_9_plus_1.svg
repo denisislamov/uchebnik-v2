@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="186" height="86" viewBox="0 0 186 86">
+<rect x="8" y="8" width="170" height="70" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<line id="card-divider" x1="177" y1="26" x2="132" y2="78" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="outline-dot-0" cx="25" cy="27" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-1" cx="55" cy="27" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-2" cx="85" cy="27" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-3" cx="125" cy="27" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-4" cx="153" cy="27" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-5" cx="25" cy="60" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-6" cx="55" cy="60" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-7" cx="85" cy="60" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="outline-dot-8" cx="125" cy="60" r="7.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="filled-dot-0" cx="153" cy="60" r="7.5" fill="#2b4ba8"/>
+</svg>

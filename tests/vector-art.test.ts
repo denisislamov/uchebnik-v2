@@ -2634,3 +2634,635 @@ test("page 40 dominoes retain filled source patterns and four right dots", async
     assert.match(art.alt, new RegExp(`${base}.*4.*${base + 4}`));
   }
 });
+
+test("pages 41–42 subtract four filled dots at the scanned positions", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const layouts: Record<
+    string,
+    { size: number[]; remaining: number[][]; crossed: number[][] }
+  > = {
+    p041_circles_6_minus_4: {
+      size: [175, 95],
+      remaining: [
+        [69, 24],
+        [26, 69],
+      ],
+      crossed: [
+        [104, 24],
+        [149, 24],
+        [103, 69],
+        [149, 69],
+      ],
+    },
+    p041_circles_8_minus_4: {
+      size: [177, 95],
+      remaining: [
+        [27, 24],
+        [72, 24],
+        [27, 69],
+        [72, 69],
+      ],
+      crossed: [
+        [106, 24],
+        [151, 24],
+        [106, 69],
+        [151, 69],
+      ],
+    },
+    p041_circles_10_minus_4: {
+      size: [180, 95],
+      remaining: [
+        [26, 24],
+        [51, 24],
+        [77, 24],
+        [26, 69],
+        [51, 69],
+        [77, 69],
+      ],
+      crossed: [
+        [109, 24],
+        [153, 24],
+        [109, 69],
+        [153, 69],
+      ],
+    },
+    p042_circles_5_minus_4: {
+      size: [180, 95],
+      remaining: [[50, 47]],
+      crossed: [
+        [104, 25],
+        [153, 25],
+        [104, 69],
+        [153, 69],
+      ],
+    },
+    p042_circles_7_minus_4: {
+      size: [180, 95],
+      remaining: [
+        [72, 25],
+        [49, 47],
+        [27, 69],
+      ],
+      crossed: [
+        [104, 25],
+        [153, 25],
+        [104, 69],
+        [153, 69],
+      ],
+    },
+    p042_circles_9_minus_4: {
+      size: [178, 95],
+      remaining: [
+        [28, 25],
+        [76, 25],
+        [52, 47],
+        [28, 69],
+        [76, 69],
+      ],
+      crossed: [
+        [110, 25],
+        [154, 25],
+        [110, 69],
+        [154, 69],
+      ],
+    },
+  };
+  for (const [id, expected] of Object.entries(layouts)) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], expected.size, id);
+    const dots = [...art.xml.matchAll(/<circle id="dot-\d+"[^>]*\/>/g)].map(
+      (m) => attributes(m[0]),
+    );
+    const crosses = [...art.xml.matchAll(/<line id="cross-\d+"[^>]*\/>/g)].map(
+      (m) => attributes(m[0]),
+    );
+    assert.equal(dots.length, expected.remaining.length + 4, id);
+    assert.equal(crosses.length, 4, id);
+    assert.ok(dots.every((dot) => dot.fill === "#2b4ba8"));
+    assert.ok(crosses.every((cross) => cross.stroke === "#c8352e"));
+    assert.deepEqual(
+      dots.map((dot) => [Number(dot.cx), Number(dot.cy)]),
+      [...expected.remaining, ...expected.crossed],
+      id,
+    );
+    assert.deepEqual(
+      crosses.map((cross) => [
+        (Number(cross.x1) + Number(cross.x2)) / 2,
+        (Number(cross.y1) + Number(cross.y2)) / 2,
+      ]),
+      expected.crossed,
+      id,
+    );
+  }
+});
+
+test("page 42 tables show their six original inputs and operation", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const cases = [
+    {
+      id: "p042_table_plus_4",
+      size: [280, 130],
+      rows: [
+        [4, 2, 6],
+        [1, 5, 3],
+      ],
+      operation: "+4",
+    },
+    {
+      id: "p042_table_minus_4",
+      size: [285, 130],
+      rows: [
+        [6, 10, 8],
+        [5, 9, 7],
+      ],
+      operation: "−4",
+    },
+  ];
+  for (const example of cases) {
+    const art = vectorAssets[example.id];
+    assert.ok(art, example.id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + example.id + ".svg", "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], example.size);
+    const cells = [
+      ...art.xml.matchAll(/<text id="cell-(\d)-(\d)"[^>]*>(\d+)<\/text>/g),
+    ];
+    assert.deepEqual(
+      cells.map((cell) => [Number(cell[1]), Number(cell[2]), Number(cell[3])]),
+      example.rows.flatMap((row, r) => row.map((value, c) => [r, c, value])),
+    );
+    assert.match(
+      art.xml,
+      new RegExp(
+        '<text id="operation"[^>]*>' +
+          example.operation.replace("+", "\\+") +
+          "<\\/text>",
+      ),
+    );
+  }
+});
+
+test("page 43 dominoes preserve each filled pip on its original side", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const left: Record<number, number[][]> = {
+    1: [[51, 52]],
+    2: [
+      [74, 32],
+      [30, 75],
+    ],
+    3: [
+      [74, 32],
+      [51, 52],
+      [30, 75],
+    ],
+    4: [
+      [30, 32],
+      [74, 32],
+      [30, 75],
+      [74, 75],
+    ],
+    5: [
+      [30, 32],
+      [74, 32],
+      [51, 52],
+      [30, 75],
+      [74, 75],
+    ],
+  };
+  const right: Record<number, number[][]> = {
+    1: [[134, 52]],
+    2: [
+      [155, 32],
+      [112, 75],
+    ],
+    3: [
+      [155, 32],
+      [134, 52],
+      [112, 75],
+    ],
+    4: [
+      [112, 32],
+      [155, 32],
+      [112, 75],
+      [155, 75],
+    ],
+    5: [
+      [112, 32],
+      [155, 32],
+      [134, 52],
+      [112, 75],
+      [155, 75],
+    ],
+  };
+  const pairs = [
+    [5, 1],
+    [1, 5],
+    [5, 2],
+    [2, 5],
+    [5, 3],
+    [3, 5],
+    [5, 4],
+    [4, 5],
+    [5, 5],
+  ];
+  for (const [a, b] of pairs) {
+    const id = "p043_domino_" + a + "_plus_" + b;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+    );
+    assert.deepEqual(
+      [art.width, art.height],
+      [a === 5 && b !== 5 ? 187 : 185, 106],
+    );
+    for (const [side, expected] of [
+      ["left", left[a]],
+      ["right", right[b]],
+    ] as const) {
+      const dots = [
+        ...art.xml.matchAll(
+          new RegExp('<circle id="' + side + '-dot-\\d+"[^>]*\\/>', "g"),
+        ),
+      ].map((m) => attributes(m[0]));
+      assert.deepEqual(
+        dots.map((dot) => [Number(dot.cx), Number(dot.cy)]),
+        expected,
+        id + ": " + side,
+      );
+      assert.ok(dots.every((dot) => dot.fill === "#2b4ba8"));
+    }
+    const separator = art.xml.match(/<line id="card-divider"[^>]*\/>/)?.[0];
+    assert.ok(separator);
+    assert.equal(attributes(separator).x1, "93");
+    assert.match(art.alt, new RegExp(a + ".*" + b + ".*" + (a + b)));
+  }
+});
+
+test("page 46 cards keep filled six-pip rows and the opposing addend", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const pairs = [
+    [6, 1],
+    [1, 6],
+    [6, 2],
+    [2, 6],
+    [6, 3],
+    [3, 6],
+    [6, 4],
+    [4, 6],
+  ];
+  const widths: Record<string, number> = {
+    "6_1": 187,
+    "1_6": 185,
+    "6_2": 182,
+    "2_6": 180,
+    "6_3": 187,
+    "3_6": 185,
+    "6_4": 182,
+    "4_6": 180,
+  };
+  const sixLeft = [
+    [30, 32],
+    [52, 32],
+    [74, 32],
+    [30, 75],
+    [52, 75],
+    [74, 75],
+  ];
+  const sixRight = [
+    [112, 32],
+    [134, 32],
+    [156, 32],
+    [112, 75],
+    [134, 75],
+    [156, 75],
+  ];
+  const leftSmall: Record<number, number[][]> = {
+    1: [[51, 53]],
+    2: [
+      [74, 32],
+      [30, 75],
+    ],
+    3: [
+      [74, 32],
+      [51, 53],
+      [30, 75],
+    ],
+    4: [
+      [30, 32],
+      [74, 32],
+      [30, 75],
+      [74, 75],
+    ],
+  };
+  const rightSmall: Record<number, number[][]> = {
+    1: [[134, 53]],
+    2: [
+      [156, 32],
+      [112, 75],
+    ],
+    3: [
+      [156, 32],
+      [134, 53],
+      [112, 75],
+    ],
+    4: [
+      [112, 32],
+      [156, 32],
+      [112, 75],
+      [156, 75],
+    ],
+  };
+  for (const [a, b] of pairs) {
+    const id = "p046_domino_" + a + "_plus_" + b;
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [widths[a + "_" + b], 108]);
+    for (const [side, expected] of [
+      ["left", a === 6 ? sixLeft : leftSmall[a]],
+      ["right", b === 6 ? sixRight : rightSmall[b]],
+    ] as const) {
+      const dots = [
+        ...art.xml.matchAll(
+          new RegExp('<circle id="' + side + '-dot-\\d+"[^>]*\\/>', "g"),
+        ),
+      ].map((m) => attributes(m[0]));
+      assert.deepEqual(
+        dots.map((dot) => [Number(dot.cx), Number(dot.cy)]),
+        expected,
+        id + ": " + side,
+      );
+      assert.ok(dots.every((dot) => dot.fill === "#2b4ba8"));
+    }
+    assert.match(art.xml, /<line id="card-divider"/);
+  }
+});
+
+test("page 49 cards retain outline versus filled addend groups", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const layouts: Record<
+    string,
+    { width: number; outline: number[][]; filled: number[][] }
+  > = {
+    p049_domino_7_plus_1: {
+      width: 185,
+      outline: [
+        [55, 27],
+        [82, 27],
+        [119, 27],
+        [149, 27],
+        [55, 63],
+        [82, 63],
+        [119, 63],
+      ],
+      filled: [[149, 63]],
+    },
+    p049_domino_1_plus_7: {
+      width: 178,
+      outline: [[52, 27]],
+      filled: [
+        [80, 27],
+        [116, 27],
+        [150, 27],
+        [52, 63],
+        [80, 63],
+        [116, 63],
+        [150, 63],
+      ],
+    },
+    p049_domino_7_plus_2: {
+      width: 186,
+      outline: [
+        [58, 27],
+        [86, 27],
+        [119, 27],
+        [28, 63],
+        [58, 63],
+        [88, 63],
+        [119, 63],
+      ],
+      filled: [
+        [151, 27],
+        [151, 63],
+      ],
+    },
+    p049_domino_2_plus_7: {
+      width: 182,
+      outline: [
+        [56, 27],
+        [27, 63],
+      ],
+      filled: [
+        [84, 27],
+        [116, 27],
+        [149, 27],
+        [56, 63],
+        [85, 63],
+        [117, 63],
+        [149, 63],
+      ],
+    },
+    p049_domino_7_plus_3: {
+      width: 182,
+      outline: [
+        [153, 27],
+        [119, 63],
+        [153, 63],
+      ],
+      filled: [
+        [28, 27],
+        [56, 27],
+        [91, 27],
+        [119, 27],
+        [28, 63],
+        [56, 63],
+        [91, 63],
+      ],
+    },
+    p049_domino_3_plus_7: {
+      width: 182,
+      outline: [
+        [91, 27],
+        [119, 27],
+        [153, 27],
+        [56, 63],
+        [91, 63],
+        [119, 63],
+        [153, 63],
+      ],
+      filled: [
+        [28, 27],
+        [56, 27],
+        [28, 63],
+      ],
+    },
+  };
+  for (const [id, expected] of Object.entries(layouts)) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], [expected.width, 90]);
+    for (const [kind, coordinates, fill] of [
+      ["outline", expected.outline, "none"],
+      ["filled", expected.filled, "#2b4ba8"],
+    ] as const) {
+      const dots = [
+        ...art.xml.matchAll(
+          new RegExp('<circle id="' + kind + '-dot-\\d+"[^>]*\\/>', "g"),
+        ),
+      ].map((m) => attributes(m[0]));
+      assert.deepEqual(
+        dots.map((dot) => [Number(dot.cx), Number(dot.cy)]),
+        coordinates,
+        id + ": " + kind,
+      );
+      assert.ok(dots.every((dot) => dot.fill === fill));
+    }
+    assert.doesNotMatch(art.xml, /card-divider/);
+  }
+});
+
+test("page 50 has one saucer, one cup, and only numeric prices 3 and 7", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const id = "p050_saucer_cup_prices";
+  const art = vectorAssets[id];
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [400, 172]);
+  assert.match(art.xml, /<path id="saucer"/);
+  assert.match(art.xml, /<path id="cup-body"/);
+  assert.match(art.xml, /<path id="cup-handle"/);
+  assert.deepEqual(
+    [
+      ...art.xml.matchAll(
+        /<text id="price-(saucer|cup)"[^>]*>([^<]+)<\/text>/g,
+      ),
+    ].map((m) => [m[1], m[2]]),
+    [
+      ["saucer", "3"],
+      ["cup", "7"],
+    ],
+  );
+  assert.doesNotMatch(art.xml, /руб|коп|₽|<text[^>]*>[^37<]/i);
+});
+
+test("pages 51–52 keep outlined eights and nines separate from filled addends", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const cases = [
+    {
+      id: "p051_domino_8_plus_1",
+      size: [176, 80],
+      outline: 8,
+      filled: 1,
+      divider: "143",
+    },
+    {
+      id: "p051_domino_1_plus_8",
+      size: [176, 80],
+      outline: 8,
+      filled: 1,
+      divider: "36",
+    },
+    {
+      id: "p051_domino_8_plus_2",
+      size: [178, 80],
+      outline: 8,
+      filled: 2,
+      divider: "143",
+    },
+    {
+      id: "p051_domino_2_plus_8",
+      size: [186, 80],
+      outline: 8,
+      filled: 2,
+      divider: "44",
+    },
+    {
+      id: "p052_domino_9_plus_1",
+      size: [186, 86],
+      outline: 9,
+      filled: 1,
+      diagonal: [
+        [177, 26],
+        [132, 78],
+      ],
+      filledPosition: [153, 60],
+    },
+    {
+      id: "p052_domino_1_plus_9",
+      size: [186, 86],
+      outline: 9,
+      filled: 1,
+      diagonal: [
+        [8, 60],
+        [60, 8],
+      ],
+      filledPosition: [25, 27],
+    },
+  ];
+  for (const example of cases) {
+    const art = vectorAssets[example.id];
+    assert.ok(art, example.id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + example.id + ".svg", "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], example.size);
+    const outlines = [
+      ...art.xml.matchAll(/<circle id="outline-dot-\d+"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
+    const filled = [
+      ...art.xml.matchAll(/<circle id="filled-dot-\d+"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
+    assert.equal(outlines.length, example.outline);
+    assert.equal(filled.length, example.filled);
+    assert.ok(
+      outlines.every((dot) => dot.fill === "none" && dot.stroke === "#2b4ba8"),
+    );
+    assert.ok(filled.every((dot) => dot.fill === "#2b4ba8"));
+    if (example.divider) {
+      const line = art.xml.match(/<line id="card-divider"[^>]*\/>/)?.[0];
+      assert.ok(line);
+      assert.equal(attributes(line).x1, example.divider);
+      assert.deepEqual(
+        [...new Set(outlines.map((dot) => dot.cy))],
+        ["25", "57"],
+      );
+      assert.deepEqual(outlines.filter((dot) => dot.cy === "25").length, 4);
+      assert.deepEqual(outlines.filter((dot) => dot.cy === "57").length, 4);
+    } else {
+      const line = art.xml.match(/<line id="card-divider"[^>]*\/>/)?.[0];
+      assert.ok(line);
+      const attrs = attributes(line);
+      assert.deepEqual(
+        [
+          [Number(attrs.x1), Number(attrs.y1)],
+          [Number(attrs.x2), Number(attrs.y2)],
+        ],
+        example.diagonal,
+      );
+      assert.deepEqual(
+        [Number(filled[0].cx), Number(filled[0].cy)],
+        example.filledPosition,
+      );
+    }
+  }
+});

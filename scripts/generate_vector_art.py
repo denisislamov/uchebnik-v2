@@ -190,6 +190,93 @@ FOUR_ADD_DOMINO = {
         (32, 79), (55, 79), (79, 79)),
 }
 
+FOUR_SUBTRACTION_LAYOUT = {
+    "p041_circles_6_minus_4": (
+        ((69, 24), (26, 69)),
+        ((104, 24), (149, 24), (103, 69), (149, 69))),
+    "p041_circles_8_minus_4": (
+        ((27, 24), (72, 24), (27, 69), (72, 69)),
+        ((106, 24), (151, 24), (106, 69), (151, 69))),
+    "p041_circles_10_minus_4": (
+        ((26, 24), (51, 24), (77, 24),
+         (26, 69), (51, 69), (77, 69)),
+        ((109, 24), (153, 24), (109, 69), (153, 69))),
+    "p042_circles_5_minus_4": (
+        ((50, 47),),
+        ((104, 25), (153, 25), (104, 69), (153, 69))),
+    "p042_circles_7_minus_4": (
+        ((72, 25), (49, 47), (27, 69)),
+        ((104, 25), (153, 25), (104, 69), (153, 69))),
+    "p042_circles_9_minus_4": (
+        ((28, 25), (76, 25), (52, 47), (28, 69), (76, 69)),
+        ((110, 25), (154, 25), (110, 69), (154, 69))),
+}
+
+FIVE_DOMINO_PIPS = {
+    "left": {
+        1: ((51, 52),),
+        2: ((74, 32), (30, 75)),
+        3: ((74, 32), (51, 52), (30, 75)),
+        4: ((30, 32), (74, 32), (30, 75), (74, 75)),
+        5: ((30, 32), (74, 32), (51, 52), (30, 75), (74, 75)),
+    },
+    "right": {
+        1: ((134, 52),),
+        2: ((155, 32), (112, 75)),
+        3: ((155, 32), (134, 52), (112, 75)),
+        4: ((112, 32), (155, 32), (112, 75), (155, 75)),
+        5: ((112, 32), (155, 32), (134, 52), (112, 75), (155, 75)),
+    },
+}
+
+SIX_DOMINO_PIPS = {
+    "left": {
+        1: ((51, 53),),
+        2: ((74, 32), (30, 75)),
+        3: ((74, 32), (51, 53), (30, 75)),
+        4: ((30, 32), (74, 32), (30, 75), (74, 75)),
+        6: ((30, 32), (52, 32), (74, 32),
+            (30, 75), (52, 75), (74, 75)),
+    },
+    "right": {
+        1: ((134, 53),),
+        2: ((156, 32), (112, 75)),
+        3: ((156, 32), (134, 53), (112, 75)),
+        4: ((112, 32), (156, 32), (112, 75), (156, 75)),
+        6: ((112, 32), (134, 32), (156, 32),
+            (112, 75), (134, 75), (156, 75)),
+    },
+}
+
+# Page 49 uses outline and filled circles as the two mathematical groups.
+# The last pair reverses which of those styles represents the seven.
+SEVEN_DOMINO_LAYOUT = {
+    "p049_domino_7_plus_1": (
+        ((55, 27), (82, 27), (119, 27), (149, 27),
+         (55, 63), (82, 63), (119, 63)),
+        ((149, 63),)),
+    "p049_domino_1_plus_7": (
+        ((52, 27),),
+        ((80, 27), (116, 27), (150, 27),
+         (52, 63), (80, 63), (116, 63), (150, 63))),
+    "p049_domino_7_plus_2": (
+        ((58, 27), (86, 27), (119, 27),
+         (28, 63), (58, 63), (88, 63), (119, 63)),
+        ((151, 27), (151, 63))),
+    "p049_domino_2_plus_7": (
+        ((56, 27), (27, 63)),
+        ((84, 27), (116, 27), (149, 27),
+         (56, 63), (85, 63), (117, 63), (149, 63))),
+    "p049_domino_7_plus_3": (
+        ((153, 27), (119, 63), (153, 63)),
+        ((28, 27), (56, 27), (91, 27), (119, 27),
+         (28, 63), (56, 63), (91, 63))),
+    "p049_domino_3_plus_7": (
+        ((91, 27), (119, 27), (153, 27),
+         (56, 63), (91, 63), (119, 63), (153, 63)),
+        ((28, 27), (56, 27), (28, 63))),
+}
+
 
 def dimensions(asset_id):
     left, top, right, bottom = BOOK_ASSETS[asset_id]["bbox"]
@@ -513,6 +600,223 @@ def filled_domino_four_svg(asset_id, base_count):
                 f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
                 f'r="9" fill="{PEN}"/>'
             )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def subtraction_four_svg(asset_id):
+    width, height = dimensions(asset_id)
+    remaining, crossed = FOUR_SUBTRACTION_LAYOUT[asset_id]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="9" y="8" width="{width-18}" height="79" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (x, y) in enumerate(remaining + crossed):
+        parts.append(
+            f'<circle id="dot-{i}" cx="{x}" cy="{y}" r="8.5" fill="{PEN}"/>'
+        )
+    for i, (x, y) in enumerate(crossed):
+        parts.append(
+            f'<line id="cross-{i}" x1="{x-9}" y1="{y+10}" '
+            f'x2="{x+9}" y2="{y-10}" stroke="{TEACHER_RED}" '
+            'stroke-width="2.4" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def arithmetic_table_four_svg(asset_id, rows, operation):
+    width, height = dimensions(asset_id)
+    plus = operation == "+4"
+    frame_width = 184 if plus else 196
+    columns = (46, 101, 157) if plus else (47, 111, 174)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="10" y="8" width="{frame_width}" height="114" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for row_index, row in enumerate(rows):
+        for column_index, value in enumerate(row):
+            parts.append(
+                f'<text id="cell-{row_index}-{column_index}" '
+                f'x="{columns[column_index]}" y="{51 + row_index * 48}" '
+                f'text-anchor="middle" font-family="Andika_700Bold" '
+                f'font-size="32" fill="{NOTEBOOK_INK}">{value}</text>'
+            )
+    parts.append(
+        f'<text id="operation" x="{218 if plus else 220}" y="79" '
+        f'font-family="Andika_700Bold" font-size="34" '
+        f'fill="{PEN}">{operation}</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def filled_domino_five_svg(asset_id, left_count, right_count):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="9" y="11" width="{width-19}" height="82" rx="3" '
+        f'fill="none" stroke="{FRAME}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="93" y1="11" x2="93" y2="93" '
+        f'stroke="{FRAME}" stroke-width="2"/>'
+    )
+    for side, count in (("left", left_count), ("right", right_count)):
+        for i, (x, y) in enumerate(FIVE_DOMINO_PIPS[side][count]):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="8.5" fill="{PEN}"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def filled_domino_six_svg(asset_id, left_count, right_count):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="9" y="11" width="{width-19}" height="82" rx="3" '
+        f'fill="none" stroke="{FRAME}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="93" y1="11" x2="93" y2="93" '
+        f'stroke="{FRAME}" stroke-width="2"/>'
+    )
+    for side, count in (("left", left_count), ("right", right_count)):
+        for i, (x, y) in enumerate(SIX_DOMINO_PIPS[side][count]):
+            parts.append(
+                f'<circle id="{side}-dot-{i}" cx="{x}" cy="{y}" '
+                f'r="8.5" fill="{PEN}"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def seven_group_domino_svg(asset_id):
+    width, height = dimensions(asset_id)
+    outline, filled = SEVEN_DOMINO_LAYOUT[asset_id]
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="8" y="8" width="{width-16}" height="74" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (x, y) in enumerate(outline):
+        parts.append(
+            f'<circle id="outline-dot-{i}" cx="{x}" cy="{y}" r="8" '
+            f'fill="none" stroke="{PEN}" stroke-width="2.1"/>'
+        )
+    for i, (x, y) in enumerate(filled):
+        parts.append(
+            f'<circle id="filled-dot-{i}" cx="{x}" cy="{y}" r="8" '
+            f'fill="{PEN}"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def saucer_cup_prices_svg():
+    width, height = dimensions("p050_saucer_cup_prices")
+    parts = start_svg(width, height)
+    parts += [
+        '<path id="saucer" d="M18 65 C19 88 53 110 106 110 '
+        'C158 110 192 88 193 65 Z" fill="#c8dedb" '
+        'stroke="#587f84" stroke-width="2.4"/>',
+        '<ellipse cx="105.5" cy="65" rx="88" ry="20" '
+        'fill="#edf5f2" stroke="#587f84" stroke-width="2.4"/>',
+        '<ellipse cx="105.5" cy="65" rx="66" ry="11" '
+        'fill="none" stroke="#9dbbb8" stroke-width="2"/>',
+        '<path id="cup-body" d="M244 37 C247 78 254 109 276 115 '
+        'Q295 123 315 115 C337 109 344 78 347 37 Z" '
+        'fill="#d8e8e3" stroke="#587f84" stroke-width="2.5"/>',
+        '<path id="cup-handle" d="M346 48 C385 37 389 88 347 94" '
+        'fill="none" stroke="#587f84" stroke-width="8" '
+        'stroke-linecap="round"/>',
+        '<path d="M346 48 C375 42 377 83 347 86" '
+        'fill="none" stroke="#edf5f2" stroke-width="3" '
+        'stroke-linecap="round"/>',
+        '<ellipse cx="295.5" cy="37" rx="51.5" ry="16" '
+        'fill="#edf5f2" stroke="#587f84" stroke-width="2.5"/>',
+        '<ellipse cx="295.5" cy="38" rx="37" ry="8" '
+        'fill="none" stroke="#9dbbb8" stroke-width="1.8"/>',
+        '<rect x="73" y="126" width="65" height="39" rx="9" '
+        'fill="#f7f0e3" stroke="#b7a78d" stroke-width="1.7"/>',
+        '<rect x="263" y="126" width="65" height="39" rx="9" '
+        'fill="#f7f0e3" stroke="#b7a78d" stroke-width="1.7"/>',
+        f'<text id="price-saucer" x="105.5" y="156" text-anchor="middle" '
+        f'font-family="Andika_700Bold" font-size="32" fill="{NOTEBOOK_INK}">3</text>',
+        f'<text id="price-cup" x="295.5" y="156" text-anchor="middle" '
+        f'font-family="Andika_700Bold" font-size="32" fill="{NOTEBOOK_INK}">7</text>',
+        '</svg>',
+    ]
+    return "\n".join(parts) + "\n", width, height
+
+
+def eight_group_domino_svg(asset_id, first_count, second_count):
+    width, height = dimensions(asset_id)
+    left_eight = first_count == 8
+    divider = 143 if left_eight else (36 if first_count == 1 else 44)
+    outline_x = (26, 52, 86, 112) if left_eight else (
+        (58, 84, 120, 146) if first_count == 1 else (61, 87, 121, 150)
+    )
+    filled_x = 157 if left_eight else 27
+    filled_ys = (25,) if (second_count if left_eight else first_count) == 1 else (25, 57)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="8" y="8" width="{width-16}" height="64" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<line id="card-divider" x1="{divider}" y1="8" '
+        f'x2="{divider}" y2="72" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (x, y) in enumerate(
+        tuple((x, y) for y in (25, 57) for x in outline_x)
+    ):
+        parts.append(
+            f'<circle id="outline-dot-{i}" cx="{x}" cy="{y}" r="7.5" '
+            f'fill="none" stroke="{PEN}" stroke-width="2"/>'
+        )
+    for i, y in enumerate(filled_ys):
+        parts.append(
+            f'<circle id="filled-dot-{i}" cx="{filled_x}" cy="{y}" '
+            f'r="7.5" fill="{PEN}"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def nine_group_domino_svg(asset_id, first_count):
+    width, height = dimensions(asset_id)
+    right_one = first_count == 9
+    separated = (153, 60) if right_one else (25, 27)
+    diagonal = ((177, 26), (132, 78)) if right_one else ((8, 60), (60, 8))
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect x="8" y="8" width="{width-16}" height="70" rx="2" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    (x1, y1), (x2, y2) = diagonal
+    parts.append(
+        f'<line id="card-divider" x1="{x1}" y1="{y1}" '
+        f'x2="{x2}" y2="{y2}" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    i = 0
+    for y in (27, 60):
+        for x in (25, 55, 85, 125, 153):
+            if (x, y) == separated:
+                continue
+            parts.append(
+                f'<circle id="outline-dot-{i}" cx="{x}" cy="{y}" r="7.5" '
+                f'fill="none" stroke="{PEN}" stroke-width="2"/>'
+            )
+            i += 1
+    x, y = separated
+    parts.append(
+        f'<circle id="filled-dot-0" cx="{x}" cy="{y}" r="7.5" fill="{PEN}"/>'
+    )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
 
@@ -1993,6 +2297,63 @@ def main():
         svg, width, height = filled_domino_four_svg(asset_id, base_count)
         register(asset_id, svg, width, height,
                  f"Карточка: {base_count} заполненных точек слева и 4 справа; всего {base_count+4}")
+    for asset_id, (remaining, _) in FOUR_SUBTRACTION_LAYOUT.items():
+        svg, width, height = subtraction_four_svg(asset_id)
+        total = len(remaining) + 4
+        register(asset_id, svg, width, height,
+                 f"Заполненные точки: {total}; 4 справа перечёркнуты, остаётся {len(remaining)}")
+    for asset_id, rows, operation in (
+        ("p042_table_plus_4", ((4, 2, 6), (1, 5, 3)), "+4"),
+        ("p042_table_minus_4", ((6, 10, 8), (5, 9, 7)), "−4"),
+    ):
+        svg, width, height = arithmetic_table_four_svg(asset_id, rows, operation)
+        register(asset_id, svg, width, height,
+                 f"Таблица: {', '.join(map(str, rows[0]))}; "
+                 f"{', '.join(map(str, rows[1]))}; операция {operation}")
+    for left_count, right_count in (
+        (5, 1), (1, 5), (5, 2), (2, 5), (5, 3),
+        (3, 5), (5, 4), (4, 5), (5, 5),
+    ):
+        asset_id = f"p043_domino_{left_count}_plus_{right_count}"
+        svg, width, height = filled_domino_five_svg(
+            asset_id, left_count, right_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {left_count} заполненных точек слева и "
+                 f"{right_count} справа; всего {left_count+right_count}")
+    for left_count, right_count in (
+        (6, 1), (1, 6), (6, 2), (2, 6),
+        (6, 3), (3, 6), (6, 4), (4, 6),
+    ):
+        asset_id = f"p046_domino_{left_count}_plus_{right_count}"
+        svg, width, height = filled_domino_six_svg(
+            asset_id, left_count, right_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {left_count} заполненных точек слева и "
+                 f"{right_count} справа; всего {left_count+right_count}")
+    for asset_id, (outline, filled) in SEVEN_DOMINO_LAYOUT.items():
+        svg, width, height = seven_group_domino_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Счётная рамка: {len(outline)} контурных и "
+                 f"{len(filled)} заполненных точек; всего {len(outline)+len(filled)}")
+    svg, width, height = saucer_cup_prices_svg()
+    register("p050_saucer_cup_prices", svg, width, height,
+             "Блюдце с ценой 3 и чашка с ценой 7")
+    for first_count, second_count in (
+        (8, 1), (1, 8), (8, 2), (2, 8),
+    ):
+        asset_id = f"p051_domino_{first_count}_plus_{second_count}"
+        svg, width, height = eight_group_domino_svg(
+            asset_id, first_count, second_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {first_count} точек слева и "
+                 f"{second_count} справа; 8 контурных, "
+                 f"{first_count+second_count-8} заполненных")
+    for first_count, second_count in ((9, 1), (1, 9)):
+        asset_id = f"p052_domino_{first_count}_plus_{second_count}"
+        svg, width, height = nine_group_domino_svg(asset_id, first_count)
+        register(asset_id, svg, width, height,
+                 f"Карточка: {first_count} точек и {second_count} точек; "
+                 "9 контурных, 1 заполненная, разделены косой линией")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (

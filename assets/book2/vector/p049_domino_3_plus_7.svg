@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="182" height="90" viewBox="0 0 182 90">
+<rect x="8" y="8" width="166" height="74" rx="2" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="outline-dot-0" cx="91" cy="27" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="outline-dot-1" cx="119" cy="27" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="outline-dot-2" cx="153" cy="27" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="outline-dot-3" cx="56" cy="63" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="outline-dot-4" cx="91" cy="63" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="outline-dot-5" cx="119" cy="63" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="outline-dot-6" cx="153" cy="63" r="8" fill="none" stroke="#2b4ba8" stroke-width="2.1"/>
+<circle id="filled-dot-0" cx="28" cy="27" r="8" fill="#2b4ba8"/>
+<circle id="filled-dot-1" cx="56" cy="27" r="8" fill="#2b4ba8"/>
+<circle id="filled-dot-2" cx="28" cy="63" r="8" fill="#2b4ba8"/>
+</svg>
