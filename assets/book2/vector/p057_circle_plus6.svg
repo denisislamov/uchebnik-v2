@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="158" viewBox="0 0 160 158">
+<circle id="operation-ring" cx="80" cy="94" r="59" fill="none" stroke="#6b7280" stroke-width="2.4"/>
+<text id="center-operation" x="80" y="105" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#2b4ba8">+6</text>
+<text id="outer-top" x="80" y="24" text-anchor="middle" font-family="Andika_700Bold" font-size="24" fill="#1f2433">3</text>
+<text id="outer-left" x="18" y="146" text-anchor="middle" font-family="Andika_700Bold" font-size="24" fill="#1f2433">2</text>
+<text id="outer-right" x="142" y="146" text-anchor="middle" font-family="Andika_700Bold" font-size="24" fill="#1f2433">4</text>
+</svg>

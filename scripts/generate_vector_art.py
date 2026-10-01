@@ -821,6 +821,86 @@ def nine_group_domino_svg(asset_id, first_count):
     return "\n".join(parts) + "\n", width, height
 
 
+def meter_abbreviation_rule_svg():
+    width, height = dimensions("p054_rule_meter_abbrev")
+    parts = start_svg(width, height)
+    parts += [
+        f'<rect x="7" y="6" width="{width-14}" height="{height-12}" '
+        f'rx="8" fill="#f5f3ec" stroke="{FRAME}" stroke-width="1.8"/>',
+        f'<text id="rule-line-1" x="{width/2:g}" y="41" '
+        f'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="40" fill="{NOTEBOOK_INK}">Слово „метр“ сокращённо</text>',
+        f'<text id="rule-line-2" x="{width/2:g}" y="82" '
+        f'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="40" fill="{NOTEBOOK_INK}">'
+        'записывают <tspan font-style="italic">м</tspan></text>',
+        '</svg>',
+    ]
+    return "\n".join(parts) + "\n", width, height
+
+
+def four_operation_columns_svg():
+    width, height = dimensions("p056_columns_plus4_minus4_plus5_minus5")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<text id="exercise-number" x="6" y="31" '
+        f'font-family="Andika_700Bold" font-size="23" '
+        f'fill="{NOTEBOOK_INK}">183.</text>'
+    )
+    groups = (
+        ((4, 6, 3, 5), "+4", 85, 113, 150),
+        ((6, 9, 7, 10), "−4", 263, 293, 328),
+        ((3, 5, 2, 4), "+5", 443, 473, 510),
+        ((10, 8, 7, 9), "−5", 620, 653, 690),
+    )
+    for column, (numbers, operation, number_x, line_x, operation_x) in enumerate(groups):
+        parts.append(
+            f'<line id="column-divider-{column}" x1="{line_x}" y1="8" '
+            f'x2="{line_x}" y2="151" stroke="{FRAME}" stroke-width="1.8"/>'
+        )
+        for row, value in enumerate(numbers):
+            parts.append(
+                f'<text id="column-{column}-row-{row}" x="{number_x}" '
+                f'y="{34 + 35*row}" text-anchor="middle" '
+                f'font-family="Andika_700Bold" font-size="34" '
+                f'fill="{NOTEBOOK_INK}">{value}</text>'
+            )
+        parts.append(
+            f'<text id="operation-{column}" x="{operation_x}" y="92" '
+            f'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="40" fill="{PEN}">{operation}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def operation_circle_svg(asset_id, operation, outer):
+    width, height = dimensions(asset_id)
+    center_x = width / 2
+    parts = start_svg(width, height)
+    parts.append(
+        f'<circle id="operation-ring" cx="{center_x:g}" cy="94" r="59" '
+        f'fill="none" stroke="{FRAME}" stroke-width="2.4"/>'
+    )
+    parts.append(
+        f'<text id="center-operation" x="{center_x:g}" y="105" '
+        f'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="34" fill="{PEN}">{operation}</text>'
+    )
+    for position, x, y, number in (
+        ("top", center_x, 24, outer[0]),
+        ("left", 18, 146, outer[1]),
+        ("right", width-18, 146, outer[2]),
+    ):
+        parts.append(
+            f'<text id="outer-{position}" x="{x:g}" y="{y}" '
+            f'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="24" fill="{NOTEBOOK_INK}">{number}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def title_svg():
     width, height = dimensions("p001_cover_title_frame")
     parts = start_svg(width, height)
@@ -2354,6 +2434,25 @@ def main():
         register(asset_id, svg, width, height,
                  f"Карточка: {first_count} точек и {second_count} точек; "
                  "9 контурных, 1 заполненная, разделены косой линией")
+    svg, width, height = meter_abbreviation_rule_svg()
+    register("p054_rule_meter_abbrev", svg, width, height,
+             "Слово „метр“ сокращённо записывают м")
+    svg, width, height = four_operation_columns_svg()
+    register("p056_columns_plus4_minus4_plus5_minus5", svg, width, height,
+             "Упражнение 183: четыре столбца чисел "
+             "4, 6, 3, 5 +4; 6, 9, 7, 10 −4; "
+             "3, 5, 2, 4 +5; 10, 8, 7, 9 −5")
+    for asset_id, operation, outer in (
+        ("p057_circle_plus6", "+6", (3, 2, 4)),
+        ("p057_circle_minus6", "−6", (10, 7, 9)),
+        ("p057_circle_plus7", "+7", (1, 3, 2)),
+        ("p057_circle_minus7", "−7", (9, 8, 7)),
+    ):
+        svg, width, height = operation_circle_svg(
+            asset_id, operation, outer)
+        register(asset_id, svg, width, height,
+                 f"Круг: {operation}; числа снаружи: "
+                 f"{outer[0]} сверху, {outer[1]} слева, {outer[2]} справа")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (

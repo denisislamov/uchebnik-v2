@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="743" height="158" viewBox="0 0 743 158">
+<text id="exercise-number" x="6" y="31" font-family="Andika_700Bold" font-size="23" fill="#1f2433">183.</text>
+<line id="column-divider-0" x1="113" y1="8" x2="113" y2="151" stroke="#6b7280" stroke-width="1.8"/>
+<text id="column-0-row-0" x="85" y="34" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">4</text>
+<text id="column-0-row-1" x="85" y="69" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">6</text>
+<text id="column-0-row-2" x="85" y="104" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">3</text>
+<text id="column-0-row-3" x="85" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">5</text>
+<text id="operation-0" x="150" y="92" text-anchor="middle" font-family="Andika_700Bold" font-size="40" fill="#2b4ba8">+4</text>
+<line id="column-divider-1" x1="293" y1="8" x2="293" y2="151" stroke="#6b7280" stroke-width="1.8"/>
+<text id="column-1-row-0" x="263" y="34" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">6</text>
+<text id="column-1-row-1" x="263" y="69" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">9</text>
+<text id="column-1-row-2" x="263" y="104" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">7</text>
+<text id="column-1-row-3" x="263" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">10</text>
+<text id="operation-1" x="328" y="92" text-anchor="middle" font-family="Andika_700Bold" font-size="40" fill="#2b4ba8">−4</text>
+<line id="column-divider-2" x1="473" y1="8" x2="473" y2="151" stroke="#6b7280" stroke-width="1.8"/>
+<text id="column-2-row-0" x="443" y="34" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">3</text>
+<text id="column-2-row-1" x="443" y="69" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">5</text>
+<text id="column-2-row-2" x="443" y="104" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">2</text>
+<text id="column-2-row-3" x="443" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">4</text>
+<text id="operation-2" x="510" y="92" text-anchor="middle" font-family="Andika_700Bold" font-size="40" fill="#2b4ba8">+5</text>
+<line id="column-divider-3" x1="653" y1="8" x2="653" y2="151" stroke="#6b7280" stroke-width="1.8"/>
+<text id="column-3-row-0" x="620" y="34" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">10</text>
+<text id="column-3-row-1" x="620" y="69" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">8</text>
+<text id="column-3-row-2" x="620" y="104" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">7</text>
+<text id="column-3-row-3" x="620" y="139" text-anchor="middle" font-family="Andika_700Bold" font-size="34" fill="#1f2433">9</text>
+<text id="operation-3" x="690" y="92" text-anchor="middle" font-family="Andika_700Bold" font-size="40" fill="#2b4ba8">−5</text>
+</svg>

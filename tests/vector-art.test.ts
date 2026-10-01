@@ -3266,3 +3266,131 @@ test("pages 51–52 keep outlined eights and nines separate from filled addends"
     }
   }
 });
+
+test("page 54 metre rule preserves the Russian sentence and italic symbol", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const id = "p054_rule_meter_abbrev";
+  const art = vectorAssets[id];
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [780, 94]);
+  assert.match(
+    art.xml,
+    /<text id="rule-line-1"[^>]*>Слово „метр“ сокращённо<\/text>/,
+  );
+  assert.match(
+    art.xml,
+    /<text id="rule-line-2"[^>]*>записывают <tspan[^>]*font-style="italic"[^>]*>м<\/tspan><\/text>/,
+  );
+  assert.match(art.alt, /Слово.*метр.*сокращённо.*записывают м/);
+});
+
+test("page 56 exercise 183 keeps four numeric columns and their operations", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const id = "p056_columns_plus4_minus4_plus5_minus5";
+  const art = vectorAssets[id];
+  assert.ok(art);
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/" + id + ".svg", "utf8"),
+  );
+  assert.deepEqual([art.width, art.height], [743, 158]);
+  assert.match(art.xml, /<text id="exercise-number"[^>]*>183\.<\/text>/);
+  const source = [
+    { values: [4, 6, 3, 5], operation: "+4" },
+    { values: [6, 9, 7, 10], operation: "−4" },
+    { values: [3, 5, 2, 4], operation: "+5" },
+    { values: [10, 8, 7, 9], operation: "−5" },
+  ];
+  for (const [column, expected] of source.entries()) {
+    const numbers = [
+      ...art.xml.matchAll(
+        new RegExp(
+          '<text id="column-' + column + '-row-(\\d)"[^>]*>(\\d+)<\\/text>',
+          "g",
+        ),
+      ),
+    ];
+    assert.deepEqual(
+      numbers.map((m) => [Number(m[1]), Number(m[2])]),
+      expected.values.map((value, row) => [row, value]),
+    );
+    assert.match(
+      art.xml,
+      new RegExp(
+        '<text id="operation-' +
+          column +
+          '"[^>]*>' +
+          expected.operation.replace("+", "\\+") +
+          "<\\/text>",
+      ),
+    );
+  }
+});
+
+test("page 57 operation circles retain each center and three outside numbers", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const cases = [
+    {
+      id: "p057_circle_plus6",
+      size: [160, 158],
+      operation: "+6",
+      outer: [3, 2, 4],
+    },
+    {
+      id: "p057_circle_minus6",
+      size: [158, 158],
+      operation: "−6",
+      outer: [10, 7, 9],
+    },
+    {
+      id: "p057_circle_plus7",
+      size: [160, 158],
+      operation: "+7",
+      outer: [1, 3, 2],
+    },
+    {
+      id: "p057_circle_minus7",
+      size: [160, 158],
+      operation: "−7",
+      outer: [9, 8, 7],
+    },
+  ];
+  for (const example of cases) {
+    const art = vectorAssets[example.id];
+    assert.ok(art, example.id);
+    assert.equal(
+      art.xml,
+      readFileSync("assets/book2/vector/" + example.id + ".svg", "utf8"),
+    );
+    assert.deepEqual([art.width, art.height], example.size);
+    const ring = art.xml.match(/<circle id="operation-ring"[^>]*\/>/)?.[0];
+    assert.ok(ring);
+    assert.equal(attributes(ring).fill, "none");
+    assert.match(
+      art.xml,
+      new RegExp(
+        '<text id="center-operation"[^>]*>' +
+          example.operation.replace("+", "\\+") +
+          "<\\/text>",
+      ),
+    );
+    const numbers = [
+      ...art.xml.matchAll(
+        /<text id="outer-(top|left|right)"[^>]*>(\d+)<\/text>/g,
+      ),
+    ];
+    assert.deepEqual(
+      numbers.map((m) => [m[1], Number(m[2])]),
+      [
+        ["top", example.outer[0]],
+        ["left", example.outer[1]],
+        ["right", example.outer[2]],
+      ],
+    );
+    assert.match(art.alt, new RegExp(example.operation.replace("+", "\\+")));
+  }
+});
