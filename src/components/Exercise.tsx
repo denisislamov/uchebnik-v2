@@ -371,6 +371,11 @@ function ExerciseBody({
                           flexDirection: "row",
                           flexWrap: field && !beside ? "nowrap" : "wrap",
                         },
+                        size.compact &&
+                          block.kind === "read" &&
+                          block.images.length >= 3 && {
+                            justifyContent: "center",
+                          },
                       ]}
                     >
                       {block.images
@@ -386,11 +391,19 @@ function ExerciseBody({
                                       flexBasis: 0,
                                       minWidth: 0,
                                     }
-                                  : {
-                                      flexGrow: 1,
-                                      flexBasis: 110,
-                                      maxWidth: "100%",
-                                    }
+                                  : size.compact &&
+                                      block.kind === "read" &&
+                                      block.images.length >= 3
+                                    ? {
+                                        flexGrow: 0,
+                                        flexBasis: "47%",
+                                        maxWidth: "47%",
+                                      }
+                                    : {
+                                        flexGrow: 1,
+                                        flexBasis: 110,
+                                        maxWidth: "100%",
+                                      }
                                 : { width: "100%" }
                             }
                           >

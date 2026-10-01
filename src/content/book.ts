@@ -755,6 +755,11 @@ if (!originalIllustrations) {
     block.prompt =
       "На учебных ценниках зубная щётка стоит 3 жетона, а упаковка пластырей — 1 жетон. Девочка дала кассиру 5 жетонов. Сколько жетонов она получила обратно?";
   }
+  for (const block of pages[80].blocks) {
+    if (block.id !== "p081-source07") continue;
+    block.prompt =
+      "На учебных ценниках глубокая тарелка стоит 7 жетонов, а мелкая — на 3 жетона меньше. Сколько стоит мелкая тарелка? Сколько стоят обе тарелки вместе?";
+  }
   for (const block of pages[28].blocks) {
     if (block.id !== "p029-lesson04") continue;
     block.images = ["p029_bars_10_all"];

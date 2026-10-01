@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="380" height="117" viewBox="0 0 380 117">
+<rect id="pencil-case" x="6" y="7" width="368" height="103" rx="10" fill="#e9efeb" stroke="#526c6c" stroke-width="2"/>
+<path id="pencil-case-divider" d="M194 8V110" fill="none" stroke="#526c6c" stroke-width="1.8"/>
+<circle id="pencil-ten-0" cx="30" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-1" cx="64" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-2" cx="98" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-3" cx="132" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-4" cx="166" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-5" cx="30" cy="84" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-6" cx="64" cy="84" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-7" cx="98" cy="84" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<circle id="pencil-ten-8" cx="132" cy="84" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<path id="cross-ten-8" d="M122 94L142 74" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="pencil-ten-9" cx="166" cy="84" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<path id="cross-ten-9" d="M156 94L176 74" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="pencil-unit-0" cx="222" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<path id="cross-unit-0" d="M212 44L232 24" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+<circle id="pencil-unit-1" cx="257" cy="34" r="11" fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>
+<path id="cross-unit-1" d="M247 44L267 24" fill="none" stroke="#1f2433" stroke-width="2.2"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="650" height="190" viewBox="0 0 650 190">
+<rect id="domino-frame" x="8" y="8" width="634" height="174" rx="5" fill="#fcfbf7" stroke="#6b7280" stroke-width="2"/>
+<path id="domino-divider" d="M325 8V182" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="base-dot-0" cx="48" cy="59" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-1" cx="102" cy="59" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-2" cx="156" cy="59" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-3" cx="210" cy="59" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-4" cx="264" cy="59" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-5" cx="48" cy="133" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-6" cx="102" cy="133" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-7" cx="156" cy="133" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="base-dot-8" cx="210" cy="133" r="23" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="added-left-0" cx="264" cy="133" r="23" fill="#1f2433" stroke="#526c6c" stroke-width="2"/>
+<circle id="added-right-0" cx="370" cy="59" r="23" fill="#1f2433" stroke="#526c6c" stroke-width="2"/>
+<circle id="added-right-1" cx="424" cy="59" r="23" fill="#1f2433" stroke="#526c6c" stroke-width="2"/>
+</svg>

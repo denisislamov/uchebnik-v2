@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="272" height="128" viewBox="0 0 272 128">
+<rect id="number-frame" x="8" y="8" width="202" height="112" rx="3" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<text id="frame-cell-0-0" x="41.6667" y="52" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">5</text>
+<text id="frame-cell-0-1" x="109" y="52" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">8</text>
+<text id="frame-cell-0-2" x="176.333" y="52" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">6</text>
+<text id="frame-cell-1-0" x="41.6667" y="107" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">9</text>
+<text id="frame-cell-1-1" x="109" y="107" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">7</text>
+<text id="frame-cell-1-2" x="176.333" y="107" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">10</text>
+<text id="frame-operation" x="218" y="74" font-family="Andika_700Bold, sans-serif" font-size="30" fill="#1f2433">−4</text>
+</svg>

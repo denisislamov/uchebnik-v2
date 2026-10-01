@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="155" viewBox="0 0 270 155">
+<rect id="number-frame" x="70" y="8" width="192" height="139" rx="3" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<text id="frame-cell-0-0" x="102" y="52" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">4</text>
+<text id="frame-cell-0-1" x="166" y="52" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">8</text>
+<text id="frame-cell-0-2" x="230" y="52" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">6</text>
+<text id="frame-cell-1-0" x="102" y="107" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">5</text>
+<text id="frame-cell-1-1" x="166" y="107" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">9</text>
+<text id="frame-cell-1-2" x="230" y="107" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">7</text>
+<text id="frame-operation" x="8" y="87.5" font-family="Andika_700Bold, sans-serif" font-size="30" fill="#1f2433">8+</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="350" height="175" viewBox="0 0 350 175">
+<rect id="number-frame" x="70" y="8" width="272" height="159" rx="3" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<text id="frame-cell-0-0" x="115.333" y="44" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">5</text>
+<text id="frame-cell-0-1" x="206" y="44" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">7</text>
+<text id="frame-cell-0-2" x="296.667" y="44" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">8</text>
+<text id="frame-cell-1-0" x="115.333" y="93" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">9</text>
+<text id="frame-cell-1-1" x="206" y="93" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">6</text>
+<text id="frame-cell-1-2" x="296.667" y="93" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">10</text>
+<text id="frame-cell-2-0" x="115.333" y="142" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">12</text>
+<text id="frame-cell-2-1" x="206" y="142" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">15</text>
+<text id="frame-cell-2-2" x="296.667" y="142" text-anchor="middle" font-family="Andika_700Bold, sans-serif" font-size="27" fill="#1f2433">13</text>
+<text id="frame-operation" x="8" y="97.5" font-family="Andika_700Bold, sans-serif" font-size="30" fill="#1f2433">3+</text>
+</svg>

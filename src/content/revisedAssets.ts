@@ -103,4 +103,5 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p078_bandage_1_rub': { source: require('../../assets/book2/p078_bandage_1_rub.png'), width: 500, height: 360, alt: "современная упаковка пластырей и отдельный ценник с числом 1" },
   'p078_soap_2_rub': { source: require('../../assets/book2/p078_soap_2_rub.png'), width: 500, height: 360, alt: "современное мыло в упаковке и отдельный ценник с числом 2" },
   'p078_toothbrush_3_rub': { source: require('../../assets/book2/p078_toothbrush_3_rub.png'), width: 500, height: 360, alt: "современная зубная щётка в картонной упаковке и отдельный ценник с числом 3" },
+  'p101_girl_table_cups_plates': { source: require('../../assets/book2/p101_girl_table_cups_plates.png'), width: 740, height: 348, alt: "девочка у современного стола: пять отдельных стопок по две чашки и четыре отдельные стопки по три тарелки" },
 };

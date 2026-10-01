@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="130" viewBox="0 0 180 130">
+<text id="sample-line-0" x="8" y="32" font-family="Andika_700Bold, sans-serif" font-size="23" fill="#1f2433">8+3=</text>
+<text id="sample-line-1" x="8" y="78" font-family="Andika_700Bold, sans-serif" font-size="23" fill="#1f2433">8+2=10</text>
+<text id="sample-line-2" x="8" y="119" font-family="Andika_700Bold, sans-serif" font-size="23" fill="#1f2433">10+1=11</text>
+<path id="sample-rule" d="M8 44H170" fill="none" stroke="#6b7280" stroke-width="1.6"/>
+</svg>

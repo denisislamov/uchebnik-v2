@@ -1141,6 +1141,226 @@ def second_decade_table_svg(asset_id):
     return "\n".join(parts) + "\n", width, height
 
 
+TEN_BRIDGE_DOMINOES = {
+    "p079_domino_9_plus_3": (9, 3),
+    "p080_domino_8_plus_3": (8, 3),
+    "p081_domino_7_plus_5": (7, 5),
+}
+
+
+def ten_bridge_domino_svg(asset_id):
+    width, height = dimensions(asset_id)
+    base, addend = TEN_BRIDGE_DOMINOES[asset_id]
+    parts = start_svg(width, height)
+    divider = width // 2
+    parts.append(
+        f'<rect id="domino-frame" x="8" y="8" width="{width-16}" '
+        f'height="{height-16}" rx="5" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<path id="domino-divider" d="M{divider} 8V{height-8}" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    positions = [(48 + column * 54, row)
+                 for row in range(2) for column in range(5)]
+    for i, (x, row) in enumerate(positions):
+        y = 59 if row == 0 else 133
+        label = f"base-dot-{i}" if i < base else f"added-left-{i-base}"
+        fill = "#d9e8e9" if i < base else NOTEBOOK_INK
+        parts.append(
+            f'<circle id="{label}" cx="{x}" cy="{y}" r="23" '
+            f'fill="{fill}" stroke="#526c6c" stroke-width="2"/>'
+        )
+    for i in range(addend - (10 - base)):
+        x = divider + 45 + i * 54
+        parts.append(
+            f'<circle id="added-right-{i}" cx="{x}" cy="59" r="23" '
+            f'fill="{NOTEBOOK_INK}" stroke="#526c6c" stroke-width="2"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+TEN_BRIDGE_SAMPLES = {
+    "p079_sample_9_plus_3": ("9+3=", "9+1=10", "10+2=12"),
+    "p080_sample_8_plus_3": ("8+3=", "8+2=10", "10+1=11"),
+    "p081_sample_7_plus_5": ("7+5=", "7+3=10", "10+2=12"),
+    "p082_sample_5_plus_7": ("5+7=", "5+5=10", "10+2=12"),
+    "p082_sample_6_plus_5": ("6+5=", "6+4=10", "10+1=11"),
+    "p083_sample_3_plus_8": ("3+8=", "3+7=10", "10+1=11"),
+    "p083_sample_4_plus_7": ("4+7=", "4+6=10", "10+1=11"),
+    "p084_sample_11_minus_2": ("11−2=", "11−1=10", "10−1= 9"),
+}
+
+
+def ten_bridge_sample_svg(asset_id):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    ys = (32, 78, 119) if height <= 135 else (34, 82, 127)
+    for i, (line, y) in enumerate(zip(TEN_BRIDGE_SAMPLES[asset_id], ys)):
+        parts.append(
+            f'<text id="sample-line-{i}" x="8" y="{y}" '
+            f'font-family="Andika_700Bold, sans-serif" font-size="23" '
+            f'fill="{NOTEBOOK_INK}">{line}</text>'
+        )
+    parts.append(
+        f'<path id="sample-rule" d="M8 {ys[0]+12}H{width-10}" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.6"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def plate_with_price_svg(asset_id):
+    width, height = dimensions(asset_id)
+    deep = asset_id == "p081_deep_plate_7_rub"
+    parts = start_svg(width, height)
+    parts.append(
+        '<ellipse id="plate-rim" cx="105" cy="43" rx="82" ry="19" '
+        'fill="#e5efed" stroke="#526c6c" stroke-width="2.3"/>'
+    )
+    parts.append(
+        '<ellipse id="plate-well" cx="105" cy="45" rx="58" ry="11" '
+        'fill="#fcfbf7" stroke="#8aa6a4" stroke-width="1.5"/>'
+    )
+    depth = 81 if deep else 61
+    parts.append(
+        f'<path id="plate-body" d="M24 44 Q27 {depth} 105 {depth} '
+        f'Q183 {depth} 186 44" fill="none" stroke="#526c6c" '
+        'stroke-width="2.2"/>'
+    )
+    parts.append(
+        '<rect id="price-tag" x="80" y="91" width="50" height="27" '
+        'rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.5"/>'
+    )
+    if deep:
+        parts.append(
+            f'<text id="plate-price" x="105" y="112" text-anchor="middle" '
+            f'font-family="Andika_700Bold, sans-serif" font-size="22" '
+            f'fill="{NOTEBOOK_INK}">7</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+TEN_BRIDGE_FRAMES = {
+    "p082_frame_8_plus": (((4, 8, 6), (5, 9, 7)), "8+"),
+    "p083_frame_3_plus": (((5, 7, 8), (9, 6, 10), (12, 15, 13)), "3+"),
+    "p085_frame_minus_2": (((4, 8, 6), (5, 9, 7)), "−2"),
+    "p086_frame_minus_3": (((5, 7, 4), (6, 9, 8)), "−3"),
+    "p087_frame_minus_4": (((5, 8, 6), (9, 7, 10)), "−4"),
+}
+
+
+def ten_bridge_frame_svg(asset_id):
+    width, height = dimensions(asset_id)
+    rows, operation = TEN_BRIDGE_FRAMES[asset_id]
+    plus = operation.endswith("+")
+    left = 70 if plus else 8
+    right = width - 8 if plus else width - 62
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="number-frame" x="{left}" y="8" width="{right-left}" '
+        f'height="{height-16}" rx="3" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    x_positions = [left + (right-left) * (column + 0.5) / 3
+                   for column in range(3)]
+    y_positions = ([52, 107] if len(rows) == 2 else [44, 93, 142])
+    for row, (numbers, y) in enumerate(zip(rows, y_positions)):
+        for column, (number, x) in enumerate(zip(numbers, x_positions)):
+            parts.append(
+                f'<text id="frame-cell-{row}-{column}" x="{x:g}" y="{y}" '
+                f'text-anchor="middle" font-family="Andika_700Bold, sans-serif" '
+                f'font-size="27" fill="{NOTEBOOK_INK}">{number}</text>'
+            )
+    operation_x = 8 if plus else right + 8
+    parts.append(
+        f'<text id="frame-operation" x="{operation_x}" y="{height/2+10:g}" '
+        f'font-family="Andika_700Bold, sans-serif" font-size="30" '
+        f'fill="{NOTEBOOK_INK}">{operation}</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def eleven_minus_two_svg():
+    width, height = dimensions("p084_sticks_11_minus_2")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="circle-frame" x="7" y="8" width="{width-14}" '
+        f'height="{height-16}" rx="5" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        '<path id="circle-divider" d="M192 8V117" '
+        f'fill="none" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i in range(10):
+        x = 26 + (i % 5) * 34
+        y = 34 if i < 5 else 88
+        parts.append(
+            f'<circle id="ten-dot-{i}" cx="{x}" cy="{y}" r="11" '
+            f'fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+        )
+        if i == 9:
+            parts.append(
+                f'<path id="cross-ten-9" d="M{x-10} {y+10}L{x+10} {y-10}" '
+                f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2"/>'
+            )
+    parts.append(
+        f'<circle id="unit-dot-0" cx="218" cy="34" r="11" '
+        f'fill="none" stroke="{PEN}" stroke-width="1.8"/>'
+    )
+    parts.append(
+        f'<path id="cross-unit-0" d="M208 44L228 24" '
+        f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def pencils_case_svg(asset_id):
+    width, height = dimensions(asset_id)
+    units = 2 if asset_id.startswith("p085") else 3
+    crossed_ten = (8, 9) if units == 2 else (9,)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="pencil-case" x="6" y="7" width="{width-12}" '
+        f'height="{height-14}" rx="10" fill="#e9efeb" '
+        f'stroke="#526c6c" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<path id="pencil-case-divider" d="M194 8V{height-7}" '
+        f'fill="none" stroke="#526c6c" stroke-width="1.8"/>'
+    )
+    for i in range(10):
+        x = 30 + (i % 5) * 34
+        y = 34 if i < 5 else 84
+        parts.append(
+            f'<circle id="pencil-ten-{i}" cx="{x}" cy="{y}" r="11" '
+            'fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>'
+        )
+        if i in crossed_ten:
+            parts.append(
+                f'<path id="cross-ten-{i}" d="M{x-10} {y+10}L{x+10} {y-10}" '
+                f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.2"/>'
+            )
+    for i in range(units):
+        x = 222 + i * 35
+        parts.append(
+            f'<circle id="pencil-unit-{i}" cx="{x}" cy="34" r="11" '
+            'fill="#fbf7eb" stroke="#526c6c" stroke-width="2"/>'
+        )
+        parts.append(
+            f'<path id="cross-unit-{i}" d="M{x-10} 44L{x+10} 24" '
+            f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.2"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
 def second_decade_column_svg(asset_id, number):
     width, height = dimensions(asset_id)
     parts = start_svg(width, height)
@@ -2922,6 +3142,36 @@ def main():
         register(asset_id, svg, width, height,
                  f"Таблица: {', '.join(map(str, top))}; "
                  f"{', '.join(map(str, bottom))}; вычесть {operation[1:]}")
+    for asset_id, (base, addend) in TEN_BRIDGE_DOMINOES.items():
+        svg, width, height = ten_bridge_domino_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Схема {base} + {addend}: слева {base} светлых и "
+                 f"{10-base} тёмных, справа {base+addend-10} тёмных точек")
+    for asset_id, lines in TEN_BRIDGE_SAMPLES.items():
+        svg, width, height = ten_bridge_sample_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 "Образец вычисления: " + "; ".join(lines))
+    for asset_id, alt in (
+        ("p081_deep_plate_7_rub", "Глубокая тарелка с числом 7 на ценнике"),
+        ("p081_shallow_plate_rub", "Мелкая тарелка с пустым ценником для ответа"),
+    ):
+        svg, width, height = plate_with_price_svg(asset_id)
+        register(asset_id, svg, width, height, alt)
+    for asset_id, (rows, operation) in TEN_BRIDGE_FRAMES.items():
+        svg, width, height = ten_bridge_frame_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Рамка с числами {rows} и общей операцией {operation}")
+    svg, width, height = eleven_minus_two_svg()
+    register("p084_sticks_11_minus_2", svg, width, height,
+             "11 кружков: 10 слева и 1 справа; зачёркнуты два, остаётся 9")
+    for asset_id, number in (
+        ("p085_pencils_box_12_minus_4", 12),
+        ("p086_pencils_box_13_minus_4", 13),
+    ):
+        svg, width, height = pencils_case_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Коробка с {number} карандашами: 10 слева и {number-10} "
+                 f"справа, четыре зачёркнуты, остаётся {number-4}")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (

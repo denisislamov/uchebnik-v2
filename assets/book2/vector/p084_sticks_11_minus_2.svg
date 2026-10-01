@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="385" height="125" viewBox="0 0 385 125">
+<rect id="circle-frame" x="7" y="8" width="371" height="109" rx="5" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<path id="circle-divider" d="M192 8V117" fill="none" stroke="#6b7280" stroke-width="1.8"/>
+<circle id="ten-dot-0" cx="26" cy="34" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-1" cx="60" cy="34" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-2" cx="94" cy="34" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-3" cx="128" cy="34" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-4" cx="162" cy="34" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-5" cx="26" cy="88" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-6" cx="60" cy="88" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-7" cx="94" cy="88" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-8" cx="128" cy="88" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<circle id="ten-dot-9" cx="162" cy="88" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-ten-9" d="M152 98L172 78" fill="none" stroke="#1f2433" stroke-width="2"/>
+<circle id="unit-dot-0" cx="218" cy="34" r="11" fill="none" stroke="#2b4ba8" stroke-width="1.8"/>
+<path id="cross-unit-0" d="M208 44L228 24" fill="none" stroke="#1f2433" stroke-width="2"/>
+</svg>

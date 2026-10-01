@@ -79,6 +79,10 @@ test("revised prompts match the bead rail and modern pharmacy pictures", () => {
   assert.ok(pharmacy);
   assert.match(pharmacy.prompt, /пластыр/);
   assert.doesNotMatch(pharmacy.prompt, /бинт|рубл/i);
+  const plates = pages[80].blocks.find((item) => item.id === "p081-source07");
+  assert.ok(plates);
+  assert.match(plates.prompt, /тарелк/);
+  assert.doesNotMatch(plates.prompt, /рубл/i);
 });
 test("empty, whitespace, malformed and zero are distinct", () => {
   const b = by("number");

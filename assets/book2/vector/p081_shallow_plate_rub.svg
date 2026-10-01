@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210" height="120" viewBox="0 0 210 120">
+<ellipse id="plate-rim" cx="105" cy="43" rx="82" ry="19" fill="#e5efed" stroke="#526c6c" stroke-width="2.3"/>
+<ellipse id="plate-well" cx="105" cy="45" rx="58" ry="11" fill="#fcfbf7" stroke="#8aa6a4" stroke-width="1.5"/>
+<path id="plate-body" d="M24 44 Q27 61 105 61 Q183 61 186 44" fill="none" stroke="#526c6c" stroke-width="2.2"/>
+<rect id="price-tag" x="80" y="91" width="50" height="27" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.5"/>
+</svg>
