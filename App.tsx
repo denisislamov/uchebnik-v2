@@ -20,6 +20,10 @@ import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
 import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
 import Svg, { Path, Rect } from "react-native-svg";
 import { pages, allBlocks, lessonPages } from "./src/content/book";
+import { catalogPreviewId } from "./src/content/catalogPreview";
+import { originalIllustrations } from "./src/content/illustrationMode";
+import { revisedAssets } from "./src/content/revisedAssets";
+import { vectorAssets } from "./src/content/vectorAssets";
 import type { Answer, Progress } from "./src/content/types";
 import {
   emptyProgress,
@@ -50,6 +54,8 @@ import {
 } from "./src/components/Lesson";
 /** A step not answered yet: one object, so an unanswered step reads as unchanged. */
 const NO_ANSWER: Answer = {};
+const revisedPreviewIds = new Set(Object.keys(revisedAssets));
+const vectorPreviewIds = new Set(Object.keys(vectorAssets));
 // Both guards are build-time constants: production removes this entire component.
 const DebugSourcePanel =
   __DEV__ && process.env.EXPO_PUBLIC_SOURCE_DEBUG === "1"
@@ -216,7 +222,7 @@ function Main() {
   const left = compact ? Math.floor((sheetWidth - writing) / 2) : cells(2);
   const paperOrigin = sheet.x + left;
   // Cards of the contents stand a cell apart, in whole cells.
-  const cardColumns = wide ? 5 : compact ? 1 : 2;
+  const cardColumns = wide ? 3 : compact ? 1 : 2;
   const cardWidth = wholeCells(
     (writing - (cardColumns - 1) * CELL) / cardColumns,
   );
@@ -679,7 +685,7 @@ function Main() {
                           },
                         ]}
                       >
-                        <BookImage id="p010_boys_fishing" maxHeight={320} />
+                        <BookImage id="p010_boys_fishing" maxHeight={360} />
                       </View>
                     </Rows>
                     <View style={s.pathHeading}>
@@ -752,6 +758,12 @@ function Main() {
                             count = p.blocks.filter((b) =>
                               isDone(b, progress.answers[b.id]),
                             ).length;
+                          const previewId = catalogPreviewId(
+                            p,
+                            revisedPreviewIds,
+                            vectorPreviewIds,
+                            originalIllustrations,
+                          );
                           return (
                             <Pressable
                               key={p.id}
@@ -789,7 +801,15 @@ function Main() {
                                 </Text>
                               </View>
                               <View style={s.cardArt}>
-                                <BookImage id={p.hero} maxHeight={108} />
+                                {previewId ? (
+                                  <BookImage id={previewId} maxHeight={cells(8)} />
+                                ) : (
+                                  <View style={s.cardNumberArt}>
+                                    <Text style={s.cardNumberArtText}>
+                                      {p.number}
+                                    </Text>
+                                  </View>
+                                )}
                               </View>
                               <Text style={s.cardTitle}>{p.title}</Text>
                               <Text style={s.cardSubtitle}>{p.subtitle}</Text>
@@ -1219,7 +1239,7 @@ const s = StyleSheet.create({
     marginTop: CELL,
   },
   coverArt: {
-    width: "46%",
+    width: "52%",
     backgroundColor: c.white,
     borderWidth: 1.5,
     borderColor: c.ink,
@@ -1259,12 +1279,11 @@ const s = StyleSheet.create({
     flexWrap: "wrap",
     gap: CELL,
   },
-  // A card is a whole number of cells wide and eleven cells high: half a
-  // cell around, a row for the number, the picture, the name, the strip.
+  // Larger cards give the lesson illustration enough room to read.
   pageCard: {
     backgroundColor: c.card,
     padding: CELL / 2,
-    minHeight: cells(11),
+    minHeight: cells(15),
   },
   cardTop: {
     flexDirection: "row",
@@ -1292,9 +1311,22 @@ const s = StyleSheet.create({
     color: c.red,
   },
   cardArt: {
-    height: CELL * 4.5,
+    height: cells(8),
     justifyContent: "center",
     marginBottom: CELL / 2,
+  },
+  cardNumberArt: {
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#edf3f1",
+    borderRadius: 4,
+  },
+  cardNumberArtText: {
+    fontFamily: f.hand,
+    fontSize: 78,
+    lineHeight: 96,
+    color: c.pen,
   },
   cardTitle: {
     fontFamily: f.bold,
