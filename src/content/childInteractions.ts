@@ -1,5 +1,6 @@
 import type { Block, Hotspot } from "./types.ts";
 import { tracePlans } from "./tracing.ts";
+import { originalIllustrations } from "./illustrationMode.ts";
 const area = (
   id: string,
   x: number,
@@ -24,11 +25,17 @@ const polygon = (id: string, coords: number[][], label: string): Hotspot => {
     polygon: coords.map(([x, y]) => ({ x, y })),
   };
 };
-const balls = [
-  { ...area("left", 0.055, 0.08, 0.39, 0.82, "Левый мяч"), ellipse: true },
-  { ...area("right", 0.69, 0.34, 0.235, 0.5, "Правый мяч"), ellipse: true },
-];
-const pencils = [
+const revisedPage3 = !originalIllustrations;
+const balls = revisedPage3
+  ? [
+      { ...area("left", 0.08, 0.09, 0.44, 0.81, "Левый мяч"), ellipse: true },
+      { ...area("right", 0.67, 0.35, 0.26, 0.54, "Правый мяч"), ellipse: true },
+    ]
+  : [
+      { ...area("left", 0.055, 0.08, 0.39, 0.82, "Левый мяч"), ellipse: true },
+      { ...area("right", 0.69, 0.34, 0.235, 0.5, "Правый мяч"), ellipse: true },
+    ];
+const originalPencils = [
   polygon(
     "green",
     [
@@ -50,6 +57,31 @@ const pencils = [
     "Красный карандаш",
   ),
 ];
+const revisedPencils = [
+  polygon(
+    "green",
+    [
+      [0.05, 0.31],
+      [0.83, 0.31],
+      [0.97, 0.4],
+      [0.83, 0.52],
+      [0.05, 0.52],
+    ],
+    "Зелёный карандаш",
+  ),
+  polygon(
+    "red",
+    [
+      [0.35, 0.61],
+      [0.75, 0.61],
+      [0.87, 0.72],
+      [0.75, 0.84],
+      [0.35, 0.84],
+    ],
+    "Красный карандаш",
+  ),
+];
+const pencils = revisedPage3 ? revisedPencils : originalPencils;
 const maps: Record<
   string,
   { targets: Hotspot[]; expected: string[]; prompt: string }

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Первый урок — было / стало</title>
+    <style>
+      :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #263443; background: #eef1ef; }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 40px 24px 56px; }
+      main { max-width: 1260px; margin: auto; }
+      header { margin-bottom: 28px; }
+      h1 { margin: 0 0 8px; font: 600 34px/1.2 Georgia, serif; }
+      header p, section p { margin: 0; color: #5b6872; font-size: 15px; line-height: 1.5; }
+      section { background: #fff; border: 1px solid #dce2e0; border-radius: 12px; margin: 22px 0; padding: 24px; box-shadow: 0 3px 14px #243b3310; }
+      h2 { margin: 0 0 5px; font-size: 21px; line-height: 1.3; }
+      .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+      figure { margin: 0; min-width: 0; }
+      figcaption { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; color: #526169; }
+      .frame { display: flex; align-items: center; justify-content: center; min-height: 250px; padding: 20px; background: #fcfaf5; border: 1px solid #e6e0d4; border-radius: 8px; }
+      .school .frame { min-height: 455px; }
+      .pencils .frame { min-height: 195px; }
+      .frame img { display: block; width: 100%; max-width: 530px; max-height: 430px; object-fit: contain; }
+      .pencils .frame img { max-height: 150px; }
+      @media (max-width: 800px) {
+        body { padding: 18px 12px; }
+        h1 { font-size: 27px; }
+        section { padding: 16px; }
+        .pair { grid-template-columns: 1fr; }
+        .school .frame { min-height: 270px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Первый урок · было / стало</h1>
+        <p>Страница 3. Пять экранов используют три рисунка: школу, мячи в двух вопросах и карандаши в двух вопросах.</p>
+      </header>
+      <section class="school">
+        <h2>1. Дети идут в школу</h2>
+        <p>8 детей · 4 пары · современная школа и одежда</p>
+        <div class="pair">
+          <figure><figcaption>Было</figcaption><div class="frame"><img src="../../assets/book/p003_school_children.jpg" alt="Старая иллюстрация школьников" /></div></figure>
+          <figure><figcaption>Стало</figcaption><div class="frame"><img src="../../assets/book2/p003_school_children@2x.png" alt="Новая иллюстрация школьников" /></div></figure>
+        </div>
+      </section>
+      <section class="balls">
+        <h2>2–3. Большой и маленький мяч</h2>
+        <p>Одна пара рисунков используется для обоих вопросов</p>
+        <div class="pair">
+          <figure><figcaption>Было</figcaption><div class="frame"><img src="../../assets/book/p003_balls_bigger_smaller.jpg" alt="Старые мячи" /></div></figure>
+          <figure><figcaption>Стало</figcaption><div class="frame"><img src="../../assets/book2/p003_balls_bigger_smaller@2x.png" alt="Новые мячи" /></div></figure>
+        </div>
+      </section>
+      <section class="pencils">
+        <h2>4–5. Длинный и короткий карандаш</h2>
+        <p>Одна пара рисунков используется для обоих вопросов</p>
+        <div class="pair">
+          <figure><figcaption>Было</figcaption><div class="frame"><img src="../../assets/book/p003_pencils_longer_shorter.jpg" alt="Старые карандаши" /></div></figure>
+          <figure><figcaption>Стало</figcaption><div class="frame"><img src="../../assets/book2/p003_pencils_longer_shorter@2x.png" alt="Новые карандаши" /></div></figure>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

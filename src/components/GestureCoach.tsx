@@ -26,7 +26,7 @@ import {
   shapeDemoPoint,
   shapeDemoEdge,
 } from "../lib/coachGeometry";
-import { assets } from "../content/assets";
+import { assets } from "../content/assetSet";
 import { CoachExample, type ExampleData } from "./CoachExample";
 import { colors as c, fonts as f } from "../theme";
 import {

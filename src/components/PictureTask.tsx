@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { View, Image, Pressable, Text } from "react-native";
 import Svg, { Polygon, Ellipse, Rect } from "react-native-svg";
 import type { Block, Hotspot, Point } from "../content/types";
-import { assets } from "../content/assets";
+import { assets } from "../content/assetSet";
 import { useTaskSize } from "./taskSize";
 import { colors as c, fonts as f } from "../theme";
 import { Rows } from "./HandDrawn";

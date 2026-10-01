@@ -17,7 +17,7 @@ import { isCorrect, isDone, hasInk } from "../lib/assessment";
 import { promptRepeatsTitle } from "../lib/blockText";
 import { offerHelp, retryLine, successLine } from "../lib/feedback";
 import { BookImage } from "./BookImage";
-import { assets } from "../content/assets";
+import { assets } from "../content/assetSet";
 import { fitsPhone, useTaskSize } from "./taskSize";
 import { scrollbarGutter } from "../lib/scrollbar";
 import { useSheetWindow } from "../lib/settledWindow";

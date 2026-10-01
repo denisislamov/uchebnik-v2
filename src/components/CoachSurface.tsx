@@ -9,7 +9,7 @@ import Svg, {
 } from "react-native-svg";
 import type { Point, TraceTarget } from "../content/types";
 import { shapeDemoPoint } from "../lib/coachGeometry";
-import { assets } from "../content/assets";
+import { assets } from "../content/assetSet";
 export type DemoSurface =
   | { kind: "image"; imageId: string }
   | { kind: "trace"; columns: number; rows: number; targets: TraceTarget[] }

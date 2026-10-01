@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
 import { Image, View } from "react-native";
 import Svg, { Ellipse } from "react-native-svg";
-import { assets } from "../content/assets";
+import { assets } from "../content/assetSet";
 import { CELL } from "../lib/grid";
 import { colors as c } from "../theme";
 /** How many times its own size a scan from the book may be shown. */
