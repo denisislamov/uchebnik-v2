@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="610" height="140" viewBox="0 0 610 140">
+<circle id="coin-0" cx="76.2" cy="70.0" r="50.4" fill="#eee8db" stroke="#8c8070" stroke-width="2.8"/>
+<circle cx="76.2" cy="70.0" r="43.4" fill="none" stroke="#c6bbaa" stroke-width="1.6"/>
+<text id="coin-label-0" x="76.2" y="89.0" text-anchor="middle" font-family="Andika_700Bold" font-size="58" fill="#1f2433">3</text>
+<circle id="coin-1" cx="228.8" cy="70.0" r="50.4" fill="#eee8db" stroke="#8c8070" stroke-width="2.8"/>
+<circle cx="228.8" cy="70.0" r="43.4" fill="none" stroke="#c6bbaa" stroke-width="1.6"/>
+<text id="coin-label-1" x="228.8" y="89.0" text-anchor="middle" font-family="Andika_700Bold" font-size="58" fill="#1f2433">3</text>
+<circle id="coin-2" cx="381.2" cy="70.0" r="50.4" fill="#eee8db" stroke="#8c8070" stroke-width="2.8"/>
+<circle cx="381.2" cy="70.0" r="43.4" fill="none" stroke="#c6bbaa" stroke-width="1.6"/>
+<text id="coin-label-2" x="381.2" y="89.0" text-anchor="middle" font-family="Andika_700Bold" font-size="58" fill="#1f2433">3</text>
+<circle id="coin-3" cx="533.8" cy="70.0" r="50.4" fill="#eee8db" stroke="#8c8070" stroke-width="2.8"/>
+<circle cx="533.8" cy="70.0" r="43.4" fill="none" stroke="#c6bbaa" stroke-width="1.6"/>
+<text id="coin-label-3" x="533.8" y="89.0" text-anchor="middle" font-family="Andika_700Bold" font-size="58" fill="#1f2433">3</text>
+</svg>

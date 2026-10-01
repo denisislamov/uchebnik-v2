@@ -32,6 +32,19 @@ test("the revised page 3 pencils can be tapped where the painted barrels are", (
   );
 });
 
+test("redrawn balls, chairs and skis keep separate tappable areas", () => {
+  for (const [block, x, y, expected] of [
+    ["p003-block02", 0.28, 0.46, "left"],
+    ["p003-block03", 0.81, 0.63, "right"],
+    ["p008-block01", 0.27, 0.52, "chair-left"],
+    ["p008-block01", 0.7, 0.68, "chair-right"],
+    ["p008-block03", 0.7, 0.23, "ski1"],
+    ["p008-block03", 0.75, 0.53, "ski2"],
+  ] as const) {
+    assert.equal(tap(block, x, y), expected, `${block} at ${x}, ${y}`);
+  }
+});
+
 test("revised page 7 to 10 targets follow the visible people, windows, ears, wings and fish", () => {
   for (const [block, x, y, expected] of [
     ["p007-block02", 0.17, 0.39, "many"],

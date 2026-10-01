@@ -84,6 +84,39 @@ test("revised prompts match the bead rail and modern pharmacy pictures", () => {
   assert.match(plates.prompt, /тарелк/);
   assert.doesNotMatch(plates.prompt, /рубл/i);
 });
+test("revised late-page picture prompts describe modern objects and number-only prices", () => {
+  const prompt = (page: number, id: string) => {
+    const block = pages[page - 1].blocks.find((item) => item.id === id);
+    assert.ok(block, id);
+    return block.prompt;
+  };
+  assert.match(prompt(94, "p094-source01"), /контейнера.*12 л/);
+  assert.doesNotMatch(prompt(94, "p094-source01"), /колхоз|бидон/i);
+  assert.match(prompt(96, "p096-source04"), /ферма.*8 плугов/);
+  assert.doesNotMatch(prompt(96, "p096-source05"), /колхоз/i);
+  for (const id of [
+    "p099-source01",
+    "p099-source02",
+    "p099-source03",
+    "p099-source04",
+    "p099-source05",
+  ]) {
+    assert.match(prompt(99, id), /жетон/);
+    assert.doesNotMatch(prompt(99, id), /рубл|копе/i);
+  }
+  assert.match(prompt(99, "p099-source01"), /пяти мячей.*числом 2/);
+  assert.match(prompt(102, "p102-source01"), /четыре учебные монеты.*числом 3/);
+  assert.doesNotMatch(prompt(108, "p108-source07"), /нож|рубл/i);
+  const coinActivity = pages[109].blocks.find(
+    (item) => item.id === "p110-source07",
+  );
+  assert.ok(coinActivity && coinActivity.kind === "activity");
+  assert.equal(coinActivity.activity.unit, "единицы");
+  const tickets = pages[109].blocks.find((item) => item.id === "p110-source08");
+  assert.ok(tickets && tickets.kind === "story");
+  assert.equal(tickets.story.unit, "жетоны");
+  assert.match(tickets.story.variants[0].description, /учебных жетона/);
+});
 test("empty, whitespace, malformed and zero are distinct", () => {
   const b = by("number");
   for (const value of [undefined, "", " ", "garbage", "2+0", "2.0", [], 0])

@@ -104,4 +104,6 @@ export const revisedAssets: Record<string, { source: ImageSourcePropType; width:
   'p078_soap_2_rub': { source: require('../../assets/book2/p078_soap_2_rub.png'), width: 500, height: 360, alt: "современное мыло в упаковке и отдельный ценник с числом 2" },
   'p078_toothbrush_3_rub': { source: require('../../assets/book2/p078_toothbrush_3_rub.png'), width: 500, height: 360, alt: "современная зубная щётка в картонной упаковке и отдельный ценник с числом 3" },
   'p101_girl_table_cups_plates': { source: require('../../assets/book2/p101_girl_table_cups_plates.png'), width: 740, height: 348, alt: "девочка у современного стола: пять отдельных стопок по две чашки и четыре отдельные стопки по три тарелки" },
+  'p108_birds_birdhouse': { source: require('../../assets/book2/p108_birds_birdhouse.png'), width: 373, height: 560, alt: "две небольшие птицы на ветках у современного деревянного скворечника" },
+  'p111_dog_sled': { source: require('../../assets/book2/p111_dog_sled.png'), width: 760, height: 288, alt: "современная собачья упряжка: шесть хорошо различимых пар собак и один вожак впереди, всего тринадцать собак" },
 };

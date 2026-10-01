@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="145" height="179" viewBox="0 0 145 179">
+<path id="mug-body" d="M17 22H104V160 Q61 173 17 160Z" fill="#e5efed" fill-opacity="0.82" stroke="#526c6c" stroke-width="2.4"/>
+<ellipse id="mug-rim" cx="60.5" cy="22" rx="43.5" ry="10" fill="#fcfbf7" stroke="#526c6c" stroke-width="2.2"/>
+<path id="mug-handle" d="M104 49H124 Q138 49 138 64V127 Q138 143 118 143H104" fill="none" stroke="#526c6c" stroke-width="7" stroke-linecap="round"/>
+<path id="mug-graduation-0" d="M24 63H51" fill="none" stroke="#8aa6a4" stroke-width="2"/>
+<path id="mug-graduation-1" d="M24 86H43" fill="none" stroke="#8aa6a4" stroke-width="2"/>
+<path id="mug-graduation-2" d="M24 109H51" fill="none" stroke="#8aa6a4" stroke-width="2"/>
+<path id="mug-graduation-3" d="M24 132H43" fill="none" stroke="#8aa6a4" stroke-width="2"/>
+<text id="mug-volume" x="69" y="105" text-anchor="middle" font-family="Andika_700Bold" font-size="25" fill="#1f2433">1 л</text>
+</svg>

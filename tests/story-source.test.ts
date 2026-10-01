@@ -326,7 +326,7 @@ test("runtime connects all ten source stories to isCorrect and requires complete
     },
     680: {
       storyVariant: "first",
-      storyUnit: "рубли",
+      storyUnit: "жетоны",
       firstOperator: "−",
       firstResult: "12",
       secondOperator: ":",

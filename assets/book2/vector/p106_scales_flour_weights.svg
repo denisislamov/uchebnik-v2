@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="390" height="285" viewBox="0 0 390 285">
+<path id="scale-base" d="M119 273H271" fill="none" stroke="#526c6c" stroke-width="8" stroke-linecap="round"/>
+<path id="scale-post" d="M195 270V179" fill="none" stroke="#526c6c" stroke-width="8"/>
+<path id="scale-beam" d="M85 189H305" fill="none" stroke="#526c6c" stroke-width="5"/>
+<path id="scale-hanger-left" d="M85 189V216" fill="none" stroke="#8aa6a4" stroke-width="2.3"/>
+<path id="scale-pan-left" d="M13 220 Q85 235 157 220" fill="none" stroke="#526c6c" stroke-width="4" stroke-linecap="round"/>
+<path id="scale-hanger-right" d="M305 189V216" fill="none" stroke="#8aa6a4" stroke-width="2.3"/>
+<path id="scale-pan-right" d="M233 220 Q305 235 377 220" fill="none" stroke="#526c6c" stroke-width="4" stroke-linecap="round"/>
+<path id="flour-bag" d="M42 208L44 92 Q83 78 128 92L131 208Z" fill="#e9dcc4" stroke="#937c61" stroke-width="2.2"/>
+<text id="flour-label" x="86" y="162" text-anchor="middle" font-family="Andika_700Bold" font-size="20" fill="#1f2433">Мука</text>
+<path id="weight-0" d="M239 215 L245 165H291L297 215Z" fill="#a8c9c6" stroke="#526c6c" stroke-width="1.8"/>
+<path d="M260 165V157H276V165" fill="none" stroke="#526c6c" stroke-width="2"/>
+<text id="weight-label-0" x="268" y="205" text-anchor="middle" font-family="Andika_700Bold" font-size="25" fill="#1f2433">5 кг</text>
+<path id="weight-1" d="M313 215 L319 165H365L371 215Z" fill="#a8c9c6" stroke="#526c6c" stroke-width="1.8"/>
+<path d="M334 165V157H350V165" fill="none" stroke="#526c6c" stroke-width="2"/>
+<text id="weight-label-1" x="342" y="205" text-anchor="middle" font-family="Andika_700Bold" font-size="25" fill="#1f2433">5 кг</text>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="227" height="155" viewBox="0 0 227 155">
+<line id="bundle-stick-0" x1="17.0" y1="135" x2="36.0" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-1" x1="21.8" y1="135" x2="40.8" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-2" x1="26.6" y1="135" x2="45.6" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-3" x1="31.4" y1="135" x2="50.4" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-4" x1="36.2" y1="135" x2="55.2" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-5" x1="41.0" y1="135" x2="60.0" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-6" x1="45.8" y1="135" x2="64.8" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-7" x1="50.6" y1="135" x2="69.6" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-8" x1="55.4" y1="135" x2="74.4" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<line id="bundle-stick-9" x1="60.2" y1="135" x2="79.2" y2="18" stroke="#a77c51" stroke-width="3.7" stroke-linecap="round"/>
+<path id="bundle-tie" d="M17 70.5 Q42 65.5 78 67.5 L78 81.5 Q43 78.5 16 85.5 Z" fill="#a8c9c6" stroke="#6b7280" stroke-width="1.6"/>
+<line id="loose-stick-0" data-group="0" x1="105" y1="135" x2="121" y2="22" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-1" data-group="0" x1="129" y1="135" x2="145" y2="22" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-2" data-group="0" x1="153" y1="135" x2="169" y2="22" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-3" data-group="0" x1="177" y1="135" x2="193" y2="22" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+<line id="loose-stick-4" data-group="0" x1="201" y1="135" x2="217" y2="22" stroke="#a77c51" stroke-width="6" stroke-linecap="round"/>
+</svg>

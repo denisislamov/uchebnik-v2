@@ -952,6 +952,7 @@ SECOND_DECADE_STICK_GROUPS = {
     "p063_bundle_plus_3_sticks": ((155, 200, 245),),
     "p064_sticks_bundle_2_plus_2": ((120, 145), (205, 230)),
     "p071_sticks_bundle_4_plus_2": ((110, 135, 160, 185), (225, 250)),
+    "p090_sticks_bundle_10_plus_5": ((105, 129, 153, 177, 201),),
 }
 
 
@@ -1357,6 +1358,695 @@ def pencils_case_svg(asset_id):
             f'<path id="cross-unit-{i}" d="M{x-10} 44L{x+10} 24" '
             f'fill="none" stroke="{NOTEBOOK_INK}" stroke-width="2.2"/>'
         )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def educational_scales_svg(asset_id):
+    width, height = dimensions(asset_id)
+    flour = "flour" in asset_id
+    labels = (("5 кг", "5 кг") if asset_id == "p106_scales_flour_weights"
+              else ("5 кг", "1 кг") if flour else ("2 кг", "1 кг"))
+    pan_y = height - 65
+    left, right, center = 85, width - 85, width / 2
+    parts = start_svg(width, height)
+    parts.append(
+        f'<path id="scale-base" d="M{center-76:g} {height-12}H{center+76:g}" '
+        f'fill="none" stroke="#526c6c" stroke-width="8" '
+        'stroke-linecap="round"/>'
+    )
+    parts.append(
+        f'<path id="scale-post" d="M{center:g} {height-15}V{pan_y-41}" '
+        f'fill="none" stroke="#526c6c" stroke-width="8"/>'
+    )
+    parts.append(
+        f'<path id="scale-beam" d="M{left} {pan_y-31}H{right}" '
+        f'fill="none" stroke="#526c6c" stroke-width="5"/>'
+    )
+    for side, x in (("left", left), ("right", right)):
+        parts.append(
+            f'<path id="scale-hanger-{side}" d="M{x} {pan_y-31}V{pan_y-4}" '
+            f'fill="none" stroke="#8aa6a4" stroke-width="2.3"/>'
+        )
+        parts.append(
+            f'<path id="scale-pan-{side}" d="M{x-72} {pan_y} '
+            f'Q{x} {pan_y+15} {x+72} {pan_y}" '
+            f'fill="none" stroke="#526c6c" stroke-width="4" '
+            'stroke-linecap="round"/>'
+        )
+    if flour:
+        parts.append(
+            f'<path id="flour-bag" d="M42 {pan_y-12}L44 {pan_y-128} '
+            f'Q83 {pan_y-142} 128 {pan_y-128}L131 {pan_y-12}Z" '
+            f'fill="#e9dcc4" stroke="#937c61" stroke-width="2.2"/>'
+        )
+        parts.append(
+            f'<text id="flour-label" x="86" y="{pan_y-58}" '
+            f'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="20" fill="{NOTEBOOK_INK}">Мука</text>'
+        )
+    else:
+        parts.append(
+            f'<path id="bread-loaf" d="M27 {pan_y-15} '
+            f'Q27 {pan_y-57} 79 {pan_y-62} '
+            f'Q132 {pan_y-59} 145 {pan_y-18}Z" '
+            'fill="#d7a76d" stroke="#98734e" stroke-width="2.2"/>'
+        )
+        for i in range(3):
+            x = 62 + i * 23
+            parts.append(
+                f'<path d="M{x} {pan_y-49}l10 12" fill="none" '
+                'stroke="#f3d9a8" stroke-width="3" stroke-linecap="round"/>'
+            )
+    for i, (label, x) in enumerate(zip(labels, (right-37, right+37))):
+        parts.append(
+            f'<path id="weight-{i}" d="M{x-29} {pan_y-5} '
+            f'L{x-23} {pan_y-55}H{x+23}L{x+29} {pan_y-5}Z" '
+            'fill="#a8c9c6" stroke="#526c6c" stroke-width="1.8"/>'
+        )
+        parts.append(
+            f'<path d="M{x-8} {pan_y-55}V{pan_y-63}H{x+8}V{pan_y-55}" '
+            f'fill="none" stroke="#526c6c" stroke-width="2"/>'
+        )
+        parts.append(
+            f'<text id="weight-label-{i}" x="{x}" y="{pan_y-15}" '
+            'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="25" fill="{NOTEBOOK_INK}">{label}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def unit_rule_svg(asset_id, word, abbreviation):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="rule-frame" x="7" y="7" width="{width-14}" '
+        f'height="{height-14}" rx="8" fill="#f5f3ec" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    if word == "литр":
+        lines = (("Слово «литр»", 35), ("сокращённо", 76),
+                 ("записывают л", 117))
+        font_size = 40
+    else:
+        lines = ((f"Слово «{word}» сокращённо", 55),
+                 (f"записывают {abbreviation}", 101))
+        font_size = 30
+    for i, (line, y) in enumerate(lines):
+        parts.append(
+            f'<text id="rule-line-{i}" x="{width/2:g}" y="{y}" '
+            'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="{font_size}" fill="{NOTEBOOK_INK}">{line}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def minus_fourteen_frame_svg():
+    width, height = dimensions("p092_frame_minus_14")
+    parts = start_svg(width, height)
+    parts.append(
+        '<rect id="number-frame" x="8" y="8" width="258" height="151" '
+        f'rx="4" fill="#fcfbf7" stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for row, (values, y) in enumerate((((16, 18, 20), 61), ((15, 19, 17), 123))):
+        for column, (value, x) in enumerate(zip(values, (50, 136, 222))):
+            parts.append(
+                f'<text id="frame-cell-{row}-{column}" x="{x}" y="{y}" '
+                'text-anchor="middle" font-family="Andika_700Bold" '
+                f'font-size="31" fill="{NOTEBOOK_INK}">{value}</text>'
+            )
+    parts.append(
+        f'<text id="frame-operation" x="276" y="100" '
+        f'font-family="Andika_700Bold" font-size="32" '
+        f'fill="{NOTEBOOK_INK}">−14</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def bottle_svg():
+    width, height = dimensions("p093_bottle")
+    parts = start_svg(width, height)
+    parts.append(
+        '<path id="bottle-body" d="M42 18H71V75 '
+        'Q71 87 90 104 Q105 119 105 145V282 '
+        'Q105 302 85 302H28 Q8 302 8 282V145 '
+        'Q8 119 23 104 Q42 87 42 75Z" '
+        'fill="#e5efed" fill-opacity="0.7" '
+        'stroke="#526c6c" stroke-width="2.5"/>'
+    )
+    parts.append(
+        '<rect id="bottle-screw-cap" x="38" y="7" width="37" height="19" '
+        'rx="3" fill="#a8c9c6" stroke="#526c6c" stroke-width="2"/>'
+    )
+    for i, y in enumerate((164, 225)):
+        parts.append(
+            f'<path id="bottle-rib-{i}" d="M13 {y}Q56 {y+6} 100 {y}" '
+            'fill="none" stroke="#8aa6a4" stroke-width="3.2"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def glass_svg():
+    width, height = dimensions("p093_glass")
+    parts = start_svg(width, height)
+    parts.append(
+        '<path id="glass-body" d="M10 11H67L60 106 '
+        'Q39 113 17 106Z" fill="#e5efed" fill-opacity="0.7" '
+        'stroke="#526c6c" stroke-width="2.2"/>'
+    )
+    parts.append(
+        '<ellipse id="glass-rim" cx="38.5" cy="11" rx="28.5" ry="5" '
+        'fill="#fcfbf7" stroke="#526c6c" stroke-width="2"/>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def measuring_mug_svg():
+    width, height = dimensions("p093_one_liter_mug")
+    parts = start_svg(width, height)
+    parts.append(
+        '<path id="mug-body" d="M17 22H104V160 '
+        'Q61 173 17 160Z" fill="#e5efed" fill-opacity="0.82" '
+        'stroke="#526c6c" stroke-width="2.4"/>'
+    )
+    parts.append(
+        '<ellipse id="mug-rim" cx="60.5" cy="22" rx="43.5" ry="10" '
+        'fill="#fcfbf7" stroke="#526c6c" stroke-width="2.2"/>'
+    )
+    parts.append(
+        '<path id="mug-handle" d="M104 49H124 Q138 49 138 64V127 '
+        'Q138 143 118 143H104" fill="none" '
+        'stroke="#526c6c" stroke-width="7" stroke-linecap="round"/>'
+    )
+    for i, y in enumerate((63, 86, 109, 132)):
+        parts.append(
+            f'<path id="mug-graduation-{i}" d="M24 {y}H{43 if i%2 else 51}" '
+            f'fill="none" stroke="#8aa6a4" stroke-width="2"/>'
+        )
+    parts.append(
+        f'<text id="mug-volume" x="69" y="105" '
+        f'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="25" fill="{NOTEBOOK_INK}">1 л</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def milk_can_svg(asset_id):
+    width, height = dimensions(asset_id)
+    known = asset_id == "p094_milk_can_12_l"
+    parts = start_svg(width, height)
+    x = width * 0.14
+    body_w = width * 0.72
+    parts.append(
+        f'<rect id="can-body" x="{x:g}" y="{height*0.29:g}" '
+        f'width="{body_w:g}" height="{height*0.68:g}" rx="13" '
+        'fill="#d9e8e9" stroke="#526c6c" stroke-width="2.5"/>'
+    )
+    parts.append(
+        f'<path id="can-shoulder" d="M{x:g} {height*0.39:g} '
+        f'Q{width/2:g} {height*0.25:g} {x+body_w:g} {height*0.39:g}" '
+        f'fill="none" stroke="#526c6c" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<path id="can-handle" d="M{width*0.30:g} {height*0.29:g} '
+        f'V{height*0.09:g} Q{width/2:g} {height*0.01:g} '
+        f'{width*0.70:g} {height*0.09:g}V{height*0.29:g}" '
+        f'fill="none" stroke="#526c6c" stroke-width="5" '
+        'stroke-linejoin="round"/>'
+    )
+    parts.append(
+        f'<rect id="can-cap" x="{width*0.31:g}" y="{height*0.22:g}" '
+        f'width="{width*0.38:g}" height="{height*0.08:g}" rx="4" '
+        'fill="#a8c9c6" stroke="#526c6c" stroke-width="2"/>'
+    )
+    if known:
+        parts.append(
+            f'<text id="can-volume" x="{width/2:g}" y="{height*0.69:g}" '
+            f'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="31" fill="{NOTEBOOK_INK}">12 л</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def modern_plough_svg():
+    width, height = dimensions("p096_plough")
+    parts = start_svg(width, height)
+    parts.append(
+        '<path id="plough-frame" d="M44 42H282L308 28" '
+        'fill="none" stroke="#526c6c" stroke-width="7" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    parts.append(
+        '<path id="plough-hitch" d="M282 30L308 23V48L282 53" '
+        'fill="none" stroke="#526c6c" stroke-width="4"/>'
+    )
+    parts.append('<g id="plough-share">')
+    for i, x in enumerate((79, 160, 241)):
+        parts.append(
+            f'<path id="plough-shank-{i}" d="M{x+15} 42L{x-7} 105" '
+            'fill="none" stroke="#526c6c" stroke-width="5" '
+            'stroke-linecap="round"/>'
+        )
+        parts.append(
+            f'<path id="plough-share-{i}" d="M{x-38} 118 '
+            f'Q{x-12} 91 {x+13} 104L{x+35} 131 '
+            f'Q{x-3} 146 {x-38} 118Z" fill="#a8c9c6" '
+            'stroke="#526c6c" stroke-width="2.3"/>'
+        )
+    parts.append('</g>')
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def modern_tractor_svg():
+    width, height = dimensions("p096_tractor")
+    parts = start_svg(width, height)
+    parts.append(
+        '<path id="tractor-mounted-plough" d="M70 125H24 '
+        'L13 146L49 157L70 133" fill="#a8c9c6" '
+        'stroke="#526c6c" stroke-width="2.5"/>'
+    )
+    parts.append(
+        '<path id="tractor-body" d="M70 107H278L294 139 '
+        'V158H66Z" fill="#9ab4b1" stroke="#526c6c" '
+        'stroke-width="2.6" stroke-linejoin="round"/>'
+    )
+    parts.append(
+        '<path id="tractor-cab" d="M104 104V41 '
+        'Q104 33 112 33H189L205 104Z" fill="#d9e8e9" '
+        'stroke="#526c6c" stroke-width="2.6"/>'
+    )
+    parts.append(
+        '<path id="tractor-window" d="M117 46H181L191 91H117Z" '
+        'fill="#f3f8f5" stroke="#526c6c" stroke-width="1.8"/>'
+    )
+    parts.append(
+        '<path id="tractor-exhaust" d="M262 104V67H271" '
+        'fill="none" stroke="#526c6c" stroke-width="4" '
+        'stroke-linecap="round"/>'
+    )
+    for i, (x, y, radius) in enumerate(((104, 163, 35), (249, 166, 25))):
+        parts.append(
+            f'<circle id="tractor-wheel-{i}" cx="{x}" cy="{y}" '
+            f'r="{radius}" fill="#59666a" stroke="#364447" stroke-width="2"/>'
+        )
+        parts.append(
+            f'<circle cx="{x}" cy="{y}" r="{radius*0.45:g}" '
+            'fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def paired_berries_svg(asset_id, pairs):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    step = width / pairs
+    for i in range(pairs):
+        center = step * (i + 0.5)
+        parts.append(f'<g id="pair-{i}">')
+        parts.append(
+            f'<path id="twig-{i}" d="M{center-26:.1f} 17 '
+            f'Q{center:.1f} 8 {center+26:.1f} 19" '
+            f'fill="none" stroke="{GREEN_EDGE}" '
+            'stroke-width="2.2" stroke-linecap="round"/>'
+        )
+        for j, x in enumerate((center-13, center+13)):
+            parts.append(
+                f'<path d="M{x:.1f} 19V35" fill="none" '
+                f'stroke="{GREEN_EDGE}" stroke-width="2"/>'
+            )
+            parts.append(
+                f'<path id="berry-{i}-{j}" d="M{x:.1f} 36 '
+                f'C{x-8:.1f} 31 {x-16:.1f} 37 {x-15:.1f} 47 '
+                f'C{x-14:.1f} 56 {x-5:.1f} 68 {x:.1f} 72 '
+                f'C{x+5:.1f} 68 {x+14:.1f} 56 {x+15:.1f} 47 '
+                f'C{x+16:.1f} 37 {x+8:.1f} 31 {x:.1f} 36Z" '
+                'fill="#c97475" stroke="#965c60" stroke-width="1.4"/>'
+            )
+            parts.append(
+                f'<path id="berry-calyx-{i}-{j}" '
+                f'd="M{x-11:.1f} 38L{x-5:.1f} 34L{x:.1f} 37 '
+                f'L{x+5:.1f} 34L{x+11:.1f} 38L{x+5:.1f} 41 '
+                f'L{x:.1f} 38L{x-5:.1f} 41Z" '
+                f'fill="{GREEN}" stroke="{GREEN_EDGE}" stroke-width="1"/>'
+            )
+        parts.append('</g>')
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def paired_acorns_svg(asset_id, pairs):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    step = width / pairs
+    for i in range(pairs):
+        center = step * (i + 0.5)
+        parts.append(f'<g id="pair-{i}">')
+        parts.append(
+            f'<path d="M{center-21:.1f} 22Q{center:.1f} 9 '
+            f'{center+21:.1f} 22" fill="none" stroke="{GREEN_EDGE}" '
+            'stroke-width="2" stroke-linecap="round"/>'
+        )
+        for j, x in enumerate((center-12, center+12)):
+            parts.append(
+                f'<path id="acorn-{i}-{j}" d="M{x-8:.1f} 37 '
+                f'Q{x:.1f} 32 {x+8:.1f} 37 '
+                f'Q{x+9:.1f} 56 {x:.1f} 66 '
+                f'Q{x-9:.1f} 56 {x-8:.1f} 37Z" '
+                'fill="#b69572" stroke="#7c654f" stroke-width="1.3"/>'
+            )
+            parts.append(
+                f'<path d="M{x-10:.1f} 39Q{x:.1f} 22 {x+10:.1f} 39" '
+                'fill="#879b75" stroke="#617751" stroke-width="1.2"/>'
+            )
+        parts.append('</g>')
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def multiplication_two_table_svg():
+    width, height = dimensions("p098_table_mult_2")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="table-frame" x="8" y="8" width="{width-16}" '
+        f'height="{height-16}" rx="5" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for factor in range(2, 11):
+        column = (factor - 2) // 3
+        row = (factor - 2) % 3
+        x = (32, 180, 326)[column]
+        y = (65, 128, 191)[row]
+        parts.append(
+            f'<text id="factor-{factor}" x="{x}" y="{y}" '
+            f'font-family="Andika_700Bold" font-size="35" '
+            f'fill="{NOTEBOOK_INK}">2×{factor}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def five_balls_with_prices_svg():
+    width, height = dimensions("p099_balls_5_two_rubles")
+    parts = start_svg(width, height)
+    for i in range(5):
+        x = 65 + i * 123
+        parts.append(
+            f'<circle id="ball-{i}" cx="{x}" cy="51" r="34" '
+            'fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>'
+        )
+        parts.append(
+            f'<path d="M{x-20} 24Q{x} 50 {x-20} 78 '
+            f'M{x+20} 24Q{x} 50 {x+20} 78" fill="none" '
+            'stroke="#8aa6a4" stroke-width="1.8"/>'
+        )
+        parts.append(
+            f'<rect id="price-tag-{i}" x="{x-25}" y="103" '
+            'width="50" height="37" rx="5" fill="#f5f3ec" '
+            'stroke="#8aa6a4" stroke-width="1.4"/>'
+        )
+        parts.append(
+            f'<text id="price-{i}" x="{x}" y="132" text-anchor="middle" '
+            f'font-family="Andika_700Bold" font-size="30" '
+            f'fill="{NOTEBOOK_INK}">2</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def triple_circles_svg(asset_id, groups):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    step = width / groups
+    for i in range(groups):
+        x = step * (i + 0.5)
+        parts.append(f'<g id="triple-{i}">')
+        for j, (dx, y) in enumerate(((0, 21), (-18, 54), (18, 54))):
+            parts.append(
+                f'<circle id="triple-dot-{i}-{j}" cx="{x+dx:.1f}" cy="{y}" '
+                f'r="11" fill="none" stroke="{PEN}" stroke-width="2"/>'
+            )
+        parts.append('</g>')
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def quad_circles_svg(asset_id, groups):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    step = width / groups
+    for group in range(groups):
+        x = step * (group + 0.5)
+        parts.append(f'<g id="quad-{group}">')
+        for dot_index, (dx, y) in enumerate(((-17, 25), (17, 25),
+                                              (-17, 58), (17, 58))):
+            parts.append(
+                f'<circle id="quad-dot-{group}-{dot_index}" '
+                f'cx="{x+dx:.1f}" cy="{y}" r="11.5" fill="none" '
+                f'stroke="{PEN}" stroke-width="2"/>'
+            )
+        parts.append('</g>')
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def cell_grid_svg(asset_id, rows, columns):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    cell_width = (width - 20) / columns
+    cell_height = (height - 20) / rows
+    for row in range(rows):
+        for column in range(columns):
+            x = 10 + column * cell_width
+            y = 10 + row * cell_height
+            parts.append(
+                f'<rect id="cell-{row}-{column}" x="{x:.2f}" y="{y:.2f}" '
+                f'width="{cell_width:.2f}" height="{cell_height:.2f}" '
+                f'fill="#fcfbf7" stroke="{NOTEBOOK_INK}" stroke-width="1.7"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def unsolved_multiplication_table_svg(asset_id, factor, end):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="table-frame" x="7" y="7" width="{width-14}" '
+        f'height="{height-14}" rx="4" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    count = end - 1
+    for i, multiplier in enumerate(range(2, end + 1)):
+        x = width * (i + 0.5) / count
+        parts.append(
+            f'<text id="expression-{i}" x="{x:.1f}" y="{height*0.65:.1f}" '
+            'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="36" fill="{NOTEBOOK_INK}">{factor}×{multiplier}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def educational_coin_row_svg(asset_id, denomination, count):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    step = width / count
+    radius = min(height * 0.36, step * 0.37)
+    for i in range(count):
+        x = step * (i + 0.5)
+        y = height / 2
+        parts.append(
+            f'<circle id="coin-{i}" cx="{x:.1f}" cy="{y:.1f}" '
+            f'r="{radius:.1f}" fill="#eee8db" stroke="#8c8070" '
+            'stroke-width="2.8"/>'
+        )
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{radius-7:.1f}" '
+            'fill="none" stroke="#c6bbaa" stroke-width="1.6"/>'
+        )
+        parts.append(
+            f'<text id="coin-label-{i}" x="{x:.1f}" y="{y+19:.1f}" '
+            'text-anchor="middle" font-family="Andika_700Bold" '
+            f'font-size="58" fill="{NOTEBOOK_INK}">{denomination}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def four_stick_square_svg():
+    width, height = dimensions("p103_sticks_square")
+    parts = start_svg(width, height)
+    for i, (x1, y1, x2, y2) in enumerate((
+        (15, 10, 85, 10), (85, 10, 85, 80),
+        (85, 80, 15, 80), (15, 80, 15, 10),
+    )):
+        parts.append(
+            f'<line id="stick-{i}" x1="{x1}" y1="{y1}" '
+            f'x2="{x2}" y2="{y2}" stroke="#a78665" '
+            'stroke-width="6" stroke-linecap="round"/>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def carrot_bunches_svg(asset_id, groups):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    step = width / groups
+    for group in range(groups):
+        center = step * (group + 0.5)
+        parts.append(f'<g id="bunch-{group}">')
+        for i, dx in enumerate((-28, -14, 0, 14, 28)):
+            x = center + dx
+            top = 47 + (i % 2) * 3
+            parts.append(
+                f'<path id="carrot-{group}-{i}" d="M{x-9:.1f} {top} '
+                f'Q{x:.1f} {top-5} {x+9:.1f} {top} '
+                f'L{x+5:.1f} {height-32} Q{x+3:.1f} {height-17} '
+                f'{x:.1f} {height-8} Q{x-3:.1f} {height-17} '
+                f'{x-5:.1f} {height-32}Z" fill="#df985e" '
+                'stroke="#a77856" stroke-width="1.5"/>'
+            )
+            parts.append(
+                f'<path d="M{x:.1f} {top-3}Q{center:.1f} 25 '
+                f'{center+dx/2:.1f} 16" fill="none" '
+                f'stroke="{GREEN_EDGE}" stroke-width="2"/>'
+            )
+        parts.append(
+            f'<path id="bunch-greens-{group}" '
+            f'd="M{center-5:.1f} 43Q{center-23:.1f} 29 '
+            f'{center-29:.1f} 17Q{center-14:.1f} 14 '
+            f'{center-4:.1f} 35Q{center-13:.1f} 14 '
+            f'{center-5:.1f} 9Q{center+4:.1f} 18 '
+            f'{center+1:.1f} 38Q{center+13:.1f} 14 '
+            f'{center+23:.1f} 18Q{center+18:.1f} 31 '
+            f'{center+7:.1f} 43Z" fill="#a0b394" '
+            f'stroke="{GREEN_EDGE}" stroke-width="1.3"/>'
+        )
+        parts.append(
+            f'<path id="bunch-tie-{group}" d="M{center-34:.1f} 44 '
+            f'Q{center:.1f} 39 {center+34:.1f} 44" fill="none" '
+            f'stroke="{NOTEBOOK_INK}" stroke-width="3"/>'
+        )
+        parts.append('</g>')
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def priced_tableware_svg(asset_id, object_name, price):
+    width, height = dimensions(asset_id)
+    parts = start_svg(width, height)
+    if object_name == "spoon":
+        parts.extend((
+            '<path id="spoon" d="M29 97Q71 81 133 57" fill="none" '
+            'stroke="#8b9e9f" stroke-width="13" stroke-linecap="round"/>',
+            '<ellipse cx="166" cy="45" rx="34" ry="20" '
+            'transform="rotate(-24 166 45)" fill="#d9e8e9" '
+            'stroke="#526c6c" stroke-width="2.5"/>',
+        ))
+    elif object_name == "fork":
+        parts.extend((
+            '<path id="fork" d="M28 100Q79 86 142 56" fill="none" '
+            'stroke="#8b9e9f" stroke-width="12" stroke-linecap="round"/>',
+            '<path d="M141 56L192 32M143 59L196 43M145 63L197 54M147 67L195 65" '
+            'fill="none" stroke="#526c6c" stroke-width="5" '
+            'stroke-linecap="round"/>',
+        ))
+    else:
+        parts.extend((
+            '<path id="mug" d="M64 25H152V101Q108 111 64 101Z" '
+            'fill="#d9e8e9" stroke="#526c6c" stroke-width="2.5"/>',
+            '<ellipse cx="108" cy="25" rx="44" ry="10" fill="#fcfbf7" '
+            'stroke="#526c6c" stroke-width="2.3"/>',
+            '<path d="M152 46H172Q189 47 189 64V78Q189 95 152 95" '
+            'fill="none" stroke="#526c6c" stroke-width="7" '
+            'stroke-linecap="round"/>',
+        ))
+    parts.append(
+        f'<rect id="price-tag" x="{width/2-31:.1f}" y="119" width="62" '
+        'height="43" rx="5" fill="#f5f3ec" '
+        'stroke="#8aa6a4" stroke-width="1.5"/>'
+    )
+    parts.append(
+        f'<text id="price" x="{width/2:.1f}" y="151" '
+        'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="37" fill="{NOTEBOOK_INK}">{price}</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def four_factor_frame_svg():
+    width, height = dimensions("p109_frame_mult_7_10")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="factor-frame" x="8" y="8" width="{width-16}" '
+        f'height="{height-16}" rx="5" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="1.8"/>'
+    )
+    for i, (label, x, y) in enumerate((
+        ("7×2", 35, 75), ("9×2", 175, 75),
+        ("8×2", 35, 144), ("10×2", 175, 144),
+    )):
+        parts.append(
+            f'<text id="expression-{i}" x="{x}" y="{y}" '
+            f'font-family="Andika_700Bold" font-size="38" '
+            f'fill="{NOTEBOOK_INK}">{label}</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def six_circles_two_rows_svg():
+    width, height = dimensions("p110_circles_3x2")
+    parts = start_svg(width, height)
+    for row, y in enumerate((33, 83)):
+        for column, x in enumerate((32, 80, 128)):
+            parts.append(
+                f'<circle id="circle-{row}-{column}" cx="{x}" cy="{y}" '
+                f'r="19" fill="none" stroke="{PEN}" stroke-width="2.3"/>'
+            )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n", width, height
+
+
+def multiplication_reference_table_svg():
+    width, height = dimensions("p110_mult_table_to_20")
+    parts = start_svg(width, height)
+    parts.append(
+        f'<rect id="reference-frame" x="9" y="9" width="{width-18}" '
+        f'height="{height-18}" rx="5" fill="#fcfbf7" '
+        f'stroke="{FRAME}" stroke-width="2"/>'
+    )
+    parts.append(
+        f'<text id="reference-title" x="{width/2:.1f}" y="50" '
+        'text-anchor="middle" font-family="Andika_700Bold" '
+        f'font-size="31" fill="{NOTEBOOK_INK}">Таблица умножения до 20</text>'
+    )
+    groups = (
+        (1, range(2, 11), 32, 94), (2, range(2, 11), 218, 94),
+        (3, range(2, 7), 406, 94), (4, range(2, 6), 590, 94),
+        (5, range(2, 5), 32, 409), (6, range(2, 4), 218, 409),
+        (7, (2,), 406, 409), (8, (2,), 406, 440),
+        (9, (2,), 590, 409), (10, (2,), 590, 440),
+    )
+    for factor, multipliers, x, top in groups:
+        for row, multiplier in enumerate(multipliers):
+            parts.append(
+                f'<text id="equation-{factor}-{multiplier}" x="{x}" '
+                f'y="{top+row*31}" font-family="Andika_400Regular" '
+                f'font-size="30" fill="{NOTEBOOK_INK}">'
+                f'{factor}×{multiplier}={factor*multiplier}</text>'
+            )
     parts.append("</svg>")
     return "\n".join(parts) + "\n", width, height
 
@@ -3172,6 +3862,133 @@ def main():
         register(asset_id, svg, width, height,
                  f"Коробка с {number} карандашами: 10 слева и {number-10} "
                  f"справа, четыре зачёркнуты, остаётся {number-4}")
+    for asset_id, object_name, weights in (
+        ("p089_scales_bread_2kg_1kg", "батон хлеба", "2 кг и 1 кг"),
+        ("p089_scales_flour_5kg_1kg", "мешок муки", "5 кг и 1 кг"),
+    ):
+        svg, width, height = educational_scales_svg(asset_id)
+        register(asset_id, svg, width, height,
+                 f"Учебные весы: слева {object_name}, справа гири {weights}")
+    for asset_id, word, abbreviation in (
+        ("p089_rule_kg_frame", "килограмм", "кг"),
+        ("p093_rule_liter_abbreviation", "литр", "л"),
+    ):
+        svg, width, height = unit_rule_svg(asset_id, word, abbreviation)
+        register(asset_id, svg, width, height,
+                 f"Правило: слово «{word}» сокращённо записывают {abbreviation}")
+    svg, width, height = minus_fourteen_frame_svg()
+    register("p092_frame_minus_14", svg, width, height,
+             "Рамка: верхний ряд 16, 18, 20; нижний 15, 19, 17; вычесть 14")
+    for asset_id, draw, alt in (
+        ("p093_bottle", bottle_svg, "Прозрачная современная бутылка"),
+        ("p093_glass", glass_svg, "Прозрачный стакан"),
+        ("p093_one_liter_mug", measuring_mug_svg,
+         "Мерная кружка с отметкой 1 л"),
+    ):
+        svg, width, height = draw()
+        register(asset_id, svg, width, height, alt)
+    for asset_id, alt in (
+        ("p094_milk_can_12_l", "Бидон с надписью 12 л"),
+        ("p094_milk_can_unknown", "Бидон без указания объёма"),
+    ):
+        svg, width, height = milk_can_svg(asset_id)
+        register(asset_id, svg, width, height, alt)
+    for asset_id, draw, alt in (
+        ("p096_plough", modern_plough_svg, "Современный навесной плуг"),
+        ("p096_tractor", modern_tractor_svg,
+         "Колёсный трактор с навесным плугом"),
+    ):
+        svg, width, height = draw()
+        register(asset_id, svg, width, height, alt)
+    for item, pages, counts, draw in (
+        ("strawberries", (97,), (2, 3, 4, 5), paired_berries_svg),
+        ("acorns", (97,), (6, 7), paired_acorns_svg),
+        ("acorns", (98,), (8, 9, 10), paired_acorns_svg),
+    ):
+        for page in pages:
+            for count in counts:
+                asset_id = f"p{page:03d}_{item}_2x{count}"
+                svg, width, height = draw(asset_id, count)
+                object_name = "ягоды" if item == "strawberries" else "жёлуди"
+                pair_word = "пары" if count in (2, 3, 4) else "пар"
+                register(asset_id, svg, width, height,
+                         f"{count} {pair_word}: по 2 {object_name} в каждой, всего {count*2}")
+    svg, width, height = multiplication_two_table_svg()
+    register("p098_table_mult_2", svg, width, height,
+             "Таблица умножения на 2: выражения от 2×2 до 2×10 без ответов")
+    svg, width, height = five_balls_with_prices_svg()
+    register("p099_balls_5_two_rubles", svg, width, height,
+             "Пять мячей; под каждым отдельный ценник только с числом 2")
+    for groups in (2, 3):
+        asset_id = f"p099_circles_3x{groups}"
+        svg, width, height = triple_circles_svg(asset_id, groups)
+        register(asset_id, svg, width, height,
+                 f"{groups} группы по 3 кружка; всего {groups*3}")
+    for groups in (4, 5, 6):
+        asset_id = f"p100_circles_3x{groups}"
+        svg, width, height = triple_circles_svg(asset_id, groups)
+        register(asset_id, svg, width, height,
+                 f"{groups} группы по 3 кружка; всего {groups*3}")
+    for asset_id, factor, end in (
+        ("p100_table_mult_3", 3, 6),
+        ("p103_table_mult_4", 4, 5),
+        ("p105_table_mult_5", 5, 4),
+        ("p107_table_mult_6", 6, 3),
+    ):
+        svg, width, height = unsolved_multiplication_table_svg(asset_id, factor, end)
+        register(asset_id, svg, width, height,
+                 f"Выражения от {factor}×2 до {factor}×{end} без ответов")
+    for asset_id, rows, columns in (
+        ("p101_grid_3x6_cells", 6, 3),
+        ("p107_cells_6x2", 2, 6),
+        ("p107_cells_6x3", 3, 6),
+        ("p110_grid_4x3", 3, 4),
+    ):
+        svg, width, height = cell_grid_svg(asset_id, rows, columns)
+        cell_word = "клетки" if columns in (3, 4) else "клеток"
+        register(asset_id, svg, width, height,
+                 f"Сетка: {rows} рядов по {columns} {cell_word}, всего {rows*columns}")
+    for page, group_counts in ((102, (2, 3)), (103, (4, 5))):
+        for groups in group_counts:
+            asset_id = f"p{page:03d}_circles_4x{groups}"
+            svg, width, height = quad_circles_svg(asset_id, groups)
+            register(asset_id, svg, width, height,
+                     f"{groups} группы по 4 кружка; всего {groups*4}")
+    for asset_id, denomination, count in (
+        ("p102_coins_3_kopeks_4", 3, 4),
+        ("p105_coins_5_kopeks_3", 5, 3),
+    ):
+        svg, width, height = educational_coin_row_svg(asset_id, denomination, count)
+        register(asset_id, svg, width, height,
+                 f"{count} учебные монеты с числом {denomination}; всего {count*denomination}")
+    svg, width, height = four_stick_square_svg()
+    register("p103_sticks_square", svg, width, height,
+             "Квадрат из четырёх отдельных палочек")
+    for groups in (2, 3, 4):
+        asset_id = f"p105_carrots_5x{groups}"
+        svg, width, height = carrot_bunches_svg(asset_id, groups)
+        register(asset_id, svg, width, height,
+                 f"{groups} пучка по 5 морковок; всего {groups*5}")
+    svg, width, height = educational_scales_svg("p106_scales_flour_weights")
+    register("p106_scales_flour_weights", svg, width, height,
+             "Учебные весы: слева пакет муки, справа две гири по 5 кг")
+    for asset_id, object_name, price, alt_object in (
+        ("p108_spoon_6_rubles", "spoon", 6, "ложка"),
+        ("p108_fork_4_rubles", "fork", 4, "вилка"),
+        ("p108_knife_3_rubles", "mug", 3, "кружка"),
+    ):
+        svg, width, height = priced_tableware_svg(asset_id, object_name, price)
+        register(asset_id, svg, width, height,
+                 f"Современная {alt_object}, ценник только с числом {price}")
+    svg, width, height = four_factor_frame_svg()
+    register("p109_frame_mult_7_10", svg, width, height,
+             "Рамка: 7×2, 9×2 сверху; 8×2, 10×2 снизу, без ответов")
+    svg, width, height = six_circles_two_rows_svg()
+    register("p110_circles_3x2", svg, width, height,
+             "Шесть пустых кружков: два ряда по три")
+    svg, width, height = multiplication_reference_table_svg()
+    register("p110_mult_table_to_20", svg, width, height,
+             "Таблица умножения до 20: 36 равенств по исходному скану")
     svg, width, height = title_svg()
     register("p001_cover_title_frame", svg, width, height, "Арифметика · 1 класс")
     for asset_id, draw, alt in (

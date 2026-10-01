@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="85" viewBox="0 0 480 85">
+<g id="quad-0">
+<circle id="quad-dot-0-0" cx="31.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-0-1" cx="65.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-0-2" cx="31.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-0-3" cx="65.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+</g>
+<g id="quad-1">
+<circle id="quad-dot-1-0" cx="127.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-1-1" cx="161.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-1-2" cx="127.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-1-3" cx="161.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+</g>
+<g id="quad-2">
+<circle id="quad-dot-2-0" cx="223.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-2-1" cx="257.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-2-2" cx="223.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-2-3" cx="257.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+</g>
+<g id="quad-3">
+<circle id="quad-dot-3-0" cx="319.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-3-1" cx="353.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-3-2" cx="319.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-3-3" cx="353.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+</g>
+<g id="quad-4">
+<circle id="quad-dot-4-0" cx="415.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-4-1" cx="449.0" cy="25" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-4-2" cx="415.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+<circle id="quad-dot-4-3" cx="449.0" cy="58" r="11.5" fill="none" stroke="#2b4ba8" stroke-width="2"/>
+</g>
+</svg>

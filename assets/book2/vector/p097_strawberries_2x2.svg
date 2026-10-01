@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="85" viewBox="0 0 220 85">
+<g id="pair-0">
+<path id="twig-0" d="M29.0 17 Q55.0 8 81.0 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M42.0 19V35" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-0-0" d="M42.0 36 C34.0 31 26.0 37 27.0 47 C28.0 56 37.0 68 42.0 72 C47.0 68 56.0 56 57.0 47 C58.0 37 50.0 31 42.0 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-0-0" d="M31.0 38L37.0 34L42.0 37 L47.0 34L53.0 38L47.0 41 L42.0 38L37.0 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path d="M68.0 19V35" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-0-1" d="M68.0 36 C60.0 31 52.0 37 53.0 47 C54.0 56 63.0 68 68.0 72 C73.0 68 82.0 56 83.0 47 C84.0 37 76.0 31 68.0 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-0-1" d="M57.0 38L63.0 34L68.0 37 L73.0 34L79.0 38L73.0 41 L68.0 38L63.0 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+</g>
+<g id="pair-1">
+<path id="twig-1" d="M139.0 17 Q165.0 8 191.0 19" fill="none" stroke="#486537" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M152.0 19V35" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-1-0" d="M152.0 36 C144.0 31 136.0 37 137.0 47 C138.0 56 147.0 68 152.0 72 C157.0 68 166.0 56 167.0 47 C168.0 37 160.0 31 152.0 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-1-0" d="M141.0 38L147.0 34L152.0 37 L157.0 34L163.0 38L157.0 41 L152.0 38L147.0 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+<path d="M178.0 19V35" fill="none" stroke="#486537" stroke-width="2"/>
+<path id="berry-1-1" d="M178.0 36 C170.0 31 162.0 37 163.0 47 C164.0 56 173.0 68 178.0 72 C183.0 68 192.0 56 193.0 47 C194.0 37 186.0 31 178.0 36Z" fill="#c97475" stroke="#965c60" stroke-width="1.4"/>
+<path id="berry-calyx-1-1" d="M167.0 38L173.0 34L178.0 37 L183.0 34L189.0 38L183.0 41 L178.0 38L173.0 41Z" fill="#5d863d" stroke="#486537" stroke-width="1"/>
+</g>
+</svg>

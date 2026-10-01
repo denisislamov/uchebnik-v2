@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="317" height="207" viewBox="0 0 317 207">
+<path id="tractor-mounted-plough" d="M70 125H24 L13 146L49 157L70 133" fill="#a8c9c6" stroke="#526c6c" stroke-width="2.5"/>
+<path id="tractor-body" d="M70 107H278L294 139 V158H66Z" fill="#9ab4b1" stroke="#526c6c" stroke-width="2.6" stroke-linejoin="round"/>
+<path id="tractor-cab" d="M104 104V41 Q104 33 112 33H189L205 104Z" fill="#d9e8e9" stroke="#526c6c" stroke-width="2.6"/>
+<path id="tractor-window" d="M117 46H181L191 91H117Z" fill="#f3f8f5" stroke="#526c6c" stroke-width="1.8"/>
+<path id="tractor-exhaust" d="M262 104V67H271" fill="none" stroke="#526c6c" stroke-width="4" stroke-linecap="round"/>
+<circle id="tractor-wheel-0" cx="104" cy="163" r="35" fill="#59666a" stroke="#364447" stroke-width="2"/>
+<circle cx="104" cy="163" r="15.75" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<circle id="tractor-wheel-1" cx="249" cy="166" r="25" fill="#59666a" stroke="#364447" stroke-width="2"/>
+<circle cx="249" cy="166" r="11.25" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="170" viewBox="0 0 220 170">
+<path id="spoon" d="M29 97Q71 81 133 57" fill="none" stroke="#8b9e9f" stroke-width="13" stroke-linecap="round"/>
+<ellipse cx="166" cy="45" rx="34" ry="20" transform="rotate(-24 166 45)" fill="#d9e8e9" stroke="#526c6c" stroke-width="2.5"/>
+<rect id="price-tag" x="79.0" y="119" width="62" height="43" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.5"/>
+<text id="price" x="110.0" y="151" text-anchor="middle" font-family="Andika_700Bold" font-size="37" fill="#1f2433">6</text>
+</svg>

@@ -63,12 +63,12 @@ test("№589 requires the actual yes/no conclusion, not only 18 required and 2 s
     false,
   );
 });
-test("№589 retains all original quantities and the question about winter", () => {
+test("№589 retains its 3-by-6 need, 20 available, and enough conclusion", () => {
   const b = block(589);
-  assert.match(b.prompt, /3 печи/);
-  assert.match(b.prompt, /6 возов/);
-  assert.match(b.prompt, /20 возов/);
+  assert.match(b.prompt, /трёх школьных кружков/);
+  assert.match(b.prompt, /по 6 наборов/);
+  assert.match(b.prompt, /20 наборов/);
   assert.ok(
-    b.fields.some((f) => /Хватит ли школе этих дров на зиму/.test(f.label)),
+    b.fields.some((f) => /Хватит ли приготовленных наборов/.test(f.label)),
   );
 });

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="230" height="170" viewBox="0 0 230 170">
+<path id="mug" d="M64 25H152V101Q108 111 64 101Z" fill="#d9e8e9" stroke="#526c6c" stroke-width="2.5"/>
+<ellipse cx="108" cy="25" rx="44" ry="10" fill="#fcfbf7" stroke="#526c6c" stroke-width="2.3"/>
+<path d="M152 46H172Q189 47 189 64V78Q189 95 152 95" fill="none" stroke="#526c6c" stroke-width="7" stroke-linecap="round"/>
+<rect id="price-tag" x="84.0" y="119" width="62" height="43" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.5"/>
+<text id="price" x="115.0" y="151" text-anchor="middle" font-family="Andika_700Bold" font-size="37" fill="#1f2433">3</text>
+</svg>

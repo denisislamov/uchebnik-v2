@@ -3562,22 +3562,35 @@ test("pages 3 and 4 writing strips alternate twelve dashes with eleven red dots"
   ] as const) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
     assert.deepEqual([art.width, art.height], size);
-    const dashes = [...art.xml.matchAll(/<path id="dash-(\d+)"[^>]*\/>/g)]
-      .map((m) => attributes(m[0]));
-    const dots = [...art.xml.matchAll(/<circle id="red-dot-(\d+)"[^>]*\/>/g)]
-      .map((m) => attributes(m[0]));
+    const dashes = [...art.xml.matchAll(/<path id="dash-(\d+)"[^>]*\/>/g)].map(
+      (m) => attributes(m[0]),
+    );
+    const dots = [
+      ...art.xml.matchAll(/<circle id="red-dot-(\d+)"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
     assert.equal(dashes.length, 12);
     assert.equal(dots.length, 11);
-    assert.deepEqual(dashes.map((dash) => Number(dash.id.split("-")[1])),
-      Array.from({ length: 12 }, (_, i) => i));
-    assert.deepEqual(dots.map((dot) => Number(dot.id.split("-")[2])),
-      Array.from({ length: 11 }, (_, i) => i));
+    assert.deepEqual(
+      dashes.map((dash) => Number(dash.id.split("-")[1])),
+      Array.from({ length: 12 }, (_, i) => i),
+    );
+    assert.deepEqual(
+      dots.map((dot) => Number(dot.id.split("-")[2])),
+      Array.from({ length: 11 }, (_, i) => i),
+    );
     assert.ok(dots.every((dot) => dot.fill === "#c8352e"));
-    assert.ok(dots.every((dot, i) =>
-      Number(dashes[i].d.match(/^M([\d.]+)/)?.[1]) < Number(dot.cx) &&
-      Number(dot.cx) < Number(dashes[i + 1].d.match(/^M([\d.]+)/)?.[1])));
+    assert.ok(
+      dots.every(
+        (dot, i) =>
+          Number(dashes[i].d.match(/^M([\d.]+)/)?.[1]) < Number(dot.cx) &&
+          Number(dot.cx) < Number(dashes[i + 1].d.match(/^M([\d.]+)/)?.[1]),
+      ),
+    );
   }
 });
 
@@ -3585,24 +3598,39 @@ test("page 4 copy samples keep five plain squares, five diagonals, and trees of 
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const squares = vectorAssets.p004_squares_row_sample;
   assert.ok(squares);
-  assert.equal(squares.xml,
-    readFileSync("assets/book2/vector/p004_squares_row_sample.svg", "utf8"));
+  assert.equal(
+    squares.xml,
+    readFileSync("assets/book2/vector/p004_squares_row_sample.svg", "utf8"),
+  );
   assert.deepEqual([squares.width, squares.height], [670, 75]);
   const boxes = [...squares.xml.matchAll(/<rect id="square-(\d+)"[^>]*\/>/g)];
-  const diagonals = [...squares.xml.matchAll(/<path id="diagonal-(\d+)"[^>]*\/>/g)];
+  const diagonals = [
+    ...squares.xml.matchAll(/<path id="diagonal-(\d+)"[^>]*\/>/g),
+  ];
   assert.equal(boxes.length, 10);
-  assert.deepEqual(diagonals.map((m) => Number(m[1])), [5, 6, 7, 8, 9]);
+  assert.deepEqual(
+    diagonals.map((m) => Number(m[1])),
+    [5, 6, 7, 8, 9],
+  );
   const boxX = boxes.map((m) => Number(attributes(m[0]).x));
   assert.ok(boxX.every((x, i) => i === 0 || x > boxX[i - 1]));
 
   const trees = vectorAssets.p004_fir_trees_sample;
   assert.ok(trees);
-  assert.equal(trees.xml,
-    readFileSync("assets/book2/vector/p004_fir_trees_sample.svg", "utf8"));
+  assert.equal(
+    trees.xml,
+    readFileSync("assets/book2/vector/p004_fir_trees_sample.svg", "utf8"),
+  );
   assert.deepEqual([trees.width, trees.height], [600, 185]);
-  const branches = [...trees.xml.matchAll(/<path id="tree-(\d+)-tier-(\d+)"[^>]*\/>/g)];
-  assert.deepEqual([0, 1, 2].map((tree) =>
-    branches.filter((m) => Number(m[1]) === tree).length), [4, 3, 2]);
+  const branches = [
+    ...trees.xml.matchAll(/<path id="tree-(\d+)-tier-(\d+)"[^>]*\/>/g),
+  ];
+  assert.deepEqual(
+    [0, 1, 2].map(
+      (tree) => branches.filter((m) => Number(m[1]) === tree).length,
+    ),
+    [4, 3, 2],
+  );
   assert.equal([...trees.xml.matchAll(/<path id="tree-\d+-trunk"/g)].length, 3);
 });
 
@@ -3610,13 +3638,20 @@ test("page 53 addition table shows all forty-five sums in stepped columns", asyn
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const art = vectorAssets.p053_addition_table;
   assert.ok(art);
-  assert.equal(art.xml,
-    readFileSync("assets/book2/vector/p053_addition_table.svg", "utf8"));
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p053_addition_table.svg", "utf8"),
+  );
   assert.deepEqual([art.width, art.height], [683, 683]);
-  assert.match(art.xml, /<text id="table-title"[^>]*>Таблица сложения\.<\/text>/);
-  const sums = [...art.xml.matchAll(
-    /<text id="sum-(\d+)-(\d+)"[^>]*>(\d+)\+(\d+)=(?: )?(\d+)<\/text>/g,
-  )];
+  assert.match(
+    art.xml,
+    /<text id="table-title"[^>]*>Таблица сложения\.<\/text>/,
+  );
+  const sums = [
+    ...art.xml.matchAll(
+      /<text id="sum-(\d+)-(\d+)"[^>]*>(\d+)\+(\d+)=(?: )?(\d+)<\/text>/g,
+    ),
+  ];
   assert.equal(sums.length, 45);
   for (let addend = 1; addend <= 9; addend++) {
     const column = sums.filter((m) => Number(m[1]) === addend);
@@ -3630,7 +3665,12 @@ test("page 53 addition table shows all forty-five sums in stepped columns", asyn
   }
   for (const start of [1, 4, 7]) {
     const ys = [start, start + 1, start + 2].map((addend) =>
-      Number(attributes(sums.find((m) => Number(m[1]) === addend && Number(m[2]) === 1)![0]).y));
+      Number(
+        attributes(
+          sums.find((m) => Number(m[1]) === addend && Number(m[2]) === 1)![0],
+        ).y,
+      ),
+    );
     assert.ok(ys[0] < ys[1] && ys[1] < ys[2]);
   }
   assert.match(art.xml, /id="table-frame"/);
@@ -3646,18 +3686,36 @@ test("pages 63, 64, and 71 keep a tied ten and the scanned loose-stick groups", 
   ] as const) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    assert.equal([...art.xml.matchAll(/<line id="bundle-stick-\d+"/g)].length, 10);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.equal(
+      [...art.xml.matchAll(/<line id="bundle-stick-\d+"/g)].length,
+      10,
+    );
     assert.match(art.xml, /id="bundle-tie"/);
-    const sticks = [...art.xml.matchAll(/<line id="loose-stick-(\d+)"[^>]*\/>/g)]
-      .map((m) => attributes(m[0]));
-    assert.equal(sticks.length, groups.reduce((sum, group) => sum + group, 0));
-    assert.deepEqual(groups.map((_, index) =>
-      sticks.filter((stick) => Number(stick["data-group"]) === index).length), [...groups]);
+    const sticks = [
+      ...art.xml.matchAll(/<line id="loose-stick-(\d+)"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
+    assert.equal(
+      sticks.length,
+      groups.reduce((sum, group) => sum + group, 0),
+    );
+    assert.deepEqual(
+      groups.map(
+        (_, index) =>
+          sticks.filter((stick) => Number(stick["data-group"]) === index)
+            .length,
+      ),
+      [...groups],
+    );
     if (groups.length === 2) {
       const split = groups[0];
-      assert.ok(Number(sticks[split].x1) - Number(sticks[split - 1].x1) >
-        Number(sticks[1].x1) - Number(sticks[0].x1));
+      assert.ok(
+        Number(sticks[split].x1) - Number(sticks[split - 1].x1) >
+          Number(sticks[1].x1) - Number(sticks[0].x1),
+      );
     }
   }
 });
@@ -3666,21 +3724,28 @@ test("page 63 and 65 frame models preserve all discs and their partitions", asyn
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const buttons = vectorAssets.p063_buttons_frame_10_5;
   assert.ok(buttons);
-  assert.equal(buttons.xml,
-    readFileSync("assets/book2/vector/p063_buttons_frame_10_5.svg", "utf8"));
+  assert.equal(
+    buttons.xml,
+    readFileSync("assets/book2/vector/p063_buttons_frame_10_5.svg", "utf8"),
+  );
   assert.equal([...buttons.xml.matchAll(/id="button-left-\d+"/g)].length, 10);
   assert.equal([...buttons.xml.matchAll(/id="button-right-\d+"/g)].length, 5);
   assert.match(buttons.xml, /id="frame-divider"/);
   const circles = vectorAssets.p065_circles_frame_15_5;
   assert.ok(circles);
-  assert.equal(circles.xml,
-    readFileSync("assets/book2/vector/p065_circles_frame_15_5.svg", "utf8"));
-  const left = [...circles.xml.matchAll(/<circle id="left-circle-\d+"[^>]*\/>/g)]
-    .map((m) => attributes(m[0]));
-  const top = [...circles.xml.matchAll(/<circle id="right-top-circle-\d+"[^>]*\/>/g)]
-    .map((m) => attributes(m[0]));
-  const bottom = [...circles.xml.matchAll(/<circle id="right-bottom-circle-\d+"[^>]*\/>/g)]
-    .map((m) => attributes(m[0]));
+  assert.equal(
+    circles.xml,
+    readFileSync("assets/book2/vector/p065_circles_frame_15_5.svg", "utf8"),
+  );
+  const left = [
+    ...circles.xml.matchAll(/<circle id="left-circle-\d+"[^>]*\/>/g),
+  ].map((m) => attributes(m[0]));
+  const top = [
+    ...circles.xml.matchAll(/<circle id="right-top-circle-\d+"[^>]*\/>/g),
+  ].map((m) => attributes(m[0]));
+  const bottom = [
+    ...circles.xml.matchAll(/<circle id="right-bottom-circle-\d+"[^>]*\/>/g),
+  ].map((m) => attributes(m[0]));
   assert.deepEqual([left.length, top.length, bottom.length], [10, 5, 5]);
   assert.ok([...left, ...top].every((circle) => circle.fill === "none"));
   assert.ok(bottom.every((circle) => circle.fill === "#1f2433"));
@@ -3690,20 +3755,29 @@ test("page 67 two-rail model has five above and five plus one below", async () =
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const art = vectorAssets.p067_abacus_5_and_6;
   assert.ok(art);
-  assert.equal(art.xml,
-    readFileSync("assets/book2/vector/p067_abacus_5_and_6.svg", "utf8"));
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p067_abacus_5_and_6.svg", "utf8"),
+  );
   assert.deepEqual([art.width, art.height], [404, 225]);
-  const top = [...art.xml.matchAll(/<circle id="bead-top-(\d+)"[^>]*\/>/g)]
-    .map((m) => attributes(m[0]));
-  const bottom = [...art.xml.matchAll(/<circle id="bead-bottom-(\d+)"[^>]*\/>/g)]
-    .map((m) => attributes(m[0]));
+  const top = [...art.xml.matchAll(/<circle id="bead-top-(\d+)"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
+  const bottom = [
+    ...art.xml.matchAll(/<circle id="bead-bottom-(\d+)"[^>]*\/>/g),
+  ].map((m) => attributes(m[0]));
   assert.deepEqual([top.length, bottom.length], [5, 6]);
   assert.ok(top.every((bead) => Number(bead.cy) === Number(top[0].cy)));
   assert.ok(bottom.every((bead) => Number(bead.cy) === Number(bottom[0].cy)));
   assert.ok(Number(top[0].cy) < Number(bottom[0].cy));
-  assert.deepEqual(top.map((bead) => bead.cx), bottom.slice(0, 5).map((bead) => bead.cx));
-  assert.ok(Number(bottom[5].cx) - Number(bottom[4].cx) >
-    Number(bottom[1].cx) - Number(bottom[0].cx));
+  assert.deepEqual(
+    top.map((bead) => bead.cx),
+    bottom.slice(0, 5).map((bead) => bead.cx),
+  );
+  assert.ok(
+    Number(bottom[5].cx) - Number(bottom[4].cx) >
+      Number(bottom[1].cx) - Number(bottom[0].cx),
+  );
   assert.equal(bottom[4].fill, bottom[5].fill);
 });
 
@@ -3718,9 +3792,13 @@ test("pages 64, 65, 71, and 72 solution cards keep each decomposition", async ()
   for (const [id, lines] of Object.entries(expected)) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    const actual = [...art.xml.matchAll(/<text id="solution-line-\d+"[^>]*>([^<]+)<\/text>/g)]
-      .map((m) => m[1].replace(/\s/g, ""));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const actual = [
+      ...art.xml.matchAll(/<text id="solution-line-\d+"[^>]*>([^<]+)<\/text>/g),
+    ].map((m) => m[1].replace(/\s/g, ""));
     assert.deepEqual(actual, lines);
     assert.match(art.xml, /id="solution-rule"/);
   }
@@ -3730,27 +3808,73 @@ test("pages 72 and 73 keep crossed five and the exact subtraction tables", async
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const frame = vectorAssets.p072_circles_frame_20_minus_5;
   assert.ok(frame);
-  assert.equal(frame.xml,
-    readFileSync("assets/book2/vector/p072_circles_frame_20_minus_5.svg", "utf8"));
-  assert.equal([...frame.xml.matchAll(/<circle id="frame-circle-\d+"/g)].length, 20);
-  const crosses = [...frame.xml.matchAll(/<path id="cross-\d+"[^>]*\/>/g)]
-    .map((m) => attributes(m[0]));
+  assert.equal(
+    frame.xml,
+    readFileSync(
+      "assets/book2/vector/p072_circles_frame_20_minus_5.svg",
+      "utf8",
+    ),
+  );
+  assert.equal(
+    [...frame.xml.matchAll(/<circle id="frame-circle-\d+"/g)].length,
+    20,
+  );
+  const crosses = [...frame.xml.matchAll(/<path id="cross-\d+"[^>]*\/>/g)].map(
+    (m) => attributes(m[0]),
+  );
   assert.equal(crosses.length, 5);
   assert.ok(crosses.every((cross) => cross.stroke === "#1f2433"));
   const expected: Record<string, { numbers: number[][]; operation: string }> = {
-    p072_table_minus_3: { numbers: [[16, 18, 15], [19, 14, 17]], operation: "−3" },
-    p072_table_minus_4: { numbers: [[14, 17, 15], [18, 16, 19]], operation: "−4" },
-    p073_frame_minus_5: { numbers: [[15, 17, 16], [18, 20, 19]], operation: "−5" },
+    p072_table_minus_3: {
+      numbers: [
+        [16, 18, 15],
+        [19, 14, 17],
+      ],
+      operation: "−3",
+    },
+    p072_table_minus_4: {
+      numbers: [
+        [14, 17, 15],
+        [18, 16, 19],
+      ],
+      operation: "−4",
+    },
+    p073_frame_minus_5: {
+      numbers: [
+        [15, 17, 16],
+        [18, 20, 19],
+      ],
+      operation: "−5",
+    },
   };
   for (const [id, data] of Object.entries(expected)) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    const entries = [...art.xml.matchAll(/<text id="table-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g)];
-    assert.deepEqual([0, 1].map((row) =>
-      [0, 1, 2].map((column) => Number(entries.find((m) =>
-        Number(m[1]) === row && Number(m[2]) === column)![3]))), data.numbers);
-    assert.match(art.xml, new RegExp(`<text id="table-operation"[^>]*>${data.operation}<\\/text>`));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const entries = [
+      ...art.xml.matchAll(
+        /<text id="table-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g,
+      ),
+    ];
+    assert.deepEqual(
+      [0, 1].map((row) =>
+        [0, 1, 2].map((column) =>
+          Number(
+            entries.find(
+              (m) => Number(m[1]) === row && Number(m[2]) === column,
+            )![3],
+          ),
+        ),
+      ),
+      data.numbers,
+    );
+    assert.match(
+      art.xml,
+      new RegExp(`<text id="table-operation"[^>]*>${data.operation}<\\/text>`),
+    );
   }
 });
 
@@ -3763,15 +3887,23 @@ test("pages 79–81 bridge ten with the scanned base and added dots", async () =
   ] as const) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    const baseDots = [...art.xml.matchAll(/<circle id="base-dot-\d+"[^>]*\/>/g)]
-      .map((m) => attributes(m[0]));
-    const left = [...art.xml.matchAll(/<circle id="added-left-\d+"[^>]*\/>/g)]
-      .map((m) => attributes(m[0]));
-    const right = [...art.xml.matchAll(/<circle id="added-right-\d+"[^>]*\/>/g)]
-      .map((m) => attributes(m[0]));
-    assert.deepEqual([baseDots.length, left.length, right.length],
-      [base, addedLeft, addedRight]);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const baseDots = [
+      ...art.xml.matchAll(/<circle id="base-dot-\d+"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
+    const left = [
+      ...art.xml.matchAll(/<circle id="added-left-\d+"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
+    const right = [
+      ...art.xml.matchAll(/<circle id="added-right-\d+"[^>]*\/>/g),
+    ].map((m) => attributes(m[0]));
+    assert.deepEqual(
+      [baseDots.length, left.length, right.length],
+      [base, addedLeft, addedRight],
+    );
     assert.equal(base + addedLeft, 10);
     assert.ok(baseDots.every((dot) => dot.fill === "#d9e8e9"));
     assert.ok([...left, ...right].every((dot) => dot.fill === "#1f2433"));
@@ -3794,9 +3926,13 @@ test("pages 79–84 examples keep each exact bridge-through-ten step", async () 
   for (const [id, expected] of Object.entries(examples)) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    const lines = [...art.xml.matchAll(/<text id="sample-line-\d+"[^>]*>([^<]+)<\/text>/g)]
-      .map((m) => m[1].replace(/\s/g, ""));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const lines = [
+      ...art.xml.matchAll(/<text id="sample-line-\d+"[^>]*>([^<]+)<\/text>/g),
+    ].map((m) => m[1].replace(/\s/g, ""));
     assert.deepEqual(lines, expected);
     assert.match(art.xml, /id="sample-rule"/);
   }
@@ -3806,32 +3942,74 @@ test("page 81 plate prices give seven and leave the answer empty", async () => {
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const deep = vectorAssets.p081_deep_plate_7_rub;
   const shallow = vectorAssets.p081_shallow_plate_rub;
-  for (const [id, art] of [["p081_deep_plate_7_rub", deep],
-                         ["p081_shallow_plate_rub", shallow]] as const) {
+  for (const [id, art] of [
+    ["p081_deep_plate_7_rub", deep],
+    ["p081_shallow_plate_rub", shallow],
+  ] as const) {
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
     assert.match(art.xml, /id="plate-rim"/);
     assert.match(art.xml, /id="price-tag"/);
     assert.doesNotMatch(art.xml, /руб|₽|коп/i);
   }
-  assert.deepEqual([...deep.xml.matchAll(/<text\b[^>]*>([^<]+)<\/text>/g)]
-    .map((m) => m[1]), ["7"]);
+  assert.deepEqual(
+    [...deep.xml.matchAll(/<text\b[^>]*>([^<]+)<\/text>/g)].map((m) => m[1]),
+    ["7"],
+  );
   assert.equal([...shallow.xml.matchAll(/<text\b/g)].length, 0);
 });
 
 test("pages 82–83 number frames preserve every printed input and operation", async () => {
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   for (const [id, rows, operation] of [
-    ["p082_frame_8_plus", [[4, 8, 6], [5, 9, 7]], "8+"],
-    ["p083_frame_3_plus", [[5, 7, 8], [9, 6, 10], [12, 15, 13]], "3+"],
+    [
+      "p082_frame_8_plus",
+      [
+        [4, 8, 6],
+        [5, 9, 7],
+      ],
+      "8+",
+    ],
+    [
+      "p083_frame_3_plus",
+      [
+        [5, 7, 8],
+        [9, 6, 10],
+        [12, 15, 13],
+      ],
+      "3+",
+    ],
   ] as const) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    const cells = [...art.xml.matchAll(/<text id="frame-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g)];
-    assert.deepEqual(rows.map((row, r) => row.map((_, c) =>
-      Number(cells.find((m) => Number(m[1]) === r && Number(m[2]) === c)![3]))), rows);
-    assert.match(art.xml, new RegExp(`<text id="frame-operation"[^>]*>${operation.replace("+", "\\+")}<\\/text>`));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const cells = [
+      ...art.xml.matchAll(
+        /<text id="frame-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g,
+      ),
+    ];
+    assert.deepEqual(
+      rows.map((row, r) =>
+        row.map((_, c) =>
+          Number(
+            cells.find((m) => Number(m[1]) === r && Number(m[2]) === c)![3],
+          ),
+        ),
+      ),
+      rows,
+    );
+    assert.match(
+      art.xml,
+      new RegExp(
+        `<text id="frame-operation"[^>]*>${operation.replace("+", "\\+")}<\\/text>`,
+      ),
+    );
   }
 });
 
@@ -3839,29 +4017,69 @@ test("page 84 eleven-circle subtraction crosses one from each compartment", asyn
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const art = vectorAssets.p084_sticks_11_minus_2;
   assert.ok(art);
-  assert.equal(art.xml,
-    readFileSync("assets/book2/vector/p084_sticks_11_minus_2.svg", "utf8"));
+  assert.equal(
+    art.xml,
+    readFileSync("assets/book2/vector/p084_sticks_11_minus_2.svg", "utf8"),
+  );
   assert.equal([...art.xml.matchAll(/<circle id="ten-dot-\d+"/g)].length, 10);
   assert.equal([...art.xml.matchAll(/<circle id="unit-dot-0"/g)].length, 1);
-  assert.deepEqual([...art.xml.matchAll(/<path id="cross-([^\"]+)"/g)].map((m) => m[1]),
-    ["ten-9", "unit-0"]);
+  assert.deepEqual(
+    [...art.xml.matchAll(/<path id="cross-([^\"]+)"/g)].map((m) => m[1]),
+    ["ten-9", "unit-0"],
+  );
 });
 
 test("pages 85–87 subtraction frames and pencil boxes retain exact groups", async () => {
   const { vectorAssets } = await import("../src/content/vectorAssets.ts");
   const frames: Record<string, { rows: number[][]; operation: string }> = {
-    p085_frame_minus_2: { rows: [[4, 8, 6], [5, 9, 7]], operation: "−2" },
-    p086_frame_minus_3: { rows: [[5, 7, 4], [6, 9, 8]], operation: "−3" },
-    p087_frame_minus_4: { rows: [[5, 8, 6], [9, 7, 10]], operation: "−4" },
+    p085_frame_minus_2: {
+      rows: [
+        [4, 8, 6],
+        [5, 9, 7],
+      ],
+      operation: "−2",
+    },
+    p086_frame_minus_3: {
+      rows: [
+        [5, 7, 4],
+        [6, 9, 8],
+      ],
+      operation: "−3",
+    },
+    p087_frame_minus_4: {
+      rows: [
+        [5, 8, 6],
+        [9, 7, 10],
+      ],
+      operation: "−4",
+    },
   };
   for (const [id, data] of Object.entries(frames)) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    const cells = [...art.xml.matchAll(/<text id="frame-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g)];
-    assert.deepEqual(data.rows.map((row, r) => row.map((_, c) =>
-      Number(cells.find((m) => Number(m[1]) === r && Number(m[2]) === c)![3]))), data.rows);
-    assert.match(art.xml, new RegExp(`<text id="frame-operation"[^>]*>${data.operation}<\\/text>`));
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    const cells = [
+      ...art.xml.matchAll(
+        /<text id="frame-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g,
+      ),
+    ];
+    assert.deepEqual(
+      data.rows.map((row, r) =>
+        row.map((_, c) =>
+          Number(
+            cells.find((m) => Number(m[1]) === r && Number(m[2]) === c)![3],
+          ),
+        ),
+      ),
+      data.rows,
+    );
+    assert.match(
+      art.xml,
+      new RegExp(`<text id="frame-operation"[^>]*>${data.operation}<\\/text>`),
+    );
   }
   for (const [id, units, crossedTen] of [
     ["p085_pencils_box_12_minus_4", 2, 2],
@@ -3869,12 +4087,426 @@ test("pages 85–87 subtraction frames and pencil boxes retain exact groups", as
   ] as const) {
     const art = vectorAssets[id];
     assert.ok(art, id);
-    assert.equal(art.xml, readFileSync(`assets/book2/vector/${id}.svg`, "utf8"));
-    assert.equal([...art.xml.matchAll(/<circle id="pencil-ten-\d+"/g)].length, 10);
-    assert.equal([...art.xml.matchAll(/<circle id="pencil-unit-\d+"/g)].length, units);
-    assert.equal([...art.xml.matchAll(/<path id="cross-ten-\d+"/g)].length, crossedTen);
-    assert.equal([...art.xml.matchAll(/<path id="cross-unit-\d+"/g)].length, units);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.equal(
+      [...art.xml.matchAll(/<circle id="pencil-ten-\d+"/g)].length,
+      10,
+    );
+    assert.equal(
+      [...art.xml.matchAll(/<circle id="pencil-unit-\d+"/g)].length,
+      units,
+    );
+    assert.equal(
+      [...art.xml.matchAll(/<path id="cross-ten-\d+"/g)].length,
+      crossedTen,
+    );
+    assert.equal(
+      [...art.xml.matchAll(/<path id="cross-unit-\d+"/g)].length,
+      units,
+    );
     assert.equal(crossedTen + units, 4);
     assert.match(art.xml, /id="pencil-case-divider"/);
   }
+});
+
+test("pages 89–99 vector package covers each registered source crop", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const ids = [
+    "p089_scales_bread_2kg_1kg",
+    "p089_scales_flour_5kg_1kg",
+    "p089_rule_kg_frame",
+    "p090_sticks_bundle_10_plus_5",
+    "p092_frame_minus_14",
+    "p093_bottle",
+    "p093_glass",
+    "p093_one_liter_mug",
+    "p093_rule_liter_abbreviation",
+    "p094_milk_can_12_l",
+    "p094_milk_can_unknown",
+    "p096_plough",
+    "p096_tractor",
+    "p097_strawberries_2x2",
+    "p097_strawberries_2x3",
+    "p097_strawberries_2x4",
+    "p097_strawberries_2x5",
+    "p097_acorns_2x6",
+    "p097_acorns_2x7",
+    "p098_acorns_2x8",
+    "p098_acorns_2x9",
+    "p098_acorns_2x10",
+    "p098_table_mult_2",
+    "p099_balls_5_two_rubles",
+    "p099_circles_3x2",
+    "p099_circles_3x3",
+  ];
+  assert.equal(ids.length, 26);
+  for (const id of ids) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.ok(art.alt.length > 8, id);
+  }
+});
+
+test("page 89 balanced scales retain the two labelled weights and their object", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, weights, object] of [
+    ["p089_scales_bread_2kg_1kg", ["2 кг", "1 кг"], "bread-loaf"],
+    ["p089_scales_flour_5kg_1kg", ["5 кг", "1 кг"], "flour-bag"],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.equal([...xml.matchAll(/id="scale-pan-(left|right)"/g)].length, 2);
+    assert.match(xml, new RegExp(`id="${object}"`));
+    assert.deepEqual(
+      [
+        ...xml.matchAll(/<text id="weight-label-\d+"[^>]*>([^<]+)<\/text>/g),
+      ].map((m) => m[1]),
+      [...weights],
+    );
+  }
+  const kg = vectorAssets.p089_rule_kg_frame.xml;
+  assert.match(kg, /Слово «килограмм» сокращённо/);
+  assert.match(kg, /записывают кг/);
+});
+
+test("page 90 sticks and page 92 subtraction frame keep their arithmetic", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const sticks = vectorAssets.p090_sticks_bundle_10_plus_5.xml;
+  assert.equal([...sticks.matchAll(/id="bundle-stick-\d+"/g)].length, 10);
+  assert.equal([...sticks.matchAll(/id="loose-stick-\d+"/g)].length, 5);
+  assert.match(sticks, /id="bundle-tie"/);
+  const frame = vectorAssets.p092_frame_minus_14.xml;
+  const cells = [
+    ...frame.matchAll(/<text id="frame-cell-(\d+)-(\d+)"[^>]*>(\d+)<\/text>/g),
+  ];
+  assert.deepEqual(
+    [0, 1].map((row) =>
+      [0, 1, 2].map((column) =>
+        Number(
+          cells.find(
+            (m) => Number(m[1]) === row && Number(m[2]) === column,
+          )![3],
+        ),
+      ),
+    ),
+    [
+      [16, 18, 20],
+      [15, 19, 17],
+    ],
+  );
+  assert.match(frame, /<text id="frame-operation"[^>]*>−14<\/text>/);
+});
+
+test("pages 93–94 vessels label one litre and twelve litres without filling the unknown", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const bottle = vectorAssets.p093_bottle.xml;
+  const glass = vectorAssets.p093_glass.xml;
+  const mug = vectorAssets.p093_one_liter_mug.xml;
+  const rule = vectorAssets.p093_rule_liter_abbreviation.xml;
+  assert.match(bottle, /id="bottle-body"/);
+  assert.match(bottle, /id="bottle-screw-cap"/);
+  assert.equal([...bottle.matchAll(/id="bottle-rib-\d+"/g)].length, 2);
+  assert.match(glass, /id="glass-body"/);
+  assert.equal([...bottle.matchAll(/<text\b/g)].length, 0);
+  assert.equal([...glass.matchAll(/<text\b/g)].length, 0);
+  assert.match(mug, /<text id="mug-volume"[^>]*>1 л<\/text>/);
+  assert.match(rule, /Слово «литр»/);
+  assert.match(rule, /сокращённо/);
+  assert.match(rule, /записывают л/);
+  const large = vectorAssets.p094_milk_can_12_l.xml;
+  const unknown = vectorAssets.p094_milk_can_unknown.xml;
+  assert.match(large, /<text id="can-volume"[^>]*>12 л<\/text>/);
+  assert.equal([...unknown.matchAll(/<text\b/g)].length, 0);
+  assert.match(large, /id="can-handle"/);
+  assert.match(unknown, /id="can-handle"/);
+});
+
+test("page 96 uses a wheeled tractor and a separate mounted plough drawing", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const tractor = vectorAssets.p096_tractor.xml;
+  const plough = vectorAssets.p096_plough.xml;
+  assert.equal(
+    [...tractor.matchAll(/<circle id="tractor-wheel-\d+"/g)].length,
+    2,
+  );
+  assert.match(tractor, /id="tractor-cab"/);
+  assert.match(tractor, /id="tractor-mounted-plough"/);
+  assert.match(plough, /id="plough-share"/);
+  assert.equal([...plough.matchAll(/id="plough-share-\d+"/g)].length, 3);
+  assert.doesNotMatch(tractor, /track|гусениц/i);
+});
+
+test("pages 97–98 berries and acorns preserve every pair", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [prefix, values, token] of [
+    ["p097_strawberries_2x", [2, 3, 4, 5], "berry"],
+    ["p097_acorns_2x", [6, 7], "acorn"],
+    ["p098_acorns_2x", [8, 9, 10], "acorn"],
+  ] as const) {
+    for (const pairs of values) {
+      const xml = vectorAssets[prefix + pairs].xml;
+      assert.equal([...xml.matchAll(/<g id="pair-\d+">/g)].length, pairs);
+      assert.equal(
+        [...xml.matchAll(new RegExp(`<path id="${token}-\\d+-\\d+"`, "g"))]
+          .length,
+        pairs * 2,
+      );
+      if (token === "berry") {
+        assert.equal(
+          [...xml.matchAll(/id="berry-calyx-\d+-\d+"/g)].length,
+          pairs * 2,
+        );
+      }
+    }
+  }
+});
+
+test("page 98 table contains nine unsolved multiplication prompts", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const xml = vectorAssets.p098_table_mult_2.xml;
+  const expressions = [
+    ...xml.matchAll(/<text id="factor-(\d+)"[^>]*>(2×\d+)<\/text>/g),
+  ];
+  assert.equal(expressions.length, 9);
+  assert.deepEqual(
+    expressions.map((m) => m[2]),
+    ["2×2", "2×3", "2×4", "2×5", "2×6", "2×7", "2×8", "2×9", "2×10"],
+  );
+  assert.doesNotMatch(xml, /<text\b[^>]*>[^<]*=/);
+});
+
+test("page 99 shows five balls priced only two and triangle groups of three", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const balls = vectorAssets.p099_balls_5_two_rubles.xml;
+  assert.equal([...balls.matchAll(/<circle id="ball-\d+"/g)].length, 5);
+  assert.deepEqual(
+    [...balls.matchAll(/<text id="price-\d+"[^>]*>([^<]+)<\/text>/g)].map(
+      (m) => m[1],
+    ),
+    ["2", "2", "2", "2", "2"],
+  );
+  assert.doesNotMatch(balls, /руб|коп|₽/i);
+  for (const groups of [2, 3]) {
+    const xml = vectorAssets[`p099_circles_3x${groups}`].xml;
+    assert.equal([...xml.matchAll(/<g id="triple-\d+">/g)].length, groups);
+    assert.equal(
+      [...xml.matchAll(/<circle id="triple-dot-\d+-\d+"/g)].length,
+      groups * 3,
+    );
+  }
+});
+
+test("pages 100–110 cover all twenty-eight new vector source crops", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const ids = [
+    "p100_circles_3x4",
+    "p100_circles_3x5",
+    "p100_circles_3x6",
+    "p100_table_mult_3",
+    "p101_grid_3x6_cells",
+    "p102_circles_4x2",
+    "p102_circles_4x3",
+    "p102_coins_3_kopeks_4",
+    "p103_circles_4x4",
+    "p103_circles_4x5",
+    "p103_sticks_square",
+    "p103_table_mult_4",
+    "p105_carrots_5x2",
+    "p105_carrots_5x3",
+    "p105_carrots_5x4",
+    "p105_coins_5_kopeks_3",
+    "p105_table_mult_5",
+    "p106_scales_flour_weights",
+    "p107_cells_6x2",
+    "p107_cells_6x3",
+    "p107_table_mult_6",
+    "p108_fork_4_rubles",
+    "p108_knife_3_rubles",
+    "p108_spoon_6_rubles",
+    "p109_frame_mult_7_10",
+    "p110_circles_3x2",
+    "p110_grid_4x3",
+    "p110_mult_table_to_20",
+  ];
+  assert.equal(ids.length, 28);
+  for (const id of ids) {
+    const art = vectorAssets[id];
+    assert.ok(art, id);
+    assert.equal(
+      art.xml,
+      readFileSync(`assets/book2/vector/${id}.svg`, "utf8"),
+    );
+    assert.ok(art.alt.length > 8, id);
+  }
+});
+
+test("pages 100, 102, 103 and 110 preserve each open-circle grouping", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const groups of [4, 5, 6]) {
+    const xml = vectorAssets[`p100_circles_3x${groups}`].xml;
+    assert.equal([...xml.matchAll(/<g id="triple-\d+">/g)].length, groups);
+    assert.equal(
+      [...xml.matchAll(/<circle id="triple-dot-\d+-\d+"/g)].length,
+      groups * 3,
+    );
+  }
+  for (const [page, groups] of [
+    [102, 2],
+    [102, 3],
+    [103, 4],
+    [103, 5],
+  ]) {
+    const xml = vectorAssets[`p${page}_circles_4x${groups}`].xml;
+    assert.equal([...xml.matchAll(/<g id="quad-\d+">/g)].length, groups);
+    assert.equal(
+      [...xml.matchAll(/<circle id="quad-dot-\d+-\d+"/g)].length,
+      groups * 4,
+    );
+  }
+  assert.equal(
+    [...vectorAssets.p110_circles_3x2.xml.matchAll(/id="circle-\d+-\d+"/g)]
+      .length,
+    6,
+  );
+});
+
+test("pages 101, 107 and 110 retain each source grid cell", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, rows, columns] of [
+    ["p101_grid_3x6_cells", 6, 3],
+    ["p107_cells_6x2", 2, 6],
+    ["p107_cells_6x3", 3, 6],
+    ["p110_grid_4x3", 3, 4],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    const cells = [...xml.matchAll(/id="cell-(\d+)-(\d+)"/g)];
+    assert.equal(cells.length, rows * columns, id);
+    assert.deepEqual(new Set(cells.map((m) => m[1])).size, rows, id);
+    assert.deepEqual(new Set(cells.map((m) => m[2])).size, columns, id);
+  }
+});
+
+test("pages 100, 103, 105 and 107 tables keep the exact unsolved source expressions", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, expected] of [
+    ["p100_table_mult_3", ["3×2", "3×3", "3×4", "3×5", "3×6"]],
+    ["p103_table_mult_4", ["4×2", "4×3", "4×4", "4×5"]],
+    ["p105_table_mult_5", ["5×2", "5×3", "5×4"]],
+    ["p107_table_mult_6", ["6×2", "6×3"]],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.deepEqual(
+      [...xml.matchAll(/<text id="expression-\d+"[^>]*>([^<]+)<\/text>/g)].map(
+        (m) => m[1],
+      ),
+      expected,
+      id,
+    );
+  }
+});
+
+test("pages 102 and 105 educational coin rows carry only their denomination", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, number, count] of [
+    ["p102_coins_3_kopeks_4", "3", 4],
+    ["p105_coins_5_kopeks_3", "5", 3],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.equal([...xml.matchAll(/id="coin-\d+"/g)].length, count);
+    assert.deepEqual(
+      [...xml.matchAll(/<text id="coin-label-\d+"[^>]*>([^<]+)<\/text>/g)].map(
+        (m) => m[1],
+      ),
+      Array(count).fill(number),
+    );
+    assert.doesNotMatch(xml, /коп|руб|₽|1933|герб/i);
+  }
+});
+
+test("page 103 square has four separate sticks and page 105 carrots form groups of five", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  assert.equal(
+    [...vectorAssets.p103_sticks_square.xml.matchAll(/id="stick-\d+"/g)].length,
+    4,
+  );
+  for (const groups of [2, 3, 4]) {
+    const xml = vectorAssets[`p105_carrots_5x${groups}`].xml;
+    assert.equal([...xml.matchAll(/<g id="bunch-\d+">/g)].length, groups);
+    assert.equal([...xml.matchAll(/id="carrot-\d+-\d+"/g)].length, groups * 5);
+  }
+});
+
+test("page 106 balances flour against two labelled five-kilogram weights", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const xml = vectorAssets.p106_scales_flour_weights.xml;
+  assert.match(xml, /id="flour-bag"/);
+  assert.equal([...xml.matchAll(/id="scale-pan-(left|right)"/g)].length, 2);
+  assert.deepEqual(
+    [...xml.matchAll(/<text id="weight-label-\d+"[^>]*>([^<]+)<\/text>/g)].map(
+      (m) => m[1],
+    ),
+    ["5 кг", "5 кг"],
+  );
+});
+
+test("page 108 uses a mug in the former knife slot and numeric prices only", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  for (const [id, object, price] of [
+    ["p108_spoon_6_rubles", "spoon", "6"],
+    ["p108_fork_4_rubles", "fork", "4"],
+    ["p108_knife_3_rubles", "mug", "3"],
+  ] as const) {
+    const xml = vectorAssets[id].xml;
+    assert.match(xml, new RegExp(`id="${object}"`));
+    assert.deepEqual(
+      [...xml.matchAll(/<text\b[^>]*>([^<]+)<\/text>/g)].map((m) => m[1]),
+      [price],
+    );
+    assert.doesNotMatch(xml, /руб|коп|₽|нож|knife/i);
+  }
+});
+
+test("page 109 frame keeps four factors in the printed two-by-two order", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const xml = vectorAssets.p109_frame_mult_7_10.xml;
+  assert.deepEqual(
+    [...xml.matchAll(/<text id="expression-\d+"[^>]*>([^<]+)<\/text>/g)].map(
+      (m) => m[1],
+    ),
+    ["7×2", "9×2", "8×2", "10×2"],
+  );
+});
+
+test("page 110 reference table reproduces all thirty-six visible equalities", async () => {
+  const { vectorAssets } = await import("../src/content/vectorAssets.ts");
+  const xml = vectorAssets.p110_mult_table_to_20.xml;
+  assert.match(xml, /Таблица умножения до 20/);
+  const equations = [
+    ...xml.matchAll(/<text id="equation-\d+-\d+"[^>]*>([^<]+)<\/text>/g),
+  ].map((m) => m[1]);
+  const groups = [
+    [1, [2, 3, 4, 5, 6, 7, 8, 9, 10]],
+    [2, [2, 3, 4, 5, 6, 7, 8, 9, 10]],
+    [3, [2, 3, 4, 5, 6]],
+    [4, [2, 3, 4, 5]],
+    [5, [2, 3, 4]],
+    [6, [2, 3]],
+    [7, [2]],
+    [8, [2]],
+    [9, [2]],
+    [10, [2]],
+  ] as const;
+  const expected = groups.flatMap(([factor, multipliers]) =>
+    multipliers.map(
+      (multiplier) => `${factor}×${multiplier}=${factor * multiplier}`,
+    ),
+  );
+  assert.equal(expected.length, 36);
+  assert.deepEqual(equations, expected);
 });

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="625" height="155" viewBox="0 0 625 155">
+<circle id="ball-0" cx="65" cy="51" r="34" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<path d="M45 24Q65 50 45 78 M85 24Q65 50 85 78" fill="none" stroke="#8aa6a4" stroke-width="1.8"/>
+<rect id="price-tag-0" x="40" y="103" width="50" height="37" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.4"/>
+<text id="price-0" x="65" y="132" text-anchor="middle" font-family="Andika_700Bold" font-size="30" fill="#1f2433">2</text>
+<circle id="ball-1" cx="188" cy="51" r="34" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<path d="M168 24Q188 50 168 78 M208 24Q188 50 208 78" fill="none" stroke="#8aa6a4" stroke-width="1.8"/>
+<rect id="price-tag-1" x="163" y="103" width="50" height="37" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.4"/>
+<text id="price-1" x="188" y="132" text-anchor="middle" font-family="Andika_700Bold" font-size="30" fill="#1f2433">2</text>
+<circle id="ball-2" cx="311" cy="51" r="34" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<path d="M291 24Q311 50 291 78 M331 24Q311 50 331 78" fill="none" stroke="#8aa6a4" stroke-width="1.8"/>
+<rect id="price-tag-2" x="286" y="103" width="50" height="37" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.4"/>
+<text id="price-2" x="311" y="132" text-anchor="middle" font-family="Andika_700Bold" font-size="30" fill="#1f2433">2</text>
+<circle id="ball-3" cx="434" cy="51" r="34" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<path d="M414 24Q434 50 414 78 M454 24Q434 50 454 78" fill="none" stroke="#8aa6a4" stroke-width="1.8"/>
+<rect id="price-tag-3" x="409" y="103" width="50" height="37" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.4"/>
+<text id="price-3" x="434" y="132" text-anchor="middle" font-family="Andika_700Bold" font-size="30" fill="#1f2433">2</text>
+<circle id="ball-4" cx="557" cy="51" r="34" fill="#d9e8e9" stroke="#526c6c" stroke-width="2"/>
+<path d="M537 24Q557 50 537 78 M577 24Q557 50 577 78" fill="none" stroke="#8aa6a4" stroke-width="1.8"/>
+<rect id="price-tag-4" x="532" y="103" width="50" height="37" rx="5" fill="#f5f3ec" stroke="#8aa6a4" stroke-width="1.4"/>
+<text id="price-4" x="557" y="132" text-anchor="middle" font-family="Andika_700Bold" font-size="30" fill="#1f2433">2</text>
+</svg>

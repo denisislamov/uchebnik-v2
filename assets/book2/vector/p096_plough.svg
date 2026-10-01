@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="325" height="160" viewBox="0 0 325 160">
+<path id="plough-frame" d="M44 42H282L308 28" fill="none" stroke="#526c6c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="plough-hitch" d="M282 30L308 23V48L282 53" fill="none" stroke="#526c6c" stroke-width="4"/>
+<g id="plough-share">
+<path id="plough-shank-0" d="M94 42L72 105" fill="none" stroke="#526c6c" stroke-width="5" stroke-linecap="round"/>
+<path id="plough-share-0" d="M41 118 Q67 91 92 104L114 131 Q76 146 41 118Z" fill="#a8c9c6" stroke="#526c6c" stroke-width="2.3"/>
+<path id="plough-shank-1" d="M175 42L153 105" fill="none" stroke="#526c6c" stroke-width="5" stroke-linecap="round"/>
+<path id="plough-share-1" d="M122 118 Q148 91 173 104L195 131 Q157 146 122 118Z" fill="#a8c9c6" stroke="#526c6c" stroke-width="2.3"/>
+<path id="plough-shank-2" d="M256 42L234 105" fill="none" stroke="#526c6c" stroke-width="5" stroke-linecap="round"/>
+<path id="plough-share-2" d="M203 118 Q229 91 254 104L276 131 Q238 146 203 118Z" fill="#a8c9c6" stroke="#526c6c" stroke-width="2.3"/>
+</g>
+</svg>

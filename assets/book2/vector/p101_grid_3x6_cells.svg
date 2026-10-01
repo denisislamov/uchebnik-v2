@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="185" height="335" viewBox="0 0 185 335">
+<rect id="cell-0-0" x="10.00" y="10.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-0-1" x="65.00" y="10.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-0-2" x="120.00" y="10.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-1-0" x="10.00" y="62.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-1-1" x="65.00" y="62.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-1-2" x="120.00" y="62.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-2-0" x="10.00" y="115.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-2-1" x="65.00" y="115.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-2-2" x="120.00" y="115.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-3-0" x="10.00" y="167.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-3-1" x="65.00" y="167.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-3-2" x="120.00" y="167.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-4-0" x="10.00" y="220.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-4-1" x="65.00" y="220.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-4-2" x="120.00" y="220.00" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-5-0" x="10.00" y="272.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-5-1" x="65.00" y="272.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+<rect id="cell-5-2" x="120.00" y="272.50" width="55.00" height="52.50" fill="#fcfbf7" stroke="#1f2433" stroke-width="1.7"/>
+</svg>

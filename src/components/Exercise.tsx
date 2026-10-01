@@ -391,19 +391,33 @@ function ExerciseBody({
                                       flexBasis: 0,
                                       minWidth: 0,
                                     }
-                                  : size.compact &&
-                                      block.kind === "read" &&
-                                      block.images.length >= 3
+                                  : size.compact && block.id === "p108-source06"
                                     ? {
                                         flexGrow: 0,
                                         flexBasis: "47%",
                                         maxWidth: "47%",
                                       }
-                                    : {
-                                        flexGrow: 1,
-                                        flexBasis: 110,
-                                        maxWidth: "100%",
-                                      }
+                                    : size.compact &&
+                                        block.kind === "read" &&
+                                        block.images.length >= 3
+                                      ? (block.id === "p093-source-art" ||
+                                          block.id === "p105-source-art") &&
+                                        aspects[i] >= 2.5
+                                        ? {
+                                            flexGrow: 0,
+                                            flexBasis: "100%",
+                                            maxWidth: "100%",
+                                          }
+                                        : {
+                                            flexGrow: 0,
+                                            flexBasis: "47%",
+                                            maxWidth: "47%",
+                                          }
+                                      : {
+                                          flexGrow: 1,
+                                          flexBasis: 110,
+                                          maxWidth: "100%",
+                                        }
                                 : { width: "100%" }
                             }
                           >

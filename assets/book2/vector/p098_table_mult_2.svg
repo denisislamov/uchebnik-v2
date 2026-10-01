@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="455" height="230" viewBox="0 0 455 230">
+<rect id="table-frame" x="8" y="8" width="439" height="214" rx="5" fill="#fcfbf7" stroke="#6b7280" stroke-width="1.8"/>
+<text id="factor-2" x="32" y="65" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×2</text>
+<text id="factor-3" x="32" y="128" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×3</text>
+<text id="factor-4" x="32" y="191" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×4</text>
+<text id="factor-5" x="180" y="65" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×5</text>
+<text id="factor-6" x="180" y="128" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×6</text>
+<text id="factor-7" x="180" y="191" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×7</text>
+<text id="factor-8" x="326" y="65" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×8</text>
+<text id="factor-9" x="326" y="128" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×9</text>
+<text id="factor-10" x="326" y="191" font-family="Andika_700Bold" font-size="35" fill="#1f2433">2×10</text>
+</svg>
