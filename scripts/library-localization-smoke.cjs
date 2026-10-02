@@ -29,6 +29,11 @@ const locales = [
           (code) => document.documentElement.lang === code,
           locale,
         );
+        const support = page.getByRole("link", { name: /Boosty/ });
+        assert.equal(
+          await support.getAttribute("href"),
+          "https://boosty.to/islamovdenis/single-payment/donation/832184/target?share=target_link",
+        );
         const selected = page.getByTestId(`language-${locale}`);
         assert.equal(await selected.getAttribute("aria-checked"), "true");
         const overflow = await page

@@ -15,7 +15,7 @@ import { Button } from "./Controls";
 /**
  * What stands around a task, the same on every step: the way out and the help
  * above it, «Назад» and «Дальше» under it. Nothing else shares the screen
- * with the task — other pages, the scan of the book and the list of steps are
+ * with the task — other pages and the list of steps are
  * a press away.
  */
 function BackArrow() {
@@ -154,7 +154,7 @@ export function LessonNav({
     </View>
   );
 }
-/** The steps of the page and its scan: for whoever wants to jump, not on the task's screen. */
+/** The steps of the page: for whoever wants to jump, not on the task's screen. */
 export function StepList({
   visible,
   title,
@@ -162,7 +162,6 @@ export function StepList({
   steps,
   current,
   onPick,
-  onOriginal,
   onClose,
 }: {
   visible: boolean;
@@ -171,7 +170,6 @@ export function StepList({
   steps: { id: string; title: string; done: boolean }[];
   current: number;
   onPick: (index: number) => void;
-  onOriginal: () => void;
   onClose: () => void;
 }) {
   return (
@@ -210,9 +208,6 @@ export function StepList({
             ))}
           </ScrollView>
           <View style={s.panelFoot}>
-            <Button secondary onPress={onOriginal}>
-              Страница в книге
-            </Button>
             <Button secondary onPress={onClose}>
               Закрыть
             </Button>

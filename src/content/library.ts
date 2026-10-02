@@ -1,5 +1,6 @@
-/** Paste the project's public Patreon page here when it is ready. */
-export const PROJECT_PATREON_URL = "";
+/** Public donation link used on every localized library page. */
+export const PROJECT_SUPPORT_URL =
+  "https://boosty.to/islamovdenis/single-payment/donation/832184/target?share=target_link";
 
 /** Update these totals manually as contributions arrive. Amounts are in rubles. */
 export const PROJECT_FUNDING = { raised: 12_500, goal: 60_000 };

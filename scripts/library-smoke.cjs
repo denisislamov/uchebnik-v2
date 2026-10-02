@@ -81,11 +81,15 @@ async function openParents(page) {
       const track = await meter.boundingBox();
       assert.ok(Math.abs(fill.width / track.width - 12500 / 60000) < 0.01);
       assert.equal(await page.getByTestId("planned-cover").count(), 9);
+      const support = page.getByRole("link", { name: /Boosty/ });
       assert.equal(
-        await page.getByRole("link", { name: /Patreon/ }).count(),
-        0,
-        "An unconfigured donation URL must not send visitors to a fake destination",
+        await support.getAttribute("href"),
+        "https://boosty.to/islamovdenis/single-payment/donation/832184/target?share=target_link",
+        "Support must open the project's actual Boosty fundraiser",
       );
+      assert.equal(await support.getAttribute("target"), "_blank");
+      assert.match(await support.getAttribute("rel"), /noopener/);
+      assert.equal(await support.isEnabled(), true);
       await page.waitForFunction(() =>
         [...document.images].every((i) => i.complete && i.naturalWidth > 0),
       );
@@ -140,6 +144,18 @@ async function openParents(page) {
         .getByRole("button", { name: "Начать заниматься  →", exact: true })
         .click();
       await stepShown(page);
+      await page.getByRole("button", { name: /^Шаги страницы/ }).click();
+      await page.getByTestId("step-list").waitFor();
+      assert.equal(
+        await page
+          .getByRole("button", { name: "Страница в книге", exact: true })
+          .count(),
+        0,
+        "Lessons must not offer comparison with the original book",
+      );
+      assert.equal(await page.getByTestId("debug-source-panel").count(), 0);
+      await page.getByRole("button", { name: "Закрыть", exact: true }).click();
+      await page.getByTestId("step-list").waitFor({ state: "hidden" });
       await page.getByRole("button", { name: "Дальше →", exact: true }).click();
       await page.waitForFunction(
         (key) =>

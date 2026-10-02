@@ -104,17 +104,16 @@ const words = {
       for (const name of ["home", "help", "back", "next"]) assert.deepEqual(onAnother[name], first[name], `${viewport.width}: «${name}» stands in the same place on another page`);
       report.checks.push({ viewport, frame: first, answer: answers[0] });
 
-      // The steps and the page in the book: a press away, behind «Шаг … из …».
+      // Step navigation remains available, without an original-book comparison.
       await p.getByRole("button", { name: /^Шаги страницы/ }).click();
       const list = p.getByTestId("step-list");
       await list.waitFor();
       assert.equal(await list.getByRole("button", { name: /^Шаг \d+:/ }).count(), lesson.blocks.length);
       const rows = await list.getByRole("button", { name: /^Шаг \d+:/ }).evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
       assert.ok(Math.min(...rows) >= 48, "a step in the list is a fingertip high");
-      await list.getByRole("button", { name: "Страница в книге", exact: true }).click();
-      await p.getByText(`Оригинал · страница ${lesson.number}`, { exact: true }).waitFor();
+      assert.equal(await list.getByRole("button", { name: "Страница в книге", exact: true }).count(), 0);
+      await list.getByRole("button", { name: "Закрыть", exact: true }).click();
       await list.waitFor({ state: "detached" });
-      await button("Закрыть").click();
 
       // The end of a page: a word about it and a choice.
       const block = lesson.blocks[last];

@@ -11,7 +11,7 @@ import {
 import { colors as c, fonts as f } from "../theme";
 import {
   plannedBooks,
-  PROJECT_PATREON_URL,
+  PROJECT_SUPPORT_URL,
   PROJECT_FUNDING,
 } from "../content/library";
 import { libraryCover } from "../content/libraryCover";
@@ -35,7 +35,7 @@ function SupportProject({
   locale: LibraryLocale;
 }) {
   const [error, setError] = useState(false);
-  const url = PROJECT_PATREON_URL.trim();
+  const url = PROJECT_SUPPORT_URL.trim();
   const { raised, goal } = PROJECT_FUNDING;
   const fraction = goal > 0 ? Math.max(0, Math.min(1, raised / goal)) : 0;
   const rubles = (amount: number) => `${amount.toLocaleString(locale)} ₽`;
@@ -97,7 +97,7 @@ function SupportProject({
         >
           <Text style={s.actionText}>{t.support}</Text>
         </Pressable>
-        {!url && <Text style={s.note}>{t.supportSoon}</Text>}
+        <Text style={s.note}>{url ? "Boosty" : t.supportSoon}</Text>
         {error && (
           <Text accessibilityRole="alert" style={s.note}>
             {t.supportError}

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   Modal,
   Platform,
   Pressable,
@@ -41,7 +40,6 @@ import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { Library } from "./src/components/Library";
 import { useLibraryLanguage } from "./src/localization/useLibraryLanguage";
-import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
 import { SettledWindow, useSettledWindowSource } from "./src/lib/settledWindow";
@@ -58,79 +56,6 @@ import {
 const NO_ANSWER: Answer = {};
 const revisedPreviewIds = new Set(Object.keys(revisedAssets));
 const vectorPreviewIds = new Set(Object.keys(vectorAssets));
-// Both guards are build-time constants: production removes this entire component.
-const DebugSourcePanel =
-  __DEV__ && process.env.EXPO_PUBLIC_SOURCE_DEBUG === "1"
-    ? function SourceComparison({
-        pageNumber,
-        title,
-      }: {
-        pageNumber: number;
-        title: string;
-      }) {
-        const [panelWidth, setPanelWidth] = useState(500);
-        const [enlarged, setEnlarged] = useState(false);
-        const imageWidth = Math.max(280, panelWidth - 32) * (enlarged ? 2 : 1);
-        const scan = assets[`page_${String(pageNumber).padStart(3, "0")}`];
-        return (
-          <View
-            testID="debug-source-panel"
-            style={{
-              flex: 1,
-              minHeight: 0,
-              backgroundColor: "#edf4fc",
-              borderLeftWidth: 1,
-              borderColor: "#b5c9df",
-            }}
-            onLayout={(e) => setPanelWidth(e.nativeEvent.layout.width)}
-          >
-            <View style={{ padding: 16, gap: 8 }}>
-              <Text
-                style={{ fontFamily: f.bold, color: "#2563a6", fontSize: 16 }}
-              >
-                РЕЖИМ СВЕРКИ · ТОЛЬКО ДЛЯ РАЗРАБОТКИ
-              </Text>
-              <Text
-                testID="debug-source-page"
-                style={{ fontFamily: f.bold, fontSize: 19, color: c.pen }}
-              >
-                PDF · страница {pageNumber}
-              </Text>
-              <Text style={{ fontFamily: f.regular, color: c.muted }}>
-                {title}
-              </Text>
-              <Text
-                style={{ fontFamily: f.regular, color: c.muted, fontSize: 12 }}
-              >
-                Полный скан страницы исходного PDF. Нумерация — по листам PDF.
-              </Text>
-              <Button small secondary onPress={() => setEnlarged((v) => !v)}>
-                {enlarged
-                  ? "Сверка: уместить страницу"
-                  : "Сверка: увеличить ×2"}
-              </Button>
-            </View>
-            <ScrollView
-              style={{ flex: 1 }}
-              contentContainerStyle={{ padding: 16 }}
-            >
-              <ScrollView horizontal style={{ flexGrow: 0 }}>
-                <Image
-                  accessibilityLabel={scan.alt}
-                  source={scan.source}
-                  resizeMode="contain"
-                  style={{
-                    width: imageWidth,
-                    height: (imageWidth * scan.height) / scan.width,
-                  }}
-                />
-              </ScrollView>
-            </ScrollView>
-          </View>
-        );
-      }
-    : null;
-
 function Main() {
   const [loaded, fontError] = useFonts({
     Andika_400Regular,
@@ -141,14 +66,12 @@ function Main() {
     [ready, setReady] = useState(false),
     [home, setHome] = useState(true),
     [library, setLibrary] = useState(true),
-    [original, setOriginal] = useState(false),
     [parent, setParent] = useState(false),
     // The adults' part opens after a question a child does not answer.
     [adult, setAdult] = useState(false),
     [confirmReset, setConfirmReset] = useState(false),
     [drawing, setDrawing] = useState(false),
     [storageError, setStorageError] = useState(""),
-    [zoom, setZoom] = useState(false),
     [catalogSection, setCatalogSection] = useState(0),
     [search, setSearch] = useState(""),
     // The list of the page's steps, the end of a page, and the word said
@@ -175,9 +98,7 @@ function Main() {
   // sheet keeps the old one and is laid out anew once.
   const held = useSettledWindowSource();
   const { width: windowWidth, height: windowHeight } = held;
-  const comparison = !!DebugSourcePanel && !home;
-  const sideBySide = windowWidth >= 900;
-  const width = comparison && sideBySide ? windowWidth * 0.52 : windowWidth;
+  const width = windowWidth;
   const wide = width >= 1000,
     compact = width < 600;
   // The sheet is ruled from the left edge of the writing, and the writing is
@@ -603,12 +524,10 @@ function Main() {
           style={{
             flex: 1,
             minHeight: 0,
-            flexDirection: comparison && sideBySide ? "row" : "column",
+            flexDirection: "column",
           }}
         >
-          <View
-            style={{ flex: comparison ? 0.52 : 1, minWidth: 0, minHeight: 0 }}
-          >
+          <View style={{ flex: 1, minWidth: 0, minHeight: 0 }}>
             <ScrollView
               testID="lesson-scroll-pane"
               style={[
@@ -969,15 +888,6 @@ function Main() {
               />
             )}
           </View>
-          {comparison && DebugSourcePanel && (
-            <View style={{ flex: 0.48, minWidth: 0, minHeight: 0 }}>
-              <DebugSourcePanel
-                key={page.number}
-                pageNumber={page.number}
-                title={block.title}
-              />
-            </View>
-          )}
         </View>
         <StepList
           visible={stepsOpen}
@@ -994,51 +904,8 @@ function Main() {
             setPageEnd(false);
             setProgress((p) => ({ ...p, block: i }));
           }}
-          onOriginal={() => {
-            setStepsOpen(false);
-            setOriginal(true);
-            setZoom(false);
-          }}
           onClose={() => setStepsOpen(false)}
         />
-        <Modal
-          visible={original}
-          animationType="slide"
-          onRequestClose={() => setOriginal(false)}
-        >
-          <SafeAreaView style={s.safe}>
-            <View style={s.modalHeader}>
-              <Text style={s.modalTitle}>
-                Оригинал · страница {page.number}
-              </Text>
-              <Button small secondary onPress={() => setOriginal(false)}>
-                Закрыть
-              </Button>
-            </View>
-            <View style={{ paddingHorizontal: 20, paddingBottom: 12 }}>
-              <Button small secondary onPress={() => setZoom(!zoom)}>
-                {zoom ? "Уместить страницу" : "Увеличить ×2"}
-              </Button>
-            </View>
-            <ScrollView
-              maximumZoomScale={3}
-              minimumZoomScale={1}
-              contentContainerStyle={{ alignItems: "center", padding: 16 }}
-            >
-              <ScrollView
-                horizontal
-                contentContainerStyle={{
-                  width: zoom ? Math.max(width * 1.7, 1000) : width - 32,
-                }}
-              >
-                <BookImage
-                  id={`page_${String(page.number).padStart(3, "0")}`}
-                  maxHeight={zoom ? 2600 : 1600}
-                />
-              </ScrollView>
-            </ScrollView>
-          </SafeAreaView>
-        </Modal>
         <Modal
           visible={parent}
           transparent
@@ -1416,13 +1283,6 @@ const s = StyleSheet.create({
   },
   lessonMain: { minWidth: 0, maxWidth: "100%" },
   exerciseCard: {},
-  modalHeader: {
-    padding: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 12,
-  },
   modalTitle: {
     fontFamily: f.hand,
     fontSize: 30,

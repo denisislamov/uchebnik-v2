@@ -16,8 +16,6 @@
     "test:content": "python3 scripts/content/extract.py --check && python3 scripts/content/build_course.py --check && node --experimental-strip-types scripts/content/lint_texts.mjs --check && python3 scripts/prepare_web_assets.py --check",
     "test:browser": "node scripts/run-browser-tests.cjs",
     "test:all": "npm run test:content && npm run typecheck && npm test && npm run test:release-guard && npm run export:web && npm run test:browser",
-    "web:debug": "node scripts/start-source-debug.cjs",
-    "test:debug": "node scripts/debug-source-smoke.cjs",
     "test:release-guard": "node scripts/check-release-debug-guard.cjs",
     "lint:texts": "node --experimental-strip-types scripts/content/lint_texts.mjs --report docs/TEXT_LINT.md",
     "audit:hints": "node --experimental-strip-types scripts/content/hints_audit.mjs"

@@ -1,4 +1,4 @@
-/** Build with the flag intentionally enabled; __DEV__ must still remove the debug UI. */
+/** Obsolete debug flags must not restore removed source-comparison controls. */
 const { spawnSync } = require("node:child_process");
 const fs = require("node:fs"),
   os = require("node:os"),
@@ -42,6 +42,8 @@ try {
           "debug-source-page",
           "РЕЖИМ СВЕРКИ",
           "Сверка: увеличить",
+          "Страница в книге",
+          "Оригинал · страница",
         ])
           if (source.includes(marker))
             throw Error(`Debug code leaked into release: ${marker}`);
@@ -52,7 +54,7 @@ try {
   if (!bundles || platforms.size !== 3)
     throw Error("Missing production bundles for web, iOS or Android");
   console.log(
-    "PASS: production removes source-comparison UI even when EXPO_PUBLIC_SOURCE_DEBUG=1",
+    "PASS: web, iOS and Android contain no original-book comparison controls, even with the obsolete debug flag",
   );
 } finally {
   fs.rmSync(output, { recursive: true, force: true });
