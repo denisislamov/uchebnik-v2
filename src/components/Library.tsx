@@ -9,7 +9,6 @@ import {
   View,
 } from "react-native";
 import { libraryColors as c, libraryFonts as f } from "./libraryTheme";
-import Svg, { Circle, Ellipse, Path } from "react-native-svg";
 import {
   plannedBooks,
   PROJECT_SUPPORT_URL,
@@ -46,7 +45,7 @@ function SupportProject({
     >
       <View style={s.funding}>
         <Text
-          style={[s.supportTitle, compact && { fontSize: 26, lineHeight: 32 }]}
+          style={[s.supportTitle, compact && { fontSize: 22, lineHeight: 30 }]}
         >
           {t.supportTitle}
         </Text>
@@ -93,7 +92,7 @@ function SupportProject({
             pressed && s.pressed,
           ]}
         >
-          <Text style={s.actionText}>{t.support} ↗</Text>
+          <Text style={[s.actionText, s.supportButtonText]}>{t.support} ↗</Text>
         </Pressable>
         <Text style={s.note}>{url ? "Boosty" : t.supportSoon}</Text>
         {error && (
@@ -136,7 +135,7 @@ export function Library({
   const plannedColumns = width < 900 ? 2 : 3;
   const contentWidth = Math.min(width, 1200) - gutter * 2;
   const futureWidth = Math.min(192, contentWidth / plannedColumns - 24);
-  const coverWidth = compact ? (width < 360 ? 96 : 128) : 216;
+  const coverWidth = compact ? (width < 360 ? 96 : 128) : 184;
   return (
     <View testID="library-home" style={s.page}>
       <View style={[s.container, { paddingHorizontal: gutter }]}>
@@ -146,7 +145,7 @@ export function Library({
               accessibilityRole="header"
               style={[
                 s.brandTitle,
-                compact && { fontSize: 30, lineHeight: 38 },
+                compact && { fontSize: 28, lineHeight: 36 },
               ]}
             >
               {t.title}
@@ -187,11 +186,8 @@ export function Library({
           </Text>
         )}
 
-        <SupportProject compact={width < 1000} copy={t} locale={locale} />
-
         <View style={s.shelves}>
           <View style={[s.availableBook, compact && s.availableBookCompact]}>
-            {width >= 1200 && <ShelfDoodle />}
             {compact && (
               <Text
                 accessibilityRole="header"
@@ -200,10 +196,16 @@ export function Library({
                 {t.arithmetic}
               </Text>
             )}
-            <View style={[s.availableRow, { gap: compact ? 16 : 48 }]}>
+            <View
+              testID="available-book"
+              style={[
+                s.availableRow,
+                { gap: compact ? 20 : 40, paddingHorizontal: compact ? 0 : 24 },
+              ]}
+            >
               <View
                 style={{
-                  width: coverWidth + (compact ? 0 : 32),
+                  width: coverWidth,
                   alignItems: "center",
                 }}
               >
@@ -226,7 +228,6 @@ export function Library({
                   />
                   <View pointerEvents="none" style={s.spine} />
                 </Pressable>
-                <View style={s.bookShelf} />
               </View>
               <View style={s.bookInfo}>
                 {!compact && (
@@ -255,7 +256,13 @@ export function Library({
                   </View>
                 )}
               </View>
+              {width >= 1100 && (
+                <View style={{ alignSelf: "flex-end" }}>
+                  <ShelfPlant width={172} />
+                </View>
+              )}
             </View>
+            <View style={s.bookShelf} />
             {compact && (
               <View style={s.mobileActions}>
                 <BookActions
@@ -267,6 +274,8 @@ export function Library({
               </View>
             )}
           </View>
+
+          <SupportProject compact={width < 1000} copy={t} locale={locale} />
 
           <View style={s.plans}>
             <Text accessibilityRole="header" style={s.plansTitle}>
@@ -287,7 +296,7 @@ export function Library({
                         {
                           width: futureWidth,
                           height: futureWidth * 1.5,
-                          backgroundColor: book.color,
+                          backgroundColor: c.planned,
                         },
                       ]}
                     >
@@ -295,7 +304,7 @@ export function Library({
                         style={[
                           s.plannedTitle,
                           {
-                            color: book.pale,
+                            color: c.ink,
                             fontSize: compact ? 18 : 26,
                             lineHeight: compact ? 25 : 34,
                           },
@@ -306,7 +315,7 @@ export function Library({
                       <Text
                         style={[
                           s.plannedSymbol,
-                          { color: book.pale, fontSize: compact ? 40 : 64 },
+                          { color: c.ink, fontSize: compact ? 40 : 64 },
                         ]}
                       >
                         {locale !== "ru" &&
@@ -321,6 +330,16 @@ export function Library({
                   <Text style={s.plannedStatus}>{t.planned}</Text>
                 </View>
               ))}
+              {plannedColumns === 2 && (
+                <View style={[s.plannedSlot, { width: "50%" }]}>
+                  <View
+                    style={[s.plannedSpace, { height: futureWidth * 1.5 + 8 }]}
+                  >
+                    <ShelfPlant width={futureWidth} />
+                  </View>
+                  <View style={s.shelfEdge} />
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -366,31 +385,15 @@ function BookActions({
   );
 }
 
-function ShelfDoodle() {
+function ShelfPlant({ width }: { width: number }) {
   return (
-    <View pointerEvents="none" aria-hidden style={s.doodle}>
-      <Svg width={104} height={92} viewBox="0 0 104 92">
-        <Circle cx="52" cy="45" r="25" fill={c.yellow} />
-        <Ellipse
-          cx="52"
-          cy="45"
-          rx="44"
-          ry="12"
-          rotation={-25}
-          origin="52,45"
-          fill="none"
-          stroke={c.pen}
-          strokeWidth="2"
-        />
-        <Path
-          d="M87 8v12M81 14h12M12 69v10M7 74h10"
-          stroke={c.coral}
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-        <Circle cx="75" cy="76" r="3" fill={c.pen} />
-      </Svg>
-    </View>
+    <Image
+      source={require("../../assets/library/shelf-plant.png")}
+      accessible={false}
+      aria-hidden
+      resizeMode="contain"
+      style={{ width, height: width * (1403 / 1121) }}
+    />
   );
 }
 
@@ -421,7 +424,7 @@ const s = StyleSheet.create({
     minHeight: 56,
     paddingHorizontal: 12,
     paddingVertical: 12,
-    borderRadius: 24,
+    borderRadius: 10,
     borderWidth: 1,
     borderBottomWidth: 1,
     borderColor: c.line,
@@ -446,8 +449,8 @@ const s = StyleSheet.create({
   brand: { flex: 1, gap: 8 },
   brandTitle: {
     fontFamily: f.heading,
-    fontSize: 48,
-    lineHeight: 56,
+    fontSize: 36,
+    lineHeight: 46,
     color: c.ink,
   },
   subtitle: {
@@ -462,8 +465,9 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     gap: CELL,
     padding: CELL,
-    backgroundColor: c.peach,
-    borderRadius: 28,
+    backgroundColor: c.wash,
+    borderRadius: 12,
+    marginTop: 36,
   },
   supportCompact: {
     flexDirection: "column",
@@ -473,8 +477,8 @@ const s = StyleSheet.create({
   },
   supportTitle: {
     fontFamily: f.heading,
-    fontSize: 32,
-    lineHeight: 40,
+    fontSize: 24,
+    lineHeight: 34,
     color: c.ink,
     flexShrink: 1,
   },
@@ -487,30 +491,33 @@ const s = StyleSheet.create({
     color: c.ink,
   },
   fundingTrack: {
-    height: 16,
-    borderRadius: 8,
+    height: 10,
+    borderRadius: 5,
     overflow: "hidden",
-    backgroundColor: "#ffffffa6",
+    backgroundColor: "#d9e2d7",
   },
   fundingFill: { height: "100%", borderRadius: 8, backgroundColor: c.pen },
-  supportButton: { minHeight: 60 },
+  supportButton: {
+    minHeight: 56,
+    backgroundColor: c.card,
+    borderWidth: 1,
+    borderColor: c.line,
+  },
+  supportButtonText: { color: c.pen, fontSize: 18 },
   note: {
     fontFamily: f.regular,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: CELL,
     color: c.muted,
   },
   shelves: { paddingBottom: CELL },
-  availableBook: {
-    marginTop: CELL,
-    gap: CELL,
-    padding: 32,
-    backgroundColor: c.wash,
-    borderRadius: 32,
+  availableBook: { marginTop: 28, gap: 0 },
+  availableBookCompact: { marginTop: 12 },
+  availableRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 24,
   },
-  availableBookCompact: { padding: 16, borderRadius: 24 },
-  doodle: { position: "absolute", top: 22, right: 22, opacity: 0.8 },
-  availableRow: { flexDirection: "row", alignItems: "center" },
   book: {
     borderTopLeftRadius: 3,
     borderTopRightRadius: 6,
@@ -533,13 +540,14 @@ const s = StyleSheet.create({
   },
   bookShelf: {
     width: "100%",
-    height: 10,
-    borderTopWidth: 3,
-    borderTopColor: "#ded0ee",
+    height: 14,
+    borderTopWidth: 4,
+    borderTopColor: c.shelfLight,
     borderBottomWidth: 2,
-    borderBottomColor: "#a88bc7",
+    borderBottomColor: c.shelfShade,
     backgroundColor: c.shelf,
-    borderRadius: 3,
+    borderRadius: 2,
+    boxShadow: "0px 10px 16px rgba(61, 49, 30, 0.12)",
   },
   bookInfo: { flex: 1, minWidth: 0, gap: 12 },
   bookTitle: {
@@ -548,11 +556,11 @@ const s = StyleSheet.create({
     lineHeight: 56,
     color: c.ink,
   },
-  mobileBookTitle: { fontSize: 28, lineHeight: 38 },
+  mobileBookTitle: { fontSize: 30, lineHeight: 40, marginBottom: 20 },
   grade: { fontFamily: f.regular, fontSize: 22, lineHeight: 32, color: c.ink },
   methodology: {
     fontFamily: f.regular,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: CELL,
     color: c.muted,
     maxWidth: 420,
@@ -563,10 +571,10 @@ const s = StyleSheet.create({
     gap: 16,
     marginTop: 12,
   },
-  mobileActions: { gap: 12 },
+  mobileActions: { gap: 12, marginTop: 24 },
   action: {
     backgroundColor: c.pen,
-    borderRadius: 24,
+    borderRadius: 10,
     borderBottomWidth: 0,
     borderBottomColor: c.penDark,
     minHeight: 64,
@@ -577,8 +585,8 @@ const s = StyleSheet.create({
   },
   actionText: {
     fontFamily: f.bold,
-    fontSize: 20,
-    lineHeight: 28,
+    fontSize: 22,
+    lineHeight: 30,
     color: c.white,
     textAlign: "center",
   },
@@ -591,7 +599,7 @@ const s = StyleSheet.create({
   },
   pressed: { opacity: 0.8 },
   secondaryPressed: { backgroundColor: c.wash },
-  plans: { marginTop: CELL * 2 },
+  plans: { marginTop: 48 },
   plansTitle: {
     fontFamily: f.heading,
     fontSize: 32,
@@ -616,13 +624,14 @@ const s = StyleSheet.create({
   plannedSymbol: { fontFamily: f.regular },
   shelfEdge: {
     marginTop: -12,
-    height: 10,
-    borderTopWidth: 3,
-    borderTopColor: "#ded0ee",
+    height: 14,
+    borderTopWidth: 4,
+    borderTopColor: c.shelfLight,
     borderBottomWidth: 2,
-    borderBottomColor: "#a88bc7",
+    borderBottomColor: c.shelfShade,
     backgroundColor: c.shelf,
-    borderRadius: 3,
+    borderRadius: 2,
+    boxShadow: "0px 10px 16px rgba(61, 49, 30, 0.12)",
   },
   plannedStatus: {
     fontFamily: f.regular,
@@ -631,9 +640,7 @@ const s = StyleSheet.create({
     color: c.muted,
     textAlign: "center",
     alignSelf: "center",
-    backgroundColor: c.wash,
-    borderRadius: 16,
-    paddingHorizontal: 14,
+    paddingHorizontal: 8,
     paddingVertical: 4,
   },
 });

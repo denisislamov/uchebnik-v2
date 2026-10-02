@@ -17,7 +17,6 @@ import { useFonts } from "expo-font";
 import { Andika_400Regular } from "@expo-google-fonts/andika/400Regular";
 import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
 import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
-import { Literata_800ExtraBold } from "@expo-google-fonts/literata/800ExtraBold";
 import { Manrope_400Regular } from "@expo-google-fonts/manrope/400Regular";
 import { Manrope_700Bold } from "@expo-google-fonts/manrope/700Bold";
 import Svg, { Path, Rect } from "react-native-svg";
@@ -64,7 +63,6 @@ function Main() {
     Andika_400Regular,
     Andika_700Bold,
     Neucha_400Regular,
-    Literata_800ExtraBold,
     Manrope_400Regular,
     Manrope_700Bold,
   });

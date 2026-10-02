@@ -1,0 +1,12 @@
+Bookshelf plant asset
+Source photograph: feey, published 22 April 2022.
+https://unsplash.com/photos/a-shelf-with-plants-on-it-O0N9MF--hK4
+Source image: https://images.unsplash.com/photo-1650614967039-1cb97737df86
+License: Unsplash License, https://unsplash.com/license
+Downloaded 3 October 2026 for this project. Free use includes commercial use.
+
+Derived asset: assets/library/shelf-plant.png
+Processing: built-in image_gen background extraction from the real photograph.
+This is a photograph-based edited cutout, not an unedited photograph.
+Prompt:
+Use case: background-extraction. Edit the supplied real photograph: extract ONLY the single small ponytail-palm / Beaucarnea plant in the ribbed white ceramic pot at upper center (the plant standing on the top wooden shelf, with bulbous tan trunk and narrow curved green leaves). Keep the exact real photographed subject, pot, texture, natural leaf shapes, lighting and proportions. Remove the shelf, wall, left large plant, other lower plants, furniture, book covers and all other objects. Actual transparent background, clean accurate photographic alpha edges, pot base included; no invented or stylized elements, no text, no border. Center the isolated plant and pot with little transparent margin, naturally sharp high quality product cutout for an educational bookshelf website.

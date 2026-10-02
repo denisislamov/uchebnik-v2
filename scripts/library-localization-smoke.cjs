@@ -26,11 +26,7 @@ const locales = [
           .filter((font) => font.status === "loaded")
           .map((font) => font.family.replaceAll('"', "")),
       );
-      for (const family of [
-        "Literata_800ExtraBold",
-        "Manrope_400Regular",
-        "Manrope_700Bold",
-      ])
+      for (const family of ["Manrope_400Regular", "Manrope_700Bold"])
         assert.ok(loadedFonts.includes(family), `${family} failed to load`);
       for (let i = 0; i < locales.length; i++) {
         const [locale, title, name] = locales[i];
@@ -58,11 +54,9 @@ const locales = [
           await page.getByTestId("language-picker").innerText(),
           new RegExp(name),
         );
-        const supportBox = await page
-          .getByTestId("support-project")
-          .boundingBox();
+        const bookBox = await page.getByTestId("available-book").boundingBox();
         assert.ok(
-          supportBox.y < (width >= 1000 ? 210 : 360),
+          bookBox.y < (width >= 1000 ? 240 : 420),
           `${locale}: header takes too much space at ${width}px`,
         );
         const overflow = await page
