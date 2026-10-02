@@ -6,9 +6,14 @@ const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
 const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
 
 async function openParents(page) {
+  const library = await page.getByTestId("library-home").isVisible();
   await page
     .getByRole("button", { name: "Информация для родителей", exact: true })
     .click();
+  if (library) {
+    await page.getByTestId("library-parent-info").waitFor();
+    return;
+  }
   const words = (await page.getByTestId("adult-gate-question").innerText())
     .trim()
     .split(" ");

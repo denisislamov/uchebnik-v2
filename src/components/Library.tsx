@@ -18,13 +18,28 @@ import { libraryCover } from "../content/libraryCover";
 import { HandFrame } from "./HandDrawn";
 import { Button } from "./Controls";
 import { CELL } from "../lib/grid";
+import { LanguageWheel } from "./LanguageWheel";
+import {
+  libraryText,
+  type LibraryCopy,
+  type LibraryLocale,
+} from "../localization/library";
 
-function SupportProject({ compact }: { compact: boolean }) {
+function SupportProject({
+  compact,
+  copy: t,
+  locale,
+}: {
+  compact: boolean;
+  copy: LibraryCopy;
+  locale: LibraryLocale;
+}) {
   const [error, setError] = useState(false);
   const url = PROJECT_PATREON_URL.trim();
   const { raised, goal } = PROJECT_FUNDING;
   const fraction = goal > 0 ? Math.max(0, Math.min(1, raised / goal)) : 0;
-  const rubles = (amount: number) => `${amount.toLocaleString("ru-RU")} ₽`;
+  const rubles = (amount: number) => `${amount.toLocaleString(locale)} ₽`;
+  const amounts = { raised: rubles(raised), goal: rubles(goal) };
   return (
     <View
       testID="support-project"
@@ -35,19 +50,17 @@ function SupportProject({ compact }: { compact: boolean }) {
         <Text
           style={[s.supportTitle, compact && { fontSize: 26, lineHeight: 32 }]}
         >
-          Новые учебники и озвучка
+          {t.supportTitle}
         </Text>
-        <Text style={s.fundingAmount}>
-          {rubles(raised)} из {rubles(goal)}
-        </Text>
+        <Text style={s.fundingAmount}>{libraryText(t.funding, amounts)}</Text>
         <View
           accessible
           accessibilityRole="progressbar"
-          accessibilityLabel="Сбор на новые учебники и озвучку"
+          accessibilityLabel={t.fundingLabel}
           aria-valuemin={0}
           aria-valuemax={goal}
           aria-valuenow={raised}
-          aria-valuetext={`Собрано ${rubles(raised)} из ${rubles(goal)}`}
+          aria-valuetext={libraryText(t.fundingAccessible, amounts)}
           style={s.fundingTrack}
         >
           <View
@@ -59,7 +72,7 @@ function SupportProject({ compact }: { compact: boolean }) {
       <View style={s.supportAction}>
         <Pressable
           accessibilityRole={url ? "link" : "button"}
-          accessibilityLabel="Поддержать проект на Patreon"
+          accessibilityLabel={t.supportLabel}
           accessibilityState={{ disabled: !url }}
           disabled={!url}
           {...(Platform.OS === "web" && url
@@ -82,12 +95,12 @@ function SupportProject({ compact }: { compact: boolean }) {
             pressed && s.pressed,
           ]}
         >
-          <Text style={s.actionText}>Поддержать проект</Text>
+          <Text style={s.actionText}>{t.support}</Text>
         </Pressable>
-        {!url && <Text style={s.note}>Patreon — скоро</Text>}
+        {!url && <Text style={s.note}>{t.supportSoon}</Text>}
         {error && (
           <Text accessibilityRole="alert" style={s.note}>
-            Не удалось открыть Patreon. Попробуйте ещё раз.
+            {t.supportError}
           </Text>
         )}
       </View>
@@ -103,6 +116,10 @@ export function Library({
   onOpenBook,
   onContinue,
   onParents,
+  locale,
+  onLocaleChange,
+  copy: t,
+  languageSaveError,
 }: {
   width: number;
   hasProgress: boolean;
@@ -111,6 +128,10 @@ export function Library({
   onOpenBook: () => void;
   onContinue: () => void;
   onParents: () => void;
+  locale: LibraryLocale;
+  onLocaleChange: (locale: LibraryLocale) => void;
+  copy: LibraryCopy;
+  languageSaveError: boolean;
 }) {
   const compact = width < 800;
   const gutter = compact ? 24 : 72;
@@ -130,22 +151,29 @@ export function Library({
                 compact && { fontSize: 34, lineHeight: 40 },
               ]}
             >
-              Цифровые учебники
+              {t.title}
             </Text>
-            <Text style={s.subtitle}>
-              По проверенным методикам 1950-х годов
-            </Text>
+            <Text style={s.subtitle}>{t.subtitle}</Text>
           </View>
-          <Button
-            secondary
-            label="Информация для родителей"
-            onPress={onParents}
-          >
-            Родителям
-          </Button>
+          <View style={[s.headerTools, compact && { width: "100%" }]}>
+            <LanguageWheel locale={locale} onChange={onLocaleChange} copy={t} />
+            {languageSaveError && (
+              <Text accessibilityRole="alert" style={s.note}>
+                {t.languageSaveError}
+              </Text>
+            )}
+            <Button
+              testID="library-parents"
+              secondary
+              label={t.parentsLabel}
+              onPress={onParents}
+            >
+              {t.parents}
+            </Button>
+          </View>
         </View>
 
-        <SupportProject compact={width < 800} />
+        <SupportProject compact={width < 1000} copy={t} locale={locale} />
 
         <View style={s.shelves}>
           <View style={[s.availableBook, compact && { marginTop: CELL }]}>
@@ -158,7 +186,8 @@ export function Library({
               >
                 <Pressable
                   accessibilityRole="button"
-                  accessibilityLabel="Открыть учебник Арифметика, 1 класс"
+                  testID="library-open-book"
+                  accessibilityLabel={t.openBook}
                   onPress={onOpenBook}
                   style={({ pressed }) => [
                     s.book,
@@ -167,7 +196,7 @@ export function Library({
                   ]}
                 >
                   <Image
-                    accessibilityLabel="Обложка учебника Арифметика, 1 класс"
+                    accessibilityLabel={t.cover}
                     source={libraryCover}
                     style={s.coverImage}
                     resizeMode="cover"
@@ -187,20 +216,22 @@ export function Library({
                     },
                   ]}
                 >
-                  Арифметика
+                  {t.arithmetic}
                 </Text>
-                <Text style={s.grade}>1 класс</Text>
-                <Text style={s.methodology}>
-                  По методике А. С. Пчёлко и Г. Б. Поляка
-                </Text>
+                <Text style={s.grade}>{t.grade}</Text>
+                <Text style={s.methodology}>{t.methodology}</Text>
+                {locale !== "ru" && (
+                  <Text style={s.note}>{t.bookLanguage}</Text>
+                )}
                 {hasProgress && (
                   <Text style={s.note}>
-                    Пройдено {completed} из {total} страниц
+                    {libraryText(t.progress, { completed, total })}
                   </Text>
                 )}
                 {!compact && (
                   <View style={s.desktopActions}>
                     <BookActions
+                      copy={t}
                       hasProgress={hasProgress}
                       onContinue={onContinue}
                       onOpenBook={onOpenBook}
@@ -212,6 +243,7 @@ export function Library({
             {compact && (
               <View style={s.mobileActions}>
                 <BookActions
+                  copy={t}
                   hasProgress={hasProgress}
                   onContinue={onContinue}
                   onOpenBook={onOpenBook}
@@ -222,7 +254,7 @@ export function Library({
 
           <View style={s.plans}>
             <Text accessibilityRole="header" style={s.plansTitle}>
-              Дальше — больше предметов
+              {t.moreSubjects}
             </Text>
             <View style={s.shelfGrid}>
               {plannedBooks.map((book) => (
@@ -253,7 +285,7 @@ export function Library({
                           },
                         ]}
                       >
-                        {book.title}
+                        {t.books[book.id]}
                       </Text>
                       <Text
                         style={[
@@ -261,13 +293,16 @@ export function Library({
                           { color: book.pale, fontSize: compact ? 40 : 64 },
                         ]}
                       >
-                        {book.symbol}
+                        {locale !== "ru" &&
+                        (book.id === "reading" || book.id === "russian")
+                          ? "Aa"
+                          : book.symbol}
                       </Text>
                       <View pointerEvents="none" style={s.spine} />
                     </View>
                   </View>
                   <View style={s.shelfEdge} />
-                  <Text style={s.plannedStatus}>В планах</Text>
+                  <Text style={s.plannedStatus}>{t.planned}</Text>
                 </View>
               ))}
             </View>
@@ -279,10 +314,12 @@ export function Library({
 }
 
 function BookActions({
+  copy: t,
   hasProgress,
   onContinue,
   onOpenBook,
 }: {
+  copy: LibraryCopy;
   hasProgress: boolean;
   onContinue: () => void;
   onOpenBook: () => void;
@@ -291,19 +328,15 @@ function BookActions({
     <>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={
-          hasProgress ? "Продолжить занятие  →" : "Начать заниматься  →"
-        }
+        accessibilityLabel={hasProgress ? t.resumeLabel : t.startLabel}
         onPress={onContinue}
         style={({ pressed }) => [s.action, pressed && s.pressed]}
       >
-        <Text style={s.actionText}>
-          {hasProgress ? "Продолжить" : "Начать учиться"} →
-        </Text>
+        <Text style={s.actionText}>{hasProgress ? t.resume : t.start} →</Text>
       </Pressable>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Оглавление учебника Арифметика"
+        accessibilityLabel={t.contentsLabel}
         onPress={onOpenBook}
         style={({ pressed }) => [
           s.action,
@@ -311,7 +344,7 @@ function BookActions({
           pressed && s.secondaryPressed,
         ]}
       >
-        <Text style={[s.actionText, { color: c.ink }]}>Оглавление</Text>
+        <Text style={[s.actionText, { color: c.ink }]}>{t.contents}</Text>
       </Pressable>
     </>
   );
@@ -332,6 +365,7 @@ const s = StyleSheet.create({
     gap: CELL,
     paddingVertical: CELL * 2,
   },
+  headerTools: { width: 280, gap: 16, alignItems: "flex-start" },
   headerCompact: {
     flexDirection: "column",
     alignItems: "flex-start",

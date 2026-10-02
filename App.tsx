@@ -40,6 +40,7 @@ import { HandFrame, Rows } from "./src/components/HandDrawn";
 import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { Library } from "./src/components/Library";
+import { useLibraryLanguage } from "./src/localization/useLibraryLanguage";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
@@ -155,6 +156,7 @@ function Main() {
     [stepsOpen, setStepsOpen] = useState(false),
     [pageEnd, setPageEnd] = useState(false),
     [lockNote, setLockNote] = useState(false);
+  const libraryLanguage = useLibraryLanguage(library);
   const scroll = useRef<ScrollView>(null),
     saveRevision = useRef(0);
   // Coaching may scroll the lesson to its target; the child returns to where they were.
@@ -632,6 +634,10 @@ function Main() {
               {home && !library && header}
               {library ? (
                 <Library
+                  locale={libraryLanguage.locale}
+                  onLocaleChange={libraryLanguage.chooseLocale}
+                  copy={libraryLanguage.copy}
+                  languageSaveError={libraryLanguage.saveError}
                   width={windowWidth}
                   hasProgress={!!stepsDone || progress.page > 1}
                   completed={finished}
@@ -1045,7 +1051,7 @@ function Main() {
         >
           <View style={s.modalShade}>
             <View style={s.parentPanel}>
-              {!adult ? (
+              {!adult && !library ? (
                 <ScrollView>
                   <AdultGate
                     library={library}
@@ -1055,12 +1061,14 @@ function Main() {
                 </ScrollView>
               ) : (
                 <ScrollView contentContainerStyle={{ gap: 20, padding: 28 }}>
-                  <Text style={s.modalTitle}>Учимся вместе</Text>
+                  <Text style={s.modalTitle}>
+                    {library
+                      ? libraryLanguage.copy.parentsTitle
+                      : "Учимся вместе"}
+                  </Text>
                   {library ? (
-                    <Text style={s.parentBody}>
-                      Выберите учебник на полке. Ответы и рисунки сохраняются на
-                      этом устройстве. Настройки прогресса находятся внутри
-                      каждого учебника, в разделе «Родителям».
+                    <Text testID="library-parent-info" style={s.parentBody}>
+                      {libraryLanguage.copy.parentsBody}
                     </Text>
                   ) : (
                     <>
@@ -1131,6 +1139,7 @@ function Main() {
                     </>
                   )}
                   <Button
+                    testID={library ? "library-parent-close" : undefined}
                     onPress={() => {
                       setParent(false);
                       setAdult(false);
@@ -1138,7 +1147,7 @@ function Main() {
                     }}
                   >
                     {library
-                      ? "Вернуться в библиотеку"
+                      ? libraryLanguage.copy.back
                       : "Вернуться к учебнику"}
                   </Button>
                 </ScrollView>
