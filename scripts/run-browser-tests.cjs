@@ -55,6 +55,7 @@ async function run(file) {
       ? process.argv.slice(2)
       : [
           "scripts/browser-smoke.cjs",
+          "scripts/web-asset-smoke.cjs",
           "scripts/full-course-smoke.cjs",
           "scripts/activity-smoke.cjs",
           "scripts/child-revisions-smoke.cjs",
