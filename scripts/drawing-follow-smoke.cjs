@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** A drawing sheet taller than the window glides up or down so that every next line is on screen before the child draws it. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -24,6 +25,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL + "/metadata.json");
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: page.number, i: index });
       await p.goto(baseURL);
+      await openBook(p);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
       await stepShown(p);
       const pad = p.getByLabel("Поле для рисования", { exact: true });

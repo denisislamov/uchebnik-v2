@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
@@ -38,6 +39,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       { KEY, n: page.number, index },
     );
     await p.goto(baseURL);
+    await openBook(p);
     await button("Продолжить занятие  →").click();
     await stepShown(p);
   }
@@ -191,6 +193,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       fullPage: true,
     });
     await p.reload();
+    await openBook(p);
     await button("Продолжить занятие  →").click();
     await stepShown(p);
     await squareBoard
@@ -205,6 +208,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       localStorage.setItem(KEY, JSON.stringify(s));
     }, KEY);
     await p.goto(baseURL);
+    await openBook(p);
     await button("Продолжить занятие  →").click();
     await stepShown(p);
     await squareBoard

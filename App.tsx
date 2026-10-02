@@ -39,6 +39,7 @@ import { NotebookPaper } from "./src/components/NotebookPaper";
 import { HandFrame, Rows } from "./src/components/HandDrawn";
 import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
+import { Library } from "./src/components/Library";
 import { assets } from "./src/content/assets";
 import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
@@ -138,6 +139,7 @@ function Main() {
   const [progress, setProgress] = useState<Progress>(emptyProgress),
     [ready, setReady] = useState(false),
     [home, setHome] = useState(true),
+    [library, setLibrary] = useState(true),
     [original, setOriginal] = useState(false),
     [parent, setParent] = useState(false),
     // The adults' part opens after a question a child does not answer.
@@ -286,7 +288,7 @@ function Main() {
     setDrawing(false);
     setLockNote(false);
     setStepsOpen(false);
-  }, [progress.page, progress.block, home, pageEnd]);
+  }, [progress.page, progress.block, home, library, pageEnd]);
   useEffect(() => setPageEnd(false), [progress.page, progress.block, home]);
   // The way to the adults' part is asked for every time it is opened.
   useEffect(() => {
@@ -385,6 +387,7 @@ function Main() {
       block ?? p.blocks.findIndex((b) => !isDone(b, progress.answers[b.id]));
     setProgress((v) => ({ ...v, page: n, block: index < 0 ? 0 : index }));
     setHome(false);
+    setLibrary(false);
   }
   // «№ 500» is a textbook exercise number; a bare number is a page.
   const query = search.trim(),
@@ -549,12 +552,12 @@ function Main() {
     >
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="На главную"
-        onPress={() => setHome(true)}
+        accessibilityLabel={home ? "В библиотеку" : "На главную"}
+        onPress={() => (home ? setLibrary(true) : setHome(true))}
         style={s.brand}
       >
-        <Text style={s.brandTitle}>Арифметика</Text>
-        <Text style={s.brandSub}>1 класс</Text>
+        <Text style={s.brandTitle}>{home ? "‹ Библиотека" : "Арифметика"}</Text>
+        {!home && <Text style={s.brandSub}>1 класс</Text>}
       </Pressable>
       <Pressable
         accessibilityRole="button"
@@ -623,9 +626,25 @@ function Main() {
               contentContainerStyle={s.scroll}
             >
               {/* The page's ruling is drawn first: the header and all text lie on it. */}
-              <NotebookPaper margin={!compact} origin={paperOrigin} />
-              {home && header}
-              {home ? (
+              {!library && (
+                <NotebookPaper margin={!compact} origin={paperOrigin} />
+              )}
+              {home && !library && header}
+              {library ? (
+                <Library
+                  width={windowWidth}
+                  hasProgress={!!stepsDone || progress.page > 1}
+                  completed={finished}
+                  total={lessonPages.length}
+                  onOpenBook={() => setLibrary(false)}
+                  onContinue={() => {
+                    setLibrary(false);
+                    if (stepsDone || progress.page > 1) setHome(false);
+                    else selectPage(3);
+                  }}
+                  onParents={() => setParent(true)}
+                />
+              ) : home ? (
                 <View
                   onLayout={measureSheet}
                   style={[
@@ -802,7 +821,10 @@ function Main() {
                               </View>
                               <View style={s.cardArt}>
                                 {previewId ? (
-                                  <BookImage id={previewId} maxHeight={cells(8)} />
+                                  <BookImage
+                                    id={previewId}
+                                    maxHeight={cells(8)}
+                                  />
                                 ) : (
                                   <View style={s.cardNumberArt}>
                                     <Text style={s.cardNumberArtText}>
@@ -1026,6 +1048,7 @@ function Main() {
               {!adult ? (
                 <ScrollView>
                   <AdultGate
+                    library={library}
                     onPass={() => setAdult(true)}
                     onClose={() => setParent(false)}
                   />
@@ -1033,64 +1056,79 @@ function Main() {
               ) : (
                 <ScrollView contentContainerStyle={{ gap: 20, padding: 28 }}>
                   <Text style={s.modalTitle}>Учимся вместе</Text>
-                  <Text style={s.parentBody}>
-                    Это тестовая версия полного учебника: 144 страницы и задания
-                    до числа 100. Начать можно с любой страницы.
-                  </Text>
-                  <Text style={s.parentBody}>
-                    Нажатия на рисунки, числа и фигуры проверяются
-                    автоматически. Прописи проверяются по форме и положению
-                    линии на клетчатом поле. Это проверка обведения образца, а
-                    не распознавание свободного рисунка.
-                  </Text>
-                  <Text style={s.parentBody}>
-                    Мешки на странице 5 перекрываются. В этом задании нет
-                    строгой числовой оценки. Это свободная тренировка
-                    выкладывания палочек; переход не означает проверку
-                    количества.
-                  </Text>
-                  <Text style={s.parentBody}>
-                    Пропущенные шаги остаются незавершёнными. Прогресс хранится
-                    только на этом устройстве; аккаунта и синхронизации нет.
-                  </Text>
-                  <Text style={s.parentBody}>
-                    Озвучивание временно отключено: кнопки «Слушать» нет, пока
-                    не выбран голос диктора. Читайте задания вместе.
-                  </Text>
-                  <Text style={s.parentBody}>
-                    Выполнено {stepsDone} из {allBlocks.length} шагов.
-                  </Text>
-                  {confirmReset ? (
-                    <View
-                      style={{
-                        gap: 12,
-                        backgroundColor: c.washWarm,
-                        padding: 16,
-                        borderRadius: 12,
-                      }}
-                    >
-                      <Text style={s.parentBody}>
-                        Удалить все ответы и рисунки этой тестовой версии? Это
-                        действие нельзя отменить.
-                      </Text>
-                      <Button
-                        onPress={() => {
-                          setProgress(emptyProgress());
-                          setConfirmReset(false);
-                          setParent(false);
-                          setHome(true);
-                        }}
-                      >
-                        Да, удалить прогресс
-                      </Button>
-                      <Button secondary onPress={() => setConfirmReset(false)}>
-                        Отмена
-                      </Button>
-                    </View>
+                  {library ? (
+                    <Text style={s.parentBody}>
+                      Выберите учебник на полке. Ответы и рисунки сохраняются на
+                      этом устройстве. Настройки прогресса находятся внутри
+                      каждого учебника, в разделе «Родителям».
+                    </Text>
                   ) : (
-                    <Button secondary onPress={() => setConfirmReset(true)}>
-                      Начать заново…
-                    </Button>
+                    <>
+                      <Text style={s.parentBody}>
+                        Это тестовая версия полного учебника: 144 страницы и
+                        задания до числа 100. Начать можно с любой страницы.
+                      </Text>
+                      <Text style={s.parentBody}>
+                        Нажатия на рисунки, числа и фигуры проверяются
+                        автоматически. Прописи проверяются по форме и положению
+                        линии на клетчатом поле. Это проверка обведения образца,
+                        а не распознавание свободного рисунка.
+                      </Text>
+                      <Text style={s.parentBody}>
+                        Мешки на странице 5 перекрываются. В этом задании нет
+                        строгой числовой оценки. Это свободная тренировка
+                        выкладывания палочек; переход не означает проверку
+                        количества.
+                      </Text>
+                      <Text style={s.parentBody}>
+                        Пропущенные шаги остаются незавершёнными. Прогресс
+                        хранится только на этом устройстве; аккаунта и
+                        синхронизации нет.
+                      </Text>
+                      <Text style={s.parentBody}>
+                        Озвучивание временно отключено: кнопки «Слушать» нет,
+                        пока не выбран голос диктора. Читайте задания вместе.
+                      </Text>
+                      <Text style={s.parentBody}>
+                        Выполнено {stepsDone} из {allBlocks.length} шагов.
+                      </Text>
+                      {confirmReset ? (
+                        <View
+                          style={{
+                            gap: 12,
+                            backgroundColor: c.washWarm,
+                            padding: 16,
+                            borderRadius: 12,
+                          }}
+                        >
+                          <Text style={s.parentBody}>
+                            Удалить все ответы и рисунки в учебнике «Арифметика
+                            · 1 класс»? Это действие нельзя отменить.
+                          </Text>
+                          <Button
+                            onPress={() => {
+                              setProgress(emptyProgress());
+                              setConfirmReset(false);
+                              setParent(false);
+                              setAdult(false);
+                              setHome(true);
+                            }}
+                          >
+                            Да, удалить прогресс
+                          </Button>
+                          <Button
+                            secondary
+                            onPress={() => setConfirmReset(false)}
+                          >
+                            Отмена
+                          </Button>
+                        </View>
+                      ) : (
+                        <Button secondary onPress={() => setConfirmReset(true)}>
+                          Начать заново…
+                        </Button>
+                      )}
+                    </>
                   )}
                   <Button
                     onPress={() => {
@@ -1099,7 +1137,9 @@ function Main() {
                       setConfirmReset(false);
                     }}
                   >
-                    Вернуться к учебнику
+                    {library
+                      ? "Вернуться в библиотеку"
+                      : "Вернуться к учебнику"}
                   </Button>
                 </ScrollView>
               )}

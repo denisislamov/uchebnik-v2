@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** Catch visible gaps between steps and any tutorial-induced lesson movement. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -31,6 +32,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         KEY,
       );
       await p.goto(baseURL);
+      await openBook(p);
       await p
         .getByRole("button", {
           name: /^(Продолжить занятие|Начать заниматься)/,
@@ -165,6 +167,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       { KEY, block },
     );
     await p.goto(baseURL);
+    await openBook(p);
     await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
     await stepShown(p);
     await p.clock.install();
@@ -241,6 +244,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         { KEY, block },
       );
       await p.goto(baseURL);
+      await openBook(p);
       await p
         .getByRole("button", {
           name: /^(Продолжить занятие|Начать заниматься)/,

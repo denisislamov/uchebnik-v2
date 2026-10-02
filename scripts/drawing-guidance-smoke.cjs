@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** Reproduce drawing retries at the page bottom, where disappearing feedback used to move the pad. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -105,6 +106,7 @@ async function settle(page) {
       },
     );
     await page.goto(baseURL);
+    await openBook(page);
     await page
       .getByRole("button", { name: "Продолжить занятие  →", exact: true })
       .click();

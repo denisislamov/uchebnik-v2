@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const { baseURL, newTestContext, openStep } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -27,6 +28,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
     p.setDefaultTimeout(12000);
     p.on("pageerror", (e) => report.errors.push(e.message));
     await p.goto(baseURL);
+    await openBook(p);
     for (const page of pages.filter((p) => p.number !== 2)) {
       await p.getByRole("button", { name: "На главную", exact: true }).click();
       await p

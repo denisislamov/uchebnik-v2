@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
@@ -49,6 +50,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           },
         );
         await p.goto(baseURL);
+        await openBook(p);
         await p
           .getByRole("button", {
             name: /^(Продолжить занятие|Начать заниматься)/,
@@ -236,6 +238,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           .boundingBox();
         assert.equal(firstSize.width, secondSize.width);
         await p.reload();
+        await openBook(p);
         await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
         await stepShown(p);
         await btn("✓ Получилось!").waitFor();

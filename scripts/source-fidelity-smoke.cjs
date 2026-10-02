@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -42,6 +43,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       { KEY, n: p.number, index: p.blocks.findIndex((b) => b.id === id) },
     );
     await page.goto(baseURL);
+    await openBook(page);
     await button("Продолжить занятие  →").click();
     await stepShown(page);
     await page
@@ -175,6 +177,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await button("Проверить ответ").click();
     assert.ok(isDone(placement, await answer(placement.id)));
     await page.reload();
+    await openBook(page);
     await button("Продолжить занятие  →").click();
     await stepShown(page);
     assert.ok(isDone(placement, await answer(placement.id)));
@@ -510,6 +513,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       assert.equal(isDone(pictured, await answer(pictured.id)), i === 2);
     }
     await page.reload();
+    await openBook(page);
     await button("Продолжить занятие  →").click();
     await stepShown(page);
     assert.ok(isDone(pictured, await answer(pictured.id)));

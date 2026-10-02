@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const { baseURL, newTestContext } = require("./browser-context.cjs");
@@ -13,6 +14,7 @@ const { baseURL, newTestContext } = require("./browser-context.cjs");
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(baseURL);
+    await openBook(page);
     await page.getByRole("button", { name: /^Страница 3\./ }).waitFor();
     await page.waitForFunction(() =>
       [...document.images]

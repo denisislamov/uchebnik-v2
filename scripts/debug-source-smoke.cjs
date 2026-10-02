@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const { openStep, stepShown } = require("./browser-context.cjs");
@@ -17,6 +18,7 @@ const { openStep, stepShown } = require("./browser-context.cjs");
     p.on("pageerror", (e) => errors.push(e.message));
     p.setDefaultTimeout(30000);
     await p.goto(process.env.DEBUG_URL || "http://127.0.0.1:8082");
+    await openBook(p);
     const btn = (name) => p.getByRole("button", { name, exact: true });
     await btn("Начать заниматься  →").click();
     await stepShown(p);

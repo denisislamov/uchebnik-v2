@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const {
   baseURL,
   newTestContext,
@@ -66,6 +67,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await images();
     };
     await p.goto(baseURL);
+    await openBook(p);
     await button("Начать заниматься  →").click();
     await stepShown(p);
     assert.equal(
@@ -111,10 +113,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     }
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     await open(10, 2);
-    await button("рыбу 1").click();
-    await button("рыбу 1").click();
+    await button("Рыба 1").click();
+    await button("Рыба 1").click();
     await p.getByText("Отмечено: 0", { exact: true }).waitFor();
-    for (const n of [1, 2, 3]) await button(`рыбу ${n}`).click();
+    for (const n of [1, 2, 3]) await button(`Рыба ${n}`).click();
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     // Draw using actual mouse gestures, without injecting answer state.
     await open(3, 5);
@@ -164,6 +166,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       KEY,
     );
     await p.reload();
+    await openBook(p);
     await button("Продолжить занятие  →").click();
     await stepShown(p);
     await p.getByText("Все элементы получились!", { exact: true }).waitFor();
@@ -198,6 +201,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     const m = await mobile.newPage();
     m.on("pageerror", (e) => errors.push(e.message));
     await m.goto(baseURL);
+    await openBook(m);
     await m
       .getByRole("button", { name: "Начать заниматься  →", exact: true })
       .click();

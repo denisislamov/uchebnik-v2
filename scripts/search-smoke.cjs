@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** «№ 500» opens exercise 500 itself and says so; a bare number still finds a page. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -12,6 +13,7 @@ const { baseURL, newTestContext } = require("./browser-context.cjs");
     const p = await ctx.newPage();
     p.on("pageerror", (e) => report.errors.push(e.message));
     await p.goto(baseURL);
+    await openBook(p);
     const search = p.getByRole("textbox", { name: "Найти страницу или задание", exact: true });
     for (const number of [500, 50, 5]) {
       const page = pages.find((page) => page.blocks.some((b) => b.exerciseNumber === number));

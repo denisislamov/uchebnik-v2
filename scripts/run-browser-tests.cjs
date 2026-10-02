@@ -54,6 +54,7 @@ async function run(file) {
     for (const file of process.argv.length > 2
       ? process.argv.slice(2)
       : [
+          "scripts/library-smoke.cjs",
           "scripts/browser-smoke.cjs",
           "scripts/web-asset-smoke.cjs",
           "scripts/full-course-smoke.cjs",

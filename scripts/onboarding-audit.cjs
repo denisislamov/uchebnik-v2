@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** Visit every first semantic tutorial; fake browser time accelerates demonstration only. */
 const fs = require("node:fs");
 const { chromium } = require("playwright");
@@ -75,6 +76,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1",
           { KEY, COACH, entry },
         );
         await p.goto(baseURL);
+        await openBook(p);
         await p
           .getByRole("button", {
             name: /^(Продолжить занятие|Начать заниматься)/,

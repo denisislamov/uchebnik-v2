@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /**
  * The lesson is written on the ruling of the sheet (cells of 24 px).
  *
@@ -56,6 +57,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         await p.goto(baseURL + "/metadata.json");
         await p.evaluate(({ KEY, page, index }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page, block: index, answers: {} })), { KEY, page, index });
         await p.goto(baseURL);
+        await openBook(p);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
         await p.getByTestId("exercise-card").waitFor();

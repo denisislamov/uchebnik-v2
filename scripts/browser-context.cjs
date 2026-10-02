@@ -22,7 +22,9 @@ async function newTestContext(browser, options) {
 async function stepShown(page) {
   await page.getByTestId("exercise-body").waitFor();
   await page.waitForFunction(
-    () => getComputedStyle(document.querySelector('[data-testid="exercise-body"]')).opacity === "1",
+    () =>
+      getComputedStyle(document.querySelector('[data-testid="exercise-body"]'))
+        .opacity === "1",
     null,
     { timeout: 5000 },
   );
@@ -36,4 +38,13 @@ async function openStep(page, name) {
   await page.getByRole("button", { name, exact: true }).click();
   await stepShown(page);
 }
-module.exports = { baseURL, newTestContext, openStep, stepShown };
+/** Existing lesson scenarios start inside the book; the library has its own smoke test. */
+async function openBook(page) {
+  await page
+    .getByRole("button", {
+      name: "Открыть учебник Арифметика, 1 класс",
+      exact: true,
+    })
+    .click();
+}
+module.exports = { baseURL, newTestContext, openStep, stepShown, openBook };

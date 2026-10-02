@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const { baseURL, newTestContext, stepShown } = require("./browser-context.cjs");
@@ -23,6 +24,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     p.setDefaultTimeout(15000);
     const btn = (name) => p.getByRole("button", { name, exact: true });
     await p.goto(baseURL);
+    await openBook(p);
     await btn("Начать заниматься  →").waitFor();
     assert.equal(await btn("Страница 2. О нашей книге").count(), 0);
     // The book's pages outside the lessons are not offered on the page; they are found by number.
@@ -64,6 +66,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         { KEY, n: page.number, index },
       );
       await p.goto(baseURL);
+      await openBook(p);
       await btn("Продолжить занятие  →").click();
       await p.getByText(b.title, { exact: true }).last().waitFor();
       // What is measured on the step is measured once the step is shown.
@@ -227,6 +230,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         await btn("Проверить ответ").click();
         await btn("✓ Получилось!").waitFor();
         await p.reload();
+        await openBook(p);
         await btn("Продолжить занятие  →").click();
         await btn("✓ Получилось!").waitFor();
       }

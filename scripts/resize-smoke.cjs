@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /**
  * A window dragged to a new size does not shake the lesson.
  *
@@ -30,6 +31,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL + "/metadata.json");
       await p.evaluate(({ KEY, page, index }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page, block: index, answers: {} })), { KEY, page: task.page, index: task.index });
       await p.goto(baseURL);
+      await openBook(p);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
       await p.getByTestId("exercise-card").waitFor();
       await p.waitForTimeout(1800);

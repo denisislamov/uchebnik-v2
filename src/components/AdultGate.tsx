@@ -13,9 +13,11 @@ import { Button } from "./Controls";
 export function AdultGate({
   onPass,
   onClose,
+  library = false,
 }: {
   onPass: () => void;
   onClose: () => void;
+  library?: boolean;
 }) {
   const [question, setQuestion] = useState(() => gateQuestion(Math.random()));
   const [typed, setTyped] = useState("");
@@ -37,8 +39,10 @@ export function AdultGate({
     <View testID="adult-gate" style={s.gate}>
       <Text style={s.title}>Для взрослых</Text>
       <Text style={s.body}>
-        Здесь сведения для родителей и сброс прогресса. Чтобы войти, наберите
-        цифрами число:
+        {library
+          ? "Здесь сведения для родителей."
+          : "Здесь сведения для родителей и сброс прогресса учебника."}{" "}
+        Чтобы войти, наберите цифрами число:
       </Text>
       <Text testID="adult-gate-question" style={s.words}>
         {question.words}
@@ -70,7 +74,7 @@ export function AdultGate({
           Стереть
         </Button>
         <Button secondary onPress={onClose}>
-          Вернуться к учебнику
+          {library ? "Вернуться в библиотеку" : "Вернуться к учебнику"}
         </Button>
       </View>
     </View>

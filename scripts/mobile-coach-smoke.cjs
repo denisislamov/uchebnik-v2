@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** A mobile tutorial must reveal its target without covering it or moving the card mid-gesture. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -53,6 +54,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           },
         );
         await p.goto(baseURL);
+        await openBook(p);
         await p
           .getByRole("button", {
             name: /^(Продолжить занятие|Начать заниматься)/,

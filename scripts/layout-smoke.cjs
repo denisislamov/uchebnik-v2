@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** A lesson has no app header, only the arrow home (and on a phone a drawing sheet stays put from line to line), the app is sized to the dynamic viewport, a phone keeps the picture near the answer, and «Дальше» waits for a solved task. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -23,6 +24,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL + "/metadata.json");
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: page.number, i: index });
       await p.goto(baseURL);
+      await openBook(p);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
       await stepShown(p);
       const home = p.getByRole("button", { name: "На главную", exact: true });
@@ -59,6 +61,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL + "/metadata.json");
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: 3, i: di });
       await p.goto(baseURL);
+      await openBook(p);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
       await stepShown(p);
       const sheet = p.getByLabel("Поле для рисования");

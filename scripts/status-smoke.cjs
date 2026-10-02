@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /** A solved task reads as solved: the check button goes flat and inert, a red tick joins the heading. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -19,6 +20,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL + "/metadata.json");
       await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: page.number, i: page.blocks.indexOf(block) });
       await p.goto(baseURL);
+      await openBook(p);
       await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
       await stepShown(p);
       const check = p.getByRole("button", { name: "Проверить", exact: true });

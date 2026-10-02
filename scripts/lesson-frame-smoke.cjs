@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /**
  * One task on a screen, and the same frame around every task.
  *
@@ -45,6 +46,7 @@ const words = {
         await p.goto(baseURL + "/metadata.json");
         await p.evaluate(({ KEY, n, i, answers }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers })), { KEY, n, i, answers });
         await p.goto(baseURL);
+        await openBook(p);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await p.getByTestId("exercise-card").waitFor();
         await p.waitForTimeout(700);
@@ -193,6 +195,7 @@ const words = {
       for (const { page, index, b } of whole) {
         await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: page, i: index });
         await p.goto(baseURL);
+        await openBook(p);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
         await p.waitForTimeout(100);

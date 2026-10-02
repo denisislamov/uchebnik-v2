@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /**
  * «Дальше» stands under the sheet, always in the same place and always in view; a step opens at its top
  * and stays there until the child answers — whether it was solved before or not.
@@ -26,6 +27,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await p.goto(baseURL + "/metadata.json");
       await p.evaluate(({ KEY, n, i, answers }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers })), { KEY, n, i, answers });
       await p.goto(baseURL);
+      await openBook(p);
       await p.getByRole("button", { name: /^Продолжить занятие/ }).click();
       await p.getByTestId("exercise-card").getByText(title, { exact: true }).waitFor();
       await p.waitForTimeout(900);

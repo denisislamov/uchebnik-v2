@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /**
  * What a task answers with is always seen.
  *
@@ -75,6 +76,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       for (const t of tasks.filter((t) => !phone || whole(t.b))) {
         await p.evaluate(({ KEY, t }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: t.page, block: t.index, answers: { [t.b.id]: t.answer } })), { KEY, t: { page: t.page, index: t.index, b: { id: t.b.id }, answer: t.answer } });
         await p.goto(baseURL);
+        await openBook(p);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
         await p.waitForTimeout(150);
@@ -88,6 +90,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const block = t.b;
         await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: t.page, i: t.index });
         await p.goto(baseURL);
+        await openBook(p);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
         await p.waitForTimeout(300);
@@ -114,6 +117,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const block = page.blocks[index];
         await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: 3, i: index });
         await p.goto(baseURL);
+        await openBook(p);
         await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
         await stepShown(p);
         const pad = p.getByLabel("Поле для рисования", { exact: true });

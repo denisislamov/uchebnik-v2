@@ -1,3 +1,4 @@
+const { openBook } = require("./browser-context.cjs");
 /**
  * On any computer window a task opens whole: from its name to its last line it stands between the top of
  * the window and the navigation under the sheet, so nothing has to be scrolled to reach the answer.
@@ -34,6 +35,7 @@ const PAGES = (process.env.FIT_PAGES || "3,4,5,6,7,8,9,10,11,12").split(",").map
           if (["work", "activity"].includes(b.kind) || b.images.length > 2) continue;
           await p.evaluate(({ KEY, n, i }) => localStorage.setItem(KEY, JSON.stringify({ version: 1, contentRevision: 7, page: n, block: i, answers: {} })), { KEY, n: page.number, i });
           await p.goto(baseURL);
+          await openBook(p);
           await p.getByRole("button", { name: /^(Продолжить занятие|Начать заниматься)/ }).click();
           const next = p.getByRole("button", { name: /^(Дальше|К страницам) →$/ });
           await next.waitFor();
