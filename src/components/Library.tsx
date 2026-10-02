@@ -8,17 +8,16 @@ import {
   Text,
   View,
 } from "react-native";
-import { colors as c, fonts as f } from "../theme";
+import { libraryColors as c, libraryFonts as f } from "./libraryTheme";
+import Svg, { Circle, Ellipse, Path } from "react-native-svg";
 import {
   plannedBooks,
   PROJECT_SUPPORT_URL,
   PROJECT_FUNDING,
 } from "../content/library";
 import { libraryCover } from "../content/libraryCover";
-import { HandFrame } from "./HandDrawn";
-import { Button } from "./Controls";
 import { CELL } from "../lib/grid";
-import { LanguageWheel } from "./LanguageWheel";
+import { LanguagePicker } from "./LanguagePicker";
 import {
   libraryText,
   type LibraryCopy,
@@ -45,7 +44,6 @@ function SupportProject({
       testID="support-project"
       style={[s.support, compact && s.supportCompact]}
     >
-      <HandFrame seed="library-support" color={c.line} />
       <View style={s.funding}>
         <Text
           style={[s.supportTitle, compact && { fontSize: 26, lineHeight: 32 }]}
@@ -95,7 +93,7 @@ function SupportProject({
             pressed && s.pressed,
           ]}
         >
-          <Text style={s.actionText}>{t.support}</Text>
+          <Text style={s.actionText}>{t.support} ↗</Text>
         </Pressable>
         <Text style={s.note}>{url ? "Boosty" : t.supportSoon}</Text>
         {error && (
@@ -142,41 +140,66 @@ export function Library({
   return (
     <View testID="library-home" style={s.page}>
       <View style={[s.container, { paddingHorizontal: gutter }]}>
-        <View style={[s.header, compact && s.headerCompact]}>
+        <View style={[s.header, width < 1000 && s.headerCompact]}>
           <View style={s.brand}>
             <Text
               accessibilityRole="header"
               style={[
                 s.brandTitle,
-                compact && { fontSize: 34, lineHeight: 40 },
+                compact && { fontSize: 30, lineHeight: 38 },
               ]}
             >
               {t.title}
             </Text>
             <Text style={s.subtitle}>{t.subtitle}</Text>
           </View>
-          <View style={[s.headerTools, compact && { width: "100%" }]}>
-            <LanguageWheel locale={locale} onChange={onLocaleChange} copy={t} />
-            {languageSaveError && (
-              <Text accessibilityRole="alert" style={s.note}>
-                {t.languageSaveError}
-              </Text>
-            )}
-            <Button
+          <View
+            style={[
+              s.headerTools,
+              width < 1000 && { width: "100%", maxWidth: 420 },
+            ]}
+          >
+            <LanguagePicker
+              locale={locale}
+              onChange={onLocaleChange}
+              copy={t}
+            />
+            <Pressable
               testID="library-parents"
-              secondary
-              label={t.parentsLabel}
+              accessibilityRole="button"
+              accessibilityLabel={t.parentsLabel}
               onPress={onParents}
+              style={({ pressed }) => [
+                s.headerButton,
+                pressed && s.secondaryPressed,
+              ]}
             >
-              {t.parents}
-            </Button>
+              <Text style={s.headerButtonText}>{t.parents}</Text>
+            </Pressable>
           </View>
         </View>
+        {languageSaveError && (
+          <Text
+            accessibilityRole="alert"
+            style={[s.note, { marginBottom: 12 }]}
+          >
+            {t.languageSaveError}
+          </Text>
+        )}
 
         <SupportProject compact={width < 1000} copy={t} locale={locale} />
 
         <View style={s.shelves}>
-          <View style={[s.availableBook, compact && { marginTop: CELL }]}>
+          <View style={[s.availableBook, compact && s.availableBookCompact]}>
+            {width >= 1200 && <ShelfDoodle />}
+            {compact && (
+              <Text
+                accessibilityRole="header"
+                style={[s.bookTitle, s.mobileBookTitle]}
+              >
+                {t.arithmetic}
+              </Text>
+            )}
             <View style={[s.availableRow, { gap: compact ? 16 : 48 }]}>
               <View
                 style={{
@@ -206,18 +229,11 @@ export function Library({
                 <View style={s.bookShelf} />
               </View>
               <View style={s.bookInfo}>
-                <Text
-                  accessibilityRole="header"
-                  style={[
-                    s.bookTitle,
-                    compact && {
-                      fontSize: width < 360 ? 28 : 32,
-                      lineHeight: 40,
-                    },
-                  ]}
-                >
-                  {t.arithmetic}
-                </Text>
+                {!compact && (
+                  <Text accessibilityRole="header" style={s.bookTitle}>
+                    {t.arithmetic}
+                  </Text>
+                )}
                 <Text style={s.grade}>{t.grade}</Text>
                 <Text style={s.methodology}>{t.methodology}</Text>
                 {locale !== "ru" && (
@@ -280,8 +296,8 @@ export function Library({
                           s.plannedTitle,
                           {
                             color: book.pale,
-                            fontSize: compact ? 24 : 32,
-                            lineHeight: compact ? 30 : 40,
+                            fontSize: compact ? 18 : 26,
+                            lineHeight: compact ? 25 : 34,
                           },
                         ]}
                       >
@@ -350,6 +366,34 @@ function BookActions({
   );
 }
 
+function ShelfDoodle() {
+  return (
+    <View pointerEvents="none" aria-hidden style={s.doodle}>
+      <Svg width={104} height={92} viewBox="0 0 104 92">
+        <Circle cx="52" cy="45" r="25" fill={c.yellow} />
+        <Ellipse
+          cx="52"
+          cy="45"
+          rx="44"
+          ry="12"
+          rotation={-25}
+          origin="52,45"
+          fill="none"
+          stroke={c.pen}
+          strokeWidth="2"
+        />
+        <Path
+          d="M87 8v12M81 14h12M12 69v10M7 74h10"
+          stroke={c.coral}
+          strokeWidth="3"
+          strokeLinecap="round"
+        />
+        <Circle cx="75" cy="76" r="3" fill={c.pen} />
+      </Svg>
+    </View>
+  );
+}
+
 const s = StyleSheet.create({
   page: { flexGrow: 1, backgroundColor: c.paper },
   container: {
@@ -360,12 +404,39 @@ const s = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
     gap: CELL,
-    paddingVertical: CELL * 2,
+    paddingVertical: CELL,
   },
-  headerTools: { width: 280, gap: 16, alignItems: "flex-start" },
+  headerTools: {
+    width: 320,
+    flexDirection: "row",
+    gap: 12,
+    alignItems: "stretch",
+  },
+  headerButton: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: 56,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: c.line,
+    borderBottomColor: c.line,
+    backgroundColor: c.card,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerButtonText: {
+    fontFamily: f.bold,
+    fontSize: 18,
+    lineHeight: 26,
+    color: c.ink,
+    textAlign: "center",
+  },
   headerCompact: {
     flexDirection: "column",
     alignItems: "flex-start",
@@ -374,10 +445,10 @@ const s = StyleSheet.create({
   },
   brand: { flex: 1, gap: 8 },
   brandTitle: {
-    fontFamily: f.hand,
+    fontFamily: f.heading,
     fontSize: 48,
     lineHeight: 56,
-    color: c.pen,
+    color: c.ink,
   },
   subtitle: {
     fontFamily: f.regular,
@@ -391,7 +462,8 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
     gap: CELL,
     padding: CELL,
-    backgroundColor: c.paper,
+    backgroundColor: c.peach,
+    borderRadius: 28,
   },
   supportCompact: {
     flexDirection: "column",
@@ -400,7 +472,7 @@ const s = StyleSheet.create({
     padding: 16,
   },
   supportTitle: {
-    fontFamily: f.hand,
+    fontFamily: f.heading,
     fontSize: 32,
     lineHeight: 40,
     color: c.ink,
@@ -418,7 +490,7 @@ const s = StyleSheet.create({
     height: 16,
     borderRadius: 8,
     overflow: "hidden",
-    backgroundColor: c.wash,
+    backgroundColor: "#ffffffa6",
   },
   fundingFill: { height: "100%", borderRadius: 8, backgroundColor: c.pen },
   supportButton: { minHeight: 60 },
@@ -428,8 +500,16 @@ const s = StyleSheet.create({
     lineHeight: CELL,
     color: c.muted,
   },
-  shelves: { backgroundColor: c.paper, paddingBottom: CELL },
-  availableBook: { marginTop: CELL * 2, gap: CELL },
+  shelves: { paddingBottom: CELL },
+  availableBook: {
+    marginTop: CELL,
+    gap: CELL,
+    padding: 32,
+    backgroundColor: c.wash,
+    borderRadius: 32,
+  },
+  availableBookCompact: { padding: 16, borderRadius: 24 },
+  doodle: { position: "absolute", top: 22, right: 22, opacity: 0.8 },
   availableRow: { flexDirection: "row", alignItems: "center" },
   book: {
     borderTopLeftRadius: 3,
@@ -455,13 +535,20 @@ const s = StyleSheet.create({
     width: "100%",
     height: 10,
     borderTopWidth: 3,
-    borderTopColor: "#e2d1b6",
+    borderTopColor: "#ded0ee",
     borderBottomWidth: 2,
-    borderBottomColor: "#b6a68d",
-    backgroundColor: "#d8c6a9",
+    borderBottomColor: "#a88bc7",
+    backgroundColor: c.shelf,
+    borderRadius: 3,
   },
   bookInfo: { flex: 1, minWidth: 0, gap: 12 },
-  bookTitle: { fontFamily: f.hand, fontSize: 48, lineHeight: 56, color: c.ink },
+  bookTitle: {
+    fontFamily: f.heading,
+    fontSize: 48,
+    lineHeight: 56,
+    color: c.ink,
+  },
+  mobileBookTitle: { fontSize: 28, lineHeight: 38 },
   grade: { fontFamily: f.regular, fontSize: 22, lineHeight: 32, color: c.ink },
   methodology: {
     fontFamily: f.regular,
@@ -479,8 +566,8 @@ const s = StyleSheet.create({
   mobileActions: { gap: 12 },
   action: {
     backgroundColor: c.pen,
-    borderRadius: 6,
-    borderBottomWidth: 3,
+    borderRadius: 24,
+    borderBottomWidth: 0,
     borderBottomColor: c.penDark,
     minHeight: 64,
     paddingVertical: 14,
@@ -499,14 +586,14 @@ const s = StyleSheet.create({
     backgroundColor: c.card,
     borderWidth: 1,
     borderColor: c.line,
-    borderBottomWidth: 2,
-    borderBottomColor: c.lip,
+    borderBottomWidth: 1,
+    borderBottomColor: c.line,
   },
   pressed: { opacity: 0.8 },
   secondaryPressed: { backgroundColor: c.wash },
   plans: { marginTop: CELL * 2 },
   plansTitle: {
-    fontFamily: f.hand,
+    fontFamily: f.heading,
     fontSize: 32,
     lineHeight: 40,
     color: c.ink,
@@ -520,20 +607,22 @@ const s = StyleSheet.create({
     paddingTop: 8,
   },
   plannedCover: {
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
     justifyContent: "space-around",
     alignItems: "center",
   },
-  plannedTitle: { fontFamily: f.hand, textAlign: "center", width: "100%" },
-  plannedSymbol: { fontFamily: f.hand },
+  plannedTitle: { fontFamily: f.bold, textAlign: "center", width: "100%" },
+  plannedSymbol: { fontFamily: f.regular },
   shelfEdge: {
     marginTop: -12,
     height: 10,
     borderTopWidth: 3,
-    borderTopColor: "#e2d1b6",
+    borderTopColor: "#ded0ee",
     borderBottomWidth: 2,
-    borderBottomColor: "#b6a68d",
-    backgroundColor: "#d8c6a9",
+    borderBottomColor: "#a88bc7",
+    backgroundColor: c.shelf,
+    borderRadius: 3,
   },
   plannedStatus: {
     fontFamily: f.regular,
@@ -541,5 +630,10 @@ const s = StyleSheet.create({
     lineHeight: CELL,
     color: c.muted,
     textAlign: "center",
+    alignSelf: "center",
+    backgroundColor: c.wash,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 4,
   },
 });

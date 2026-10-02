@@ -20,10 +20,30 @@ const locales = [
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
       await page.goto(baseURL);
-      await page.getByTestId("language-wheel").waitFor({ timeout: 8000 });
+      await page.getByTestId("language-picker").waitFor({ timeout: 8000 });
+      const loadedFonts = await page.evaluate(() =>
+        [...document.fonts]
+          .filter((font) => font.status === "loaded")
+          .map((font) => font.family.replaceAll('"', "")),
+      );
+      for (const family of [
+        "Literata_800ExtraBold",
+        "Manrope_400Regular",
+        "Manrope_700Bold",
+      ])
+        assert.ok(loadedFonts.includes(family), `${family} failed to load`);
       for (let i = 0; i < locales.length; i++) {
         const [locale, title, name] = locales[i];
-        if (i) await page.getByTestId("language-next").click();
+        await page.getByTestId("language-picker").click();
+        const dialog = page.getByTestId("language-dialog");
+        await dialog.waitFor();
+        assert.ok(await page.getByRole("dialog").getAttribute("aria-label"));
+        const current = await page
+          .getByTestId(`language-${locales[Math.max(0, i - 1)][0]}`)
+          .getAttribute("aria-pressed");
+        assert.equal(current, "true");
+        await page.getByTestId(`language-${locale}`).click();
+        await dialog.waitFor({ state: "hidden" });
         await page.getByRole("heading", { name: title, exact: true }).waitFor();
         await page.waitForFunction(
           (code) => document.documentElement.lang === code,
@@ -34,8 +54,17 @@ const locales = [
           await support.getAttribute("href"),
           "https://boosty.to/islamovdenis/single-payment/donation/832184/target?share=target_link",
         );
-        const selected = page.getByTestId(`language-${locale}`);
-        assert.equal(await selected.getAttribute("aria-checked"), "true");
+        assert.match(
+          await page.getByTestId("language-picker").innerText(),
+          new RegExp(name),
+        );
+        const supportBox = await page
+          .getByTestId("support-project")
+          .boundingBox();
+        assert.ok(
+          supportBox.y < (width >= 1000 ? 210 : 360),
+          `${locale}: header takes too much space at ${width}px`,
+        );
         const overflow = await page
           .getByTestId("library-home")
           .evaluate((root) =>
@@ -104,32 +133,42 @@ const locales = [
       await page
         .getByRole("heading", { name: locales[5][1], exact: true })
         .waitFor();
-      const wheel = page.getByTestId("language-scroll");
-      await wheel.press("Home");
-      await page
-        .getByRole("heading", { name: locales[0][1], exact: true })
-        .waitFor();
-      await wheel.press("ArrowDown");
-      await page
-        .getByRole("heading", { name: locales[1][1], exact: true })
-        .waitFor();
-      await wheel.press("Tab");
-      await page.waitForTimeout(350); // Flush deferred scroll events after focus leaves the wheel.
+      const picker = page.getByTestId("language-picker");
+      await picker.press("Enter");
+      const dialog = page.getByTestId("language-dialog");
+      await dialog.waitFor();
+      const search = page.getByTestId("language-search");
+      await search.fill("francais");
+      await page.getByTestId("language-fr").waitFor();
+      assert.equal(
+        await page.getByTestId("language-options").getByRole("button").count(),
+        1,
+      );
+      await search.fill("zzzz");
+      assert.equal(
+        await page.getByTestId("language-options").getByRole("button").count(),
+        0,
+      );
+      await page.getByTestId("language-empty").waitFor();
+      await search.press("Escape");
+      await dialog.waitFor({ state: "hidden" });
       assert.equal(
         await page.title(),
-        locales[1][1],
-        "Tab must not change the language",
+        locales[5][1],
+        "Closing search must not change the language",
       );
-      await wheel.hover();
-      await page.mouse.wheel(0, 112);
+      await picker.press("Enter"); // Focus returns to the trigger after closing.
+      await page.getByTestId("language-search").fill("English");
+      await page.getByTestId("language-en").press("Enter");
+      await dialog.waitFor({ state: "hidden" });
       await page
-        .getByRole("heading", { name: locales[3][1], exact: true })
+        .getByRole("heading", { name: locales[1][1], exact: true })
         .waitFor();
       assert.deepEqual(errors, []);
       await context.close();
     }
     console.log(
-      "PASS localization: 6 languages × 4 widths, parents, persistence, keyboard and wheel",
+      "PASS localization: 6 languages × 4 widths, compact header, parents, persistence, searchable picker and keyboard",
     );
   } finally {
     await browser.close();
