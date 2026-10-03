@@ -16,7 +16,8 @@ export function libraryLocale(value: string | null): LibraryLocale {
 export const LANGUAGE_STORAGE_KEY = "uchebnik:library-language:v1";
 
 const ru = {
-  title: "Цифровые учебники",
+  title: "Умная Полка",
+  chooseBook: "Выбери учебник",
   subtitle: "По проверенным методикам 1950-х годов",
   language: "Язык",
   searchLanguages: "Найти язык",
@@ -70,7 +71,8 @@ export type LibraryCopy = {
 export const libraryCopy: Record<LibraryLocale, LibraryCopy> = {
   ru,
   en: {
-    title: "Digital textbooks",
+    title: "Smart Shelf",
+    chooseBook: "Choose a textbook",
     subtitle: "Based on proven teaching methods from the 1950s",
     language: "Language",
     searchLanguages: "Find a language",
@@ -119,7 +121,8 @@ export const libraryCopy: Record<LibraryLocale, LibraryCopy> = {
     },
   },
   de: {
-    title: "Digitale Schulbücher",
+    title: "Smart Shelf",
+    chooseBook: "Wähle dein Schulbuch",
     subtitle: "Nach bewährten Lehrmethoden der 1950er-Jahre",
     language: "Sprache",
     searchLanguages: "Sprache suchen",
@@ -170,7 +173,8 @@ export const libraryCopy: Record<LibraryLocale, LibraryCopy> = {
     },
   },
   fr: {
-    title: "Manuels numériques",
+    title: "Smart Shelf",
+    chooseBook: "Choisissez un manuel",
     subtitle: "Des méthodes pédagogiques éprouvées des années 1950",
     language: "Langue",
     searchLanguages: "Rechercher une langue",
@@ -219,7 +223,8 @@ export const libraryCopy: Record<LibraryLocale, LibraryCopy> = {
     },
   },
   es: {
-    title: "Libros de texto digitales",
+    title: "Smart Shelf",
+    chooseBook: "Elige un libro",
     subtitle: "Basados en métodos de enseñanza probados de los años 50",
     language: "Idioma",
     searchLanguages: "Buscar un idioma",
@@ -268,7 +273,8 @@ export const libraryCopy: Record<LibraryLocale, LibraryCopy> = {
     },
   },
   it: {
-    title: "Libri di testo digitali",
+    title: "Smart Shelf",
+    chooseBook: "Scegli un libro",
     subtitle: "Basati su metodi didattici collaudati degli anni ’50",
     language: "Lingua",
     searchLanguages: "Cerca una lingua",

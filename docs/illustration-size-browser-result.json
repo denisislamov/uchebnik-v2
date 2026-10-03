@@ -1,0 +1,115 @@
+{
+  "passed": true,
+  "broad": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "checked": 303
+    },
+    {
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "checked": 303
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "checked": 303
+    }
+  ],
+  "finalFieldChecks": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "checked": 48
+    },
+    {
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "checked": 48
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "checked": 48
+    }
+  ],
+  "river": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "id": "book-image-p004_boys_river_bathing",
+      "width": 384,
+      "height": 288,
+      "aspect": 1.3333333333333333,
+      "loaded": true
+    },
+    {
+      "viewport": {
+        "width": 1180,
+        "height": 820
+      },
+      "id": "book-image-p004_boys_river_bathing",
+      "width": 360,
+      "height": 264,
+      "aspect": 1.3333333333333333,
+      "loaded": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "id": "book-image-p004_boys_river_bathing",
+      "width": 352,
+      "height": 264,
+      "aspect": 1.3333333333333333,
+      "loaded": true
+    }
+  ],
+  "portrait": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "book-image-p004_boys_river_bathing",
+      "width": 336,
+      "height": 240,
+      "aspect": 1.3333333333333333,
+      "loaded": true
+    },
+    {
+      "viewport": {
+        "width": 820,
+        "height": 1180
+      },
+      "id": "book-image-p004_boys_river_bathing",
+      "width": 192,
+      "height": 144,
+      "aspect": 1.3333333333333333,
+      "loaded": true
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "Every available illustrated step rendered and loaded; no horizontal overflow",
+    "Landscape field samples: single long edge >=240px, multiple >=144px",
+    "Short landscape: whole river scene can be scrolled into view; circle can be placed on field",
+    "Portrait river geometry stays 336x240 on phone and192x144 on tablet"
+  ]
+}

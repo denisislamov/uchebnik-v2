@@ -30,7 +30,7 @@ export function useLibraryLanguage(onLibrary: boolean) {
       document.documentElement.lang = onLibrary ? locale : "ru";
       document.title = onLibrary
         ? libraryCopy[locale].title
-        : "Арифметика · 1 класс";
+        : "Арифметика · 1 класс — Умная Полка";
     }
   }, [locale, onLibrary]);
   function chooseLocale(value: LibraryLocale) {

@@ -15,6 +15,7 @@
     "format": "prettier --write App.tsx index.ts src tests scripts/browser-smoke.cjs",
     "test:content": "python3 scripts/content/extract.py --check && python3 scripts/content/build_course.py --check && node --experimental-strip-types scripts/content/lint_texts.mjs --check && python3 scripts/prepare_web_assets.py --check",
     "test:browser": "node scripts/run-browser-tests.cjs",
+    "test:illustrations": "node scripts/run-browser-tests.cjs scripts/illustration-size-smoke.cjs",
     "test:all": "npm run test:content && npm run typecheck && npm test && npm run test:release-guard && npm run export:web && npm run test:browser",
     "test:release-guard": "node scripts/check-release-debug-guard.cjs",
     "lint:texts": "node --experimental-strip-types scripts/content/lint_texts.mjs --report docs/TEXT_LINT.md",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/andika": "^0.4.1",
+    "@expo-google-fonts/inter": "^0.4.2",
     "@expo-google-fonts/literata": "^0.4.3",
     "@expo-google-fonts/manrope": "^0.4.2",
     "@expo-google-fonts/neucha": "^0.4.1",

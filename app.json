@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Цифровые учебники",
+    "name": "Умная Полка",
     "slug": "arithmetic-first-steps",
     "version": "0.1.0",
     "orientation": "default",
@@ -10,6 +10,6 @@
       "bundleIdentifier": "dev.uchebnik.firststeps"
     },
     "android": { "package": "dev.uchebnik.firststeps" },
-    "web": { "bundler": "metro", "name": "Цифровые учебники" }
+    "web": { "bundler": "metro", "name": "Умная Полка" }
   }
 }

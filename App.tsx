@@ -17,8 +17,9 @@ import { useFonts } from "expo-font";
 import { Andika_400Regular } from "@expo-google-fonts/andika/400Regular";
 import { Andika_700Bold } from "@expo-google-fonts/andika/700Bold";
 import { Neucha_400Regular } from "@expo-google-fonts/neucha/400Regular";
-import { Manrope_400Regular } from "@expo-google-fonts/manrope/400Regular";
-import { Manrope_700Bold } from "@expo-google-fonts/manrope/700Bold";
+import { Inter_400Regular } from "@expo-google-fonts/inter/400Regular";
+import { Inter_700Bold } from "@expo-google-fonts/inter/700Bold";
+import { Inter_800ExtraBold } from "@expo-google-fonts/inter/800ExtraBold";
 import Svg, { Path, Rect } from "react-native-svg";
 import { pages, allBlocks, lessonPages } from "./src/content/book";
 import { catalogPreviewId } from "./src/content/catalogPreview";
@@ -63,8 +64,9 @@ function Main() {
     Andika_400Regular,
     Andika_700Bold,
     Neucha_400Regular,
-    Manrope_400Regular,
-    Manrope_700Bold,
+    Inter_400Regular,
+    Inter_700Bold,
+    Inter_800ExtraBold,
   });
   const [progress, setProgress] = useState<Progress>(emptyProgress),
     [ready, setReady] = useState(false),

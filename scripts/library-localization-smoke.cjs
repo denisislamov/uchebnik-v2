@@ -2,12 +2,12 @@ const assert = require("node:assert/strict");
 const { chromium } = require("playwright");
 const { baseURL, newTestContext } = require("./browser-context.cjs");
 const locales = [
-  ["ru", "Цифровые учебники", "Русский"],
-  ["en", "Digital textbooks", "English"],
-  ["de", "Digitale Schulbücher", "Deutsch"],
-  ["fr", "Manuels numériques", "Français"],
-  ["es", "Libros de texto digitales", "Español"],
-  ["it", "Libri di testo digitali", "Italiano"],
+  ["ru", "Умная Полка", "Русский"],
+  ["en", "Smart Shelf", "English"],
+  ["de", "Smart Shelf", "Deutsch"],
+  ["fr", "Smart Shelf", "Français"],
+  ["es", "Smart Shelf", "Español"],
+  ["it", "Smart Shelf", "Italiano"],
 ];
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -26,7 +26,11 @@ const locales = [
           .filter((font) => font.status === "loaded")
           .map((font) => font.family.replaceAll('"', "")),
       );
-      for (const family of ["Manrope_400Regular", "Manrope_700Bold"])
+      for (const family of [
+        "Inter_400Regular",
+        "Inter_700Bold",
+        "Inter_800ExtraBold",
+      ])
         assert.ok(loadedFonts.includes(family), `${family} failed to load`);
       for (let i = 0; i < locales.length; i++) {
         const [locale, title, name] = locales[i];

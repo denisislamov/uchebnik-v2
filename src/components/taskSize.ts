@@ -30,6 +30,7 @@ export function useTaskSize() {
   return {
     compact,
     wide,
+    landscape: width > height,
     fit,
     tall,
     measured: compact ? 0 : measured,

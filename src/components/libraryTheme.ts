@@ -1,24 +1,24 @@
 /** The bookshelf has its own palette; lesson pages keep their notebook theme. */
 export const libraryColors = {
-  paper: "#faf9f5",
+  paper: "#fafaf7",
   card: "#ffffff",
-  ink: "#243a32",
-  muted: "#5e6a63",
-  pen: "#24634f",
-  penDark: "#194a3b",
-  wash: "#eef2ec",
-  line: "#d8ded6",
-  lip: "#b2c0b4",
+  ink: "#282638",
+  muted: "#69697d",
+  pen: "#6351cf",
+  penDark: "#5140b4",
+  wash: "#efecfa",
+  line: "#e8e6ef",
+  lip: "#cbc5e0",
   white: "#ffffff",
-  shelf: "#c9b28f",
-  shelfLight: "#e3d3b9",
-  shelfShade: "#ac9270",
-  planned: "#e5e2d8",
+  shelf: "#e5ddec",
+  shelfLight: "#f8f5fc",
+  shelfShade: "#c5bdd6",
+  planned: "#eeeafa",
 };
 
 /** Bundled OFL fonts; no third-party font requests at runtime. */
 export const libraryFonts = {
-  regular: "Manrope_400Regular",
-  bold: "Manrope_700Bold",
-  heading: "Manrope_700Bold",
+  regular: "Inter_400Regular",
+  bold: "Inter_700Bold",
+  heading: "Inter_800ExtraBold",
 };

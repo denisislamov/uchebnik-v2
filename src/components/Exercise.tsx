@@ -116,7 +116,10 @@ function ExerciseBody({
   // wider column is a low strip over empty paper: on a tall window it goes
   // above the work, a few rows high; a low one has no rows to spare, so it
   // stays at the side and the work's words fill the paper under it.
-  const sideHeight = Math.max(CELL * 3, size.beside - asideRows);
+  const sideHeight = Math.max(
+    size.landscape ? CELL * 10 : CELL * 3,
+    size.beside - asideRows,
+  );
   // A drawing keeps the width it had: the sheet grows with its column, and a
   // narrower one left rows of empty paper under a smaller sheet. A board
   // needs less, and leaves the sample half the row.
@@ -131,23 +134,33 @@ function ExerciseBody({
     size.wide &&
     field &&
     single.length > 0 &&
-    (rowWidth === 0 || needed <= widest || !size.tall);
-  // Several pictures wrap two to a line in the side column and share the
+    (rowWidth === 0 ||
+      needed <= widest ||
+      !size.tall ||
+      // A tall landscape window still has room for a scene beside the
+      // board. Moving it above used to reduce it to six rows (144px).
+      (size.landscape && single.length === 1 && aspects[0] < 2.2));
+  // Several pictures wrap in the side column and share the
   // window's height; tied to the work's height, a small sheet made them
   // specks.
   const lines = Math.ceil(single.length / 2);
   const pictureHeight = beside
     ? lines > 1
       ? Math.max(
-          CELL * 3,
+          size.landscape ? CELL * 6 : CELL * 3,
           (size.beside - asideRows - (lines - 1) * CELL) / lines,
         )
       : sideHeight
     : field && single.length
-      ? Math.min(
-          size.picture,
-          single.length === 1 && aspects[0] >= 2.2 ? CELL * 3 : CELL * 6,
-        )
+      ? size.landscape
+        ? // Below the two-column breakpoint keep the scene large and let
+          // the field scroll. A wide strip naturally stays low by its ratio.
+          // Reserve one extra row for width/height rounding of narrow art.
+          Math.max(CELL * 11, Math.min(size.picture, CELL * 15))
+        : Math.min(
+            size.picture,
+            single.length === 1 && aspects[0] >= 2.2 ? CELL * 3 : CELL * 6,
+          )
       : block.kind === "read"
         ? size.read
         : size.picture;
@@ -369,7 +382,10 @@ function ExerciseBody({
                         s.imagesContent,
                         block.images.length > 1 && {
                           flexDirection: "row",
-                          flexWrap: field && !beside ? "nowrap" : "wrap",
+                          flexWrap:
+                            field && !beside && !size.landscape
+                              ? "nowrap"
+                              : "wrap",
                         },
                         size.compact &&
                           block.kind === "read" &&
@@ -388,7 +404,7 @@ function ExerciseBody({
                                 ? field && !beside
                                   ? {
                                       flexGrow: aspects[i],
-                                      flexBasis: 0,
+                                      flexBasis: size.landscape ? CELL * 11 : 0,
                                       minWidth: 0,
                                     }
                                   : size.compact && block.id === "p108-source06"
@@ -425,7 +441,9 @@ function ExerciseBody({
                                           }
                                       : {
                                           flexGrow: 1,
-                                          flexBasis: 110,
+                                          flexBasis: size.landscape
+                                            ? CELL * (beside ? 6 : 11)
+                                            : 110,
                                           maxWidth: "100%",
                                         }
                                 : { width: "100%" }
