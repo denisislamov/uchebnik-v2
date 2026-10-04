@@ -771,7 +771,7 @@ const s = StyleSheet.create({
     ...written(26, 2),
   },
   exerciseNumber: { fontFamily: f.regular, color: c.muted, ...written(16, 2) },
-  doneMark: { fontFamily: f.hand, color: c.red, ...written(32, 2, true) },
+  doneMark: { fontFamily: f.hand, color: c.success, ...written(32, 2, true) },
   prompt: {
     fontFamily: f.regular,
     fontSize: 20,
@@ -930,11 +930,11 @@ const s = StyleSheet.create({
     rowGap: CELL / 2,
   },
   missedWords: { flexGrow: 1, flexShrink: 1, flexBasis: CELL * 10 },
-  // Отметка учителя: написана красной ручкой прямо на листе.
+  // Верный ответ: зелёный рукописный текст прямо на листе.
   success: {},
   successText: {
     fontFamily: f.hand,
-    color: c.red,
+    color: c.success,
     ...written(24, 1, true),
   },
   hint: { fontFamily: f.regular, fontSize: 16, lineHeight: 24, color: c.muted },

@@ -385,7 +385,7 @@ const s = StyleSheet.create({
     lineHeight: CELL,
     color: c.muted,
   },
-  stepDone: { fontFamily: f.hand, fontSize: 24, color: c.red },
+  stepDone: { fontFamily: f.hand, fontSize: 24, color: c.success },
   stepTitle: {
     flex: 1,
     minWidth: 0,
@@ -409,7 +409,7 @@ const s = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: c.line,
   },
-  doneTitle: { fontFamily: f.hand, color: c.red, ...written(40, 2, true) },
+  doneTitle: { fontFamily: f.hand, color: c.success, ...written(40, 2, true) },
   doneText: {
     fontFamily: f.regular,
     color: c.ink,

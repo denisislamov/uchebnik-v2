@@ -97,7 +97,7 @@ export function NumberGameTask({
         .map((previous) => (
           <View key={previous.id} style={s.completed}>
             <Text style={s.instruction}>
-              <Text style={{ color: c.red }}>✓</Text> {previous.label}
+              <Text style={{ color: c.success }}>✓</Text> {previous.label}
             </Text>
             <Text style={s.equation}>
               {previous.visible} + {responses[previous.id]} = {previous.total}

@@ -78,7 +78,7 @@ export function LocationTask({
             style={s.folded}
           >
             <Text style={s.foldedText}>
-              <Text style={{ color: c.red }}>✓</Text>{" "}
+              <Text style={{ color: c.success }}>✓</Text>{" "}
               {answer.responses?.vertical}
               <Text style={s.foldedLink}> · изменить</Text>
             </Text>

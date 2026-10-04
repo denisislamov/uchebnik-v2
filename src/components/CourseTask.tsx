@@ -1178,7 +1178,7 @@ const s = StyleSheet.create({
     backgroundColor: c.card,
   },
   selected: { backgroundColor: c.pen },
-  feedback: { fontFamily: f.hand, color: c.red, ...written(22, 1, true) },
+  feedback: { fontFamily: f.hand, color: c.success, ...written(22, 1, true) },
   group: {
     padding: CELL / 2 - 2,
     borderWidth: 2,

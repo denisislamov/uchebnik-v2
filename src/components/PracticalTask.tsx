@@ -93,7 +93,7 @@ export function PracticalTask({
           // with the teacher's tick, what was laid out, and a way back to it.
           <View key={previous.id} testID="practical-done">
             <Text style={sheet.count}>
-              <Text style={{ color: c.red }}>✓</Text> {i + 1}.{" "}
+              <Text style={{ color: c.success }}>✓</Text> {i + 1}.{" "}
               {previous.instruction}
             </Text>
             <Rows object>

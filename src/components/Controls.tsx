@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { colors as c, fonts as f } from "../theme";
-import { CELL, upToCells } from "../lib/grid";
+import { CELL, upToCells, written } from "../lib/grid";
 /** `done`: the action already succeeded — flat, no pen lip, not pressable, still fully legible. */
 export function Button({
   children,
@@ -114,9 +114,8 @@ export function CellPressable({
   );
 }
 /**
- * «Попробуй ещё раз»: не красная отметка учителя, а заметка карандашом —
- * своя краска и круглый значок со стрелкой по кругу (без рамки и заливки), чтобы
- * «не получилось» нельзя было спутать с галочкой «верно».
+ * Повторная попытка: красный рукописный текст прямо на листе.
+ * Стрелка отличает её от зелёной галочки верного ответа.
  */
 export function RetryNote({
   children,
@@ -139,7 +138,7 @@ export function RetryNote({
         <Svg width={18} height={18} viewBox="0 0 24 24">
           <Path
             d="M19 12a7 7 0 1 1-2.05-4.95M19 4v4h-4"
-            stroke={c.white}
+            stroke={c.retry}
             strokeWidth={2.6}
             fill="none"
             strokeLinecap="round"
@@ -241,7 +240,7 @@ const s = StyleSheet.create({
   denseLabel: { fontSize: 15 },
   secondaryLabel: { color: c.ink },
   doneLabel: { color: c.ink },
-  // A note in pencil, two cells high.
+  // Handwritten feedback on the sheet, two cells high.
   retry: {
     flexDirection: "row",
     alignItems: "center",
@@ -263,16 +262,15 @@ const s = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginVertical: -3,
-    backgroundColor: c.retry,
+    backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
   },
   retryText: {
     flex: 1,
-    fontFamily: f.bold,
+    fontFamily: f.hand,
     color: c.retry,
-    fontSize: 16,
-    lineHeight: CELL,
+    ...written(24, 1, true),
   },
   // The bar lies in the middle of its row.
   track: {
