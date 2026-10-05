@@ -1,3 +1,4 @@
+import { CountingPiece, useCountingMaterial } from "./CountingMaterial";
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Svg, { Circle, Line, Path } from "react-native-svg";
@@ -14,6 +15,7 @@ export function PracticalPreview({
   step: PracticalStep;
   state: PracticalState;
 }) {
+  const material = useCountingMaterial();
   const [availableWidth, setAvailableWidth] = useState(300);
   let content: React.ReactNode;
   if (step.mode === "draw") {
@@ -110,7 +112,7 @@ export function PracticalPreview({
                 y1={p.y * 320}
                 x2={q.x * 320}
                 y2={q.y * 320}
-                stroke="#bb8052"
+                stroke={material.fill}
                 strokeWidth={6}
                 strokeLinecap="round"
               />
@@ -187,16 +189,19 @@ export function PracticalPreview({
                           justifyContent: "center",
                         }}
                       >
-                        <View
-                          style={{
-                            width: step.token === "stick" ? 8 : 28,
-                            height: step.token === "stick" ? 40 : 28,
-                            borderRadius:
-                              step.token === "circle" || !step.token ? 16 : 3,
-                            backgroundColor:
-                              step.token === "stick" ? "#bb8052" : "#1565c0",
-                          }}
-                        />
+                        {step.token === "square" ? (
+                          <View
+                            style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: 3,
+                              backgroundColor: "#1565c0",
+                            }}
+                          />
+                        ) : (
+                          <CountingPiece token={step.token ?? "circle"} />
+                        )}
+
                         {value > 1 && (
                           <Text
                             style={{

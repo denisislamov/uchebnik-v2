@@ -1,3 +1,4 @@
+import { useCountingMaterial } from "./CountingMaterial";
 import React from "react";
 import { View, Text } from "react-native";
 import { colors as c, fonts as f } from "../theme";
@@ -21,6 +22,7 @@ export type ExampleData = {
 };
 /** A worked example is separate from the task, so watching never fills its answer. */
 export function CoachExample({ example }: { example: ExampleData }) {
+  const material = useCountingMaterial();
   const { kind, values, active } = example;
   const items =
     example.labels ??
@@ -80,11 +82,28 @@ export function CoachExample({ example }: { example: ExampleData }) {
                     height:
                       example.token === "stick" ? 26 : (pattern?.cell ?? 22),
                     borderRadius: example.token === "circle" ? 11 : 0,
-                    backgroundColor: partPalette[example.colors![group]].fill,
+                    backgroundColor:
+                      example.token === "square"
+                        ? partPalette[example.colors![group]].fill
+                        : material.fill,
                     borderWidth: 1,
-                    borderColor: "#1f2433",
+                    borderColor:
+                      example.token === "square" ? "#1f2433" : material.edge,
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                />
+                >
+                  {example.token !== "square" && group === 1 && (
+                    <View
+                      style={{
+                        width: 4,
+                        height: 4,
+                        borderRadius: 2,
+                        backgroundColor: c.white,
+                      }}
+                    />
+                  )}
+                </View>
               </View>
             )),
           )}
@@ -209,12 +228,12 @@ export function CoachExample({ example }: { example: ExampleData }) {
                   <View
                     key={j}
                     style={{
-                      width: i === 0 ? 12 : 10,
-                      height: i === 0 ? 40 : 10,
+                      width: i === 0 ? 7 : 10,
+                      height: i === 0 ? 46 : 10,
                       borderRadius: 3,
-                      backgroundColor: i === 0 ? "#bb8052" : "#2563a6",
+                      backgroundColor: material.fill,
                       borderWidth: i === 0 ? 1 : 0,
-                      borderColor: "#714b2a",
+                      borderColor: material.edge,
                     }}
                   />
                 ))}

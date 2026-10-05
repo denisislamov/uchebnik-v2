@@ -1,3 +1,4 @@
+import { CountingPiece } from "./CountingMaterial";
 import { useGestureCoach } from "./GestureCoach";
 import { useTaskSize } from "./taskSize";
 import React, { useEffect, useRef, useState } from "react";
@@ -364,20 +365,20 @@ export function CounterBoard({
             : undefined,
         ]}
       >
-        <View
-          pointerEvents="none"
-          style={{
-            width: token === "stick" ? 8 : 28,
-            height: token === "stick" ? 40 : 28,
-            borderRadius: token === "circle" ? 16 : 3,
-            backgroundColor:
-              token === "stick"
-                ? "#bb8052"
-                : token === "square" && slots && index === 2
-                  ? "#d62828"
-                  : "#1565c0",
-          }}
-        />
+        {token === "square" ? (
+          <View
+            pointerEvents="none"
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 3,
+              backgroundColor: slots && index === 2 ? "#d62828" : "#1565c0",
+            }}
+          />
+        ) : (
+          <CountingPiece token={token} />
+        )}
+
         {tokenValue > 1 && (
           <Text
             pointerEvents="none"

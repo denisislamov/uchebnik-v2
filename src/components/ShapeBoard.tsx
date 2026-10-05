@@ -1,3 +1,4 @@
+import { useCountingMaterial } from "./CountingMaterial";
 import { useGestureCoach } from "./GestureCoach";
 import React, { useState, useRef } from "react";
 import { View, Text, Platform, Pressable } from "react-native";
@@ -22,6 +23,7 @@ export function ShapeBoard({
   onChange: (v: string[]) => void;
   onDrawing: (v: boolean) => void;
 }) {
+  const material = useCountingMaterial();
   const boardRef = useRef<View>(null),
     targetRef = useRef<View>(null);
   const sourceRef = useRef<View>(null),
@@ -267,7 +269,7 @@ export function ShapeBoard({
                     y1={a.y}
                     x2={b.x}
                     y2={b.y}
-                    stroke={value.includes(t.key) ? "#bb8052" : "#2b4ba8"}
+                    stroke={value.includes(t.key) ? material.fill : "#2b4ba8"}
                     // While a stick is carried the lines that wait for it
                     // are drawn bolder.
                     strokeWidth={
@@ -372,10 +374,11 @@ export function ShapeBoard({
                     pointerEvents="none"
                     style={{
                       height: 9,
-                      backgroundColor: "#bb8052",
-                      borderRadius: 5,
+                      backgroundColor: material.fill,
+                      borderRadius: 3,
                       borderWidth: 1,
-                      borderColor: "#93613a",
+                      borderColor: material.edge,
+                      borderTopColor: material.light,
                     }}
                   />
                 </View>

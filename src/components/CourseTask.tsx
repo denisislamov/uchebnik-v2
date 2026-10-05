@@ -1,3 +1,4 @@
+import { CountingPiece, useCountingMaterial } from "./CountingMaterial";
 import { CounterBoard } from "./CounterBoard";
 import { CompositionBoard } from "./CompositionBoard";
 import { composeStory, storySubjects } from "../lib/composeStory";
@@ -173,6 +174,7 @@ export function CourseTask({
   onAnswer: (a: Answer) => void;
   onDrawing: (value: boolean) => void;
 }) {
+  const material = useCountingMaterial();
   const card = s.card;
   const narrow = useSheetWindow().width < 600;
   const takeInHand = useContext(FieldInHand);
@@ -704,7 +706,9 @@ export function CourseTask({
                 <>
                   <View style={s.row}>
                     {Array.from({ length: value }, (_, j) => (
-                      <View key={j} style={tokenStyle} />
+                      <View key={j} style={{ margin: 3 }}>
+                        <CountingPiece token="circle" />
+                      </View>
                     ))}
                   </View>
                   {stepper(key, "Предметы", 12)}
@@ -793,7 +797,9 @@ export function CourseTask({
                             <Text style={s.note}>Группа {g + 1}</Text>
                             <View style={s.row}>
                               {Array.from({ length: count }, (_, j) => (
-                                <View key={j} style={tokenStyle} />
+                                <View key={j} style={{ margin: 3 }}>
+                                  <CountingPiece token="circle" />
+                                </View>
                               ))}
                             </View>
                           </CellPressable>
@@ -843,7 +849,17 @@ export function CourseTask({
                     {Array.from(
                       { length: Number(r[`${i}tens`]) || 0 },
                       (_, j) => (
-                        <View key={j} style={s.bundle}>
+                        <View
+                          key={j}
+                          style={[
+                            s.bundle,
+                            {
+                              backgroundColor: material.fill,
+                              borderWidth: 1,
+                              borderColor: material.edge,
+                            },
+                          ]}
+                        >
                           <Text style={{ lineHeight: 24, color: c.white }}>
                             10
                           </Text>
@@ -857,7 +873,9 @@ export function CourseTask({
                     {Array.from(
                       { length: Number(r[`${i}ones`]) || 0 },
                       (_, j) => (
-                        <View key={j} style={tokenStyle} />
+                        <View key={j} style={{ margin: 3 }}>
+                          <CountingPiece token="circle" />
+                        </View>
                       ),
                     )}
                   </View>
@@ -917,7 +935,9 @@ export function CourseTask({
                             {Array.from(
                               { length: Number(r[`${i}${side}`]) || 0 },
                               (_, j) => (
-                                <View key={j} style={tokenStyle} />
+                                <View key={j} style={{ margin: 3 }}>
+                                  <CountingPiece token="circle" />
+                                </View>
                               ),
                             )}
                           </View>

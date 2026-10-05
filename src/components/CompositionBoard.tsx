@@ -1,3 +1,4 @@
+import { useCountingMaterial } from "./CountingMaterial";
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { Button } from "./Controls";
@@ -47,6 +48,14 @@ export function CompositionBoard({
   onChange: (parts: [number, number]) => void;
   onDrawing: (value: boolean) => void;
 }) {
+  const material = useCountingMaterial();
+  const singleColor = token !== "square";
+  const partLabel = (group: number) =>
+    singleColor
+      ? group === 0
+        ? "Первая часть"
+        : "Вторая часть"
+      : partPalette[colors[group]].label;
   const counts = compositionCounts(parts[0], parts[1], total),
     count = counts[0] + counts[1];
   const [width, setWidth] = useState(300),
@@ -81,20 +90,24 @@ export function CompositionBoard({
       ? [
           {
             ref: field,
-            text: "Все предметы рядом. Пересчитай каждый цвет и проверь, сколько всего. Лишний предмет можно вернуть вниз.",
+            text: "Все предметы рядом. Пересчитай каждую часть и проверь, сколько всего. Лишний предмет можно вернуть вниз.",
           },
         ]
       : [
           {
             ref: source0,
-            text: `Здесь ${partPalette[colors[0]].label.toLowerCase()} ${noun}. Нажми на предмет, а потом на поле — он ляжет туда.`,
+            text: singleColor
+              ? "Здесь предметы для первой части, без метки. Нажми на предмет, а потом на поле — он ляжет туда."
+              : `Здесь ${partPalette[colors[0]].label.toLowerCase()} ${noun}. Нажми на предмет, а потом на поле — он ляжет туда.`,
             motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
           },
           {
             ref: field,
-            text: pattern
-              ? "Можно и перенести его пальцем на общее поле. Предмет встанет на место, как в образце. Продолжай раскладывать предметы двух цветов."
-              : `Можно и перенести его пальцем на общее поле. Клади ${noun} рядом: сначала одного цвета, затем другого.`,
+            text: singleColor
+              ? "Переноси предметы на общее поле: сначала первую часть, потом вторую. Метка поможет отличить их."
+              : pattern
+                ? "Можно и перенести его пальцем на общее поле. Предмет встанет на место, как в образце. Продолжай раскладывать предметы двух цветов."
+                : `Можно и перенести его пальцем на общее поле. Клади ${noun} рядом: сначала одного цвета, затем другого.`,
             motion: {
               kind: "drag",
               points: [],
@@ -105,12 +118,14 @@ export function CompositionBoard({
                 y: geometry.center(counts[0]).y / 148,
               },
               token,
-              color: partPalette[colors[0]].fill,
+              color: singleColor ? material.fill : partPalette[colors[0]].fill,
             },
           },
           {
             ref: source1,
-            text: `А здесь ${partPalette[colors[1]].label.toLowerCase()} ${noun}. Перенеси нужное количество на то же поле. Два цвета покажут две части числа.`,
+            text: singleColor
+              ? "Здесь предметы для второй части, с белой меткой. Перенеси нужное количество на то же поле."
+              : `А здесь ${partPalette[colors[1]].label.toLowerCase()} ${noun}. Перенеси нужное количество на то же поле. Два цвета покажут две части числа.`,
             motion: { kind: "tap", points: [{ x: 0.5, y: 0.5 }] },
           },
         ],
@@ -273,7 +288,7 @@ export function CompositionBoard({
             : `composition-token-${group}-${index}`
         }
         accessibilityRole="button"
-        accessibilityLabel={`${partPalette[colors[group]].label} ${noun}${isSource ? ": возьми здесь" : `: предмет ${index + 1}`}`}
+        accessibilityLabel={`${partLabel(group)}${singleColor ? ":" : ""} ${noun}${isSource ? ": возьми здесь" : `: предмет ${index + 1}`}`}
         accessibilityHint="Удерживай и перетаскивай"
         {...handlers(group, index)}
         style={[
@@ -312,22 +327,26 @@ export function CompositionBoard({
         <View
           pointerEvents="none"
           style={{
-            width: token === "stick" ? 8 : size,
-            height: token === "stick" ? 40 : size,
-            backgroundColor: partPalette[colors[group]].fill,
-            borderRadius: token === "circle" ? size / 2 : 0,
+            width: token === "stick" ? 7 : size,
+            height: token === "stick" ? 46 : size,
+            backgroundColor: singleColor
+              ? material.fill
+              : partPalette[colors[group]].fill,
+            borderRadius:
+              token === "circle" ? size / 2 : token === "stick" ? 2.5 : 0,
             borderWidth: 1,
-            borderColor: "#1f2433",
+            borderColor: singleColor ? material.edge : "#1f2433",
+            borderTopColor: singleColor ? material.light : "#1f2433",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
           {/* The two parts differ by more than colour: one carries a dot. */}
-          {colors[group] === "red" && token !== "stick" && (
+          {(singleColor ? group === 1 : colors[group] === "red") && (
             <View
               style={{
-                width: Math.max(6, size * 0.28),
-                height: Math.max(6, size * 0.28),
+                width: token === "stick" ? 5 : Math.max(6, size * 0.28),
+                height: token === "stick" ? 5 : Math.max(6, size * 0.28),
                 borderRadius: size,
                 backgroundColor: c.white,
               }}
@@ -424,7 +443,7 @@ export function CompositionBoard({
             >
               {toBox ? "Верни сюда" : "Бери здесь"}
             </Text>
-            {colors.map((color, i) => (
+            {colors.map((_, i) => (
               <Text
                 key={i}
                 style={{
@@ -438,7 +457,7 @@ export function CompositionBoard({
                   color: c.ink,
                 }}
               >
-                {partPalette[color].label}
+                {partLabel(i)}
               </Text>
             ))}
           </View>

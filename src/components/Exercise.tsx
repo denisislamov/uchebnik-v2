@@ -1,3 +1,4 @@
+import { CountingMaterialProvider } from "./CountingMaterial";
 import { useTaskCoach } from "./TaskCoach";
 import {
   GestureCoachProvider,
@@ -49,13 +50,15 @@ type ExerciseProps = {
 };
 export function Exercise(props: ExerciseProps) {
   return (
-    <GestureCoachProvider
-      key={props.block.id}
-      revealTarget={props.revealCoachTarget}
-      onActiveChange={props.onCoachActiveChange}
-    >
-      <ExerciseBody {...props} />
-    </GestureCoachProvider>
+    <CountingMaterialProvider taskId={props.block.id}>
+      <GestureCoachProvider
+        key={props.block.id}
+        revealTarget={props.revealCoachTarget}
+        onActiveChange={props.onCoachActiveChange}
+      >
+        <ExerciseBody {...props} />
+      </GestureCoachProvider>
+    </CountingMaterialProvider>
   );
 }
 function ExerciseBody({

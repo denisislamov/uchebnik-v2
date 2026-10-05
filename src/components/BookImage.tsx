@@ -1,3 +1,4 @@
+import { CountingPiece } from "./CountingMaterial";
 import React, { useRef, useState } from "react";
 import { useCoachAnchor } from "./GestureCoach";
 import { View } from "react-native";
@@ -70,16 +71,7 @@ export function BookImage({
                 marginLeft: i === n - 1 && n > 1 ? 18 : 0,
               }}
             >
-              {
-                <View
-                  style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: 12,
-                    backgroundColor: "#1565c0",
-                  }}
-                />
-              }
+              <CountingPiece token="circle" />
             </View>
           ))}
         </View>

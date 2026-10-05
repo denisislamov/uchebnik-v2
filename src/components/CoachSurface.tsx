@@ -1,3 +1,4 @@
+import { useCountingMaterial } from "./CountingMaterial";
 import React from "react";
 import { View, Text } from "react-native";
 import Svg, {
@@ -37,6 +38,7 @@ export function CoachSurface({
   width: number;
   height: number;
 }) {
+  const material = useCountingMaterial();
   if (surface.kind === "image")
     return (
       <BookArtwork
@@ -87,15 +89,23 @@ export function CoachSurface({
           })}
         {surface.kind === "token" &&
           (surface.token === "circle" ? (
-            <Circle cx={width / 2} cy={height / 2} r={18} fill="#1565c0" />
+            <Circle
+              cx={width / 2}
+              cy={height / 2}
+              r={15}
+              fill={material.fill}
+              stroke={material.edge}
+              strokeWidth={1}
+            />
           ) : (
             <Rect
-              x={width / 2 - (surface.token === "stick" ? 4 : 18)}
+              x={width / 2 - (surface.token === "stick" ? 3.5 : 18)}
               y={height / 2 - 24}
-              width={surface.token === "stick" ? 8 : 36}
+              width={surface.token === "stick" ? 7 : 36}
               height={48}
               rx={4}
-              fill={surface.token === "stick" ? "#bb8052" : "#1565c0"}
+              fill={surface.token === "stick" ? material.fill : "#1565c0"}
+              stroke={surface.token === "stick" ? material.edge : "none"}
             />
           ))}
         {surface.kind === "token" && surface.value !== undefined && (

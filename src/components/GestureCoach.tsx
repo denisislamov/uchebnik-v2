@@ -1,3 +1,4 @@
+import { useCountingMaterial } from "./CountingMaterial";
 import React, {
   createContext,
   useCallback,
@@ -163,6 +164,7 @@ export function GestureCoachProvider({
   revealTarget?: Reveal;
   onActiveChange?: (active: boolean) => void;
 }) {
+  const material = useCountingMaterial();
   const { width, height } = useWindowDimensions();
   const entries = useRef(new Map<string, Tutorial>()),
     anchors = useRef(new Map<string, React.RefObject<View | null>>());
@@ -815,12 +817,12 @@ export function GestureCoachProvider({
                 motion?.kind === "drag" &&
                 (motion.token === "stick" ? (
                   <Rect
-                    x={finger!.x - 4}
+                    x={finger!.x - 3.5}
                     y={finger!.y - stickLength / 2}
-                    width={8}
+                    width={7}
                     height={stickLength}
                     rx={3}
-                    fill={motion.color ?? "#bb8052"}
+                    fill={motion.color ?? material.fill}
                     transform={`rotate(${stickAngle - 90} ${finger!.x} ${finger!.y})`}
                   />
                 ) : motion.token === "square" || motion.token === "card" ? (
@@ -836,8 +838,10 @@ export function GestureCoachProvider({
                   <Circle
                     cx={finger!.x}
                     cy={finger!.y}
-                    r={14}
-                    fill={motion.color ?? "#1565c0"}
+                    r={15}
+                    fill={motion.color ?? material.fill}
+                    stroke={material.edge}
+                    strokeWidth={1}
                   />
                 ))}
               {fingerVisible &&
