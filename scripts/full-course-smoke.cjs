@@ -75,7 +75,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     for (const [i, target] of coins.activity.targets.entries())
       for (let n = 0; n < target / 10; n++)
         await p
-          .getByRole("button", { name: "Монета 10 копеек", exact: true })
+          .getByRole("button", { name: "Монета с числом 10", exact: true })
           .nth(i)
           .click();
     await btn("Проверить").click();

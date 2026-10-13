@@ -10,7 +10,9 @@ export type Config = {
   mailFrom: string;
   abuseSecret: string;
 };
-export type Mailer = { sendReset(to: string, resetUrl: string): Promise<void> };
+export type Mailer = {
+  sendReset(to: string, resetUrl: string, username: string): Promise<void>;
+};
 export type Dependencies = { pool: Pool; now: () => Date; mailer: Mailer };
 const ownerEmail = "islamov.denis@gmail.com";
 

@@ -10,7 +10,7 @@
     "ios": "expo start --ios",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
-    "export:web": "expo export --platform web",
+    "export:web": "expo export --platform web --clear",
     "assets": "python3 scripts/prepare_assets.py",
     "format": "prettier --write App.tsx index.ts src tests scripts/browser-smoke.cjs",
     "test:content": "python3 scripts/content/extract.py --check && python3 scripts/content/build_course.py --check && node --experimental-strip-types scripts/content/lint_texts.mjs --check && python3 scripts/prepare_web_assets.py --check",

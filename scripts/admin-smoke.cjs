@@ -131,12 +131,12 @@ const api = "http://127.0.0.1:8097";
         await page.getByTestId("admin-username").fill("test-owner");
         await page.getByTestId("admin-password").fill("test-long-password");
         await page.getByTestId("admin-login-submit").click();
-        await page.getByTestId("admin-dashboard").waitFor();
+        await page.getByTestId("metric-visitors").waitFor();
       }
       await login();
       assert.match(await page.getByTestId("metric-visitors").innerText(), /12/);
       await page.reload();
-      await page.getByTestId("admin-dashboard").waitFor();
+      await page.getByTestId("metric-visitors").waitFor();
       await page.getByTestId("period-30d").click();
       await page.waitForFunction(() =>
         document

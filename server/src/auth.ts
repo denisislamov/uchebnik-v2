@@ -188,7 +188,10 @@ export async function registerAuth(
         if (recipientAllowed) {
           const value = token();
           const inserted = await deps.pool.query(
-            "INSERT INTO password_reset_tokens(token_hash,owner_id,expires_at) SELECT $1,id,$2 FROM owner_account WHERE id=1 AND email=$3 RETURNING owner_id",
+            `WITH owner AS (SELECT id,username FROM owner_account WHERE id=1 AND email=$3),
+             inserted AS (INSERT INTO password_reset_tokens(token_hash,owner_id,expires_at)
+               SELECT $1,id,$2 FROM owner RETURNING owner_id)
+             SELECT owner.username FROM inserted JOIN owner ON owner.id=inserted.owner_id`,
             [
               tokenHash(value),
               new Date(now.getTime() + 30 * minute),
@@ -200,6 +203,7 @@ export async function registerAuth(
               await deps.mailer.sendReset(
                 config.ownerEmail,
                 `${config.webOrigin}/admin/reset#token=${value}`,
+                inserted.rows[0].username,
               );
             } catch {
               await deps.pool.query(

@@ -1,6 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { withAuth, ownerPassword, type AuthHarness } from "./helpers.ts";
+import { createMailer } from "../src/mail.ts";
+import { randomBytes } from "node:crypto";
 
 async function requestReset(h: AuthHarness) {
   const response = await h.request({
@@ -18,6 +20,65 @@ async function requestReset(h: AuthHarness) {
   return new URLSearchParams(link.hash.slice(1)).get("token")!;
 }
 const newPassword = "new-password-long-enough-for-the-owner";
+test("owner can recover both forgotten login and password using only the email", async (t) =>
+  withAuth(async (h) => {
+    const generatedUsername = `owner-${randomBytes(16).toString("base64url")}`;
+    await h.pool.query("UPDATE owner_account SET username=$1 WHERE id=1", [
+      generatedUsername,
+    ]);
+    let delivered: { to: string[]; text: string } | undefined;
+    t.mock.method(
+      globalThis,
+      "fetch",
+      async (_url: unknown, options: RequestInit) => {
+        delivered = JSON.parse(String(options.body));
+        return new Response('{"id":"test-only"}', { status: 200 });
+      },
+    );
+    h.deps.mailer = createMailer(h.config);
+    const requested = await h.request({
+      method: "POST",
+      url: "/v1/auth/forgot",
+      payload: { email: h.config.ownerEmail },
+    });
+    assert.equal(requested.statusCode, 202);
+    assert.deepEqual(delivered?.to, [h.config.ownerEmail]);
+    assert.ok(
+      delivered?.text.includes(generatedUsername),
+      "owner email must recover the forgotten random username",
+    );
+    assert.equal(
+      requested.body.includes(generatedUsername),
+      false,
+      "public forgot response must not reveal login",
+    );
+    const recoveredUsername = delivered!.text.match(/Логин: ([^\n]+)/)?.[1];
+    const link = delivered!.text.match(
+      /http[^\s]+\/admin\/reset#token=[\w-]+/,
+    )?.[0];
+    assert.ok(link);
+    const token = new URLSearchParams(new URL(link).hash.slice(1)).get("token");
+    assert.equal(
+      (
+        await h.request({
+          method: "POST",
+          url: "/v1/auth/reset",
+          payload: { token, password: newPassword },
+        })
+      ).statusCode,
+      204,
+    );
+    assert.equal(
+      (
+        await h.request({
+          method: "POST",
+          url: "/v1/auth/login",
+          payload: { username: recoveredUsername, password: newPassword },
+        })
+      ).statusCode,
+      200,
+    );
+  }));
 test("forgot sends only to owner and does not reveal whether email matches", () =>
   withAuth(async (h) => {
     const unknown = await h.request({
