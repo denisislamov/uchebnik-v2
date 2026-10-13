@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Image,
   Linking,
@@ -18,6 +18,8 @@ import { libraryCover } from "../content/libraryCover";
 import { LanguagePicker } from "./LanguagePicker";
 import Svg, { Path } from "react-native-svg";
 import { track } from "../analytics";
+import { FeedbackForm } from "./FeedbackForm";
+import { feedbackCopy } from "../localization/feedback";
 import {
   libraryText,
   type LibraryCopy,
@@ -132,6 +134,8 @@ export function Library({
   languageSaveError: boolean;
 }) {
   const singleColumn = width < 1000;
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const feedbackButton = useRef<View>(null);
   const phone = width < 600;
   const gutter = singleColumn ? 20 : 48;
   const contentWidth = Math.min(width, 1248) - gutter * 2;
@@ -288,6 +292,42 @@ export function Library({
               />
             </View>
             <SupportProject compact copy={t} locale={locale} />
+            {Platform.OS === "web" && (
+              <Pressable
+                ref={feedbackButton}
+                testID="feedback-open"
+                accessibilityRole="button"
+                accessibilityLabel={feedbackCopy[locale].open}
+                aria-haspopup="dialog"
+                onPress={() => setFeedbackOpen(true)}
+                style={{
+                  minHeight: 44,
+                  justifyContent: "center",
+                  alignSelf: "flex-start",
+                  marginTop: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: f.regular,
+                    fontSize: 14,
+                    color: c.penDark,
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  {feedbackCopy[locale].open}
+                </Text>
+              </Pressable>
+            )}
+            {feedbackOpen && (
+              <FeedbackForm
+                locale={locale}
+                onClose={() => {
+                  setFeedbackOpen(false);
+                  requestAnimationFrame(() => feedbackButton.current?.focus());
+                }}
+              />
+            )}
           </View>
           <View style={[s.plans, singleColumn && s.plansCompact]}>
             <Text accessibilityRole="header" style={s.plansTitle}>
