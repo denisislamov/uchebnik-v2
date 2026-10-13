@@ -29,4 +29,6 @@ Render автоматически соберёт новую версию. В р�
 
 Настройки созданы через Dashboard; `render.yaml` не добавлялся. Веб-публикация не создаёт нативные iOS/Android-приложения.
 
+Админка, посещаемость и обратная связь требуют отдельного API и постоянной PostgreSQL. Конфигурация и порядок запуска: [ADMIN_RENDER.md](ADMIN_RENDER.md), blueprint `render.admin.yaml`. Он не управляет существующим Static Site. После готовности API добавить frontend-переменную `EXPO_PUBLIC_API_BASE_URL`, rewrite и headers для `/admin`, перечисленные в инструкции. Не публиковать незавершённую конфигурацию.
+
 Справка Render: [статические сайты](https://render.com/docs/static-sites), [версия Node](https://render.com/docs/node-version).
