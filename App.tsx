@@ -44,6 +44,8 @@ import { BookImage } from "./src/components/BookImage";
 import { Library } from "./src/components/Library";
 import { useLibraryLanguage } from "./src/localization/useLibraryLanguage";
 import { track } from "./src/analytics";
+import { AdminApp } from "./src/admin/AdminApp";
+import { adminRoute } from "./src/admin/route";
 import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
 import { SettledWindow, useSettledWindowSource } from "./src/lib/settledWindow";
@@ -1067,9 +1069,18 @@ function LockIcon() {
   );
 }
 export default function App() {
+  const [route, setRoute] = useState(() =>
+    Platform.OS === "web" ? adminRoute(window.location.pathname) : null,
+  );
+  useEffect(() => {
+    if (Platform.OS !== "web") return;
+    const update = () => setRoute(adminRoute(window.location.pathname));
+    window.addEventListener("popstate", update);
+    return () => window.removeEventListener("popstate", update);
+  }, []);
   return (
     <SafeAreaProvider>
-      <Main />
+      {route ? <AdminApp key={route} /> : <Main />}
     </SafeAreaProvider>
   );
 }
