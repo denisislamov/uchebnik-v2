@@ -43,6 +43,7 @@ import { CELL, cells, wholeCells, written } from "./src/lib/grid";
 import { BookImage } from "./src/components/BookImage";
 import { Library } from "./src/components/Library";
 import { useLibraryLanguage } from "./src/localization/useLibraryLanguage";
+import { track } from "./src/analytics";
 import { Exercise } from "./src/components/Exercise";
 import { TaskFitExtra, fitsPhone } from "./src/components/taskSize";
 import { SettledWindow, useSettledWindowSource } from "./src/lib/settledWindow";
@@ -60,6 +61,13 @@ const NO_ANSWER: Answer = {};
 const revisedPreviewIds = new Set(Object.keys(revisedAssets));
 const vectorPreviewIds = new Set(Object.keys(vectorAssets));
 function Main() {
+  const visitTracked = useRef(false);
+  useEffect(() => {
+    if (!visitTracked.current) {
+      visitTracked.current = true;
+      track("page_view");
+    }
+  }, []);
   const [loaded, fontError] = useFonts({
     Andika_400Regular,
     Andika_700Bold,
@@ -567,8 +575,12 @@ function Main() {
                   hasProgress={!!stepsDone || progress.page > 1}
                   completed={finished}
                   total={lessonPages.length}
-                  onOpenBook={() => setLibrary(false)}
+                  onOpenBook={() => {
+                    track("book_open");
+                    setLibrary(false);
+                  }}
                   onContinue={() => {
+                    track("book_open");
                     setLibrary(false);
                     if (stepsDone || progress.page > 1) setHome(false);
                     else selectPage(3);

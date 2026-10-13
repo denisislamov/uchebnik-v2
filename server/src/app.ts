@@ -5,6 +5,7 @@ import type { Config, Dependencies } from "./config.ts";
 import { SCHEMA_VERSION } from "./migrate.ts";
 import { HttpError } from "./security.ts";
 import { registerAuth } from "./auth.ts";
+import { registerAnalytics } from "./analytics.ts";
 
 export async function buildApp(config: Config, deps: Dependencies) {
   const app = Fastify({
@@ -47,6 +48,7 @@ export async function buildApp(config: Config, deps: Dependencies) {
     }
   });
   await registerAuth(app, config, deps);
+  await registerAnalytics(app, config, deps);
   app.get("/healthz", async (_request, reply) => {
     reply.header("Cache-Control", "no-store");
     const result = await deps.pool.query(

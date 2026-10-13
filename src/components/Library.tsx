@@ -17,6 +17,7 @@ import {
 import { libraryCover } from "../content/libraryCover";
 import { LanguagePicker } from "./LanguagePicker";
 import Svg, { Path } from "react-native-svg";
+import { track } from "../analytics";
 import {
   libraryText,
   type LibraryCopy,
@@ -80,7 +81,7 @@ function SupportProject({
             : {})}
           onPress={
             Platform.OS === "web"
-              ? undefined
+              ? () => track("boosty_click")
               : () => {
                   setError(false);
                   Linking.openURL(url).catch(() => setError(true));
