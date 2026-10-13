@@ -3,7 +3,7 @@ export const PROJECT_SUPPORT_URL =
   "https://boosty.to/islamovdenis/single-payment/donation/832184/target?share=target_link";
 
 /** Update these totals manually as contributions arrive. Amounts are in rubles. */
-export const PROJECT_FUNDING = { raised: 12_500, goal: 60_000 };
+export const PROJECT_FUNDING = { raised: 0, goal: 60_000 };
 
 export const plannedBooks = [
   {

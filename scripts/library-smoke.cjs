@@ -75,11 +75,10 @@ async function openParents(page) {
       const meter = page.getByRole("progressbar", {
         name: "Сбор на новые учебники и озвучку",
       });
-      assert.equal(await meter.getAttribute("aria-valuenow"), "12500");
+      assert.equal(await meter.getAttribute("aria-valuenow"), "0");
       assert.equal(await meter.getAttribute("aria-valuemax"), "60000");
       const fill = await page.getByTestId("funding-fill").boundingBox();
-      const track = await meter.boundingBox();
-      assert.ok(Math.abs(fill.width / track.width - 12500 / 60000) < 0.01);
+      assert.equal(fill.width, 0);
       assert.equal(await page.getByTestId("planned-cover").count(), 9);
       const support = page.getByRole("link", { name: /Boosty/ });
       assert.equal(
