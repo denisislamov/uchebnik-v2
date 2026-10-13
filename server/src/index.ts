@@ -2,6 +2,7 @@ import { readConfig } from "./config.ts";
 import { createPool } from "./db.ts";
 import { migrate } from "./migrate.ts";
 import { buildApp } from "./app.ts";
+import { createMailer } from "./mail.ts";
 
 const config = readConfig(process.env);
 const pool = createPool(config.databaseUrl);
@@ -10,11 +11,7 @@ try {
   const app = await buildApp(config, {
     pool,
     now: () => new Date(),
-    mailer: {
-      async sendReset() {
-        throw new Error("Mailer unavailable");
-      },
-    },
+    mailer: createMailer(config),
   });
   const stop = async () => {
     await app.close();

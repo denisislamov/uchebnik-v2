@@ -10,7 +10,8 @@
     "start": "node --experimental-strip-types src/index.ts",
     "test": "node --experimental-strip-types --test",
     "typecheck": "tsc --noEmit",
-    "migrate": "node --experimental-strip-types src/migrate.ts"
+    "migrate": "node --experimental-strip-types src/migrate.ts",
+    "bootstrap-owner": "node --experimental-strip-types scripts/bootstrap-owner.ts"
   },
   "dependencies": {
     "@fastify/cookie": "11.1.3",
