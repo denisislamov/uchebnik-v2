@@ -4,7 +4,7 @@
 
 ## Состояние запуска
 
-Код подготовлен. База `shelfsmart-admin-db` уже создана владельцем: `dpg-db7j6ua5b2lc7385gsdg-a`, PostgreSQL 18, Frankfurt, статус Available проверен 2026-10-14. Повторно создавать базу не нужно. API, почтовый отправитель, DNS API и production-приёмка ещё не выполнены. Текущая публикация — Static Site `srv-dam8up61egvs738j9kmg`, ветка `feature/debug-source-view`. Публикация фронтенда с API URL выполняется после готовности API и почты.
+Код подготовлен. База `shelfsmart-admin-db` уже создана владельцем: `dpg-db7j6ua5b2lc7385gsdg-a`, PostgreSQL 18, Frankfurt, статус Available проверен 2026-10-14. Повторно создавать базу не нужно. Почтовый домен Resend `mail.shelfsmartacademy.com` подтверждён; реальная доставка восстановления ещё не проверена. API `shelfsmart-api` создан: `srv-db7k2iqj9qps73codnh0`, Frankfurt, 0.5 CPU / 512 MB. Первый deploy `0fe05a5` — Live; публичный `/healthz` вернул `200 {"ok":true}` с существующей БД. Владелец создан, данные входа сохранены в приватный файл вне Git. CNAME `api` → `shelfsmart-api.onrender.com` подтверждён двумя публичными DNS и authoritative NS; проверка Render/TLS и production-приёмка ещё выполняются. Текущая публикация — Static Site `srv-dam8up61egvs738j9kmg`, ветка `feature/debug-source-view`. Публикация фронтенда с API URL выполняется после готовности API и почты.
 
 ## Ресурсы Render
 
@@ -13,11 +13,11 @@
 | Ресурс | Конфигурация | Плановый расход |
 | --- | --- | --- |
 | API shelfsmart-api | 0.5 CPU / 512 MB (Starter) | ориентир $7/мес. |
-| Существующая shelfsmart-admin-db | PostgreSQL 18, 0.1 CPU / 256 MB (Basic), плановый диск 5 GB | ориентир $6 + $1.50/мес. |
+| Существующая shelfsmart-admin-db | PostgreSQL 18, 0.1 CPU / 256 MB (Basic), 5 GB | $6 + $1.50/мес. |
 | Существующий Static Site | сохраняется | без отдельного compute |
 | Resend | Free, проверенный отправитель | в рамках бесплатной квоты |
 
-Это ориентир $14.50/мес. до налогов и возможного превышения трафика/сборок. Сумма API проверяется в панели непосредственно перед созданием; фактический размер диска базы нужно сверить в Dashboard. Workspace повышать не требуется. В актуальном [Blueprint Reference](https://render.com/docs/blueprint-spec) ID compute-планов — `0.5c-512mb` и `0.1c-256mb`. Для существующей базы требуется отключённое автоматическое расширение диска и закрытый внешний доступ; API использует внутренний URL. Эти настройки управляются отдельно в Dashboard.
+Это ориентир $14.50/мес. до налогов и возможного превышения трафика/сборок. В Dashboard 2026-10-14 подтверждены 5 GB базы и $7/мес. в форме нового API. Workspace повышать не требуется. В актуальном [Blueprint Reference](https://render.com/docs/blueprint-spec) ID compute-планов — `0.5c-512mb` и `0.1c-256mb`. У базы отключено автоматическое расширение диска; после перезагрузки Dashboard подтверждено «All internet traffic is blocked». API использует внутренний URL. Эти настройки управляются отдельно в Dashboard.
 
 Build из корня репозитория: `npm ci --prefix server --include=dev && npm --prefix server run typecheck`. Start: `npm --prefix server start`. Root Directory не задавать: сервер импортирует `shared/*.ts`. Миграции выполняются при старте под advisory lock; изменять уже применённый SQL-файл нельзя. `/healthz` проверяет соединение и версию схемы.
 
@@ -32,17 +32,19 @@ Build из корня репозитория: `npm ci --prefix server --include=
 | OWNER_EMAIL | islamov.denis@gmail.com |
 | ABUSE_SECRET | случайный секрет не менее 32 байт; generateValue |
 | RESEND_API_KEY | ключ Resend с минимально достаточной отправкой |
-| MAIL_FROM | проверенный адрес, например account@mail.shelfsmartacademy.com |
+| MAIL_FROM | account@mail.shelfsmartacademy.com |
 
 Секреты не добавляются в Git, build логи, frontend или `EXPO_PUBLIC_*`. Приложение не использует пароль Gmail. На Free Resend сейчас 3000 писем/мес. и 100/день: проверить [текущие условия](https://resend.com/pricing). Resend получает адрес владельца, его логин и ссылку восстановления; сообщения посетителей не отправляются по почте.
+
+Resend: домен `61d382b9-1935-4722-a334-1c7bb9d60e93`, Ireland (`eu-west-1`), Verified. Включён Enforced TLS, получение почты выключено, tracking domain не настроен. Создан ключ `shelfsmart-password-reset` с Sending access только для этого поддомена; его значение не хранится в документации. В Spaceship добавлены выданный TXT `resend._domainkey.mail` и CNAME `rsend.mail` → `rsend-euw1.forge.rmta.net`, `send.mail` → `send.forge.rmta.net`; публичный DNS подтверждает все три. Записи основного сайта сохранены.
 
 ## DNS, отправитель и frontend
 
 1. В Render API → Custom Domains добавить `api.shelfsmartacademy.com`. В Spaceship создать CNAME `api` на фактический `*.onrender.com` API, дождаться Verified и Certificate Issued. Записи `@` и `www` существующего сайта сохраняются.
-2. В Resend добавить отправляющий поддомен `mail.shelfsmartacademy.com`. Скопировать именно выданные Resend DKIM/SPF/MX записи в Spaceship; не угадывать значения и не менять почтовые записи корневого домена. Дождаться статуса Verified. Ключ хранить только в Render API.
+2. В Resend добавить отправляющий поддомен `mail.shelfsmartacademy.com`. Скопировать именно выданные Resend DNS-записи в Spaceship; не угадывать значения и не менять почтовые записи корневого домена. Дождаться статуса Verified. Ключ хранить только в Render API.
 3. В существующий Static Site добавить `EXPO_PUBLIC_API_BASE_URL=https://api.shelfsmartacademy.com` и пересобрать. Build остаётся `npm ci --include=dev && npm run export:web`.
 4. Redirects/Rewrites: **Rewrite** `/admin` → `/index.html`, `/admin/*` → `/index.html`. Headers: для `/admin` и `/admin/*` задать `Cache-Control: no-store`, `X-Robots-Tag: noindex, nofollow`, `Referrer-Policy: no-referrer`. Проверить реальные ответы `curl -I` и прямое открытие `/admin/reset`. Содержимое HTML общедоступно; данные закрыты API авторизацией.
-5. Перед открытием API посетителям проверить реальную proxy-цепочку Render и невозможность подмены клиентского IP. Текущее безопасное значение `trustProxy: false` использует адрес ближайшего прокси; без настройки это объединит квоты посетителей. Нельзя включать безусловное доверие произвольному `X-Forwarded-For`. Это обязательная production-проверка, пока не выполнена.
+5. `trustProxy: false` сохраняется. В production квота использует единственный валидный `CF-Connecting-IP`, нормализованный через ipaddr.js; отсутствие, дубликат или неверное значение закрывает ограничиваемый endpoint с 503. XFF игнорируется. Это опирается на [публичный ingress Render через Cloudflare](https://render.com/articles/how-render-handles-ddos-attacks) и [семантику заголовка Cloudflare](https://developers.cloudflare.com/fundamentals/reference/http-headers/). Прямые приватные вызовы считаются доверенной инфраструктурой; порт приложения нельзя открывать в Интернет напрямую. Production-проверка: 10 ошибочных входов с одного IP, последующие подмены заголовков должны оставаться 429 на обоих hostname; запрос из Render Shell по публичному HTTPS должен получить 401, подтверждая отдельную квоту. После рестарта лимит должен сохраниться. Проверка фактического ingress ещё не завершена.
 
 ## Создание владельца
 
@@ -85,3 +87,7 @@ Runner занимает только `127.0.0.1:8096/8097`, поднимает �
 ## Production-приёмка
 
 После Live с проверенным SHA у обоих сервисов: прямое открытие `/admin`, login/reload/logout; 401 для анонимных analytics/inbox; тестовая обратная связь в inbox; Boosty открывается и добавляет один клик; restart API сохраняет сообщение; реальное письмо в Gmail и одноразовый reset отзывают прежние сессии. Тестовое сообщение удалить, служебные события отметить владельцу. Отдельно зафиксировать получение письма владельцем, фактические IDs, SHA, цену и дату. Локальные тесты не подтверждают доставку письма или production.
+
+## Известный дефект учебника до админки
+
+Полный regression нельзя считать зелёным: result-smoke выявляет обрезанную кнопку подсказки в p004-block06 после неверного ответа на экранах 1440×760 (28 px) и 1280×800 (12 px). Это воспроизведено 2026-10-14 на отдельно собранном опубликованном SHA 652d39a с тем же lockfile/браузером; соответствующий runtime-код совпадает. Независимое ревью допускает отдельный выпуск админки с этим зарегистрированным существующим дефектом. Тест не ослаблен. Изолированный resize повторно прошёл, исправленный all-pages прошёл 143 страницы и 1251 блок. Admin CI b8eeecc прошёл, включая 39 серверных тестов и browser E2E с PostgreSQL18.
