@@ -5,6 +5,8 @@ import {
   scrypt,
   timingSafeEqual,
 } from "node:crypto";
+import { isIP } from "node:net";
+import ipaddr from "ipaddr.js";
 import type { Pool, PoolClient } from "pg";
 import type { FastifyRequest } from "fastify";
 import type { ApiFailure } from "../../shared/site-api.ts";
@@ -81,9 +83,24 @@ export function ipKey(
   config: Config,
   now: Date,
 ): string {
-  // trustProxy remains false until the production proxy chain is verified.
+  // Render's public ingress passes through Cloudflare. Private network callers
+  // are trusted infrastructure; never expose the process port directly.
+  let address = request.ip;
+  if (config.environment === "production") {
+    const supplied = request.headers["cf-connecting-ip"];
+    const raw = request.raw.rawHeaders;
+    let count = 0;
+    for (let i = 0; i < raw.length; i += 2) {
+      if (raw[i].toLowerCase() === "cf-connecting-ip") count++;
+    }
+    if (
+      count !== 1 || typeof supplied !== "string" ||
+      supplied.includes("%") || isIP(supplied) === 0
+    ) throw new HttpError(503, "unavailable");
+    address = ipaddr.process(supplied).toString();
+  }
   return createHmac("sha256", config.abuseSecret)
-    .update(`ip:${now.toISOString().slice(0, 10)}:${request.ip}`)
+    .update(`ip:${now.toISOString().slice(0, 10)}:${address}`)
     .digest("hex");
 }
 export async function consumeLimit(

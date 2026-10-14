@@ -106,7 +106,11 @@ export async function withAuth(
     const request = (options: InjectOptions) =>
       app.inject({
         ...options,
-        headers: { origin: config.webOrigin, ...options.headers },
+        headers: {
+          origin: config.webOrigin,
+          ...(production ? { "cf-connecting-ip": "198.51.100.1" } : {}),
+          ...options.headers,
+        },
       });
     const login = async () => {
       const response = await request({

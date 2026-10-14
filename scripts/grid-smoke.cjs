@@ -134,9 +134,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             const r = e.getBoundingClientRect();
             return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== "hidden";
           };
-          const things = [...main.querySelectorAll('[role="button"], input, img, div')].filter((e) => {
+          const things = [...main.querySelectorAll('[role="button"], [role="img"], input, img, div')].filter((e) => {
             if (!visible(e) || e.closest('[data-sheet="object"]') !== null && !e.matches('[data-sheet="object"]')) return false;
-            if (e.matches('[role="button"], input, img, [data-sheet="object"]')) return true;
+            // Revised book illustrations are accessible SVGs inside role=img wrappers.
+            if (e.matches('[role="button"], [role="img"], input, img, [data-sheet="object"]')) return true;
             const st = getComputedStyle(e);
             const bg = st.backgroundColor.match(/[\d.]+/g);
             const filled = bg && (bg.length < 4 || Number(bg[3]) > 0.3);
