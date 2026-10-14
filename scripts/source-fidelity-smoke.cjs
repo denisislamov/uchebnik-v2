@@ -468,21 +468,21 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       [
         "Покупка ложек",
         "Сколько ложек купили?",
-        "Сколько рублей стоят эти ложки?",
+        "Сколько жетонов стоят эти ложки?",
         "1",
         "6",
       ],
       [
         "Покупка вилок",
         "Сколько вилок купили?",
-        "Сколько рублей стоят эти вилки?",
+        "Сколько жетонов стоят эти вилки?",
         "2",
         "8",
       ],
       [
-        "Покупка ножей",
-        "Сколько ножей купили?",
-        "Сколько рублей стоят эти ножи?",
+        "Покупка кружек",
+        "Сколько кружек взяли?",
+        "Сколько жетонов стоят эти кружки?",
         "3",
         "9",
       ],
@@ -504,7 +504,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         .getByRole("button", { name: `Сюжет: ${label}`, exact: true })
         .click();
       await part.getByRole("textbox", { name: input, exact: true }).fill(count);
-      await part.getByRole("button", { name: "рубли", exact: true }).click();
+      await part.getByRole("button", { name: "жетоны", exact: true }).click();
       await part.getByRole("button", { name: "×", exact: true }).click();
       await part
         .getByRole("textbox", { name: `Ответ: ${question}`, exact: true })
@@ -523,7 +523,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     assert.equal(isDone(pictured, await answer(pictured.id)), false);
     await page
       .getByRole("textbox", {
-        name: "Ответ: Сколько рублей стоят эти ложки?",
+        name: "Ответ: Сколько жетонов стоят эти ложки?",
         exact: true,
       })
       .fill("12");

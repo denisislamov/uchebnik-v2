@@ -132,7 +132,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       }
       await button("Пауза").click();
       await visible(
-        { x: 0.055, y: 0.08, w: 0.39, h: 0.82 },
+        { x: 0.08, y: 0.09, w: 0.44, h: 0.81 },
         `${viewport.width} whole big ball`,
       );
       await p.screenshot({
@@ -141,7 +141,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       await button("Продолжить показ").click();
       await button("Показать ещё раз").waitFor();
       await visible(
-        { x: 0.69, y: 0.34, w: 0.235, h: 0.5 },
+        { x: 0.68, y: 0.42, w: 0.24, h: 0.48 },
         `${viewport.width} whole small ball`,
       );
       await button("Закрыть подсказку").click();

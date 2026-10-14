@@ -152,6 +152,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
               w: b.width,
               h: b.height,
               color: getComputedStyle(s).backgroundColor,
+              marked: s.childElementCount > 0,
             };
           }),
         );
@@ -159,8 +160,15 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
           page === 15 || page === 25 || page === 27
             ? ["rgb(203, 69, 56)", "rgb(93, 134, 61)"]
             : ["rgb(93, 134, 61)", "rgb(203, 69, 56)"];
+        const plastic = [25, 27].includes(page);
+        if (plastic) {
+          assert.ok(["rgb(229, 57, 53)", "rgb(22, 139, 210)", "rgb(39, 174, 96)"].includes(boxes[0].color));
+          const sourceColor = await p.getByTestId('composition-source-0').evaluate(e => getComputedStyle(e.firstElementChild).backgroundColor);
+          assert.equal(boxes[0].color, sourceColor, "placed material keeps the task colour");
+        }
         boxes.forEach((b, i) => {
-          assert.equal(b.color, colors[i < amounts[0] ? 0 : 1]);
+          assert.equal(b.color, plastic ? boxes[0].color : colors[i < amounts[0] ? 0 : 1]);
+          if (plastic) assert.equal(b.marked, i >= amounts[0], "white dot distinguishes the second part");
           if (pattern) {
             assert.ok(
               Math.abs(b.x - boxes[0].x - pattern[i][0] * b.w) < 1,

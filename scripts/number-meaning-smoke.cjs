@@ -39,7 +39,11 @@ const KEY = 'uchebnik:pchelko-1959:pages-001-010:v1';
         await card(b.targets[0].label).tap();
         await p.getByText('✓ Верно!',{exact:false}).waitFor();
         assert.equal(await p.locator('img[src*="abacus"]').count(),0);
-        if (id==='p008-block08') await p.getByTestId('modern-meaning-tokens').waitFor();
+        if (id==='p008-block08') {
+          const rail = card('Две бусины на счётной линейке').locator('svg');
+          await rail.waitFor();
+          assert.equal(await rail.locator('circle[id^="bead-"]').count(), 10);
+        }
         await p.reload();
         await openBook(p);
         await p.getByRole('button',{name:/^(Продолжить занятие|Начать заниматься)/}).click();

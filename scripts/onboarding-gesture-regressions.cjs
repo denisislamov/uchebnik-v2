@@ -282,9 +282,9 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
             const line =
               root.querySelector('[data-testid="coach-demo-surface"] line') ??
               document.querySelector('[data-testid="stick-board"] line');
-            const ghost = [
-              ...root.querySelectorAll('rect[fill="#bb8052"]'),
-            ].find((e) => e.hasAttribute("transform"));
+            // The plastic stick follows the task's colour; its rotated geometry
+            // identifies the demonstration independently of that palette.
+            const ghost = root.querySelector('rect[width="7"][transform]');
             if (!line || !ghost) throw Error("missing shape line/ghost");
             const n = (e, k) => Number(e.getAttribute(k));
             return {
@@ -394,7 +394,7 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
         const before = await answers();
         await button("Как это сделать?").click();
         await advanceUntil(async () =>
-          /Пересчитай каждый цвет/.test(
+          /Пересчитай каждую часть/.test(
             await p.getByTestId("coach-instruction").innerText(),
           ),
         );
