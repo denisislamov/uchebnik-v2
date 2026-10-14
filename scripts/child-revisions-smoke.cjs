@@ -80,11 +80,12 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     );
     const r = await picture.boundingBox();
     for (const [x, y] of [
-      [0.26, 0.4],
+      // Coordinates follow the revised illustration: the left chair's back.
+      [0.235, 0.47],
       // The right chair's seat: its thin back borders the window's area.
       [0.69, 0.67],
       [0.53, 0.14],
-      [0.88, 0.2],
+      [0.73, 0.2],
       [0.14, 0.12],
       [0.125, 0.34],
     ])
@@ -92,7 +93,10 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     await p.getByText("✓ Верно!", { exact: false }).waitFor();
     await p.screenshot({ path: "docs/room-pairs.png", fullPage: true });
     await open(pages[6].blocks[5]);
-    await p.getByTestId("modern-counting-card").waitFor();
+    await p.getByRole("img", {
+      name: "Счётная линейка: 1 бусина слева, 9 справа; всего 10, первые 5 красные",
+      exact: true,
+    }).waitFor();
     await open(pages[2].blocks[5]);
     for (const name of ["чёрный", "красный", "синий"])
       await btn(`Цвет: ${name}`).waitFor();

@@ -72,11 +72,11 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     let b = allBlocks.find((b) => b.exerciseNumber === 49);
     await open(b);
     await btn("Сюжет: Копилка").click();
-    await btn("рубли").click();
+    await btn("жетоны").click();
     await btn("+").click();
     await p
       .getByRole("textbox", {
-        name: "Ответ: Сколько рублей стало в копилке?",
+        name: "Ответ: Сколько жетонов стало в копилке?",
         exact: true,
       })
       .fill("5");
@@ -84,13 +84,13 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
     assert.equal(await btn("✓ Получилось!").count(), 0);
     await p
       .getByRole("textbox", {
-        name: "Ответ: Сколько рублей стало в копилке?",
+        name: "Ответ: Сколько жетонов стало в копилке?",
         exact: true,
       })
       .fill("4");
     await btn("Проверить задачу").click();
     await btn("✓ Верно").waitFor();
-    report.scenarios.push("story-builder: source rubles, wrong then correct");
+    report.scenarios.push("story-builder: counting tokens, wrong then correct");
     b = allBlocks.find(
       (b) =>
         b.kind === "activity" &&

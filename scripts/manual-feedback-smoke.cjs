@@ -248,7 +248,11 @@ const KEY = "uchebnik:pchelko-1959:pages-001-010:v1";
       const r = await picture.boundingBox();
       await picture.click({
         position: {
-          x: (target.x - target.w * 0.1) * r.width,
+          // The revised second berry overlaps the first berry on its left.
+          // Exercise its outer halo on the right; exact neighbouring hits win.
+          x: (target.id === "object-1"
+            ? target.x + target.w * 1.1
+            : target.x - target.w * 0.1) * r.width,
           y: (target.y + target.h / 2) * r.height,
         },
       });
