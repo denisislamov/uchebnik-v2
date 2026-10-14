@@ -4,7 +4,9 @@
 
 ## Состояние запуска
 
-Код подготовлен. База `shelfsmart-admin-db` уже создана владельцем: `dpg-db7j6ua5b2lc7385gsdg-a`, PostgreSQL 18, Frankfurt, статус Available проверен 2026-10-14. Повторно создавать базу не нужно. Почтовый домен Resend `mail.shelfsmartacademy.com` подтверждён; реальная доставка восстановления ещё не проверена. API `shelfsmart-api` создан: `srv-db7k2iqj9qps73codnh0`, Frankfurt, 0.5 CPU / 512 MB. Первый deploy `0fe05a5` — Live; публичный `/healthz` вернул `200 {"ok":true}` с существующей БД. Владелец создан, данные входа сохранены в приватный файл вне Git. CNAME `api` → `shelfsmart-api.onrender.com` подтверждён двумя публичными DNS и authoritative NS; проверка Render/TLS и production-приёмка ещё выполняются. Текущая публикация — Static Site `srv-dam8up61egvs738j9kmg`, ветка `feature/debug-source-view`. Публикация фронтенда с API URL выполняется после готовности API и почты.
+Опубликовано и проверено 2026-10-14. Используется существующая база `shelfsmart-admin-db`: `dpg-db7j6ua5b2lc7385gsdg-a`, PostgreSQL 18, Frankfurt. Новая база не создавалась. API `shelfsmart-api`: `srv-db7k2iqj9qps73codnh0`, Frankfurt, 0.5 CPU / 512 MB, `https://api.shelfsmartacademy.com`; HTTPS и `/healthz` работают. Static Site `srv-dam8up61egvs738j9kmg` обслуживает основной домен с настроенным API URL. Производственная ветка обоих сервисов — `feature/debug-source-view`.
+
+Приёмка выполнена на frontend `35623f39a89ac9c6f88936629c0ec3a7a4fb11a7` (deploy `dep-db7kmcmi0phs7397dlug`) и API `b8eeecc82fbeefb9e19b1ebbb4f40b0b867045a2` (deploy `dep-db7k7hij9qps73cosls0`). Впоследствии API и frontend синхронизируются с производственной веткой; различия после проверенного runtime — документация и исправления regression-тестов. Единственная учётная запись владельца создана; актуальные случайные данные входа сохранены в приватный файл `ShelfSmart Admin.json` на рабочем столе владельца (0600, вне Git).
 
 ## Ресурсы Render
 
@@ -44,7 +46,7 @@ Resend: домен `61d382b9-1935-4722-a334-1c7bb9d60e93`, Ireland (`eu-west-1`)
 2. В Resend добавить отправляющий поддомен `mail.shelfsmartacademy.com`. Скопировать именно выданные Resend DNS-записи в Spaceship; не угадывать значения и не менять почтовые записи корневого домена. Дождаться статуса Verified. Ключ хранить только в Render API.
 3. В существующий Static Site добавить `EXPO_PUBLIC_API_BASE_URL=https://api.shelfsmartacademy.com` и пересобрать. Build остаётся `npm ci --include=dev && npm run export:web`.
 4. Redirects/Rewrites: **Rewrite** `/admin` → `/index.html`, `/admin/*` → `/index.html`. Headers: для `/admin` и `/admin/*` задать `Cache-Control: no-store`, `X-Robots-Tag: noindex, nofollow`, `Referrer-Policy: no-referrer`. Проверить реальные ответы `curl -I` и прямое открытие `/admin/reset`. Содержимое HTML общедоступно; данные закрыты API авторизацией.
-5. `trustProxy: false` сохраняется. В production квота использует единственный валидный `CF-Connecting-IP`, нормализованный через ipaddr.js; отсутствие, дубликат или неверное значение закрывает ограничиваемый endpoint с 503. XFF игнорируется. Это опирается на [публичный ingress Render через Cloudflare](https://render.com/articles/how-render-handles-ddos-attacks) и [семантику заголовка Cloudflare](https://developers.cloudflare.com/fundamentals/reference/http-headers/). Прямые приватные вызовы считаются доверенной инфраструктурой; порт приложения нельзя открывать в Интернет напрямую. Production-проверка: 10 ошибочных входов с одного IP, последующие подмены заголовков должны оставаться 429 на обоих hostname; запрос из Render Shell по публичному HTTPS должен получить 401, подтверждая отдельную квоту. После рестарта лимит должен сохраниться. Проверка фактического ingress ещё не завершена.
+5. `trustProxy: false` сохраняется. В production квота использует единственный валидный `CF-Connecting-IP`, нормализованный через ipaddr.js; отсутствие, дубликат или неверное значение закрывает ограничиваемый endpoint с 503. XFF игнорируется. Это опирается на [публичный ingress Render через Cloudflare](https://render.com/articles/how-render-handles-ddos-attacks) и [семантику заголовка Cloudflare](https://developers.cloudflare.com/fundamentals/reference/http-headers/). Прямые приватные вызовы считаются доверенной инфраструктурой; порт приложения нельзя открывать в Интернет напрямую. Production-проверка пройдена: после ошибочных входов подмена XFF/X-Real-IP/True-Client-IP и длинной цепочки XFF оставалась 429; попытки подмены CF-Connecting-IP блокировал Cloudflare (403 HTML). Проверены custom и onrender hostname. Запрос из Render Shell по публичному HTTPS получил 401 на обоих hostname, подтверждая отдельную квоту. После рестарта API в 17:27 Asia/Makassar лимит сохранился (429 в 17:28:57).
 
 ## Создание владельца
 
@@ -86,7 +88,16 @@ Runner занимает только `127.0.0.1:8096/8097`, поднимает �
 
 ## Production-приёмка
 
-После Live с проверенным SHA у обоих сервисов: прямое открытие `/admin`, login/reload/logout; 401 для анонимных analytics/inbox; тестовая обратная связь в inbox; Boosty открывается и добавляет один клик; restart API сохраняет сообщение; реальное письмо в Gmail и одноразовый reset отзывают прежние сессии. Тестовое сообщение удалить, служебные события отметить владельцу. Отдельно зафиксировать получение письма владельцем, фактические IDs, SHA, цену и дату. Локальные тесты не подтверждают доставку письма или production.
+2026-10-14 на опубликованном сайте проверены:
+
+- Firefox: прямой `/admin`, вход, сохранение сессии после обновления, выход; форма обратной связи → сообщение в админке; ссылка Boosty открывает нужную страницу и добавляет один клик.
+- HTTPS: анонимные inbox/analytics возвращают 401; cookie Secure/HttpOnly; повторные сообщения и события не дублируются. `/admin` и `/admin/reset` возвращают 200 с no-store/noindex/no-referrer.
+- После рестарта API сохранились сессия, сообщение и ограничение попыток входа. API deploy при этой проверке: `dep-db7k7hij9qps73cosls0`.
+- Письмо запрошено через Firefox. Resend подтвердил Delivered на `islamov.denis@gmail.com` в 17:35 Asia/Makassar, email ID `01a139c4-44c2-7e75-b7aa-538943d4309a`. Входящий ящик Gmail не просматривался. Письмо содержит логин и одноразовую ссылку.
+- Ссылка открыла `/admin/reset` в Firefox, секрет удалился из адресной строки. Через API проверен реальный reset: 204, прежняя сессия 401, повторное использование ссылки 400, старый пароль 401, новый вход 200 (09:40:40 UTC). Затем вход с новым паролем повторно проверен в Firefox.
+- Два собственных проверочных сообщения удалены по точным ID и содержимому. Первые показатели включают служебные визиты и два проверочных клика Boosty. Письма от формы обратной связи не отправляются.
+
+Admin CI `38542582482` успешно завершён на `35623f3`, включая PostgreSQL 18, 39 серверных тестов и браузерный сценарий. Независимое ревью выполнено; критических или важных незакрытых замечаний по админке нет. Полный regression учебника остаётся отдельным ограничением ниже.
 
 ## Известный дефект учебника до админки
 
