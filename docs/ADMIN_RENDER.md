@@ -4,20 +4,20 @@
 
 ## Состояние запуска
 
-Код подготовлен. Платные ресурсы, почтовый отправитель, DNS API и production-приёмка ещё не выполнены. Текущая публикация — Static Site `srv-dam8up61egvs738j9kmg`, ветка `feature/debug-source-view`. Публикация фронтенда с API URL выполняется после готовности API и почты.
+Код подготовлен. База `shelfsmart-admin-db` уже создана владельцем: `dpg-db7j6ua5b2lc7385gsdg-a`, PostgreSQL 18, Frankfurt, статус Available проверен 2026-10-14. Повторно создавать базу не нужно. API, почтовый отправитель, DNS API и production-приёмка ещё не выполнены. Текущая публикация — Static Site `srv-dam8up61egvs738j9kmg`, ветка `feature/debug-source-view`. Публикация фронтенда с API URL выполняется после готовности API и почты.
 
 ## Ресурсы Render
 
-`render.admin.yaml` описывает только два новых ресурса в Frankfurt:
+`render.admin.yaml` описывает только новый API в Frankfurt. В `DATABASE_URL` вручную передаётся внутренний URL существующей базы из Render → shelfsmart-admin-db → Info → Connections. База намеренно не объявлена в Blueprint, чтобы его применение не создавало и не перенастраивало её.
 
 | Ресурс | Конфигурация | Плановый расход |
 | --- | --- | --- |
 | API shelfsmart-api | 0.5 CPU / 512 MB (Starter) | ориентир $7/мес. |
-| shelfsmart-admin-db | PostgreSQL 17, 0.1 CPU / 256 MB (Basic), 5 GB | ориентир $6 + $1.50/мес. |
+| Существующая shelfsmart-admin-db | PostgreSQL 18, 0.1 CPU / 256 MB (Basic), плановый диск 5 GB | ориентир $6 + $1.50/мес. |
 | Существующий Static Site | сохраняется | без отдельного compute |
 | Resend | Free, проверенный отправитель | в рамках бесплатной квоты |
 
-Это ориентир $14.50/мес. до налогов и возможного превышения трафика/сборок. Сумма и названия проверяются в панели непосредственно перед созданием. Workspace повышать не требуется. В актуальном [Blueprint Reference](https://render.com/docs/blueprint-spec) ID compute-планов — `0.5c-512mb` и `0.1c-256mb`; ресурсам задан диск 5 GB и отключено автоматическое расширение. Внешние подключения к базе закрыты (`ipAllowList: []`), API использует внутренний URL.
+Это ориентир $14.50/мес. до налогов и возможного превышения трафика/сборок. Сумма API проверяется в панели непосредственно перед созданием; фактический размер диска базы нужно сверить в Dashboard. Workspace повышать не требуется. В актуальном [Blueprint Reference](https://render.com/docs/blueprint-spec) ID compute-планов — `0.5c-512mb` и `0.1c-256mb`. Для существующей базы требуется отключённое автоматическое расширение диска и закрытый внешний доступ; API использует внутренний URL. Эти настройки управляются отдельно в Dashboard.
 
 Build из корня репозитория: `npm ci --prefix server --include=dev && npm --prefix server run typecheck`. Start: `npm --prefix server start`. Root Directory не задавать: сервер импортирует `shared/*.ts`. Миграции выполняются при старте под advisory lock; изменять уже применённый SQL-файл нельзя. `/healthz` проверяет соединение и версию схемы.
 
@@ -27,7 +27,7 @@ Build из корня репозитория: `npm ci --prefix server --include=
 | --- | --- |
 | NODE_VERSION | 24.7.0 |
 | NODE_ENV | production |
-| DATABASE_URL | внутренний URL через fromDatabase |
+| DATABASE_URL | внутренний URL существующей shelfsmart-admin-db; sync: false |
 | WEB_ORIGIN | https://shelfsmartacademy.com |
 | OWNER_EMAIL | islamov.denis@gmail.com |
 | ABUSE_SECRET | случайный секрет не менее 32 байт; generateValue |
@@ -52,7 +52,7 @@ Build из корня репозитория: `npm ci --prefix server --include=
 
 ## Локальная проверка
 
-Node 24.7+, отдельный PostgreSQL 17 на loopback. Создать БД `shelfsmart_test`; URL передавать только через `TEST_DATABASE_URL`. Тесты отвергают внешние адреса и остальные имена БД, создают уникальную `test_*` схему и удаляют только её.
+Node 24.7+, отдельный PostgreSQL 18 на loopback (локальные проверки также проходили на 17). Создать БД `shelfsmart_test`; URL передавать только через `TEST_DATABASE_URL`. Тесты отвергают внешние адреса и остальные имена БД, создают уникальную `test_*` схему и удаляют только её.
 
 ```sh
 npm ci
@@ -66,7 +66,7 @@ EXPO_NO_DOTENV=1 EXPO_PUBLIC_API_BASE_URL=http://127.0.0.1:8097 npm run export:w
 npm run test:admin:browser
 ```
 
-Runner занимает только `127.0.0.1:8096/8097`, поднимает настоящую БД/API и SPA, fake mailer живёт только в тестовом дочернем процессе и доступен через IPC. Нет тестового HTTP endpoint в production. Проверяет вход, интерфейс на 390/1280, сообщения, сохранность после перезапуска API, смену пароля и отзыв cookie. Скриншоты — каталог `shelfsmart-admin-evidence` в системной временной папке (в CI `/tmp`). Существующий workflow regression tests сохраняется с добавлением недостающего Pillow, отдельный admin workflow добавляет PostgreSQL17. `export:web` очищает Metro cache: иначе после сборки без API URL Expo может повторно использовать клиент с пустой настройкой.
+Runner занимает только `127.0.0.1:8096/8097`, поднимает настоящую БД/API и SPA, fake mailer живёт только в тестовом дочернем процессе и доступен через IPC. Нет тестового HTTP endpoint в production. Проверяет вход, интерфейс на 390/1280, сообщения, сохранность после перезапуска API, смену пароля и отзыв cookie. Скриншоты — каталог `shelfsmart-admin-evidence` в системной временной папке (в CI `/tmp`). Существующий workflow regression tests сохраняется с добавлением недостающего Pillow, отдельный admin workflow использует PostgreSQL 18, как существующая база Render. `export:web` очищает Metro cache: иначе после сборки без API URL Expo может повторно использовать клиент с пустой настройкой.
 
 Для отдельного dev API понадобятся `DATABASE_URL`, `NODE_ENV=development`, `WEB_ORIGIN=http://127.0.0.1:8096`, `OWNER_EMAIL`, `ABUSE_SECRET`, `RESEND_API_KEY`, `MAIL_FROM`. `npm --prefix server start` использует реальный почтовый адаптер; для проверок без писем предпочтителен тестовый runner.
 

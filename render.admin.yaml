@@ -1,4 +1,5 @@
-# New API + DB only. Existing uchebnik-v2 Static Site stays managed in Dashboard.
+# API only. Reuse existing shelfsmart-admin-db (PostgreSQL 18, Frankfurt).
+# Existing uchebnik-v2 Static Site and database stay managed in Dashboard.
 # Confirm the displayed monthly price before applying this paid blueprint.
 services:
   - type: web
@@ -17,9 +18,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: shelfsmart-admin-db
-          property: connectionString
+        sync: false
       - key: WEB_ORIGIN
         value: https://shelfsmartacademy.com
       - key: OWNER_EMAIL
@@ -30,13 +29,3 @@ services:
         sync: false
       - key: MAIL_FROM
         sync: false
-databases:
-  - name: shelfsmart-admin-db
-    databaseName: shelfsmart
-    user: shelfsmart
-    plan: 0.1c-256mb
-    diskSizeGB: 5
-    postgresMajorVersion: "17"
-    region: frankfurt
-    ipAllowList: []
-    storageAutoscalingEnabled: false

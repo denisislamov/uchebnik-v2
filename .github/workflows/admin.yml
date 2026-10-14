@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 15
     services:
       postgres:
-        image: postgres:17
+        image: postgres:18
         env:
           POSTGRES_USER: shelfsmart
           POSTGRES_PASSWORD: local-ci-only
