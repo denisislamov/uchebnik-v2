@@ -784,15 +784,6 @@ function Main() {
                           );
                         })}
                     </View>
-                    <View style={s.homeFooter}>
-                      <Text style={s.footerText}>
-                        А. С. Пчёлко · Г. Б. Поляк{"\n"}Арифметика для первого
-                        класса
-                      </Text>
-                      <Text style={s.footerText}>
-                        Тестовая версия{"\n"}Страницы PDF 1–144
-                      </Text>
-                    </View>
                   </View>
                 </View>
               ) : (
@@ -1284,18 +1275,6 @@ const s = StyleSheet.create({
     fontSize: 13,
     lineHeight: CELL,
     color: c.muted,
-  },
-  homeFooter: {
-    marginTop: cells(2),
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: CELL,
-  },
-  footerText: {
-    fontFamily: f.regular,
-    color: c.muted,
-    fontSize: 12,
-    lineHeight: CELL,
   },
   // Everything here is counted in cells of the sheet (24 px): an empty row
   // over the task, the task itself, an empty row under it.
